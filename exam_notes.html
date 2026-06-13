@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linear Algebra — Exam Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --bg: #1a1612;
+    --bg-elevated: #221d18;
+    --bg-card: #1f1a15;
+    --border: #3a342c;
+    --border-soft: #2a251f;
+    --text: #f5efe4;
+    --text-muted: #b8aa97;
+    --text-dim: #8a7e6e;
+    --accent: #e0b888;
+    --accent-hover: #ecc89c;
+    --warn: #d99a7e;
+    --danger: #c87060;
+    --highlight: #2a2218;
+    --code-bg: #14110d;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 17px;
+    line-height: 1.75;
+    font-weight: 400;
+    letter-spacing: -0.005em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 100vh;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--bg-elevated);
+    border-right: 1px solid var(--border);
+    padding: 2.5rem 1.75rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    font-size: 0.92rem;
+  }
+
+  .sidebar-header {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+
+  .sidebar-sub {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    margin-bottom: 2rem;
+    line-height: 1.4;
+  }
+
+  .sidebar nav h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-dim);
+    margin: 1.5rem 0 0.5rem;
+    font-weight: 600;
+  }
+
+  .sidebar nav h3:first-child { margin-top: 0; }
+
+  .sidebar nav a {
+    display: block;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 0.35rem 0;
+    border-left: 2px solid transparent;
+    padding-left: 0.65rem;
+    margin-left: -0.65rem;
+    transition: all 0.15s ease;
+    font-size: 0.92rem;
+  }
+
+  .sidebar nav a:hover {
+    color: var(--text);
+    border-left-color: var(--accent);
+  }
+
+  /* MAIN CONTENT */
+  main {
+    max-width: 780px;
+    padding: 4rem 4rem 6rem;
+    margin: 0 auto;
+  }
+
+  /* TITLE BLOCK */
+  .title-block {
+    margin-bottom: 5rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    color: var(--accent);
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 3.25rem;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 1.5rem;
+    color: var(--text);
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .lede {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    line-height: 1.65;
+  }
+
+  /* PART/SECTION HEADERS */
+  .part {
+    margin-top: 6rem;
+    margin-bottom: 3rem;
+  }
+
+  .part-number {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 2.25rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    color: var(--text);
+    position: relative;
+  }
+
+  h2 + p {
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+    max-width: 620px;
+    font-size: 1.02rem;
+  }
+
+  h3 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 1.4rem;
+    margin: 3rem 0 1rem;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+  }
+
+  h4 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 1.75rem 0 0.75rem;
+    color: var(--text);
+    letter-spacing: -0.005em;
+  }
+
+  p {
+    margin-bottom: 1.1rem;
+  }
+
+  ul, ol {
+    padding-left: 1.5rem;
+    margin: 0.75rem 0 1.25rem;
+  }
+
+  li {
+    margin-bottom: 0.65rem;
+  }
+
+  li strong, p strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* DEFINITIONS */
+  .definition {
+    background: var(--bg-card);
+    border-left: 3px solid var(--accent);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .definition .term {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+    display: block;
+    letter-spacing: -0.005em;
+  }
+
+  .definition .ref {
+    color: var(--text-dim);
+    font-size: 0.82rem;
+    font-style: normal;
+    margin-left: 0.5rem;
+    font-weight: 400;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* PROOFS */
+  .proof {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.5rem 1.75rem;
+    margin: 2rem 0;
+  }
+
+  .proof-header {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 1.05rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    letter-spacing: -0.005em;
+  }
+
+  .proof-tag {
+    display: inline-block;
+    background: var(--warn);
+    color: var(--bg);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.55rem;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .proof-tag.tier1 {
+    background: var(--danger);
+    color: var(--text);
+  }
+
+  .proof-tag.tier2 {
+    background: var(--accent, #3a6ea5);
+    color: var(--text);
+    opacity: 0.85;
+  }
+
+  .proof-statement {
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px dashed var(--border);
+    font-size: 0.97rem;
+  }
+
+  .proof ol, .proof ul {
+    padding-left: 1.5rem;
+    margin: 0.75rem 0;
+  }
+
+  .proof li {
+    margin-bottom: 0.6rem;
+  }
+
+  /* CALLOUTS */
+  .callout {
+    background: var(--highlight);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .callout-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.78rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .callout.warn { border-left-color: var(--warn); }
+  .callout.warn .callout-title { color: var(--warn); }
+
+  .callout.danger { border-left-color: var(--danger); }
+  .callout.danger .callout-title { color: var(--danger); }
+
+  .callout.defbox {
+    border-left-color: var(--ok, #4caf82);
+    background: color-mix(in srgb, var(--ok, #4caf82) 8%, var(--highlight));
+  }
+  .callout.defbox .callout-title { color: var(--ok, #4caf82); }
+  .callout.defbox dl { margin: 0; }
+  .callout.defbox dt { font-weight: 700; margin-top: 0.5rem; }
+  .callout.defbox dd { margin: 0.1rem 0 0 0; color: var(--text-muted); }
+
+  /* CODE & MATH */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88em;
+    background: var(--code-bg);
+    color: var(--accent);
+    padding: 0.12rem 0.4rem;
+    border-radius: 3px;
+  }
+
+  /* TABLES */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+
+  th {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+    border-bottom: 2px solid var(--border);
+  }
+
+  tr:hover { background: var(--bg-card); }
+
+  /* DECORATIVE */
+  .ornament {
+    text-align: center;
+    color: var(--text-dim);
+    margin: 3rem 0;
+    letter-spacing: 1em;
+    font-family: 'Fraunces', serif;
+  }
+
+  .pull-quote {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--accent);
+    border-left: 3px solid var(--accent);
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    margin: 2rem 0;
+    line-height: 1.45;
+    letter-spacing: -0.005em;
+  }
+
+  /* MOBILE */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar {
+      position: relative;
+      height: auto;
+      padding: 1.5rem;
+    }
+    main { padding: 2rem 1.5rem 4rem; }
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 1.85rem; }
+  }
+
+  /* PRINT */
+  @media print {
+    body { background: white; color: black; font-size: 11pt; }
+    .sidebar { display: none; }
+    .layout { grid-template-columns: 1fr; }
+    main { padding: 0; max-width: none; }
+    h1, h2, h3, h4 { color: black; page-break-after: avoid; }
+    .definition, .proof, .callout {
+      background: #f5f5f0;
+      border-color: #444;
+      page-break-inside: avoid;
+    }
+    .definition .term, .proof-header, .callout-title { color: black; }
+    a { color: black; text-decoration: none; }
+    .pull-quote { color: #444; }
+  }
+
+  /* MathJax tweaks */
+  mjx-container {
+    color: var(--text) !important;
+  }
+  mjx-container[display="true"] {
+    margin: 1.25rem 0 !important;
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<aside class="sidebar">
+  <div class="sidebar-header">Linear Algebra<br>Exam Notes</div>
+  <div class="sidebar-sub">Kazeev / UniVie — 4th exam date</div>
+
+  <nav>
+    <h3>Orientation</h3>
+    <a href="#exam-format">The exam format</a>
+    <a href="#strategy">Strategy & timing</a>
+
+    <h3>Definitions</h3>
+    <a href="#defs-foundation">Foundation</a>
+    <a href="#defs-matrices">Matrices</a>
+    <a href="#defs-spaces">Vector spaces</a>
+    <a href="#defs-maps">Linear maps</a>
+
+    <h3>Computational recipes</h3>
+    <a href="#recipe-lu">LU decomposition</a>
+    <a href="#recipe-inverse">Matrix inverse</a>
+    <a href="#recipe-multiply">Matrix multiplication</a>
+
+    <h3>The big proofs (Problem 5)</h3>
+    <a href="#proof-sums">IV.1.4 Sums</a>
+    <a href="#proof-rankn">IV.1.10 Rank-Nullity</a>
+    <a href="#proof-steinitz">III.1.47 Steinitz</a>
+    <a href="#proof-rank">IV.1.15 Rank</a>
+
+    <h3>Other in-scope proofs</h3>
+    <a href="#proof-257">II.5.7 Triangular mult</a>
+    <a href="#proof-258">II.5.8 Elimination step</a>
+    <a href="#proof-259">II.5.9 $r$ elim. steps</a>
+    <a href="#proof-2510">II.5.10 Triangular inv</a>
+    <a href="#proof-1129">III.1.29 Span</a>
+    <a href="#proof-1136">III.1.36 Lin. indep.</a>
+    <a href="#proof-1138">III.1.38 Basis</a>
+    <a href="#proof-1146">III.1.46 Exchange</a>
+    <a href="#proof-1147">III.1.47 Steinitz (ii)</a>
+    <a href="#proof-211">III.2.11 Kernel/Image</a>
+    <a href="#proof-small">Q2 small proofs</a>
+
+    <h3>Concept guides</h3>
+    <a href="#concept-subspace">Subspaces</a>
+    <a href="#concept-span">Span</a>
+    <a href="#concept-basis">Basis</a>
+    <a href="#concept-lindep">Linear independence</a>
+
+    <h3>Problem 6 patterns</h3>
+    <a href="#p6-complexkernel">Complex kernel + injectivity</a>
+    <a href="#p6-linearitytest">Is this map linear?</a>
+    <a href="#p6-setimage">Image/preimage of a set</a>
+    <a href="#p6-fixed">Fixed-point subspace</a>
+    <a href="#p6-poly">Polynomial subspaces</a>
+    <a href="#p6-steinitz">Dimension arguments</a>
+    <a href="#p6-directsum">Direct sum tricks</a>
+    <a href="#p6-zp">Maps over $\mathbb{Z}_p$</a>
+    <a href="#p6-basisext">Basis extension</a>
+
+    <h3>Exam day</h3>
+    <a href="#exam-day">What to remember</a>
+  </nav>
+</aside>
+
+<main>
+
+<div class="title-block">
+  <div class="eyebrow">Introduction to Linear Algebra · 2025–2026</div>
+  <h1>Everything you<br>need for the <em>exam</em></h1>
+  <p class="lede">A complete, dense, deliberately compressed reference — definitions, recipes, proofs, and patterns — for the 4th-date exam under Prof. Kazeev at UniVie.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- ORIENTATION                                                  -->
+<!-- ============================================================ -->
+
+<section id="exam-format" class="part">
+  <div class="part-number">Part I · Orientation</div>
+  <h2>The exam format</h2>
+  <p>Six problems, ~40 points, ~90 minutes. The format is identical across all six historical exams.</p>
+
+<table>
+  <thead><tr><th>#</th><th>Theme</th><th>Pts</th><th>What rotates</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Foundational definition</td><td>4</td><td>Field <em>or</em> vector space</td></tr>
+    <tr><td>2</td><td>Sets, maps, properties + small proof</td><td>5</td><td>Composition associativity <em>or</em> uniqueness of inverse</td></tr>
+    <tr><td>3</td><td>Linear system via LU with pivoting</td><td>7</td><td>Coefficients only</td></tr>
+    <tr><td>4</td><td>Matrix inverse via row operations</td><td>6</td><td>Coefficients only</td></tr>
+    <tr><td>5</td><td>Definitions + statement + proof of major theorem</td><td>10</td><td><strong>3 candidates: Sums / Rank-Nullity / Steinitz</strong></td></tr>
+    <tr><td>6</td><td>Vector space / subspace mixed problems</td><td>8</td><td>4 sub-problems each time</td></tr>
+  </tbody>
+</table>
+
+<h3>Problem 5 historical rotation</h3>
+<table>
+  <thead><tr><th>Exam date</th><th>Big proof</th></tr></thead>
+  <tbody>
+    <tr><td>Past 1st date</td><td>Rank-Nullity (IV.1.10)</td></tr>
+    <tr><td>Past 2nd date</td><td>Dimension Theorem for Sums (IV.1.4)</td></tr>
+    <tr><td>Past 3rd date</td><td>Rank-Nullity (IV.1.10)</td></tr>
+    <tr><td>Past 4th date</td><td>Dimension Theorem for Sums (IV.1.4)</td></tr>
+    <tr><td>Real Exam 1 (Feb 2026)</td><td>Steinitz (III.1.47)</td></tr>
+    <tr><td>Real Exam 2 (Mar 2026)</td><td>Dimension Theorem for Sums (IV.1.4)</td></tr>
+  </tbody>
+</table>
+
+<div class="callout warn">
+  <div class="callout-title">For the 4th date — what to prioritize</div>
+  <p>Frequencies across 6 exams: <strong>Sums 3/6 (50%)</strong>, <strong>Rank-Nullity 2/6 (33%)</strong>, <strong>Steinitz 1/6 (17%)</strong>. Sums is the highest base rate; Rank-Nullity alternated with it across past papers. Prepare all three. If forced to rank effort: Sums &gt; Rank-Nullity &gt; Steinitz.</p>
+</div>
+
+<h3 id="strategy">Strategy & timing</h3>
+
+<div class="callout">
+  <div class="callout-title">The optimal exam order</div>
+  <p><strong>1) Open with Problems 1, 2, 6</strong> — definitions and short proofs. Easy points, builds confidence.<br>
+  <strong>2) Problem 5 second</strong>, while fresh — the 10-point swing.<br>
+  <strong>3) Problems 3, 4 last</strong> — mechanical, doable even when tired.</p>
+</div>
+
+<table>
+  <thead><tr><th>Problem</th><th>Target time</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>1 (Field/VS def)</td><td>4 min</td><td>Write fast — easy points</td></tr>
+    <tr><td>2 (Maps)</td><td>10 min</td><td>Definitions + one short proof</td></tr>
+    <tr><td>3 (LU)</td><td>15 min</td><td>Computational, can be slow</td></tr>
+    <tr><td>4 (Inverse)</td><td>12 min</td><td>Computational</td></tr>
+    <tr><td>5 (Big proof)</td><td>25 min</td><td>The hardest. Allocate generously.</td></tr>
+    <tr><td>6 (Mixed)</td><td>20 min</td><td>Multi-part — careful reading</td></tr>
+    <tr><td>Buffer</td><td>4 min</td><td>Check work on Q3, Q4</td></tr>
+  </tbody>
+</table>
+
+<div class="callout danger">
+  <div class="callout-title">Where Prof Kazeev catches students</div>
+  <ol>
+    <li><strong>Forgetting to cite results.</strong> When you use the Exchange Lemma, name it: "by Lemma III.1.46". Same for basis extension (Cor. III.1.48), Steinitz (III.1.47). Citations are graded.</li>
+    <li><strong>Subspace traps with quadratic constraints.</strong> $\{x : x^2 + y^2 + z^2 = 0\}$ in $\mathbb{R}^3$ is just $\{0\}$ — a subspace, but for boring reasons. Check $0$ is in the set first.</li>
+    <li><strong>Domain matters for injectivity.</strong> $x^4$ injective on $\mathbb{R}_+$, not on $\mathbb{R}$.</li>
+    <li><strong>Missing axioms.</strong> Field has 6, vector space has 5. Most common error: forgetting distributivity (field) or $1 \cdot v = v$ (vector space).</li>
+  </ol>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- DEFINITIONS                                                  -->
+<!-- ============================================================ -->
+
+<section id="defs-foundation" class="part">
+  <div class="part-number">Part II · Definitions</div>
+  <h2>Definitions to know cold</h2>
+  <p>If you can recite each of these in 30 seconds without notes, the proofs become readable.</p>
+
+<h3>Foundation</h3>
+
+<div class="definition" id="def-field">
+  <span class="term">Field<span class="ref">— II.1.1</span></span>
+  <p>A set $\mathbb{F}$ with two distinct elements $0, 1 \in \mathbb{F}$ and two operations $\oplus, \otimes : \mathbb{F} \times \mathbb{F} \to \mathbb{F}$ satisfying:</p>
+  <ol>
+    <li><strong>Commutativity:</strong> $a \oplus b = b \oplus a$ AND $a \otimes b = b \otimes a$</li>
+    <li><strong>Associativity:</strong> $(a \oplus b) \oplus c = a \oplus (b \oplus c)$ AND $(a \otimes b) \otimes c = a \otimes (b \otimes c)$</li>
+    <li><strong>Neutral elements:</strong> $0 \oplus a = a$ AND $1 \otimes a = a$</li>
+    <li><strong>Additive inverse:</strong> $\forall a \in \mathbb{F}, \exists b: a \oplus b = 0$</li>
+    <li><strong>Multiplicative inverse:</strong> $\forall a \in \mathbb{F} \setminus \{0\}, \exists b: a \otimes b = 1$</li>
+    <li><strong>Distributivity:</strong> $a \otimes (b \oplus c) = (a \otimes b) \oplus (a \otimes c)$</li>
+  </ol>
+  <p>Examples: $\mathbb{Q}, \mathbb{R}, \mathbb{C}, \mathbb{F}_2, \mathbb{Z}_p$ for $p$ prime.</p>
+</div>
+
+<div class="definition">
+  <span class="term">Function: injective, surjective, bijective</span>
+  <ul>
+    <li><strong>Injective:</strong> $x \neq x' \Rightarrow f(x) \neq f(x')$. Equivalently: $f(x) = f(x') \Rightarrow x = x'$.</li>
+    <li><strong>Surjective:</strong> $f(X) = Y$. Every $y \in Y$ has a preimage.</li>
+    <li><strong>Bijective:</strong> injective AND surjective. Equivalent to invertible.</li>
+  </ul>
+</div>
+
+<div class="definition">
+  <span class="term">Function composition</span>
+  <p>$(g \circ f)(x) = g(f(x))$. Apply $f$ first, then $g$. <strong>Associative:</strong> $(h \circ g) \circ f = h \circ (g \circ f)$.</p>
+</div>
+
+<h3 id="defs-matrices">Matrices</h3>
+
+<div class="definition">
+  <span class="term">Matrix-vector product<span class="ref">— II.4.1</span></span>
+  <p>For $A \in \mathbb{F}^{m \times n}$ and $x \in \mathbb{F}^n$:</p>
+  $$(Ax)_i = \sum_{j=1}^n a_{ij} x_j$$
+  <p>Equivalently: $Ax$ is a linear combination of the columns of $A$ with coefficients $x_1, \dots, x_n$.</p>
+</div>
+
+<div class="definition">
+  <span class="term">Matrix product<span class="ref">— II.4.3</span></span>
+  <p>For $A \in \mathbb{F}^{m \times r}$, $B \in \mathbb{F}^{r \times n}$:</p>
+  $$(AB)_{ij} = \sum_{k=1}^r a_{ik} b_{kj}$$
+  <p>See <a href="#recipe-multiply">three ways to compute it</a>.</p>
+</div>
+
+<div class="definition">
+  <span class="term">Identity matrix</span>
+  <p>$I_n$ — diagonal entries all $1$, zero elsewhere. $I_n A = A$ and $A I_n = A$.</p>
+</div>
+
+<div class="definition">
+  <span class="term">Inverse matrix<span class="ref">— II.4.14</span></span>
+  <p>$A \in \mathbb{F}^{n \times n}$ is invertible iff there exists $B$ with $AB = I = BA$. Then $B = A^{-1}$ is unique.</p>
+</div>
+
+<div class="definition">
+  <span class="term">Transpose</span>
+  <p>$(A^T)_{ij} = A_{ji}$. Key property: $(AB)^T = B^T A^T$ — <strong>order flips</strong>.</p>
+</div>
+
+<div class="definition">
+  <span class="term">Triangular matrices</span>
+  <ul>
+    <li><strong>Lower-triangular:</strong> $a_{ij} = 0$ for $i &lt; j$ (above diagonal is zero).</li>
+    <li><strong>Unit lower-triangular:</strong> lower-triangular AND all diagonal entries $= 1$.</li>
+    <li><strong>Strictly lower-triangular:</strong> lower-triangular AND all diagonal entries $= 0$.</li>
+    <li>Same definitions flip for upper-triangular.</li>
+  </ul>
+</div>
+
+<div class="definition">
+  <span class="term">Matrix rank<span class="ref">— II.4.49</span></span>
+  <p>The smallest $r \in \mathbb{N}_0$ such that $A = \sum_{k=1}^r u_k v_k^T$. The rank of a matrix is the number of linearly independent rows (equivalently, columns). Equivalently (more useful on exam): <strong>the dimension of the column space</strong>.</p>
+</div>
+
+<h3 id="defs-spaces">Vector spaces</h3>
+
+<div class="definition" id="def-vs">
+  <span class="term">Vector space over $\mathbb{F}$</span>
+  <p>A set $V$ with $+: V \times V \to V$ and $\cdot : \mathbb{F} \times V \to V$ such that:</p>
+  <ol>
+    <li>$(V, +)$ is an abelian group: commutative, associative, has $0_V$, has additive inverses</li>
+    <li>$1 \cdot v = v$</li>
+    <li>$\alpha \cdot (\beta \cdot v) = (\alpha \beta) \cdot v$</li>
+    <li>$(\alpha + \beta) \cdot v = \alpha v + \beta v$</li>
+    <li>$\alpha \cdot (v + w) = \alpha v + \alpha w$</li>
+  </ol>
+</div>
+
+<div class="definition">
+  <span class="term">Subspace</span>
+  <p>$U \subseteq V$ is a subspace iff <strong>(1)</strong> $0 \in U$, <strong>(2)</strong> closed under $+$, <strong>(3)</strong> closed under scalar mult.</p>
+  <p>Combined: $\forall \lambda \in \mathbb{F}, u, u' \in U: \lambda u + u' \in U$, and $0 \in U$.</p>
+</div>
+
+<div class="definition">
+  <span class="term">Span</span>
+  <p>The span of a set of vectors is the set of all linear combinations of those vectors. $\langle A \rangle$ = smallest subspace of $V$ containing $A$ = set of all finite linear combinations of elements of $A$:</p>
+  $$\langle A \rangle = \left\{ \sum_{i=1}^n \lambda_i a_i : n \in \mathbb{N}, a_i \in A, \lambda_i \in \mathbb{F} \right\}$$
+</div>
+
+<div class="definition">
+  <span class="term">Linear independence</span>
+  <p>$A \subseteq V$ is linearly independent iff <em>the only linear combination giving $0$ is the trivial one</em>:</p>
+  $$\sum_{i=1}^n \lambda_i v_i = 0 \quad \Rightarrow \quad \lambda_1 = \dots = \lambda_n = 0$$
+  <p>for every finite subset $\{v_1, \dots, v_n\} \subseteq A$.</p>
+</div>
+
+<div class="definition">
+  <span class="term">Spanning set / generating system</span>
+  <p>A <strong>spanning set</strong> (or <strong>generating system</strong>) for a vector space \(V\) is a set of vectors whose span is all of \(V\).</p>
+
+<p>Formally, \(\{v_1, \ldots, v_k\}\) is a spanning set for \(V\) if:</p>
+
+<p>\[ \text{span}\{v_1, \ldots, v_k\} = V \]$A \subseteq V$ with $\langle A \rangle = V$.</p>
+</div>
+
+<div class="definition">
+  <span class="term">Basis</span>
+  <p>$\mathcal{B} \subseteq V$ that is BOTH linearly independent AND a spanning set.</p>
+  <p><strong>Equivalent (III.1.38):</strong> minimal spanning set, OR maximal linearly independent set.</p>
+</div>
+
+<div class="definition">
+  <span class="term">Dimension</span>
+  <p>$\dim V$ = the number of elements in any basis of $V$. Well-defined by Steinitz.</p>
+  <p><strong>Memorize:</strong> $\dim \mathbb{F}^n = n$, $\dim \mathbb{F}_n[X] = n + 1$, $\dim M_{m \times n}(\mathbb{F}) = mn$.</p>
+</div>
+
+<h3 id="defs-maps">Linear maps</h3>
+
+<div class="definition">
+  <span class="term">Linear map</span>
+  <p>$f: V \to W$ is linear iff for all $v, v' \in V$, $\lambda \in \mathbb{F}$:</p>
+  $$f(\lambda v + v') = \lambda f(v) + f(v')$$
+</div>
+
+<div class="definition">
+  <span class="term">Kernel, image, rank</span>
+  <ul>
+    <li><strong>Kernel:</strong> $\ker(f) = \{v \in V : f(v) = 0\} = f^{-1}(\{0\})$ — subspace of $V$.</li>
+    <li><strong>Image:</strong> $\text{im}(f) = f(V) = \{f(v) : v \in V\}$ — subspace of $W$.</li>
+    <li><strong>Rank:</strong> $\text{rk}(f) = \dim(\text{im}(f))$.</li>
+  </ul>
+  <p><strong>Key (III.2.11):</strong> $f$ injective $\iff \ker(f) = \{0\}$.</p>
+</div>
+
+<div class="definition">
+  <span class="term">Sum, direct sum, complement</span>
+  <ul>
+    <li><strong>Sum:</strong> $W + \hat W = \{w + \hat w : w \in W, \hat w \in \hat W\}$.</li>
+    <li><strong>Direct sum:</strong> $W \oplus \hat W$ — sum with $W \cap \hat W = \{0\}$. Every element has unique decomposition.</li>
+    <li><strong>Complement:</strong> $W, \hat W$ complementary in $V$ iff $V = W \oplus \hat W$.</li>
+    <p>The whole point of "direct" is uniqueness. These two conditions are equivalent:</p>
+
+<ul>
+  <li>\( U \cap W = \{0\} \)</li>
+  <li>Every vector \( v \in U + W \) can be written as \( v = u + w \) in <strong>exactly one way</strong> (one \( u \in U \), one \( w \in W \)).</li>
+</ul>
+  </ul>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- COMPUTATIONAL RECIPES                                        -->
+<!-- ============================================================ -->
+
+<section class="part">
+  <div class="part-number">Part III · Computational recipes</div>
+  <h2>The three procedures you'll use on Problems 3 and 4</h2>
+  <p>Mechanical skills. Drill until automatic.</p>
+
+<h3 id="recipe-lu">LU decomposition & substitution</h3>
+
+<p>The recipe for solving $Ax = b$ via LU is three explicit steps. <strong>Problem 3 always tests this</strong>, almost always with a 3×3 system, sometimes requiring partial pivoting.</p>
+
+<div class="callout">
+  <div class="callout-title">Step 1 — Compute L and U</div>
+  <p>Row-reduce $A$ to upper-triangular form $U$. Each multiplier $\ell_{ij}$ you use to eliminate goes into $L$ at position $(i, j)$. $L$ has 1s on the diagonal. If a pivot would be zero, swap rows and track the permutation $P$ so that $PA = LU$.</p>
+</div>
+
+<div class="callout">
+  <div class="callout-title">Step 2 — Forward substitution: solve $Ly = b$</div>
+  <p>$L$ is lower-triangular with $L_{ii} = 1$, so each row has one new unknown. Go <strong>top-down</strong>:</p>
+  $$y_1 = b_1, \quad y_i = b_i - \sum_{j=1}^{i-1} L_{ij} y_j \quad (i = 2, \dots, n)$$
+</div>
+
+<div class="callout">
+  <div class="callout-title">Step 3 — Backward substitution: solve $Ux = y$</div>
+  <p>$U$ is upper-triangular, so each row has one new unknown counting from the bottom. Go <strong>bottom-up</strong>:</p>
+  $$x_n = \frac{y_n}{U_{nn}}, \quad x_i = \frac{1}{U_{ii}} \left( y_i - \sum_{j=i+1}^{n} U_{ij} x_j \right) \quad (i = n-1, \dots, 1)$$
+</div>
+
+<div class="pull-quote">
+  L before U, y before x. Forward (top-down) for L, backward (bottom-up) for U.
+</div>
+
+<h4>Worked 3×3 structure</h4>
+
+<p>For $A = LU$ with</p>
+$$L = \begin{pmatrix} 1 & 0 & 0 \\ \ell_{21} & 1 & 0 \\ \ell_{31} & \ell_{32} & 1 \end{pmatrix}, \quad U = \begin{pmatrix} u_{11} & u_{12} & u_{13} \\ 0 & u_{22} & u_{23} \\ 0 & 0 & u_{33} \end{pmatrix}$$
+
+<p>Forward $Ly = b$:</p>
+$$y_1 = b_1, \quad y_2 = b_2 - \ell_{21} y_1, \quad y_3 = b_3 - \ell_{31} y_1 - \ell_{32} y_2$$
+
+<p>Backward $Ux = y$:</p>
+$$x_3 = \tfrac{y_3}{u_{33}}, \quad x_2 = \tfrac{y_2 - u_{23} x_3}{u_{22}}, \quad x_1 = \tfrac{y_1 - u_{12} x_2 - u_{13} x_3}{u_{11}}$$
+
+<div class="callout warn">
+  <div class="callout-title">Submission format</div>
+  <p>Always present $L$, $U$, $y$, $x$ explicitly with labels. Prof Kazeev wants to see the work — don't shortcut to the final answer.</p>
+</div>
+
+<h3 id="recipe-inverse">Matrix inverse via row operations</h3>
+
+<p>For an invertible $A \in \mathbb{F}^{n \times n}$, to compute $A^{-1}$:</p>
+
+<ol>
+  <li>Form the augmented matrix $[\,A \mid I\,]$.</li>
+  <li>Row-reduce until the left half is $I$. Whatever appears on the right is $A^{-1}$.</li>
+  <li>Result: $[\,I \mid A^{-1}\,]$.</li>
+</ol>
+
+<p><strong>Why it works:</strong> each row operation corresponds to left-multiplying by an elementary matrix $E$. If $E_k \cdots E_1 A = I$, then $E_k \cdots E_1 = A^{-1}$. Applying the same row ops to $I$ gives $E_k \cdots E_1 I = A^{-1}$.</p>
+
+<div class="callout warn">
+  <div class="callout-title">Common pitfall</div>
+  <p>Annotate each row operation above the arrow. "$R_2 \to R_2 - 2R_1$" — Prof Kazeev grades on the steps, not just the answer.</p>
+</div>
+
+<h3 id="recipe-multiply">Three ways to compute $AB$</h3>
+
+<p>One method is enough for the exam, but understand all three — they appear in proofs differently.</p>
+
+<table>
+  <thead><tr><th>Method</th><th>Formula</th><th>Use when</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>Entry-by-entry</strong></td>
+      <td>$(AB)_{ij} = \sum_k a_{ik} b_{kj}$</td>
+      <td>Default for raw computation</td>
+    </tr>
+    <tr>
+      <td><strong>Column-by-column</strong></td>
+      <td>$\text{col}_j(AB) = B_{1j} \text{col}_1(A) + \dots + B_{rj} \text{col}_r(A)$</td>
+      <td>Reasoning about rank, image, column space</td>
+    </tr>
+    <tr>
+      <td><strong>Row-by-row</strong></td>
+      <td>$\text{row}_i(AB) = A_{i1} \text{row}_1(B) + \dots + A_{ir} \text{row}_r(B)$</td>
+      <td>Reasoning about kernel, Gaussian elimination</td>
+    </tr>
+  </tbody>
+</table>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- THE BIG PROOFS                                               -->
+<!-- ============================================================ -->
+
+<section class="part">
+  <div class="part-number">Part IV · The big proofs (Problem 5)</div>
+  <h2>The four in-scope big proofs</h2>
+  <p>The first three are the rotating 10-point candidates — prepare all three, with the Sums theorem the highest-probability target. IV.1.15 (Rank) is also in scope and ties the others together.</p>
+  <div class="callout">
+    <div class="callout-title">Problem 5 always has three parts</div>
+    <p>(a) <strong>define the related terms</strong> (2 pts), (b) <strong>state the theorem properly</strong> (2 pts), (c) <strong>prove it</strong> (6 pts). The green box under each proof lists the exact definitions that part (a) tends to ask for — those 2 points are free if you've memorized them, so don't walk in with only the proof.</p>
+  </div>
+
+<!-- DIM THM FOR SUMS -->
+<div class="proof" id="proof-sums">
+  <div class="proof-header">
+    IV.1.4 — Dimension Theorem for Sums
+    <span class="proof-tag tier1">Tier 1 — 50% base rate</span>
+  </div>
+  <div class="proof-statement">For finite-dimensional subspaces $W, \hat W$ of $V$: $\dim(W + \hat W) = \dim(W) + \dim(\hat W) - \dim(W \cap \hat W)$.</div>
+
+  <div class="callout defbox">
+    <div class="callout-title">Q5(a) may ask you to define these first (2 pts)</div>
+    <p>This is the proof that pairs with the <em>subspace-relations</em> definitions (exam_02's actual Q5a):</p>
+    <dl>
+      <dt>Subspace</dt>
+      <dd>$U \subseteq V$ with $0 \in U$, closed under $+$ and under scalar multiplication.</dd>
+      <dt>Sum of two subspaces</dt>
+      <dd>$W + \hat W := \{ w + \hat w : w \in W,\ \hat w \in \hat W \}$ — the smallest subspace containing both.</dd>
+      <dt>Direct sum</dt>
+      <dd>The sum is <em>direct</em>, written $W \oplus \hat W$, iff $W \cap \hat W = \{0\}$. Equivalently: every element of the sum has a <em>unique</em> decomposition $w + \hat w$.</dd>
+      <dt>Complement</dt>
+      <dd>$\hat W$ is a complement of $W$ in $V$ iff $V = W \oplus \hat W$ (i.e. $W + \hat W = V$ and $W \cap \hat W = \{0\}$).</dd>
+    </dl>
+  </div>
+
+  <h4>The construction</h4>
+  <ol>
+    <li>Pick a basis $\{w_1, \dots, w_k\}$ of $W \cap \hat W$, where $k = \dim(W \cap \hat W)$.</li>
+    <li>Extend to a basis $\{w_1, \dots, w_n\}$ of $W$, where $n = \dim(W)$. (Uses the <strong>basis extension corollary</strong>: every linearly independent set extends to a basis — Cor. III.1.48(ii).)</li>
+    <li>Separately, extend $\{w_1, \dots, w_k\}$ to a basis $\{w_1, \dots, w_k, \hat w_{k+1}, \dots, \hat w_m\}$ of $\hat W$, where $m = \dim(\hat W)$.</li>
+    <li>Claim: $\mathcal{B} := \{w_1, \dots, w_n, \hat w_{k+1}, \dots, \hat w_m\}$ is a basis of $W + \hat W$.</li>
+  </ol>
+  <p>Size check: $|\mathcal{B}| = n + (m - k) = \dim W + \dim \hat W - \dim(W \cap \hat W)$. ✓</p>
+
+  <h4>Proof that $\mathcal{B}$ spans $W + \hat W$</h4>
+  <p>$W \subseteq \langle \mathcal{B} \rangle$ (since the basis of $W$ is inside $\mathcal{B}$), similarly $\hat W \subseteq \langle \mathcal{B} \rangle$, hence $W + \hat W \subseteq \langle \mathcal{B} \rangle$. Reverse direction trivial.</p>
+
+  <h4>Proof that $\mathcal{B}$ is linearly independent — the hard part</h4>
+  <p>Suppose $\sum_{i=1}^n \lambda_i w_i + \sum_{j=k+1}^m \mu_j \hat w_j = 0$. Rearrange:</p>
+  $$\sum_{i=1}^n \lambda_i w_i = -\sum_{j=k+1}^m \mu_j \hat w_j$$
+  <p>LHS $\in W$, RHS $\in \hat W$, so both lie in $W \cap \hat W$. The RHS is expressed in the basis of $\hat W$ with the $w_1, \dots, w_k$ coefficients all zero — but it's in $W \cap \hat W$, hence must be a combination of $w_1, \dots, w_k$ only. By linear independence of the basis of $\hat W$: all $\mu_j = 0$. Then $\sum \lambda_i w_i = 0$, and linear independence of the basis of $W$ gives all $\lambda_i = 0$. $\square$</p>
+</div>
+
+<!-- RANK NULLITY -->
+<div class="proof" id="proof-rankn">
+  <div class="proof-header">
+    IV.1.10 — Rank-Nullity Theorem
+    <span class="proof-tag tier1">Tier 1 — 33% base rate</span>
+  </div>
+  <div class="proof-statement">For finite-dim $V, W$ and linear $f: V \to W$: $\dim(V) = \dim(\text{im}(f)) + \dim(\ker(f))$.</div>
+
+  <div class="callout defbox">
+    <div class="callout-title">Q5(a) may ask you to define these first (2 pts)</div>
+    <p>Pairs with the <em>kernel / image / rank</em> definitions (same trio asked alongside Steinitz on exam_01):</p>
+    <dl>
+      <dt>Kernel</dt>
+      <dd>$\ker(f) := f^{-1}(\{0\}) = \{ v \in V : f(v) = 0 \}$ — a subspace of $V$.</dd>
+      <dt>Image</dt>
+      <dd>$\text{im}(f) := f(V) = \{ f(v) : v \in V \}$ — a subspace of $W$.</dd>
+      <dt>Rank</dt>
+      <dd>$\text{rk}(f) := \dim(\text{im}(f))$, the dimension of the image. (Nullity $= \dim(\ker f)$.)</dd>
+    </dl>
+  </div>
+
+  <h4>Three moves to memorize</h4>
+  <ol>
+    <li><strong>Start with the kernel.</strong> Pick a basis $\{b_1, \dots, b_k\}$ of $\ker(f)$, so $k = \dim(\ker f)$.</li>
+    <li><strong>Extend to a basis of $V$.</strong> By the <strong>basis extension corollary</strong> (every linearly independent set extends to a basis — Cor. III.1.48(ii)), extend to $\{b_1, \dots, b_n\}$ where $n = \dim V$.</li>
+    <li><strong>Claim:</strong> $\{f(b_{k+1}), \dots, f(b_n)\}$ is a basis of $\text{im}(f)$. Has $n - k$ elements ⇒ $\dim(\text{im} f) = n - k$. ✓</li>
+  </ol>
+
+  <h4>Generating</h4>
+  <p>The $b_1, \dots, b_n$ span $V$, so their images $f(b_1), \dots, f(b_n)$ span $\text{im}(f)$ — the image of a spanning set spans the image, by <strong>Prop III.2.11</strong>. But $f(b_1) = \dots = f(b_k) = 0$ (since $b_1, \dots, b_k \in \ker f$), so $f(b_{k+1}), \dots, f(b_n)$ alone generate $\text{im}(f)$.</p>
+
+  <h4>Linearly independent</h4>
+  <p>Suppose $\lambda_{k+1} f(b_{k+1}) + \dots + \lambda_n f(b_n) = 0$. By linearity, $f(\lambda_{k+1} b_{k+1} + \dots + \lambda_n b_n) = 0$, so $\lambda_{k+1} b_{k+1} + \dots + \lambda_n b_n \in \ker(f) = \langle b_1, \dots, b_k \rangle$. Hence there exist $\mu_1, \dots, \mu_k$ with</p>
+  $$\lambda_{k+1} b_{k+1} + \dots + \lambda_n b_n = \mu_1 b_1 + \dots + \mu_k b_k.$$
+  <p>Rearrange to $\mu_1 b_1 + \dots + \mu_k b_k - \lambda_{k+1} b_{k+1} - \dots - \lambda_n b_n = 0$. By linear independence of the basis $\{b_1, \dots, b_n\}$ of $V$, every coefficient vanishes: all $\mu_j = 0$ and all $\lambda_i = 0$. So the $f(b_{k+1}), \dots, f(b_n)$ are independent.</p>
+
+  <h4>Conclusion (don't forget this line)</h4>
+  <p>$\{f(b_{k+1}), \dots, f(b_n)\}$ spans $\text{im}(f)$ and is independent ⇒ it is a basis ⇒ $\dim(\text{im} f) = n - k$. Therefore</p>
+  $$\dim(V) = n = k + (n-k) = \dim(\ker f) + \dim(\text{im} f). \qquad \square$$
+  <div class="callout">
+    <div class="callout-title">Where the marks are</div>
+    <p>Name both citations explicitly: <strong>Cor. III.1.48(ii)</strong> for the basis extension, <strong>Prop III.2.11</strong> for the image of a spanning set spanning the image. And always write the final count line — the curated source trails off after "all coefficients zero," but no closing equation = lost marks.</p>
+  </div>
+
+  <h4>Full written version (reproduce this on paper)</h4>
+  <p><strong>Theorem.</strong> Let $V, W$ be finite-dimensional $\mathbb{F}$-vector spaces and $f: V \to W$ linear. Then $\dim(V) = \dim(\text{im} f) + \dim(\ker f)$.</p>
+  <p><strong>Proof.</strong> Choose a basis $\{b_1, \dots, b_k\}$ of the subspace $\ker(f) \subseteq V$, so $\dim(\ker f) = k$. Since these vectors are linearly independent, the <strong>basis extension corollary</strong> — every linearly independent set extends to a basis (Cor. III.1.48(ii)) — lets us extend them to a basis $\{b_1, \dots, b_k, b_{k+1}, \dots, b_n\}$ of $V$, so $\dim(V) = n$. We claim $\{f(b_{k+1}), \dots, f(b_n)\}$ is a basis of $\text{im}(f)$; this proves the theorem.</p>
+  <p>Generating. The vectors $b_1, \dots, b_n$ span $V$, so their images $f(b_1), \dots, f(b_n)$ span $\text{im}(f)$ (the image of a spanning set spans the image, by Proposition III.2.11). By construction $b_1, \dots, b_k \in \ker(f)$, so $f(b_1) = \dots = f(b_k) = 0$. Dropping these, the remaining $f(b_{k+1}), \dots, f(b_n)$ still span $\text{im}(f)$.</p>
+  <p>Linearly independent. Suppose scalars $\lambda_{k+1}, \dots, \lambda_n \in \mathbb{F}$ satisfy</p>
+  $$\lambda_{k+1} f(b_{k+1}) + \dots + \lambda_n f(b_n) = 0.$$
+  <p>By linearity the left side is $f(\lambda_{k+1} b_{k+1} + \dots + \lambda_n b_n)$, so</p>
+  $$\lambda_{k+1} b_{k+1} + \dots + \lambda_n b_n \in \ker(f).$$
+  <p>Since $\{b_1, \dots, b_k\}$ is a basis of $\ker(f)$, there are scalars $\mu_1, \dots, \mu_k \in \mathbb{F}$ with</p>
+  $$\lambda_{k+1} b_{k+1} + \dots + \lambda_n b_n = \mu_1 b_1 + \dots + \mu_k b_k,$$
+  <p>that is,</p>
+  $$\mu_1 b_1 + \dots + \mu_k b_k - \lambda_{k+1} b_{k+1} - \dots - \lambda_n b_n = 0.$$
+  <p>But $\{b_1, \dots, b_n\}$ is a basis of $V$, hence linearly independent, so every coefficient vanishes: $\mu_1 = \dots = \mu_k = \lambda_{k+1} = \dots = \lambda_n = 0$. In particular all $\lambda_j = 0$, proving independence.</p>
+  <p>Conclusion. $\{f(b_{k+1}), \dots, f(b_n)\}$ spans $\text{im}(f)$ and is linearly independent, so it is a basis; hence $\dim(\text{im} f) = n - k$. Therefore $\dim(V) = n = k + (n-k) = \dim(\ker f) + \dim(\text{im} f)$. $\square$</p>
+</div>
+
+<!-- STEINITZ -->
+<div class="proof" id="proof-steinitz">
+  <div class="proof-header">
+    III.1.47 — Steinitz Exchange Theorem
+    <span class="proof-tag tier1">Tier 1 — 17% base rate</span>
+  </div>
+  <div class="proof-statement">Let $V$ have spanning set $\{v_1, \dots, v_n\}$. <strong>(i)</strong> Any linearly independent $A \subseteq V$ is finite with at most $n$ elements; if $A = \{a_1, \dots, a_k\}$ with $k < n$, we can renumber the $v_i$ so $\{a_1, \dots, a_k, v_{k+1}, \dots, v_n\}$ spans $V$. <strong>(ii)</strong> Any spanning set contains a finite spanning subset with at most $n$ elements.</div>
+
+  <div class="callout defbox">
+    <div class="callout-title">Q5(a) may ask you to define these first (2 pts)</div>
+    <p>On exam_01, Steinitz was paired with the <em>kernel / image / rank</em> definitions. Be ready for those, plus the terms inside the theorem itself:</p>
+    <dl>
+      <dt>Kernel / Image / Rank</dt>
+      <dd>$\ker(f) = \{v : f(v)=0\}$; $\ \text{im}(f) = f(V)$; $\ \text{rk}(f) = \dim(\text{im} f)$.</dd>
+      <dt>Spanning (generating) set</dt>
+      <dd>$\{v_1, \dots, v_n\}$ spans $V$ iff every $v \in V$ is a linear combination $\lambda_1 v_1 + \dots + \lambda_n v_n$. Equivalently $\langle v_1, \dots, v_n \rangle = V$.</dd>
+      <dt>Linear independence</dt>
+      <dd>The only combination $\lambda_1 v_1 + \dots + \lambda_n v_n = 0$ is the trivial one (all $\lambda_i = 0$).</dd>
+      <dt>Basis</dt>
+      <dd>A set that is both linearly independent and spanning.</dd>
+    </dl>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">The idea in one sentence (read this first)</div>
+    <p>If you have a set that <strong>spans</strong> (big enough to build everything) and a set that's <strong>linearly independent</strong> (no redundancy), you can trade the independent vectors into the spanning set one at a time — each swap kicks out one spanning vector and keeps the spanning property intact. The payoff: <strong>an independent set can never be larger than a spanning set.</strong> That single inequality is what makes "dimension" a well-defined number.</p>
+  </div>
+
+  <h4>How to read the proof</h4>
+  <p>Everything rests on the <strong>Exchange Lemma (III.1.46)</strong>: if $\{u_1, \dots, u_n\}$ spans $V$ and $w = \lambda_1 u_1 + \dots + \lambda_n u_n$ with $\lambda_1 \neq 0$, then $\{w, u_2, \dots, u_n\}$ still spans — a nonzero coefficient means $u_1$ became redundant once $w$ is available, so you swap $w$ in for $u_1$. <strong>Steinitz is just this lemma applied repeatedly, one $a_i$ at a time.</strong> The induction below tracks how many $a$'s you've swapped in so far.</p>
+
+  <h4>Proof of part (i) — induction on $\ell$ = number of $a$'s swapped in</h4>
+
+  <p><strong>Base case $\ell = 1$:</strong> Pick $a_1 \in A$. Since $\{v_1, \dots, v_n\}$ spans, $a_1 = \sum \lambda_i v_i$. Since $A$ is linearly independent, $a_1 \neq 0$, so some $\lambda_i \neq 0$. <strong>Renumber</strong> the $v_i$ so $\lambda_1 \neq 0$. By the <strong>Exchange Lemma (III.1.46)</strong>, $\{a_1, v_2, \dots, v_n\}$ spans $V$. ✓</p>
+
+  <p><strong>Inductive step:</strong> Assume we have $\{a_1, \dots, a_\ell, v_{\ell+1}, \dots, v_n\}$ spanning $V$.</p>
+  <ul>
+    <li>If $A = \{a_1, \dots, a_\ell\}$: done. ($|A| = \ell \leq n$.)</li>
+    <li>Otherwise, pick $a_{\ell+1} \in A \setminus \{a_1, \dots, a_\ell\}$. Write
+    $$a_{\ell+1} = \sum_{i=1}^\ell \lambda_i a_i + \sum_{i=\ell+1}^n \lambda_i v_i$$</li>
+  </ul>
+
+  <p><strong>Key argument:</strong> Some $\lambda_i$ with $i > \ell$ must be nonzero. (If not, $a_{\ell+1} = \sum_{i=1}^\ell \lambda_i a_i$, giving $\sum_{i=1}^\ell \lambda_i a_i - a_{\ell+1} = 0$, a nontrivial relation — contradicting linear independence of $A$.) <strong>Renumber</strong> so $\lambda_{\ell+1} \neq 0$. By the <strong>Exchange Lemma</strong>, $\{a_1, \dots, a_{\ell+1}, v_{\ell+2}, \dots, v_n\}$ spans $V$. ✓</p>
+
+  <p><strong>Termination:</strong> Either we exhaust $A$ first ($|A| \leq n$), or we reach $\ell = n$. In the second case, $\{a_1, \dots, a_n\}$ spans, so $\langle \{a_1, \dots, a_n\} \rangle = V = \langle A \rangle$. By III.1.36, $A = \{a_1, \dots, a_n\}$, so $|A| = n$. $\square$</p>
+
+  <div class="callout warn">
+    <div class="callout-title">Three moves to remember</div>
+    <ol>
+      <li>Always <strong>renumber</strong> the $v_i$ so the nonzero coefficient is at $v_{\ell+1}$.</li>
+      <li>The <strong>key argument</strong> is: some $v$-coefficient must be nonzero, <em>because otherwise $A$ would be dependent</em>.</li>
+      <li>Cite the <strong>Exchange Lemma (III.1.46)</strong> explicitly at each step.</li>
+    </ol>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">Why it matters (the payoff)</div>
+    <p>Take any two bases $B_1, B_2$ of $V$. Each is both independent <em>and</em> spanning, so applying "independent $\leq$ spanning" both ways gives $|B_1| \leq |B_2|$ and $|B_2| \leq |B_1|$, hence $|B_1| = |B_2|$. That equality is the <strong>definition of dimension</strong>. Steinitz is the load-bearing wall under the entire theory of dimension — which is why it's a Tier-1 proof candidate even at only ~17% appearance frequency.</p>
+  </div>
+</div>
+
+<!-- RANK -->
+<div class="proof" id="proof-rank">
+  <div class="proof-header">
+    IV.1.15 — Rank of a Matrix
+    <span class="proof-tag tier2">Tier 2 — in scope, lower frequency</span>
+  </div>
+  <div class="proof-statement">For $A \in M_{m,n}(\mathbb{F})$: <strong>(i)</strong> $\text{rk}(A)$ equals the dimension of the column span of $A$ in $\mathbb{F}^m$ (so $\text{rk}(A) = r$ iff $r$ columns are linearly independent but any $r+1$ are dependent). <strong>(ii)</strong> For invertible $C \in M_m$, $D \in M_n$: $\text{rk}(A) = \text{rk}(CA) = \text{rk}(AD)$. <strong>(iii)</strong> If $A$ is in row echelon form with $r$ pivots, then $\text{rk}(A) = r$.</div>
+
+  <p>Throughout, let $f: \mathbb{F}^n \to \mathbb{F}^m$, $f(v) = Av$, so the columns of $A$ are $f(e_1), \dots, f(e_n)$.</p>
+
+  <h4>(i) — rank = column-span dimension</h4>
+  <p>The columns $f(e_1), \dots, f(e_n)$ generate $\text{im}(f)$ (Prop IV.0.2), so the column span <em>is</em> $\text{im}(f)$ and its dimension is $\text{rk}(A) := \dim(\text{im} f)$. By Cor III.1.48 this generating set contains a basis, giving the "$r$ independent, any $r+1$ dependent" characterization.</p>
+
+  <h4>(ii) — invariance under invertible multiplication</h4>
+  <p>Let $g: \mathbb{F}^m \to \mathbb{F}^m$, $g(v) = Cv$, an isomorphism. Then $g$ restricts to a bijection $\text{im}(f) \to \text{im}(g \circ f)$, so $\text{rk}(CA) = \dim(\text{im}(g\circ f)) = \dim(\text{im} f) = \text{rk}(A)$. The same argument on the domain side gives $\text{rk}(AD) = \text{rk}(A)$.</p>
+
+  <h4>(iii) — echelon form has rank = pivot count</h4>
+  <p>Reduce $A$ to <em>reduced</em> row echelon form (same pivots) by left-multiplication by an invertible matrix (Thm II.6.9); by (ii) this preserves rank, so assume $A$ is reduced. The pivot columns $j_1, \dots, j_r$ are exactly $e_1, \dots, e_r$, hence $r$ independent columns and $\text{rk}(A) \ge r$. Conversely all rows from $r+1$ on are zero, so $\text{im}(f) \subseteq \mathbb{F}^r$, forcing $\text{rk}(A) \le r$. Thus $\text{rk}(A) = r$. $\square$</p>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- OTHER IN-SCOPE PROOFS                                        -->
+<!-- ============================================================ -->
+
+<section class="part">
+  <div class="part-number">Part V · Other in-scope proofs</div>
+  <h2>The ten smaller proofs</h2>
+  <p>Anything from this list may appear inside Problem 2 or as part of Problem 5. Skeleton-level recall is enough.</p>
+
+<div class="proof" id="proof-257">
+  <div class="proof-header">II.5.7 — Triangular structure under matrix multiplication</div>
+  <div class="proof-statement">Lower-tri × lower-tri = lower-tri with $(AB)_{ii} = A_{ii} B_{ii}$. Unit/strict properties preserved. Same for upper-tri.</div>
+  <ol>
+    <li>Fix $i \leq j$. Split $(AB)_{ij} = \sum_k A_{ik} B_{kj}$ into three ranges: $k &lt; i$, $i \leq k \leq j$, $k &gt; j$.</li>
+    <li>Lower-triangularity kills the third sum ($A_{ik} = 0$ for $k > i$) and the first ($B_{kj} = 0$ for $k < j$).</li>
+    <li>If $i < j$: middle sum has $B_{kj} = 0$ for $k = i$ through $j-1$, giving $0$. If $i = j$: only $k = i$ survives, giving $A_{ii} B_{ii}$.</li>
+    <li>(b), (c) follow from (a) by checking diagonals. (d), (e), (f) by transposition: $(AB)^T = B^T A^T$.</li>
+  </ol>
+</div>
+
+<div class="proof" id="proof-258">
+  <div class="proof-header">II.5.8 — Inversion of a single Gaussian elimination step</div>
+  <div class="proof-statement">For $\ell \in \mathbb{F}^m$ with first $k$ components zero and $e_k$ the $k$-th column of $I$: $(I - \ell e_k^T)^{-1} = I + \ell e_k^T$.</div>
+  <ol>
+    <li>Compute $(I \mp \ell e_k^T)(I \pm \ell e_k^T) = I \pm \ell e_k^T \mp \ell e_k^T - \ell(e_k^T \ell) e_k^T$.</li>
+    <li>The cross-terms cancel. The quadratic term has $e_k^T \ell = \ell_k = 0$ by assumption.</li>
+    <li>So both products $= I$. By def II.4.14, $I - \ell e_k^T$ is invertible with inverse $I + \ell e_k^T$. $\square$</li>
+  </ol>
+</div>
+
+<div class="proof" id="proof-259">
+  <div class="proof-header">II.5.9 — Representation of $r$ steps of Gaussian elimination</div>
+  <div class="proof-statement">For $\ell_1, \dots, \ell_r \in \mathbb{F}^m$ ($r \le m-1$) where $\ell_k$ has its first $k$ components zero: $\displaystyle (I + \ell_1 e_1^T)\cdots(I + \ell_r e_r^T) = I + \sum_{k=1}^r \ell_k e_k^T$.</div>
+  <p><strong>Induction on $r$.</strong></p>
+  <ol>
+    <li><strong>Base ($r=1$):</strong> both sides equal $I + \ell_1 e_1^T$. Trivial.</li>
+    <li><strong>Step:</strong> assume the claim for $r=n$. Multiply both sides on the right by $I + \ell_{n+1} e_{n+1}^T$ and expand (associativity, identity, distributivity — II.4.10):
+    $$\Big(I + \sum_{k=1}^n \ell_k e_k^T\Big)\big(I + \ell_{n+1}e_{n+1}^T\big) = I + \sum_{k=1}^{n+1} \ell_k e_k^T + \sum_{k=1}^n \ell_k (e_k^T \ell_{n+1}) e_{n+1}^T.$$</li>
+    <li>The final sum vanishes: for each $k \le n$, $e_k^T \ell_{n+1}$ is component $k$ of $\ell_{n+1}$, which is zero by hypothesis. So the product equals $I + \sum_{k=1}^{n+1}\ell_k e_k^T$, completing the induction. $\square$</li>
+  </ol>
+</div>
+
+<div class="proof" id="proof-2510">
+  <div class="proof-header">II.5.10 — Lower-triangular matrices and inversion</div>
+  <div class="proof-statement">(a) Unit lower-tri ⇒ invertible with unit lower-tri inverse. (b) Lower-tri with no zero on diagonal ⇒ invertible with lower-tri inverse. (c) Invertible lower-tri ⇒ no zeros on diagonal.</div>
+
+  <h4>(a)</h4>
+  <p>Write $L - I = \sum_{k=1}^{m-1} \ell_k e_k^T$ where $\ell_k$ has first $k$ components zero. By Lemma II.5.9, $L = \prod_{k=1}^{m-1} (I + \ell_k e_k^T)$. Each factor invertible by II.5.8. So $L^{-1} = \prod_{k=m-1}^{1} (I - \ell_k e_k^T)$ (note reversed order). By II.5.7(b), $L^{-1}$ is unit lower-tri.</p>
+
+  <h4>(b)</h4>
+  <p>Let $D = \text{diag}(L)$. $D$ invertible (no zeros). $D^{-1} L$ is unit lower-tri ⇒ invertible by (a). So $L = D(D^{-1}L)$ is invertible. $L^{-1} = (D^{-1}L)^{-1} D^{-1}$, both lower-tri ⇒ $L^{-1}$ lower-tri by II.5.7(a).</p>
+
+  <h4>(c) — by contradiction</h4>
+  <p>Suppose $L$ invertible but $L_{kk} = 0$ for some smallest $k$.</p>
+  <ul>
+    <li>If $k = 1$: row 1 of $L$ is zero ⇒ row 1 of $LL^{-1}$ is zero ≠ row 1 of $I$. Contradiction.</li>
+    <li>If $k = m$: column $m$ of $L$ is zero ⇒ column $m$ of $L^{-1}L$ is zero ≠ column $m$ of $I$. Contradiction.</li>
+    <li>If $1 < k < m$: construct invertible $X$ such that $XL$ has a zero row at position $k$. Then $XL$ is invertible, but row $k$ of $(XL)^{-1}(XL)$ is zero. Contradiction. $\square$</li>
+  </ul>
+</div>
+
+<div class="proof" id="proof-1129">
+  <div class="proof-header">III.1.29 — The span is the smallest containing subspace</div>
+  <div class="proof-statement">For $A \subseteq V$: (i) there is a unique subspace $\langle A \rangle$ containing $A$ such that every subspace $W \supseteq A$ has $\langle A \rangle \subseteq W$. (ii) $v \in \langle A \rangle$ iff $v$ is a finite linear combination of elements of $A$.</div>
+
+  <h4>(i)</h4>
+  <p>Existence: define $\langle A \rangle := \bigcap_{W \supseteq A, W \text{ subspace}} W$. Intersection of subspaces is a subspace; contains $A$; minimal by construction.</p>
+  <p>Uniqueness: if $\tilde W$ has the same property, $\tilde W \subseteq \langle A \rangle$ and $\langle A \rangle \subseteq \tilde W$ both follow from the property.</p>
+
+  <h4>(ii)</h4>
+  <p>($\Leftarrow$) Any linear combination of $A$ lies in every subspace containing $A$, hence in the intersection $\langle A \rangle$.</p>
+  <p>($\Rightarrow$) Define $W := \{0\} \cup \{\text{all finite linear combinations of } A\}$. $W$ is a subspace (closed under linear combinations directly). $A \subseteq W$, so $\langle A \rangle \subseteq W$ by (i). $\square$</p>
+</div>
+
+<div class="proof" id="proof-1136">
+  <div class="proof-header">III.1.36 — Three equivalent characterizations of linear independence</div>
+  <div class="proof-statement">For $A \subseteq V$: (i) $A$ linearly independent ⇔ (ii) every $v \in \langle A \rangle$ has a unique representation ⇔ (iii) $\langle B \rangle \subsetneq \langle A \rangle$ for every proper $B \subsetneq A$.</div>
+
+  <h4>(i) ⇒ (ii)</h4>
+  <p>If $v = \sum \lambda_i a_i = \sum \mu_i a_i$, then $\sum (\lambda_i - \mu_i) a_i = 0$ forces $\lambda_i = \mu_i$ by linear independence.</p>
+
+  <h4>(ii) ⇒ (iii), contrapositive</h4>
+  <p>If $\langle B \rangle = \langle A \rangle$ for $B \subsetneq A$, pick $v \in A \setminus B$. Then $v$ has two representations: as $1 \cdot v$, and as a combination of $B$ (not involving $v$). Contradicts uniqueness.</p>
+
+  <h4>(iii) ⇒ (i), contrapositive</h4>
+  <p>If $A$ linearly dependent, $\sum_{i=1}^n \lambda_i v_i = 0$ with $\lambda_1 \neq 0$. So $v_1 = \sum_{i=2}^n -\frac{\lambda_i}{\lambda_1} v_i$. Setting $B = A \setminus \{v_1\}$, every element of $\langle A \rangle$ is reachable from $B$, so $\langle B \rangle = \langle A \rangle$. $\square$</p>
+</div>
+
+<div class="proof" id="proof-1138">
+  <div class="proof-header">III.1.38 — Three equivalent characterizations of a basis</div>
+  <div class="proof-statement">$\mathcal{B} \subseteq V$ is a basis ⇔ minimal spanning set ⇔ maximal linearly independent set.</div>
+
+  <h4>(i) ⇔ (ii)</h4>
+  <p>Spanning is in both. Minimality "$\langle A \rangle \neq V$ for $A \subsetneq \mathcal{B}$" is exactly III.1.36(iii), equivalent to linear independence.</p>
+
+  <h4>(i) ⇒ (iii)</h4>
+  <p>$\mathcal{B}$ l.i. Let $B \supsetneq \mathcal{B}$. Then $\langle B \rangle \supseteq \langle \mathcal{B} \rangle = V$. If $B$ were l.i., III.1.36(iii) gives $\langle \mathcal{B} \rangle \subsetneq \langle B \rangle = V$, contradicting $\langle \mathcal{B} \rangle = V$.</p>
+
+  <h4>(iii) ⇒ (i)</h4>
+  <p>$\mathcal{B}$ l.i. by hypothesis. For $v \in V$: if $v \in \mathcal{B}$ done; else $\mathcal{B} \cup \{v\}$ properly contains $\mathcal{B}$, so l.d. — argue $v$ appears with nonzero coefficient (else $\mathcal{B}$ would be dependent), solve for $v$ as combination of $\mathcal{B}$. $\square$</p>
+</div>
+
+<div class="proof" id="proof-1146">
+  <div class="proof-header">III.1.46 — Exchange Lemma</div>
+  <div class="proof-statement">For $A \subseteq V$, $v \in \langle A \rangle$ with $v = \sum \lambda_i a_i$ and $\lambda_0 \neq 0$ on some $a_0 \in A$. Then $A' := (A \setminus \{a_0\}) \cup \{v\}$ satisfies $\langle A' \rangle = \langle A \rangle$.</div>
+  <ol>
+    <li>From $v = \lambda_0 a_0 + \sum_{i \neq 0} \lambda_i a_i$ with $\lambda_0 \neq 0$, solve for $a_0$:
+    $$a_0 = \frac{1}{\lambda_0} v - \sum_{i \neq 0} \frac{\lambda_i}{\lambda_0} a_i$$</li>
+    <li>So $a_0 \in \langle A' \rangle$, hence $A \subseteq \langle A' \rangle$ and $\langle A \rangle \subseteq \langle A' \rangle$.</li>
+    <li>Conversely, $v \in \langle A \rangle$ and $A \setminus \{a_0\} \subseteq \langle A \rangle$, so $A' \subseteq \langle A \rangle$ and $\langle A' \rangle \subseteq \langle A \rangle$.</li>
+    <li>$\langle A' \rangle = \langle A \rangle$. $\square$</li>
+  </ol>
+</div>
+
+<div class="proof" id="proof-1147">
+  <div class="proof-header">III.1.47 — Steinitz Exchange Theorem</div>
+  <div class="proof-statement">The full proof lives in the big-proofs section above (it's a Tier-1 10-point candidate). See <a href="#proof-steinitz">Steinitz Exchange Theorem</a>. Quick reminders for part (ii) below.</div>
+  <h4>(ii) — extracting a finite spanning subset (the part the big version compresses)</h4>
+  <p>If $A = \{0\}$ take $A' = \emptyset$. Otherwise pick $a_1 \neq 0$; renumbering gives $\{a_1, v_2, \dots, v_n\}$ spanning. If $\langle\{a_1\}\rangle = V$, done; else there is $a_2 \in A \setminus \langle\{a_1\}\rangle$ (since $A$ spans), so some $v_i$ has a nonzero coefficient and exchanging gives $\{a_1, a_2, v_3, \dots, v_n\}$ spanning. Iterate: at step $\ell$, if $\{a_1, \dots, a_\ell\}$ doesn't span there is $a_{\ell+1} \in A \setminus \langle\{a_1, \dots, a_\ell\}\rangle$, forcing a nonzero $v$-coefficient; after $\le n$ exchanges the $a$'s alone span $V$, yielding $A'$. $\square$</p>
+</div>
+
+<div class="proof" id="proof-211">
+  <div class="proof-header">III.2.11 — Kernel/image are subspaces; injectivity criterion</div>
+  <div class="proof-statement">For linear $f: V \to W$: (i) image of a subspace is a subspace of $W$; (ii) preimage of a subspace is a subspace of $V$; (iii) $f$ surjective ⇔ $\text{im}(f) = W$; (iv) $f$ injective ⇔ $\ker(f) = \{0\}$.</div>
+
+  <h4>(i)</h4>
+  <p>Let $w, w' \in f(\hat V)$. Then $w = f(v)$, $w' = f(v')$ for some $v, v' \in \hat V$. By linearity, $\lambda w + w' = f(\lambda v + v') \in f(\hat V)$. Also $f(0) = 0 \in f(\hat V)$. ✓</p>
+
+  <h4>(ii)</h4>
+  <p>Let $v, v' \in f^{-1}(\hat W)$. Then $f(v), f(v') \in \hat W$. $f(\lambda v + v') = \lambda f(v) + f(v') \in \hat W$, so $\lambda v + v' \in f^{-1}(\hat W)$. Also $f(0) = 0 \in \hat W$. ✓</p>
+
+  <h4>(iv) ⇒</h4>
+  <p>If $f$ injective and $f(v) = 0 = f(0)$, then $v = 0$.</p>
+
+  <h4>(iv) ⇐</h4>
+  <p>If $\ker f = \{0\}$ and $f(x) = f(y)$, then $f(x-y) = 0$, so $x - y = 0$, hence $x = y$. $\square$</p>
+</div>
+
+<div class="proof" id="proof-small">
+  <div class="proof-header">Q2 small proofs</div>
+
+  <h4>Associativity of function composition</h4>
+  <p>For any $x$ in the domain of $f$:</p>
+  $$((h \circ g) \circ f)(x) = (h \circ g)(f(x)) = h(g(f(x))) = h((g \circ f)(x)) = (h \circ (g \circ f))(x)$$
+  <p>Equal at every point ⇒ functions equal. $\square$</p>
+
+  <h4>Uniqueness of inverse function</h4>
+  <p>Suppose $g, \tilde g$ both satisfy $g \circ f = \text{id}_X$ and $f \circ g = \text{id}_Y$. Then:</p>
+  $$\tilde g = \tilde g \circ \text{id}_Y = \tilde g \circ (f \circ g) = (\tilde g \circ f) \circ g = \text{id}_X \circ g = g$$
+  <p>Using associativity of composition in the middle step. $\square$</p>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- CONCEPTUAL DEEP DIVES                                        -->
+<!-- ============================================================ -->
+
+<section class="part">
+  <div class="part-number">Part VI · Concept guides</div>
+  <h2>The four pillars</h2>
+  <p>If these are clear, every Problem 5 and Problem 6 collapses. If they're fuzzy, no amount of memorization saves you.</p>
+
+<h3 id="concept-subspace">Subspace</h3>
+
+<p>A <strong>subset of a vector space that is itself a vector space</strong> using the same operations.</p>
+
+<p>The 3-step check:</p>
+<ol>
+  <li>$0 \in U$</li>
+  <li>$u, u' \in U \Rightarrow u + u' \in U$</li>
+  <li>$\lambda \in \mathbb{F}, u \in U \Rightarrow \lambda u \in U$</li>
+</ol>
+
+<p>In $\mathbb{R}^3$, subspaces are exactly: $\{0\}$, lines through origin, planes through origin, all of $\mathbb{R}^3$. Anything that doesn't contain $0$, or curves, or doesn't extend infinitely is <strong>not</strong> a subspace.</p>
+
+<div class="callout">
+  <div class="callout-title">The kernel trick — your most-used shortcut</div>
+  <p>If $U$ is defined by a <em>linear condition</em> ("$\phi(v) = 0$" for linear $\phi$), then $U = \ker(\phi)$ is automatically a subspace. Cite Prop III.2.11(ii) and you're done in one line.</p>
+  <p>Examples: $\{p : p(0) = 0\}$ is $\ker(\text{eval at 0})$. $\{v : h(v) = v\}$ is $\ker(h - \text{id})$. $\{p : \int_0^1 p = 0\}$ is $\ker(\text{integration})$.</p>
+</div>
+
+<h3 id="concept-span">Span</h3>
+
+<p>$\langle A \rangle$ — two equivalent definitions:</p>
+<ol>
+  <li><strong>Bottom-up:</strong> all finite linear combinations of elements of $A$.</li>
+  <li><strong>Top-down:</strong> the smallest subspace of $V$ containing $A$.</li>
+</ol>
+
+<p>In $\mathbb{R}^3$:</p>
+<ul>
+  <li>1 nonzero vector → line through origin.</li>
+  <li>2 non-parallel vectors → plane through origin.</li>
+  <li>3 non-coplanar vectors → all of $\mathbb{R}^3$.</li>
+</ul>
+
+<p>Adding parallel/redundant vectors does <strong>not</strong> grow the span.</p>
+
+<h3 id="concept-basis">Basis</h3>
+
+<p>A <strong>linearly independent spanning set</strong>. Three equivalent characterizations:</p>
+<ol>
+  <li>L.i. AND spanning (definition).</li>
+  <li>Minimal spanning set.</li>
+  <li>Maximal linearly independent set.</li>
+</ol>
+
+<p>Unique-representation property: <em>every $v \in V$ has exactly one representation as a linear combination of basis elements</em>. This is what makes coordinates possible.</p>
+
+<div class="callout">
+  <div class="callout-title">The basis machinery used in every big proof</div>
+  <ul>
+    <li><strong>Basis extension (Cor III.1.48(ii)):</strong> every l.i. set extends to a basis. <em>Used in Rank-Nullity, Dim Theorem for Sums.</em></li>
+    <li><strong>Basis containment (Cor III.1.48(i)):</strong> every spanning set contains a basis.</li>
+    <li><strong>All bases have the same size (Steinitz):</strong> defines dimension.</li>
+  </ul>
+</div>
+
+<h3 id="concept-lindep">Linear independence</h3>
+
+<p>$A = \{v_1, \dots, v_m\}$ is <strong>linearly independent</strong> iff the only linear combination equalling $0$ is the trivial one:</p>
+$$\lambda_1 v_1 + \dots + \lambda_m v_m = 0 \quad\Longrightarrow\quad \lambda_1 = \dots = \lambda_m = 0.$$
+<p>If some <em>nontrivial</em> combination (not all coefficients zero) gives $0$, the set is <strong>linearly dependent</strong>.</p>
+
+<p>Three equivalent views (III.1.36):</p>
+<ol>
+  <li>No nontrivial relation $\sum \lambda_i v_i = 0$.</li>
+  <li>Every $v \in \langle A \rangle$ has a unique representation.</li>
+  <li>Removing any element strictly shrinks the span.</li>
+</ol>
+
+<h4>How to prove a set is linearly independent</h4>
+<p>The definition is an implication ("if a combination is $0$, then the coefficients are $0$"), so the proof always has the same shape:</p>
+<ol>
+  <li><strong>Assume</strong> a general combination equals zero: write $\lambda_1 v_1 + \dots + \lambda_m v_m = 0$ with unknown scalars $\lambda_i$.</li>
+  <li><strong>Solve for the coefficients.</strong> Turn the vector equation into conditions on the $\lambda_i$ — usually by comparing components (in $\mathbb{F}^n$), comparing coefficients (for polynomials/matrices), or applying a linear map.</li>
+  <li><strong>Conclude</strong> that every $\lambda_i = 0$. That — and only that — proves independence. $\square$</li>
+</ol>
+
+<div class="callout">
+  <div class="callout-title">Why "= 0"?</div>
+  <p>You assume the combination equals $0$ because that's the one case the definition constrains. Zero is the only vector an independent set must reach in just one (trivial) way; a combination equalling any other vector says nothing about independence.</p>
+</div>
+
+<h4>Concrete methods by setting</h4>
+<ul>
+  <li><strong>In $\mathbb{F}^n$ (column vectors):</strong> stack the vectors as columns of a matrix and row-reduce. Independent $\iff$ a pivot in every column $\iff$ only solution to $A\lambda = 0$ is $\lambda = 0$. (This is the Problem 6 "basis containment" check.)</li>
+  <li><strong>Polynomials / matrices:</strong> set the combination equal to the zero polynomial / zero matrix and compare coefficients (or entries) degree-by-degree; each comparison forces one $\lambda_i = 0$.</li>
+  <li><strong>Abstract spaces:</strong> apply a convenient linear map or evaluation. E.g. for functions, plug in well-chosen inputs to peel off one coefficient at a time.</li>
+</ul>
+
+<h4>Worked example (polynomial style)</h4>
+<p>Show $\{1,\ 1+X,\ 1+X+X^2\}$ is independent in $\mathbb{F}_2[X]$. Assume</p>
+$$\lambda_1(1) + \lambda_2(1+X) + \lambda_3(1+X+X^2) = 0.$$
+<p>Collect by power of $X$: $(\lambda_1 + \lambda_2 + \lambda_3) + (\lambda_2 + \lambda_3)X + \lambda_3 X^2 = 0$. The zero polynomial has all coefficients zero, so</p>
+$$\lambda_3 = 0,\quad \lambda_2 + \lambda_3 = 0 \Rightarrow \lambda_2 = 0,\quad \lambda_1 + \lambda_2 + \lambda_3 = 0 \Rightarrow \lambda_1 = 0.$$
+<p>All coefficients vanish, so the set is independent. $\square$ (Notice the back-substitution — solve top-down from the highest power.)</p>
+
+<h4>To prove dependence instead</h4>
+<p>You only need to <em>exhibit one</em> nontrivial relation — find scalars, not all zero, with $\sum \lambda_i v_i = 0$. A single explicit witness suffices; you don't need to show all relations.</p>
+
+<p><strong>Quick disqualification:</strong> more vectors than $\dim V$ ⇒ linearly dependent, by Steinitz. Used constantly on Problem 6.</p>
+
+<div class="callout warn">
+  <div class="callout-title">The mistake everyone makes</div>
+  <p>"No vector is a scalar multiple of another" is <strong>not</strong> the definition and is wrong for sets of 3+ vectors. Three vectors can be pairwise non-proportional yet still dependent (e.g. coplanar vectors in $\mathbb{R}^3$). Always use the formal "only trivial combination gives $0$" definition.</p>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- PROBLEM 6 PATTERNS                                           -->
+<!-- ============================================================ -->
+
+<section class="part">
+  <div class="part-number">Part VII · Problem 6 patterns</div>
+  <h2>The mixed-bag toolkit</h2>
+  <p>Problem 6 has four subparts. Each maps to a recurring pattern. Recognize the pattern, apply the technique, cite the result, move on.</p>
+
+<h3 id="p6-fixed">Fixed-point subspace</h3>
+
+<p><strong>Question:</strong> "Show that $H = \{v : h(v) = v\}$ is a subspace."</p>
+
+<p><strong>Two-line solution:</strong> $h(v) = v \Leftrightarrow (h - \text{id})(v) = 0 \Leftrightarrow v \in \ker(h - \text{id})$. Since $h$ is linear, so is $h - \text{id}$. By <strong>Prop III.2.11(ii)</strong>, $\ker(h - \text{id})$ is a subspace. $\square$</p>
+
+<h3 id="p6-poly">Polynomial subspaces (vanishing, derivative, integral)</h3>
+
+<p><strong>Pattern:</strong> $\{p \in \mathbb{F}[X] : \phi(p) = 0\}$ for some linear $\phi$.</p>
+
+<p>Examples of linear $\phi$: $p \mapsto p(a)$ (evaluation), $p \mapsto p'(a)$ (derivative), $p \mapsto \int_a^b p$ (integration).</p>
+
+<p><strong>Solution:</strong> Express the set as $\ker(\phi)$. Cite Prop III.2.11(ii). $\square$</p>
+
+<h3 id="p6-steinitz">Dimension arguments via Steinitz</h3>
+
+<p><strong>Pattern:</strong> "Does $V$ contain a linearly independent (or spanning) set of size $k$?"</p>
+
+<table>
+  <thead><tr><th>Question type</th><th>Answer</th><th>Reason</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>L.i. set of size $k$?</td>
+      <td>Yes iff $k \leq \dim V$</td>
+      <td>By Steinitz, l.i. ⇒ $|A| \leq \dim V$</td>
+    </tr>
+    <tr>
+      <td>Spanning set of size $k$?</td>
+      <td>Yes iff $k \geq \dim V$</td>
+      <td>By Steinitz (part ii), spanning ⇒ $|A| \geq \dim V$</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Always cite Steinitz (III.1.47) explicitly.</strong></p>
+
+<p><strong>Key dimensions to memorize:</strong> $\dim \mathbb{F}^n = n$, $\dim \mathbb{F}_n[X] = n+1$, $\dim M_{m \times n}(\mathbb{F}) = mn$.</p>
+
+<h3 id="p6-directsum">Direct sum tricks ($f^n = f$ pattern)</h3>
+
+<p><strong>Pattern:</strong> "Given $f^5 = f$, show $V = \text{im}(f) \oplus \ker(f)$."</p>
+
+<p><strong>The trick:</strong> use $f^{n-1}$ as a projection. For $f^5 = f$, use $f^4$.</p>
+
+<ol>
+  <li><strong>Decomposition exists.</strong> For any $v$, write $v = f^4(v) + (v - f^4(v))$.
+    <ul>
+      <li>$f^4(v) \in \text{im}(f)$ since $f^4(v) = f(f^3(v))$.</li>
+      <li>$v - f^4(v) \in \ker(f)$ since $f(v - f^4(v)) = f(v) - f^5(v) = f(v) - f(v) = 0$. ✓</li>
+    </ul>
+  </li>
+  <li><strong>Intersection trivial.</strong> Suppose $w \in \text{im}(f) \cap \ker(f)$. Then $w = f(u)$ for some $u$, and $f(w) = 0$. Apply $f^4$ to $w = f(u)$: $f^4(w) = f^5(u) = f(u) = w$. But $f(w) = 0$ ⇒ $f^k(w) = 0$ for $k \geq 1$. So $w = f^4(w) = 0$. ✓ $\square$</li>
+</ol>
+
+<h3 id="p6-zp">Maps over $\mathbb{Z}_p$</h3>
+
+<p><strong>Pattern:</strong> "Given $f: \mathbb{Z}_p^n \to \mathbb{Z}_p^m$, is it injective/surjective?"</p>
+
+<ol>
+  <li>Write the matrix of $f$.</li>
+  <li>Row-reduce over $\mathbb{Z}_p$ (mod $p$ arithmetic — careful!).</li>
+  <li>Read off rank.</li>
+  <li>Apply rank-nullity: $\dim V = \text{rk}(f) + \dim(\ker f)$.</li>
+  <li><strong>Injective ⇔ $\text{rk}(f) = \dim V$.</strong> Surjective ⇔ $\text{rk}(f) = \dim W$.</li>
+</ol>
+
+<p><strong>Quick disqualifiers:</strong> $\dim V > \dim W$ ⇒ never injective. $\dim V < \dim W$ ⇒ never surjective.</p>
+
+<h3 id="p6-basisext">Basis extension</h3>
+
+<p><strong>Pattern:</strong> "Does there exist a basis of $V$ containing the vectors $v_1, v_2$?"</p>
+
+<ol>
+  <li>Form $[v_1 \mid v_2]$ and row-reduce to check linear independence.</li>
+  <li>If l.i.: <strong>yes</strong>, cite <strong>Corollary III.1.48(ii)</strong> (basis extension).</li>
+  <li>If l.d.: <strong>no</strong>, cite III.1.36 (l.d. set can't be in any basis).</li>
+</ol>
+
+<h3 id="p6-complexkernel">Complex kernel + injectivity ($T:\mathbb{C}^2 \to \mathbb{C}^2$)</h3>
+
+<div class="callout warn">
+  <div class="callout-title">This is the most reliable computational sub-question</div>
+  <p>Problem 6(d) was <strong>this exact pattern on both recent exams</strong> (3 points each time): a $2\times 2$ complex matrix $T(z,w) = \big(az + bw,\ cz + dw\big)$, "compute the kernel, is $T$ injective?" Expect it again.</p>
+</div>
+
+<p><strong>The shortcut — don't row-reduce unless you have to.</strong> For a $2\times 2$ map, $T$ is injective $\iff \ker T = \{0\} \iff$ the two columns are linearly independent $\iff ad - bc \neq 0$ (the $2\times 2$ "cross-product" test — this is just whether one column is a complex multiple of the other; it is <em>not</em> a determinant method on the syllabus, just the rank-1 check).</p>
+
+<ol>
+  <li><strong>Write the matrix</strong> $T = \begin{pmatrix} a & b \\ c & d \end{pmatrix}$ from $T(z,w) = (az+bw,\ cz+dw)$.</li>
+  <li><strong>Check if rows/columns are proportional.</strong> Compute $ad$ and $bc$.
+    <ul>
+      <li>If $ad \neq bc$: the map has rank 2, $\ker T = \{0\}$, $T$ is <strong>injective</strong>. Done.</li>
+      <li>If $ad = bc$: rank is 1 (assuming not all zero), kernel is 1-dimensional, $T$ is <strong>not injective</strong> — proceed to find it.</li>
+    </ul>
+  </li>
+  <li><strong>To find a nonzero kernel vector</strong> when $ad = bc$: solve $az + bw = 0$, i.e. $z = -\frac{b}{a} w$. Set $w = a$ (clears the denominator): kernel is spanned by $\begin{pmatrix} -b \\ a \end{pmatrix}$. So $\ker T = \left\langle \begin{pmatrix} -b \\ a \end{pmatrix} \right\rangle$.</li>
+</ol>
+
+<p><strong>Complex arithmetic reminders</strong> (where points get lost):</p>
+<ul>
+  <li>$i^2 = -1$. To divide, multiply by the conjugate: $\dfrac{1}{a+bi} = \dfrac{a-bi}{a^2+b^2}$.</li>
+  <li>Two columns $\binom{a}{c}, \binom{b}{d}$ are dependent over $\mathbb{C}$ iff $ad = bc$ <em>as complex numbers</em> — carry the $i$ terms carefully through the multiplication.</li>
+  <li>$\dim_{\mathbb{C}} \mathbb{C}^2 = 2$ (as a $\mathbb{C}$-vector space). Rank-nullity: $2 = \dim(\text{im}) + \dim(\ker)$.</li>
+</ul>
+
+<p><strong>Worked check (exam 1 style):</strong> $T(z,w) = \big((1+5i)z + 2w,\ (8+i)z + (1-3i)w\big)$. Here $ad = (1+5i)(1-3i) = 1 - 3i + 5i -15i^2 = 1 + 2i + 15 = 16 + 2i$, and $bc = 2(8+i) = 16 + 2i$. Since $ad = bc$, $T$ is <strong>not injective</strong>; kernel spanned by $\binom{-2}{\,1+5i}$. (Always recompute the arithmetic on the day — the point is the method.)</p>
+
+<h3 id="p6-linearitytest">Is this map linear?</h3>
+
+<p><strong>Pattern:</strong> "Is $F: \mathbb{R}^n \to \mathbb{R}^m$ given by [formula] linear?" (exam 2, Problem 6(c), 1 point.)</p>
+
+<p>A map is linear iff every output component is a <strong>homogeneous linear combination</strong> of the inputs (each term is constant × one variable, first degree, no constant term, no products, no powers).</p>
+
+<ul>
+  <li><strong>Scan each component for a non-linear term:</strong> anything like $v_i^2$, $v_i v_j$, $\sin v_i$, $|v_i|$, or a constant $+c$ breaks linearity.</li>
+  <li><strong>If non-linear:</strong> say "no" and give a one-line <strong>counterexample</strong> to additivity or homogeneity. For a squared term $v_1^2$: take $F(2v) \neq 2F(v)$. E.g. with $v = (1,0,0)$, the offending component gives $F(2v) = 4$ but $2F(v) = 2$, so homogeneity fails. $\square$</li>
+  <li><strong>If linear:</strong> say "yes", write the matrix $A$ with $F(v) = Av$, and note linearity follows since matrix multiplication is linear.</li>
+</ul>
+
+<h3 id="p6-setimage">Image/preimage of a set — the 1-point definitions</h3>
+
+<p>Problem 2(a) opens with one of these (1 point) — write them precisely:</p>
+<ul>
+  <li><strong>Direct image</strong> of $A \subseteq X$: $\ f(A) := \{ f(a) : a \in A \} \subseteq Y$.</li>
+  <li><strong>Preimage</strong> of $B \subseteq Y$: $\ f^{-1}(B) := \{ x \in X : f(x) \in B \} \subseteq X$. (Note: defined even when $f$ is not invertible.)</li>
+</ul>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- EXAM DAY                                                     -->
+<!-- ============================================================ -->
+
+<section id="exam-day" class="part">
+  <div class="part-number">Part VIII · Exam day</div>
+  <h2>What to remember when the pen hits the page</h2>
+
+<div class="callout">
+  <div class="callout-title">Before you start writing</div>
+  <ol>
+    <li>Read all 6 problems first. 2 minutes.</li>
+    <li>Note which Problem 5 candidate it is (Sums, Rank-Nullity, or Steinitz).</li>
+    <li>Mentally sequence: 1 → 2 → 6 → 5 → 3 → 4.</li>
+  </ol>
+</div>
+
+<div class="callout warn">
+  <div class="callout-title">During the proof problem (Q5)</div>
+  <ul>
+    <li>Write the statement <em>before</em> the proof. 2 points for this alone.</li>
+    <li>Define every term that appears in the statement (kernel, image, sum, etc.). 2 more points.</li>
+    <li>Cite every result you use by number: <strong>Lemma III.1.46</strong>, <strong>Cor. III.1.48</strong>, etc.</li>
+    <li>If you get stuck mid-proof: skip to "By [Lemma X], we conclude..." and outline the next step. Partial credit is real.</li>
+  </ul>
+</div>
+
+<div class="callout danger">
+  <div class="callout-title">The 5 most expensive mistakes</div>
+  <ol>
+    <li><strong>Missing axioms in Q1.</strong> Field has 6; vector space has 5. Count them as you write.</li>
+    <li><strong>Forgetting "$a \neq 0$"</strong> in the multiplicative inverse axiom.</li>
+    <li><strong>Not checking $0 \in U$</strong> first on subspace problems — fastest disqualifier.</li>
+    <li><strong>Not citing Steinitz / III.1.48</strong> in Problem 6 dimension arguments.</li>
+    <li><strong>Computing $A^{-1}$ without writing down the row operations.</strong> Show the work.</li>
+  </ol>
+</div>
+
+<div class="ornament">· · ·</div>
+
+<div class="pull-quote">
+  The material is finite. The exam is predictable. The prep is honest work, not magic.
+</div>
+
+<p style="text-align: center; color: var(--text-dim); margin-top: 4rem; font-style: italic;">Good luck.</p>
+
+</section>
+
+</main>
+
+</div>
+
+</body>
+</html>
