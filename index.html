@@ -3,40 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#1a1612">
+<meta name="theme-color" content="#f6f7f9">
 <meta name="description" content="Notes and mock exams for Introduction to Linear Algebra — Prof. Kazeev, Universität Wien.">
 <title>Linear Algebra — Notes & Mock Exams</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400..600;9..144,1,400..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #1a1612;
-    --bg-elevated: #221d18;
-    --bg-card: #1f1a15;
-    --border: #3a342c;
-    --border-soft: #2a251f;
-    --text: #f5efe4;
-    --text-muted: #b8aa97;
-    --text-dim: #8a7e6e;
-    --accent: #e0b888;
-    --accent-hover: #ecc89c;
-    --glow: rgba(224, 184, 136, 0.14);
+    --bg: #f6f7f9;
+    --bg-card: #ffffff;
+    --border: #e4e7ec;
+    --border-soft: #eef1f4;
+    --text: #14161c;
+    --text-muted: #565b66;
+    --text-dim: #868c98;
+    --accent: #4f46e5;
+    --accent-hover: #6257f0;
+    --glow: rgba(79, 70, 229, 0.10);
+    --font-head: 'Space Grotesk', sans-serif;
+    --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-body);
     background: var(--bg);
     color: var(--text);
-    line-height: 1.65;
-    letter-spacing: -0.005em;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     min-height: 100vh;
-    /* soft warm glow behind the hero */
-    background-image:
-      radial-gradient(900px 500px at 50% -10%, var(--glow), transparent 70%);
+    background-image: radial-gradient(820px 460px at 50% -8%, var(--glow), transparent 70%);
     background-repeat: no-repeat;
   }
 
@@ -50,22 +49,23 @@
 
   /* HERO */
   .eyebrow {
+    font-family: var(--font-mono);
     font-weight: 500;
     color: var(--accent);
-    font-size: clamp(0.74rem, 2.6vw, 0.85rem);
-    letter-spacing: 0.14em;
+    font-size: clamp(0.72rem, 2.6vw, 0.8rem);
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     margin-bottom: 1.1rem;
   }
   h1 {
-    font-family: 'Fraunces', serif;
-    font-weight: 500;
-    font-size: clamp(2.4rem, 9vw, 3.6rem);
-    line-height: 1.04;
-    letter-spacing: -0.025em;
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: clamp(2.4rem, 9vw, 3.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
     margin-bottom: 1.3rem;
   }
-  h1 em { font-style: italic; color: var(--accent); }
+  h1 .hl { color: var(--accent); }
   .lede {
     font-size: clamp(1rem, 3.4vw, 1.12rem);
     color: var(--text-muted);
@@ -90,37 +90,30 @@
     padding: clamp(1.4rem, 4vw, 1.85rem);
     text-decoration: none;
     color: inherit;
-    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(20, 22, 28, 0.04);
     transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
     -webkit-tap-highlight-color: transparent;
-  }
-  .card::before {
-    content: "";
-    position: absolute; inset: 0;
-    background: radial-gradient(420px 200px at 100% 0%, var(--glow), transparent 60%);
-    opacity: 0; transition: opacity .25s ease;
-    pointer-events: none;
   }
   .card:hover, .card:focus-visible {
     transform: translateY(-3px);
     border-color: var(--accent);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    box-shadow: 0 14px 34px rgba(79, 70, 229, 0.16);
     outline: none;
   }
-  .card:hover::before, .card:focus-visible::before { opacity: 1; }
   .card-num {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
     color: var(--text-dim);
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     margin-bottom: 1rem;
   }
   .card-title {
-    font-family: 'Fraunces', serif;
+    font-family: var(--font-head);
     font-weight: 600;
-    font-size: clamp(1.4rem, 4.5vw, 1.7rem);
-    color: var(--accent);
+    font-size: clamp(1.4rem, 4.5vw, 1.65rem);
+    color: var(--text);
     line-height: 1.1;
+    letter-spacing: -0.02em;
     margin-bottom: 0.5rem;
   }
   .card-desc { color: var(--text-muted); font-size: 0.96rem; flex: 1; }
@@ -128,7 +121,7 @@
     margin-top: 1.25rem;
     font-weight: 600;
     font-size: 0.9rem;
-    color: var(--text);
+    color: var(--accent);
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
@@ -166,7 +159,7 @@
 
   <header>
     <div class="eyebrow">Universität Wien · Prof. Kazeev</div>
-    <h1>Introduction to<br><em>Linear Algebra</em></h1>
+    <h1>Introduction to<br><span class="hl">Linear Algebra</span></h1>
     <p class="lede">Everything you need for the 4th exam date — distilled notes, the must-know proofs, and five full mock exams with answer keys.</p>
   </header>
 

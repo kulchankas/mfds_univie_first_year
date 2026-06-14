@@ -6,7 +6,7 @@
 <title>Mock Exams — Intro to Linear Algebra</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script>
 MathJax = {
   tex: { inlineMath: [['$', '$']], displayMath: [['$$','$$']] },
@@ -14,35 +14,37 @@ MathJax = {
 };
 </script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-<meta name="theme-color" content="#1a1612">
+<meta name="theme-color" content="#f6f7f9">
 <style>
   :root {
-    --bg: #1a1612;
-    --bg-elevated: #221d18;
-    --bg-card: #1f1a15;
-    --border: #3a342c;
-    --border-soft: #2a251f;
-    --text: #f5efe4;
-    --text-muted: #b8aa97;
-    --text-dim: #8a7e6e;
-    --accent: #e0b888;
-    --accent-hover: #ecc89c;
-    --warn: #d99a7e;
-    --danger: #c87060;
-    --ok: #8bc6a0;
-    --highlight: #2a2218;
-    --code-bg: #14110d;
-    --glow: rgba(224, 184, 136, 0.12);
+    --bg: #f6f7f9;
+    --bg-elevated: #ffffff;
+    --bg-card: #ffffff;
+    --border: #e4e7ec;
+    --border-soft: #eef1f4;
+    --text: #14161c;
+    --text-muted: #565b66;
+    --text-dim: #868c98;
+    --accent: #4f46e5;
+    --accent-hover: #6257f0;
+    --warn: #c2410c;
+    --danger: #be123c;
+    --ok: #0f766e;
+    --highlight: #eef0fe;
+    --code-bg: #eef1f4;
+    --glow: rgba(79, 70, 229, 0.08);
+    --font-head: 'Space Grotesk', sans-serif;
+    --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-body);
     background: var(--bg);
     color: var(--text);
     font-size: clamp(15.5px, 1.2vw + 13px, 17px);
     line-height: 1.65;
-    letter-spacing: -0.005em;
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased;
@@ -71,103 +73,106 @@ MathJax = {
   }
   .home-link:hover { color: var(--accent); }
   h1 {
-    font-family: 'Fraunces', serif;
+    font-family: var(--font-head);
     font-weight: 600;
-    font-size: clamp(1.9rem, 6vw, 2.4rem);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+    font-size: clamp(1.9rem, 6vw, 2.45rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
     margin: 0 0 0.4rem;
     color: var(--text);
   }
   h2 {
-    font-family: 'Fraunces', serif;
+    font-family: var(--font-head);
     font-weight: 600;
     font-size: clamp(1.35rem, 4.5vw, 1.7rem);
-    color: var(--accent);
+    color: var(--text);
     margin: 3rem 0 0.3rem;
     padding-top: 1.6rem;
     border-top: 1px solid var(--border);
-    letter-spacing: -0.015em;
+    letter-spacing: -0.025em;
   }
   h2:first-of-type { border-top: none; }
   h3 {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 1.05rem;
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 1.08rem;
     margin: 1.8rem 0 0.4rem;
     color: var(--text);
+    letter-spacing: -0.01em;
   }
   .lead { color: var(--text-muted); margin-bottom: 1.5rem; }
   .meta {
     color: var(--text-dim);
-    font-size: 0.85rem;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     margin-bottom: 2rem;
   }
   .problem {
     margin: 1.3rem 0;
     padding-left: 1rem;
-    border-left: 2px solid var(--border-soft);
+    border-left: 2px solid var(--border);
   }
   .problem .pts { color: var(--text-dim); font-size: 0.85rem; }
-  strong { color: var(--text); }
-  em { color: var(--accent-hover); }
+  strong { color: var(--text); font-weight: 600; }
+  em { color: var(--accent); font-style: italic; }
   .tag {
     display: inline-block;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 700;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 0.12rem 0.5rem;
-    border-radius: 3px;
+    letter-spacing: 0.05em;
+    padding: 0.14rem 0.5rem;
+    border-radius: 4px;
     margin-left: 0.5rem;
     vertical-align: middle;
   }
-  .tag.core { background: var(--highlight); color: var(--accent); border: 1px solid var(--border); }
-  .tag.extra { background: rgba(180, 130, 200, 0.16); color: #d3aee0; border: 1px solid rgba(180, 130, 200, 0.4); }
+  .tag.core { background: var(--highlight); color: var(--accent); border: 1px solid #d6d8fb; }
+  .tag.extra { background: #e6f6f3; color: #0f766e; border: 1px solid #c2e8e1; }
   .table-scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 1.2rem 0; }
   table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
   th, td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; text-align: left; white-space: nowrap; }
   th { background: var(--highlight); color: var(--accent); font-weight: 600; }
-  tr:hover { background: var(--bg-card); }
+  tr:hover { background: var(--bg-elevated); }
   .callout {
-    background: var(--highlight);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-left: 4px solid var(--accent);
     padding: 0.9rem 1.2rem;
     margin: 1.4rem 0;
-    border-radius: 0 4px 4px 0;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 1px 2px rgba(20, 22, 28, 0.04);
   }
   .callout.warn { border-left-color: var(--warn); }
   .callout-title {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
+    font-family: var(--font-mono);
+    font-weight: 600;
     color: var(--accent);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    font-size: 0.72rem;
     margin-bottom: 0.5rem;
   }
   .callout.warn .callout-title { color: var(--warn); }
   details.answers {
     margin: 1.5rem 0 0;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 10px;
     background: var(--bg-card);
     padding: 0 1.2rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1px 2px rgba(20, 22, 28, 0.04);
   }
   details.answers summary {
     cursor: pointer;
     list-style: none;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
+    font-family: var(--font-mono);
+    font-weight: 600;
     color: var(--ok);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    font-size: 0.76rem;
     padding: 0.9rem 0;
   }
   details.answers summary::-webkit-details-marker { display: none; }
@@ -178,16 +183,15 @@ MathJax = {
   details.answers li { margin: 0.35rem 0; color: var(--text-muted); }
   details.answers li strong { color: var(--text); }
   code {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.88em;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
     background: var(--code-bg);
     color: var(--accent);
     padding: 0.1rem 0.4rem;
-    border-radius: 3px;
+    border-radius: 4px;
   }
   a { color: var(--accent); }
-  /* MathJax: recolor for dark bg + let long display math scroll on mobile */
-  mjx-container { color: var(--text) !important; }
+  /* MathJax: let long display math scroll on mobile instead of overflowing */
   mjx-container[display="true"] {
     overflow-x: auto;
     overflow-y: hidden;

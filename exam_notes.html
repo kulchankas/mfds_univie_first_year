@@ -6,7 +6,8 @@
 <title>Linear Algebra — Exam Notes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#f6f7f9">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script>
 MathJax = {
   tex: {
@@ -20,20 +21,21 @@ MathJax = {
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 <style>
   :root {
-    --bg: #1a1612;
-    --bg-elevated: #221d18;
-    --bg-card: #1f1a15;
-    --border: #3a342c;
-    --border-soft: #2a251f;
-    --text: #f5efe4;
-    --text-muted: #b8aa97;
-    --text-dim: #8a7e6e;
-    --accent: #e0b888;
-    --accent-hover: #ecc89c;
-    --warn: #d99a7e;
-    --danger: #c87060;
-    --highlight: #2a2218;
-    --code-bg: #14110d;
+    --bg: #f6f7f9;
+    --bg-elevated: #ffffff;
+    --bg-card: #ffffff;
+    --border: #e4e7ec;
+    --border-soft: #eef1f4;
+    --text: #14161c;
+    --text-muted: #565b66;
+    --text-dim: #868c98;
+    --accent: #4f46e5;
+    --accent-hover: #6257f0;
+    --warn: #c2410c;
+    --danger: #be123c;
+    --ok: #0f766e;
+    --highlight: #eef0fe;
+    --code-bg: #eef1f4;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,7 +43,7 @@ MathJax = {
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: var(--bg);
     color: var(--text);
     font-size: 17px;
@@ -71,7 +73,7 @@ MathJax = {
   }
 
   .sidebar-header {
-    font-family: 'Inter', sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 700;
     font-size: 1rem;
     letter-spacing: -0.01em;
@@ -88,7 +90,7 @@ MathJax = {
   }
 
   .sidebar nav h3 {
-    font-family: 'Inter', sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.14em;
@@ -131,7 +133,7 @@ MathJax = {
   }
 
   .eyebrow {
-    font-family: 'Inter', sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 500;
     color: var(--accent);
     font-size: 0.85rem;
@@ -141,7 +143,7 @@ MathJax = {
   }
 
   h1 {
-    font-family: 'Fraunces', serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-weight: 500;
     font-size: 3.25rem;
     line-height: 1.05;
@@ -170,7 +172,7 @@ MathJax = {
   }
 
   .part-number {
-    font-family: 'Inter', sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 600;
     color: var(--accent);
     font-size: 0.85rem;
@@ -180,7 +182,7 @@ MathJax = {
   }
 
   h2 {
-    font-family: 'Fraunces', serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-weight: 500;
     font-size: 2.25rem;
     line-height: 1.15;
@@ -198,7 +200,7 @@ MathJax = {
   }
 
   h3 {
-    font-family: 'Inter', sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 600;
     font-size: 1.4rem;
     margin: 3rem 0 1rem;
@@ -207,7 +209,7 @@ MathJax = {
   }
 
   h4 {
-    font-family: 'Inter', sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 600;
     font-size: 1.05rem;
     margin: 1.75rem 0 0.75rem;
@@ -243,7 +245,7 @@ MathJax = {
   }
 
   .definition .term {
-    font-family: 'Inter', sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 700;
     color: var(--accent);
     font-size: 1.05rem;
@@ -258,7 +260,7 @@ MathJax = {
     font-style: normal;
     margin-left: 0.5rem;
     font-weight: 400;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'IBM Plex Mono', monospace;
   }
 
   /* PROOFS */
@@ -271,7 +273,7 @@ MathJax = {
   }
 
   .proof-header {
-    font-family: 'Inter', sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 700;
     color: var(--accent);
     font-size: 1.05rem;
@@ -286,8 +288,8 @@ MathJax = {
   .proof-tag {
     display: inline-block;
     background: var(--warn);
-    color: var(--bg);
-    font-family: 'JetBrains Mono', monospace;
+    color: #fff;
+    font-family: 'IBM Plex Mono', monospace;
     font-size: 0.7rem;
     font-weight: 700;
     padding: 0.15rem 0.55rem;
@@ -298,13 +300,13 @@ MathJax = {
 
   .proof-tag.tier1 {
     background: var(--danger);
-    color: var(--text);
+    color: #fff;
   }
 
   .proof-tag.tier2 {
     background: var(--accent, #3a6ea5);
-    color: var(--text);
-    opacity: 0.85;
+    color: #fff;
+    opacity: 1;
   }
 
   .proof-statement {
@@ -335,7 +337,7 @@ MathJax = {
   }
 
   .callout-title {
-    font-family: 'Inter', sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 700;
     color: var(--accent);
     text-transform: uppercase;
@@ -371,7 +373,7 @@ MathJax = {
 
   /* CODE & MATH */
   code {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'IBM Plex Mono', monospace;
     font-size: 0.88em;
     background: var(--code-bg);
     color: var(--accent);
@@ -396,7 +398,7 @@ MathJax = {
   }
 
   th {
-    font-family: 'Inter', sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 700;
     color: var(--accent);
     text-transform: uppercase;
@@ -413,11 +415,11 @@ MathJax = {
     color: var(--text-dim);
     margin: 3rem 0;
     letter-spacing: 1em;
-    font-family: 'Fraunces', serif;
+    font-family: 'Space Grotesk', sans-serif;
   }
 
   .pull-quote {
-    font-family: 'Fraunces', serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-style: italic;
     font-size: 1.25rem;
     font-weight: 400;
