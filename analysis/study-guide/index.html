@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analysis in Data Science — Exam Study Guide</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" id="MathJax-script" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#10211c;        /* deep spruce */
+  --paper:#f6f4ec;      /* warm chalk */
+  --line:#cfc8b6;
+  --accent:#b5491f;     /* burnt sienna — "do this" actions */
+  --accent2:#1f5d4c;    /* viridian — structure */
+  --gold:#a6822b;
+  --soft:#ece7d8;
+  --code-bg:#11231e;
+  --code-ink:#e7e1cf;
+  --muted:#5f6b62;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Newsreader","Iowan Old Style",Georgia,serif;
+  line-height:1.62; font-size:18px; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+.wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:262px 1fr;gap:0;}
+/* ---- sidebar nav ---- */
+nav{
+  position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;
+  padding:28px 20px 60px;border-right:1px solid var(--line);background:var(--soft);
+  font-family:"Space Grotesk",-apple-system,"Segoe UI",sans-serif;font-size:13.5px;
+}
+nav h1{font-size:15px;letter-spacing:.04em;margin:0 0 4px;text-transform:uppercase;color:var(--accent2)}
+nav .sub{color:var(--muted);font-size:12px;margin-bottom:18px;line-height:1.4}
+nav a{display:block;color:var(--ink);text-decoration:none;padding:3px 0;border-bottom:1px dotted transparent}
+nav a:hover{color:var(--accent);border-bottom:1px dotted var(--accent)}
+nav .grp{margin:14px 0 4px;font-weight:700;color:var(--accent2);text-transform:uppercase;font-size:11px;letter-spacing:.08em}
+nav .ps{color:var(--gold);font-weight:600}
+/* ---- main ---- */
+main{padding:46px 54px 120px;min-width:0}
+header.hero{margin-bottom:40px}
+header.hero .eyebrow{font-family:"Space Grotesk",sans-serif;text-transform:uppercase;letter-spacing:.22em;font-size:12px;color:var(--accent);font-weight:600}
+header.hero h1{font-family:"Space Grotesk",sans-serif;font-size:46px;line-height:1.02;margin:.18em 0 .25em;font-weight:700;letter-spacing:-.02em}
+header.hero p.lede{font-size:19px;color:var(--muted);max-width:60ch;margin:0}
+section{margin:0 0 14px;padding:34px 0 8px;border-top:1px solid var(--line)}
+section:first-of-type{border-top:none}
+h2{font-family:"Space Grotesk",sans-serif;font-size:31px;margin:0 0 .1em;font-weight:700;color:var(--accent2);letter-spacing:-.015em}
+h2 .tag{font-family:"Space Grotesk",sans-serif;font-size:12px;font-weight:600;color:var(--accent);letter-spacing:.05em;display:block;text-transform:uppercase;margin-bottom:6px}
+h3{font-family:"Space Grotesk",sans-serif;font-size:21px;margin:1.4em 0 .3em;font-weight:600;letter-spacing:-.01em}
+h4{font-size:16.5px;margin:1.1em 0 .2em;font-family:"Space Grotesk",sans-serif;letter-spacing:.02em;color:var(--accent2)}
+p{margin:.5em 0}
+ul,ol{margin:.4em 0 .8em;padding-left:1.3em}
+li{margin:.28em 0}
+strong{font-weight:700}
+em{color:var(--ink)}
+code{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:.86em;background:var(--soft);padding:1px 5px;border-radius:4px}
+.muted{color:var(--muted)}
+/* state-prove-compute pills */
+.spc{display:inline-block;font-family:"Space Grotesk",sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-right:6px;vertical-align:middle}
+.s-state{background:#e7eef0;color:#2a5b6b}
+.s-prove{background:#f0e3da;color:#8d3c16}
+.s-compute{background:#e6efe6;color:#2c6b3e}
+/* boxes */
+.box{border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:14px 0;background:#fbfaf4}
+.box.def{border-left:5px solid var(--accent2)}
+.box.thm{border-left:5px solid var(--gold);background:#fbf7ea}
+.box.recipe{border-left:5px solid var(--accent);background:#fcf3ee}
+.box.pitfall{border-left:5px solid #9c2b2b;background:#faeeee}
+.box.idea{border-left:5px solid var(--accent2);background:#eef4f1}
+.box .lbl{font-family:"Space Grotesk",sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:11px;font-weight:700;color:var(--accent2);display:block;margin-bottom:4px}
+.box.recipe .lbl{color:var(--accent)}
+.box.thm .lbl{color:var(--gold)}
+.box.pitfall .lbl{color:#9c2b2b}
+/* code blocks */
+pre{background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:10px;overflow-x:auto;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:13.5px;line-height:1.5;margin:12px 0}
+pre .cm{color:#8fae9c}
+pre .kw{color:#e0a85a}
+/* problem-set link chips */
+.pschip{display:inline-block;font-family:"Space Grotesk",sans-serif;font-size:11px;font-weight:600;background:var(--accent2);color:#fff;padding:2px 9px;border-radius:5px;margin:0 4px 4px 0;letter-spacing:.02em}
+.maps{font-family:"Space Grotesk",sans-serif;font-size:13px;color:var(--muted);margin:.3em 0 1em}
+/* practice block */
+.practice{background:#11231e;color:#ece7d8;border-radius:12px;padding:18px 24px;margin:18px 0}
+.practice .lbl{font-family:"Space Grotesk",sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:11px;font-weight:700;color:#d98a5e;display:block;margin-bottom:8px}
+.practice ol{padding-left:1.2em}
+.practice li{margin:.5em 0}
+.practice a.sol{color:#d98a5e}
+details.sol{margin:.4em 0 0;font-size:14.5px}
+details.sol summary{cursor:pointer;color:#d98a5e;font-family:"Space Grotesk",sans-serif;font-size:12px;letter-spacing:.04em}
+details.sol[open] summary{margin-bottom:6px}
+details.sol .body{color:#cfd6cd;border-left:2px solid #3a564b;padding-left:14px}
+/* schedule table */
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14.5px;font-family:"Space Grotesk",sans-serif}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+th{background:var(--accent2);color:#fff;font-weight:600;letter-spacing:.02em}
+tr:nth-child(even) td{background:#fbfaf4}
+td .day{font-weight:700;color:var(--accent2)}
+/* resource cards */
+.res{display:grid;grid-template-columns:1fr;gap:0}
+.res .r{border-bottom:1px solid var(--line);padding:10px 0}
+.res .r b{color:var(--accent2)}
+.res .r .w{font-family:"Space Grotesk",sans-serif;font-size:12.5px;color:var(--muted)}
+.callout{font-family:"Space Grotesk",sans-serif;font-size:14px;background:#f0e3da;border-radius:8px;padding:12px 16px;margin:14px 0;color:#7a3414}
+hr.rule{border:none;border-top:1px solid var(--line);margin:30px 0}
+figure.fig{margin:18px 0;padding:14px 16px 10px;background:#fbfaf4;border:1px solid var(--line);border-radius:12px}
+figure.fig svg{display:block}
+figure.fig figcaption{font-family:"Space Grotesk",sans-serif;font-size:12.5px;color:var(--muted);text-align:center;margin-top:8px;line-height:1.4}
+figure.fig figcaption b{color:var(--accent2)}
+/* ============================================================
+   UX ENHANCEMENTS  (reading progress, scrollspy, dark mode,
+   mobile nav, back-to-top, copy-code, print)
+   ============================================================ */
+/* reading-progress bar */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:80;
+  background:linear-gradient(90deg,var(--accent),var(--gold));transition:width .08s linear}
+/* shared small UI button */
+.btn-ui{font-family:"Space Grotesk",sans-serif;font-size:12px;font-weight:600;cursor:pointer;
+  border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:6px 11px;border-radius:8px;
+  display:inline-flex;align-items:center;gap:6px;letter-spacing:.02em;
+  transition:background .15s,color .15s,border-color .15s}
+.btn-ui:hover{border-color:var(--accent);color:var(--accent)}
+.toggle-row{display:flex;gap:8px;margin:2px 0 18px}
+.toggle-row .btn-ui{flex:1;justify-content:center}
+nav .nav-close{display:none}
+/* active scrollspy link */
+nav a.active{color:var(--accent);border-bottom:1px dotted var(--accent);font-weight:700;
+  padding-left:8px;margin-left:-8px;border-left:2px solid var(--accent)}
+/* back-to-top */
+#toTop{position:fixed;right:24px;bottom:24px;width:46px;height:46px;border-radius:50%;
+  border:1px solid var(--line);background:var(--accent2);color:#fff;font-size:20px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;
+  transform:translateY(10px);transition:opacity .2s,transform .2s,background .15s;z-index:60;
+  box-shadow:0 8px 22px rgba(0,0,0,.20)}
+#toTop.show{opacity:1;pointer-events:auto;transform:none}
+#toTop:hover{background:var(--accent)}
+/* copy-to-clipboard on code blocks */
+pre{position:relative}
+.copy-btn{position:absolute;top:9px;right:9px;font-family:"Space Grotesk",sans-serif;font-size:11px;
+  font-weight:600;cursor:pointer;border:1px solid #33473f;background:#1b302a;color:#cfd6cd;
+  padding:3px 10px;border-radius:6px;opacity:0;transition:opacity .15s,background .15s,color .15s}
+pre:hover .copy-btn,.copy-btn:focus{opacity:1}
+.copy-btn:hover{background:#274237;color:#fff}
+.copy-btn.done{color:#9ed8b0;border-color:#3a6b50}
+/* mobile topbar + off-canvas overlay (hidden on desktop) */
+.topbar{display:none}
+#overlay{display:none}
+/* keep wide content (display math, tables, code) from forcing horizontal page scroll */
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%;padding-bottom:2px}
+.scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+.scroll-x>table{margin:0}
+code{overflow-wrap:break-word}
+section{scroll-margin-top:24px}
+
+/* ---------- dark theme ---------- */
+[data-theme="dark"]{
+  --ink:#e8e2d0; --paper:#0e1a16; --line:#2a3a31; --accent:#e8915f; --accent2:#5fb39b;
+  --gold:#cda84e; --soft:#15231e; --muted:#9aa89f;
+}
+[data-theme="dark"] code{background:#1b2a24}
+[data-theme="dark"] .box{background:#13211c;border-color:#2a3a31}
+[data-theme="dark"] .box.thm{background:#1d2014}
+[data-theme="dark"] .box.recipe{background:#22160f}
+[data-theme="dark"] .box.pitfall{background:#221414}
+[data-theme="dark"] .box.idea{background:#102019}
+[data-theme="dark"] table tr:nth-child(even) td{background:#13211c}
+[data-theme="dark"] td .day{color:var(--accent2)}
+[data-theme="dark"] .callout{background:#26190f;color:#e6a274}
+[data-theme="dark"] .btn-ui{background:var(--soft)}
+[data-theme="dark"] .s-state{background:#1c2e33;color:#92c6d6}
+[data-theme="dark"] .s-prove{background:#33231a;color:#e6a47e}
+[data-theme="dark"] .s-compute{background:#1b2e22;color:#90d2a5}
+/* keep hand-drawn diagrams on a light "plate" so they stay legible in dark mode */
+[data-theme="dark"] figure.fig{background:#ece7d8;border-color:#3a4a43}
+[data-theme="dark"] figure.fig figcaption{color:#5f6b62}
+[data-theme="dark"] figure.fig figcaption b{color:#1f5d4c}
+
+/* ---------- mobile ---------- */
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr}
+  .topbar{display:flex;align-items:center;gap:8px;position:fixed;top:0;left:0;right:0;height:56px;
+    z-index:50;background:var(--soft);border-bottom:1px solid var(--line);padding:0 8px 0 4px}
+  .topbar .ham{font-size:23px;background:none;border:none;color:var(--ink);cursor:pointer;line-height:1;
+    width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:9px}
+  .topbar .ham:active{background:rgba(127,127,127,.16)}
+  .topbar .ttl{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:14px;color:var(--accent2);
+    letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .topbar .spacer{flex:1}
+  .topbar .btn-ui{min-width:42px;height:38px;justify-content:center}
+  nav{position:fixed;top:0;left:0;bottom:0;width:288px;max-width:86vw;height:100vh;z-index:70;
+    padding:24px 22px 60px;transform:translateX(-100%);transition:transform .26s ease;
+    border-right:1px solid var(--line);box-shadow:0 0 46px rgba(0,0,0,.30)}
+  body.nav-open nav{transform:none}
+  body.nav-open{overflow:hidden}
+  nav a{padding:8px 0;font-size:14.5px}
+  nav .grp{margin-top:18px}
+  nav .nav-close{display:flex;align-items:center;justify-content:center;position:absolute;top:10px;right:10px;
+    width:40px;height:40px;font-size:20px;background:none;border:none;color:var(--muted);cursor:pointer;border-radius:9px}
+  #overlay{display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:65;
+    opacity:0;pointer-events:none;transition:opacity .26s}
+  body.nav-open #overlay{opacity:1;pointer-events:auto}
+  main{padding:74px 20px 80px}
+  section{scroll-margin-top:66px}
+  header.hero{margin-bottom:30px}
+  header.hero h1{font-size:33px}
+  header.hero p.lede{font-size:17px}
+  table{font-size:13.5px}
+  th,td{padding:7px 9px}
+  pre{font-size:12.8px;padding:14px}
+  .practice{padding:16px 18px}
+  .copy-btn{opacity:1}                /* touch devices have no hover — keep it visible */
+  #toTop{right:16px;bottom:16px}
+}
+@media (max-width:560px){
+  body{font-size:16.5px;line-height:1.58}
+  main{padding:70px 15px 72px}
+  header.hero h1{font-size:28px}
+  header.hero .eyebrow{letter-spacing:.16em;font-size:11px}
+  h2{font-size:24px}
+  h3{font-size:18.5px}
+  h4{font-size:15.5px}
+  .box{padding:13px 15px}
+  .practice{padding:14px 15px;border-radius:10px}
+  figure.fig{padding:10px 10px 8px}
+  pre{font-size:12px;padding:12px}
+  .maps,.callout{font-size:13px}
+  .pschip{font-size:10.5px}
+  table{font-size:12.5px}
+  th,td{padding:6px 7px}
+  #toTop{width:42px;height:42px}
+}
+
+/* ---------- print ---------- */
+@media print{
+  nav,#progress,#toTop,.topbar,#overlay,.copy-btn{display:none!important}
+  .wrap{grid-template-columns:1fr}
+  main{padding:0}
+  body{font-size:11pt}
+  .practice,pre{background:#fff!important;color:#111!important;border:1px solid #999!important}
+  .practice .lbl,details.sol summary,details.sol .body{color:#222!important}
+  details.sol .body{border-left-color:#bbb}
+  a{color:#111;text-decoration:none}
+  section,figure.fig,.box,table{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <button class="nav-close" aria-label="Close navigation">✕</button>
+  <h1>Analysis<br>in Data Science</h1>
+  <div class="sub">Exam study guide · built around the 13 problem sets · Ehler, <em>Mathematical Structures of Computation</em> (ch. 11 &amp; §7.5)</div>
+  <div class="toggle-row">
+    <button class="btn-ui js-theme" aria-label="Toggle dark mode"><span class="ti">◐</span><span class="tl">Dark</span></button>
+    <button class="btn-ui" onclick="window.print()" aria-label="Print or save as PDF">⎙ Print</button>
+  </div>
+  <a href="#how">How to use this</a>
+  <a href="#plan">2.5-week plan</a>
+  <div class="grp">Topic blocks</div>
+  <a href="#b1">1 · Metric spaces &amp; topology</a>
+  <a href="#b2">2 · Continuity &amp; connectedness</a>
+  <a href="#b3">3 · Curves &amp; length</a>
+  <a href="#b4">4 · Differentiability &amp; gradient</a>
+  <a href="#b5">5 · Taylor, Hessian, extrema</a>
+  <a href="#b6">6 · Convexity</a>
+  <a href="#b7">7 · Optimization algorithms</a>
+  <a href="#b8">8 · Newton &amp; inverse/implicit</a>
+  <a href="#b9">9 · Constrained extrema</a>
+  <a href="#b10">10 · Operator norms &amp; Neumann</a>
+  <div class="grp">Reference</div>
+  <a href="#julia">Julia template bank</a>
+  <a href="#cheats">One-page cheat sheet</a>
+  <a href="#mock">Checkpoint mock</a>
+  <a href="#exam">Exam-day strategy</a>
+  <a href="#resources">External resources</a>
+</nav>
+
+<main>
+<header class="hero">
+  <div class="eyebrow">Exam preparation · 2.5 weeks</div>
+  <h1>Analysis in Data&nbsp;Science</h1>
+  <p class="lede">A practice-first guide. The exam mirrors the problem sets, so every concept here is tied to the tasks that test it, the logic for solving that task type, and fresh problems to drill it.</p>
+</header>
+
+<section id="how">
+  <h2><span class="tag">Read first</span>How to use this guide</h2>
+  <p>This is organized into <strong>ten topic blocks</strong>, not by problem-set number, so related ideas sit together. Each block shows which problem sets it covers, gives you the minimum you must be able to <em>state</em>, <em>prove</em>, and <em>compute</em>, walks the <em>solution logic</em> for the recurring task types, and ends with <strong>new practice problems</strong> (with hidden solutions).</p>
+  <div class="box idea">
+    <span class="lbl">The framing that matters</span>
+    For each result, ask the three questions: <span class="spc s-state">State</span> can I write the precise statement and hypotheses? <span class="spc s-prove">Prove</span> do I know the one key idea the proof turns on? <span class="spc s-compute">Compute</span> can I run the recipe on a concrete example fast and without notes? On this exam, <strong>Compute and the proof-ideas dominate</strong>. Memorizing definitions verbatim earns little; reproducing a solution method under time pressure earns everything.
+  </div>
+  <div class="callout"><strong>Practice protocol:</strong> attempt every practice problem on paper with a timer before opening the solution. If you peek first, it doesn't count as practice — it counts as reading.</div>
+</section>
+
+<section id="plan">
+  <h2><span class="tag">Schedule</span>The 2.5-week plan</h2>
+  <p>17 days. Front half builds the machinery block-by-block while re-deriving every problem-set solution from scratch; back half is mixed timed practice and weak-spot repair. Each day pairs <strong>one external resource</strong> with hands-on work — the videos are scheduled, not optional.</p>
+
+  <h4>Week 1 — build &amp; re-derive (days 1–7)</h4>
+  <table>
+    <tr><th>Day</th><th>Focus</th><th>Do</th><th>External (scheduled)</th></tr>
+    <tr><td><span class="day">1</span></td><td>Metric spaces, $d_p$, balls, open/closed</td><td>Redo PS1 fully by hand + Julia. Prove $d_\infty$ is a metric and the $d_p\to d_\infty$ squeeze.</td><td>Tao, <em>Analysis II</em> §1.1–1.4 (metric spaces, balls, open sets)</td></tr>
+    <tr><td><span class="day">2</span></td><td>Continuity ⇔ preimages open; coordinate maps</td><td>Redo PS2 P1–P3. Write the "preimage of open is open" proof from memory.</td><td>3Blue1Brown — "Topology" intuition clip; Pugh §2 on continuity</td></tr>
+    <tr><td><span class="day">3</span></td><td>Contractions, fixed points, path-connectedness</td><td>Redo PS2 P4. Implement fixed-point iteration. State Banach fixed-point.</td><td>Tao §1.5–1.6 (connectedness); skim Banach FPT statement</td></tr>
+    <tr><td><span class="day">4</span></td><td>Curves: length, metric derivative, reparam.</td><td>Redo PS3 entirely. Hand-compute the two arc lengths; build polygonal + midpoint length code.</td><td>3Blue1Brown — "Essence of Calculus" ep. 1–2 (derivative as scaling)</td></tr>
+    <tr><td><span class="day">5</span></td><td>Gradient, partial derivatives, affine approx., Jacobian</td><td>Redo PS4 + PS5. Practice the "gradient → affine approximation → estimate a value" pipeline until automatic.</td><td>3Blue1Brown — "Gradient" &amp; "Jacobian" clips; MIT 18.02 multivariable notes</td></tr>
+    <tr><td><span class="day">6</span></td><td>Taylor in $\mathbb R^n$, Hessian, second-order test</td><td>Redo PS6 + PS7 P1. Drill: critical points → Hessian → classify. Memorize the 2×2 test.</td><td>MIT OCW 18.02 — second derivative test lecture</td></tr>
+    <tr><td><span class="day">7</span></td><td><strong>Checkpoint.</strong> Mixed timed set across days 1–6</td><td>90-min closed-book mock from PS1–PS7. Grade ruthlessly; log every miss in the weak-spot list.</td><td>—</td></tr>
+  </table>
+
+  <h4>Week 2 — algorithms, Newton, constraints (days 8–14)</h4>
+  <table>
+    <tr><td><span class="day">8</span></td><td>Convexity: definitions &amp; closure rules</td><td>Redo PS7 P3 (sum / max / affine-precomposition convex). Prove each. State Jensen.</td><td>Boyd &amp; Vandenberghe <em>Convex Optimization</em> §3.1–3.2 (free PDF)</td></tr>
+    <tr><td><span class="day">9</span></td><td>Gradient descent, SGD, mini-batch; $L$-smoothness</td><td>Redo PS7 P4 + PS8 P2. Implement GD/SGD/MB on the least-squares example; plot $f(x_k)$.</td><td>Boyd EE364A lec. on gradient methods; 3B1B "Gradient descent" (neural-net series ch. 2)</td></tr>
+    <tr><td><span class="day">10</span></td><td>Newton in 1-D and $\mathbb R^n$; convergence orders</td><td>Redo PS8 P3–P4 + PS10 P1–P2. Hand-iterate Newton twice; code <code>myNewton</code>.</td><td>Boyd EE364A — Newton's method lecture; rates of convergence notes</td></tr>
+    <tr><td><span class="day">11</span></td><td>Newton edge cases; linear vs quadratic convergence</td><td>Redo PS10 P3–P4. Build linearly- and quadratically-convergent sequences; log-axis plots.</td><td>Review IFT/Inverse FT statements (Ehler §11.3)</td></tr>
+    <tr><td><span class="day">12</span></td><td>Implicit/Inverse Function Thm; submanifolds, tangent space</td><td>Redo PS11 fully. Practice "IFT ⇒ $y=g(x)$ locally, then differentiate implicitly."</td><td>MIT 18.02 — Lagrange &amp; implicit differentiation; Pugh §5 (IFT)</td></tr>
+    <tr><td><span class="day">13</span></td><td>Lagrange multipliers; constrained extrema</td><td>Redo PS12 + PS13 P1–P3. Drill the multiplier recipe; do the AM–GM proof (PS13 P1).</td><td>Boyd §5 (Lagrangian/duality intro); 3B1B Lagrange clip</td></tr>
+    <tr><td><span class="day">14</span></td><td>Operator norms, Neumann/von&nbsp;Neumann series</td><td>Redo PS9 fully. Prove the $\|A\|_1$/$\|A\|_\infty$ identities; hand-compute a Neumann inverse.</td><td>Ehler §7.5; Boyd notes on matrix norms</td></tr>
+  </table>
+
+  <h4>Final push (days 15–17)</h4>
+  <table>
+    <tr><td><span class="day">15</span></td><td>Full mock #1 (all blocks, timed)</td><td>Simulate exam length closed-book. Then mark, and spend the afternoon only on missed item types.</td><td>—</td></tr>
+    <tr><td><span class="day">16</span></td><td>Weak-spot repair + proof rehearsal</td><td>Re-prove the 6 "must-prove" results aloud. Re-run the Julia templates from blank.</td><td>—</td></tr>
+    <tr><td><span class="day">17</span></td><td>Full mock #2 + light review</td><td>Second timed mock from this guide's practice problems. Skim cheat sheet. Sleep.</td><td>—</td></tr>
+  </table>
+  <div class="callout">If you fall behind, protect days 5–6 and 9–13 — those blocks carry the most exam weight (differentiation pipeline, optimization, Newton, constraints). Topology proofs (block 1–2) are lower yield if time is short.</div>
+</section>
+
+<!-- ============ BLOCK 1 ============ -->
+<section id="b1">
+  <h2><span class="tag">Block 1</span>Metric spaces, norms &amp; topology</h2>
+  <div class="maps">Covers <span class="pschip">PS1</span> · feeds everything later (norms reappear in operator-norm and convergence blocks).</div>
+
+  <h3>What to know</h3>
+  <figure class="fig"><svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;height:auto;display:block;margin:0 auto"><rect width="560" height="200" fill="none"/><line x1="23" y1="95" x2="167" y2="95" stroke="#cfc8b6" stroke-width="1"/><line x1="95" y1="23" x2="95" y2="167" stroke="#cfc8b6" stroke-width="1"/><polygon points="155.00,95.00 153.16,93.16 151.43,91.43 149.79,89.79 148.24,88.24 146.76,86.76 145.35,85.35 143.99,83.99 142.69,82.69 141.44,81.44 140.23,80.23 139.05,79.05 137.91,77.91 136.81,76.81 135.73,75.73 134.67,74.67 133.63,73.63 132.62,72.62 131.62,71.62 130.63,70.63 129.65,69.65 128.69,68.69 127.73,67.73 126.78,66.78 125.83,65.83 124.88,64.88 123.93,63.93 122.98,62.98 122.03,62.03 121.07,61.07 120.10,60.10 119.12,59.12 118.13,58.13 117.13,57.13 116.11,56.11 115.07,55.07 114.01,54.01 112.92,52.92 111.80,51.80 110.66,50.66 109.47,49.47 108.25,48.25 106.99,46.99 105.67,45.67 104.31,44.31 102.88,42.88 101.38,41.38 99.80,39.80 98.14,38.14 96.39,36.39 94.53,35.47 92.72,37.28 91.01,38.99 89.40,40.60 87.86,42.14 86.40,43.60 85.00,45.00 83.66,46.34 82.37,47.63 81.13,48.87 79.93,50.07 78.77,51.23 77.63,52.37 76.53,53.47 75.46,54.54 74.41,55.59 73.38,56.62 72.37,57.63 71.37,58.63 70.38,59.62 69.41,60.59 68.45,61.55 67.49,62.51 66.54,63.46 65.59,64.41 64.64,65.36 63.70,66.30 62.75,67.25 61.79,68.21 60.83,69.17 59.86,70.14 58.88,71.12 57.89,72.11 56.88,73.12 55.85,74.15 54.81,75.19 53.74,76.26 52.64,77.36 51.52,78.48 50.36,79.64 49.17,80.83 47.94,82.06 46.66,83.34 45.34,84.66 43.95,86.05 42.51,87.49 40.99,89.01 39.40,90.60 37.72,92.28 35.93,94.07 35.93,95.93 37.72,97.72 39.40,99.40 40.99,100.99 42.51,102.51 43.95,103.95 45.34,105.34 46.66,106.66 47.94,107.94 49.17,109.17 50.36,110.36 51.52,111.52 52.64,112.64 53.74,113.74 54.81,114.81 55.85,115.85 56.88,116.88 57.89,117.89 58.88,118.88 59.86,119.86 60.83,120.83 61.79,121.79 62.75,122.75 63.70,123.70 64.64,124.64 65.59,125.59 66.54,126.54 67.49,127.49 68.45,128.45 69.41,129.41 70.38,130.38 71.37,131.37 72.37,132.37 73.38,133.38 74.41,134.41 75.46,135.46 76.53,136.53 77.63,137.63 78.77,138.77 79.93,139.93 81.13,141.13 82.37,142.37 83.66,143.66 85.00,145.00 86.40,146.40 87.86,147.86 89.40,149.40 91.01,151.01 92.72,152.72 94.53,154.53 96.39,153.61 98.14,151.86 99.80,150.20 101.38,148.62 102.88,147.12 104.31,145.69 105.67,144.33 106.99,143.01 108.25,141.75 109.47,140.53 110.66,139.34 111.80,138.20 112.92,137.08 114.01,135.99 115.07,134.93 116.11,133.89 117.13,132.87 118.13,131.87 119.12,130.88 120.10,129.90 121.07,128.93 122.03,127.97 122.98,127.02 123.93,126.07 124.88,125.12 125.83,124.17 126.78,123.22 127.73,122.27 128.69,121.31 129.65,120.35 130.63,119.37 131.62,118.38 132.62,117.38 133.63,116.37 134.67,115.33 135.73,114.27 136.81,113.19 137.91,112.09 139.05,110.95 140.23,109.77 141.44,108.56 142.69,107.31 143.99,106.01 145.35,104.65 146.76,103.24 148.24,101.76 149.79,100.21 151.43,98.57 153.16,96.84 155.00,95.00" fill="#f0e3da" stroke="#b5491f" stroke-width="2.5"/><text x="95" y="185" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="14" fill="#10211c" font-weight="600">p = 1</text><line x1="208" y1="95" x2="352" y2="95" stroke="#cfc8b6" stroke-width="1"/><line x1="280" y1="23" x2="280" y2="167" stroke="#cfc8b6" stroke-width="1"/><polygon points="340.00,95.00 339.97,93.11 339.88,91.21 339.73,89.33 339.52,87.44 339.25,85.57 338.93,83.70 338.54,81.85 338.10,80.01 337.59,78.18 337.03,76.37 336.42,74.58 335.74,72.81 335.02,71.06 334.23,69.33 333.40,67.63 332.51,65.96 331.56,64.32 330.57,62.71 329.52,61.13 328.43,59.58 327.29,58.07 326.10,56.59 324.86,55.16 323.58,53.76 322.26,52.41 320.89,51.09 319.49,49.82 318.04,48.60 316.56,47.42 315.04,46.29 313.48,45.21 311.89,44.18 310.27,43.20 308.62,42.27 306.94,41.39 305.24,40.57 303.51,39.80 301.75,39.08 299.98,38.42 298.18,37.82 296.37,37.28 294.54,36.79 292.69,36.36 290.83,35.99 288.96,35.67 287.09,35.42 285.20,35.23 283.31,35.09 281.42,35.02 279.53,35.00 277.63,35.05 275.74,35.15 273.85,35.32 271.97,35.54 270.10,35.82 268.24,36.16 266.39,36.57 264.55,37.02 262.72,37.54 260.92,38.11 259.13,38.75 257.37,39.43 255.62,40.17 253.91,40.97 252.21,41.82 250.55,42.73 248.91,43.68 247.31,44.69 245.74,45.75 244.20,46.85 242.70,48.01 241.23,49.21 239.81,50.45 238.42,51.74 237.07,53.08 235.77,54.45 234.51,55.87 233.30,57.33 232.14,58.82 231.02,60.35 229.95,61.91 228.93,63.51 227.96,65.14 227.04,66.79 226.18,68.48 225.37,70.19 224.61,71.93 223.91,73.69 223.27,75.47 222.68,77.27 222.15,79.09 221.67,80.92 221.26,82.77 220.90,84.63 220.60,86.50 220.37,88.38 220.19,90.27 220.07,92.16 220.01,94.05 220.01,95.95 220.07,97.84 220.19,99.73 220.37,101.62 220.60,103.50 220.90,105.37 221.26,107.23 221.67,109.08 222.15,110.91 222.68,112.73 223.27,114.53 223.91,116.31 224.61,118.07 225.37,119.81 226.18,121.52 227.04,123.21 227.96,124.86 228.93,126.49 229.95,128.09 231.02,129.65 232.14,131.18 233.30,132.67 234.51,134.13 235.77,135.55 237.07,136.92 238.42,138.26 239.81,139.55 241.23,140.79 242.70,141.99 244.20,143.15 245.74,144.25 247.31,145.31 248.91,146.32 250.55,147.27 252.21,148.18 253.91,149.03 255.62,149.83 257.37,150.57 259.13,151.25 260.92,151.89 262.72,152.46 264.55,152.98 266.39,153.43 268.24,153.84 270.10,154.18 271.97,154.46 273.85,154.68 275.74,154.85 277.63,154.95 279.53,155.00 281.42,154.98 283.31,154.91 285.20,154.77 287.09,154.58 288.96,154.33 290.83,154.01 292.69,153.64 294.54,153.21 296.37,152.72 298.18,152.18 299.98,151.58 301.75,150.92 303.51,150.20 305.24,149.43 306.94,148.61 308.62,147.73 310.27,146.80 311.89,145.82 313.48,144.79 315.04,143.71 316.56,142.58 318.04,141.40 319.49,140.18 320.89,138.91 322.26,137.59 323.58,136.24 324.86,134.84 326.10,133.41 327.29,131.93 328.43,130.42 329.52,128.87 330.57,127.29 331.56,125.68 332.51,124.04 333.40,122.37 334.23,120.67 335.02,118.94 335.74,117.19 336.42,115.42 337.03,113.63 337.59,111.82 338.10,109.99 338.54,108.15 338.93,106.30 339.25,104.43 339.52,102.56 339.73,100.67 339.88,98.79 339.97,96.89 340.00,95.00" fill="#e6efe6" stroke="#1f5d4c" stroke-width="2.5"/><text x="280" y="185" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="14" fill="#10211c" font-weight="600">p = 2</text><line x1="393" y1="95" x2="537" y2="95" stroke="#cfc8b6" stroke-width="1"/><line x1="465" y1="23" x2="465" y2="167" stroke="#cfc8b6" stroke-width="1"/><polygon points="525.00,95.00 525.00,93.10 525.00,91.21 525.00,89.30 525.00,87.38 525.00,85.45 525.00,83.50 525.00,81.52 525.00,79.51 525.00,77.48 525.00,75.40 525.00,73.28 525.00,71.11 525.00,68.89 525.00,66.61 524.99,64.25 524.98,61.83 524.97,59.32 524.93,56.73 524.87,54.05 524.74,51.31 524.52,48.52 524.11,45.75 523.42,43.12 522.33,40.75 520.76,38.80 518.69,37.35 516.24,36.37 513.56,35.77 510.78,35.41 508.00,35.22 505.27,35.11 502.62,35.06 500.05,35.03 497.56,35.01 495.15,35.01 492.82,35.00 490.55,35.00 488.34,35.00 486.18,35.00 484.08,35.00 482.01,35.00 479.98,35.00 477.98,35.00 476.01,35.00 474.07,35.00 472.14,35.00 470.22,35.00 468.32,35.00 466.42,35.00 464.53,35.00 462.63,35.00 460.73,35.00 458.82,35.00 456.90,35.00 454.96,35.00 453.00,35.00 451.02,35.00 449.01,35.00 446.96,35.00 444.87,35.00 442.74,35.00 440.56,35.00 438.32,35.00 436.02,35.00 433.65,35.01 431.21,35.02 428.68,35.04 426.07,35.08 423.37,35.16 420.61,35.30 417.82,35.57 415.08,36.03 412.49,36.81 410.22,38.01 408.39,39.72 407.06,41.89 406.19,44.41 405.66,47.13 405.35,49.91 405.19,52.69 405.09,55.40 405.05,58.03 405.02,60.58 405.01,63.05 405.01,65.44 405.00,67.76 405.00,70.01 405.00,72.20 405.00,74.35 405.00,76.44 405.00,78.50 405.00,80.52 405.00,82.51 405.00,84.47 405.00,86.42 405.00,88.34 405.00,90.25 405.00,92.16 405.00,94.05 405.00,95.95 405.00,97.84 405.00,99.75 405.00,101.66 405.00,103.58 405.00,105.53 405.00,107.49 405.00,109.48 405.00,111.50 405.00,113.56 405.00,115.65 405.00,117.80 405.00,119.99 405.00,122.24 405.01,124.56 405.01,126.95 405.02,129.42 405.05,131.97 405.09,134.60 405.19,137.31 405.35,140.09 405.66,142.87 406.19,145.59 407.06,148.11 408.39,150.28 410.22,151.99 412.49,153.19 415.08,153.97 417.82,154.43 420.61,154.70 423.37,154.84 426.07,154.92 428.68,154.96 431.21,154.98 433.65,154.99 436.02,155.00 438.32,155.00 440.56,155.00 442.74,155.00 444.87,155.00 446.96,155.00 449.01,155.00 451.02,155.00 453.00,155.00 454.96,155.00 456.90,155.00 458.82,155.00 460.73,155.00 462.63,155.00 464.53,155.00 466.42,155.00 468.32,155.00 470.22,155.00 472.14,155.00 474.07,155.00 476.01,155.00 477.98,155.00 479.98,155.00 482.01,155.00 484.08,155.00 486.18,155.00 488.34,155.00 490.55,155.00 492.82,155.00 495.15,154.99 497.56,154.99 500.05,154.97 502.62,154.94 505.27,154.89 508.00,154.78 510.78,154.59 513.56,154.23 516.24,153.63 518.69,152.65 520.76,151.20 522.33,149.25 523.42,146.88 524.11,144.25 524.52,141.48 524.74,138.69 524.87,135.95 524.93,133.27 524.97,130.68 524.98,128.17 524.99,125.75 525.00,123.39 525.00,121.11 525.00,118.89 525.00,116.72 525.00,114.60 525.00,112.52 525.00,110.49 525.00,108.48 525.00,106.50 525.00,104.55 525.00,102.62 525.00,100.70 525.00,98.79 525.00,96.90 525.00,95.00" fill="#e7eef0" stroke="#a6822b" stroke-width="2.5"/><text x="465" y="185" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="14" fill="#10211c" font-weight="600">p = 10</text><text x="280.0" y="194" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" fill="#5f6b62">Unit balls {x : d(x,0) ≤ 1} — diamond → disk → (almost) square as p grows</text></svg><figcaption><b>Block 1.</b> As p grows the unit ball swells from the L¹ diamond, through the L² disk, toward the L∞ square — exactly the squeeze d∞ ≤ dₚ ≤ n^(1/p)·d∞.</figcaption></figure>
+
+  <div class="box def"><span class="lbl">Definition · Metric</span>
+  A <strong>metric</strong> on a set $X$ is $d:X\times X\to[0,\infty)$ with, for all $x,y,z$:
+  (M1) $d(x,y)=0 \iff x=y$; (M2) symmetry $d(x,y)=d(y,x)$; (M3) triangle inequality $d(x,z)\le d(x,y)+d(y,z)$.</div>
+
+  <div class="box def"><span class="lbl">Definition · The $p$-metrics on $\mathbb R^n$</span>
+  $\;d_p(x,y)=\Big(\sum_{k=1}^n |x_k-y_k|^p\Big)^{1/p}$ for $p\in[1,\infty)$, and $\;d_\infty(x,y)=\max_k |x_k-y_k|$.
+  Balls: $B_\varepsilon(x)=\{y: d(x,y)\le \varepsilon\}$ (closed), $\mathring B_\varepsilon(x)=\{y:d(x,y)<\varepsilon\}$ (open).</div>
+
+  <h3>Solution logic for the recurring tasks</h3>
+
+  <h4><span class="spc s-prove">Prove</span> "$d$ is a metric"</h4>
+  <p>(M1) and (M2) are usually one line. The work is (M3). For $d_\infty$: for each coordinate $k$, $|x_k-z_k|\le|x_k-y_k|+|y_k-z_k|\le \max_j|x_j-y_j|+\max_j|y_j-z_j|$. The right side no longer depends on $k$, so take the max over $k$ on the left — that's the whole trick. For $d_p$ the triangle inequality <em>is</em> the Minkowski inequality; cite it (you are not expected to re-prove Minkowski unless asked).</p>
+
+  <div class="box recipe"><span class="lbl">Recipe · $d_\infty \le d_p \le n^{1/p}d_\infty$ and the limit (PS1 P2)</span>
+  <ol>
+  <li><strong>Lower bound:</strong> one term dominates the sum, so $d_p^p=\sum_k|x_k-y_k|^p \ge \max_k|x_k-y_k|^p = d_\infty^p$. Take $p$-th roots.</li>
+  <li><strong>Upper bound:</strong> every term $\le d_\infty^p$, and there are $n$ of them, so $d_p^p\le n\,d_\infty^p$; take $p$-th roots to get $n^{1/p}d_\infty$.</li>
+  <li><strong>Limit:</strong> $n^{1/p}=e^{(\ln n)/p}\to 1$ as $p\to\infty$, so the squeeze forces $d_p\to d_\infty$.</li>
+  </ol></div>
+
+  <div class="box pitfall"><span class="lbl">Pitfall</span>The squeeze argument needs $x,y$ <em>fixed</em>. You are showing pointwise convergence of the value, not uniform convergence of the function. Don't over-claim.</div>
+
+  <div class="practice">
+    <span class="lbl">Practice · Block 1</span>
+    <ol>
+      <li>Show $d(x,y)=\dfrac{\|x-y\|_2}{1+\|x-y\|_2}$ is a metric on $\mathbb R^n$. (Hint: $t\mapsto t/(1+t)$ is increasing and subadditive.)
+        <details class="sol"><summary>Solution sketch</summary><div class="body">M1, M2 immediate. For M3, let $\phi(t)=t/(1+t)$, increasing and concave with $\phi(0)=0$, hence subadditive: $\phi(a+b)\le\phi(a)+\phi(b)$. With $a=\|x-y\|_2,\ b=\|y-z\|_2$ and $\|x-z\|_2\le a+b$, monotonicity then subadditivity give $d(x,z)=\phi(\|x-z\|_2)\le\phi(a+b)\le\phi(a)+\phi(b)=d(x,y)+d(y,z)$.</div></details></li>
+      <li>For $n=2$, sketch by hand the unit balls $B_1(0)$ under $d_1,d_2,d_\infty$ and order their areas. Then explain in one sentence why the $d_{10}$ ball looks "almost square."
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$d_1$ = diamond (area 2), $d_2$ = disk (area $\pi$), $d_\infty$ = square $[-1,1]^2$ (area 4). As $p\to\infty$ the ball swells toward the $d_\infty$ square because $n^{1/p}d_\infty\to d_\infty$; at $p=10$ it is nearly the full square with slightly rounded corners.</div></details></li>
+      <li>On any set $X$, show the discrete metric $d(x,y)=1$ if $x\neq y$, else $0$, is a metric, and describe $\mathring B_{1/2}(x)$ and $\mathring B_2(x)$.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">M1–M2 clear; M3 holds because the RHS is $\ge 1$ whenever the LHS is $1$. $\mathring B_{1/2}(x)=\{x\}$ (only point within distance $<\tfrac12$); $\mathring B_2(x)=X$.</div></details></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ BLOCK 2 ============ -->
+<section id="b2">
+  <h2><span class="tag">Block 2</span>Continuity, openness &amp; connectedness</h2>
+  <div class="maps">Covers <span class="pschip">PS1 P3–P4</span> <span class="pschip">PS2</span>.</div>
+
+  <h3>What to know</h3>
+  <div class="box thm"><span class="lbl">Theorem · Topological characterization of continuity</span>
+  $f:X\to Y$ is continuous $\iff$ $f^{-1}(U)$ is open in $X$ for every open $U\subseteq Y$.</div>
+  <div class="box def"><span class="lbl">Definitions you'll reuse</span>
+  <strong>Contraction:</strong> $\exists L<1$ with $d(f(x),f(y))\le L\,d(x,y)$. <strong>Path-connected:</strong> any two points are joined by a continuous path $\gamma:[0,1]\to X$. <strong>Banach fixed-point:</strong> a contraction on a complete space has a unique fixed point, reached by iteration $x_{k+1}=f(x_k)$.</div>
+
+  <h3>Solution logic</h3>
+  <div class="box recipe"><span class="lbl">Recipe · continuity ⇔ preimages open (PS1 P3)</span>
+  Translate $\varepsilon$–$\delta$ into balls. <strong>(⇒)</strong> Take $U$ open, $x\in f^{-1}(U)$; since $U$ open, $\mathring B_\varepsilon(f(x))\subseteq U$. Continuity gives $\delta$ with $f(\mathring B_\delta(x))\subseteq \mathring B_\varepsilon(f(x))\subseteq U$, so $\mathring B_\delta(x)\subseteq f^{-1}(U)$ — preimage is open. <strong>(⇐)</strong> Given $x,\varepsilon$, the set $\mathring B_\varepsilon(f(x))$ is open, so $f^{-1}$ of it is open and contains $x$; extract a $\delta$-ball inside it. Done.</div>
+
+  <div class="box recipe"><span class="lbl">Recipe · "$f(x)=d(x,y_0)$ is continuous; $B_\varepsilon$ closed; $\mathring B_\varepsilon$ open" (PS1 P4)</span>
+  Continuity of $x\mapsto d(x,y_0)$ follows from the reverse triangle inequality $|d(x,y_0)-d(x',y_0)|\le d(x,x')$ (it is 1-Lipschitz). Then $\mathring B_\varepsilon(x)=f^{-1}([0,\varepsilon))$ is the preimage of an open set ⇒ open; $B_\varepsilon(x)=f^{-1}([0,\varepsilon])$ is the preimage of a closed set ⇒ closed.</div>
+
+  <div class="box recipe"><span class="lbl">Recipe · coordinate maps &amp; vector continuity (PS2 P2)</span>
+  $\chi_i(x)=x_i$ is continuous because $|\chi_i(x)-\chi_i(x')|=|x_i-x_i'|\le\|x-x'\|_2$ (take $\delta=\varepsilon$). Then $f=(f_1,f_2)$ continuous $\iff$ each $f_i=\chi_i\circ f$ continuous: forward by composition; backward because $\|f(t)-f(s)\|_2\le\sqrt{|f_1(t)-f_1(s)|^2+|f_2(t)-f_2(s)|^2}$ is small when each component is.</div>
+
+  <div class="box recipe"><span class="lbl">Recipe · contraction ⇒ unique fixed point (PS2 P4)</span>
+  For $f(x)=\tfrac14(x^2+1)$ on $[0,1]$: (i) <strong>maps into itself</strong>: $f$ increasing on $[0,1]$, $f(0)=\tfrac14,\ f(1)=\tfrac12$, so $f([0,1])\subseteq[\tfrac14,\tfrac12]\subset[0,1]$. (ii) <strong>contraction</strong>: $|f'(x)|=|x/2|\le\tfrac12<1$, so by MVT $L=\tfrac12$. (iii) Banach FPT ⇒ unique fixed point; iterate $x_{k+1}=f(x_k)$.</div>
+
+  <div class="practice">
+    <span class="lbl">Practice · Block 2</span>
+    <ol>
+      <li>Show $g(x)=\cos x$ is a contraction on $[0,1]$ and estimate its contraction constant. Will fixed-point iteration converge from $x_0=0.5$?
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$|g'(x)|=|\sin x|\le\sin 1\approx 0.841<1$ on $[0,1]$; also $g([0,1])\subseteq[\cos 1,1]\subseteq[0,1]$. So $L\le 0.841$, Banach applies, iteration converges to the unique root of $\cos x=x$ (≈0.739) from any $x_0\in[0,1]$.</div></details></li>
+      <li>Prove that the continuous image of a path-connected set is path-connected. (This is PS2 P1 generalized.)
+        <details class="sol"><summary>Solution sketch</summary><div class="body">Let $h:A\to Y$ continuous, $A$ path-connected, and $u,v\in h(A)$ with $u=h(a),v=h(b)$. Pick a path $\gamma:[0,1]\to A$ from $a$ to $b$. Then $h\circ\gamma$ is continuous (composition) and joins $u$ to $v$. So $h(A)$ is path-connected. Setting $A=[0,1]$ recovers PS2 P1.</div></details></li>
+      <li>Decide which is path-connected: $A=\{x^2+y^2<1\}$ vs $B=$ two vertical segments at $x=\pm1$. Give a one-line reason each.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$A$ is path-connected (convex: the straight segment between any two points stays inside). $B$ is not: no continuous path inside $B$ links a point on $x=-1$ to one on $x=+1$, since the $x$-coordinate would have to pass through values not in $\{\pm1\}$ while staying in $B$.</div></details></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ BLOCK 3 ============ -->
+<section id="b3">
+  <h2><span class="tag">Block 3</span>Curves &amp; arc length</h2>
+  <div class="maps">Covers <span class="pschip">PS3</span>.</div>
+
+  <h3>What to know</h3>
+  <figure class="fig"><svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;height:auto;display:block;margin:0 auto"><rect width="420" height="300" fill="none"/><polyline points="320.0,150.0 320.0,148.3 319.9,146.5 319.9,144.8 319.8,143.1 319.7,141.3 319.5,139.6 319.3,137.9 319.1,136.2 318.9,134.5 318.6,132.7 318.4,131.0 318.0,129.3 317.7,127.6 317.3,125.9 316.9,124.3 316.5,122.6 316.1,120.9 315.6,119.2 315.1,117.6 314.6,115.9 314.0,114.3 313.5,112.6 312.9,111.0 312.2,109.4 311.6,107.8 310.9,106.2 310.2,104.6 309.5,103.1 308.7,101.5 308.0,99.9 307.2,98.4 306.3,96.9 305.5,95.4 304.6,93.9 303.7,92.4 302.8,90.9 301.9,89.5 300.9,88.0 299.9,86.6 298.9,85.2 297.9,83.8 296.8,82.4 295.7,81.1 294.6,79.7 293.5,78.4 292.4,77.1 291.2,75.8 290.0,74.5 288.8,73.3 287.6,72.1 286.4,70.9 285.1,69.7 283.9,68.5 282.6,67.3 281.3,66.2 279.9,65.1 278.6,64.0 277.2,62.9 275.8,61.9 274.4,60.9 273.0,59.9 271.6,58.9 270.2,57.9 268.7,57.0 267.2,56.1 265.7,55.2 264.2,54.3 262.7,53.5 261.2,52.6 259.7,51.9 258.1,51.1 256.6,50.3 255.0,49.6 253.4,48.9 251.8,48.2 250.2,47.6 248.6,47.0 246.9,46.4 245.3,45.8 243.7,45.3 242.0,44.8 240.3,44.3 238.7,43.8 237.0,43.4 235.3,43.0 233.6,42.6 231.9,42.2 230.2,41.9 228.5,41.6 226.8,41.3 225.1,41.0 223.4,40.8 221.7,40.6 219.9,40.5 218.2,40.3 216.5,40.2 214.8,40.1 213.0,40.0 211.3,40.0 209.6,40.0 207.8,40.0 206.1,40.1 204.4,40.1 202.6,40.2 200.9,40.4 199.2,40.5 197.5,40.7 195.7,40.9 194.0,41.2 192.3,41.4 190.6,41.7 188.9,42.0 187.2,42.4 185.5,42.8 183.8,43.2 182.2,43.6 180.5,44.0 178.8,44.5 177.2,45.0 175.5,45.5 173.9,46.1 172.2,46.7 170.6,47.3 169.0,47.9 167.4,48.6 165.8,49.3 164.2,50.0 162.7,50.7 161.1,51.5 159.6,52.2 158.0,53.1 156.5,53.9 155.0,54.7 153.5,55.6 152.0,56.5 150.6,57.4 149.1,58.4 147.7,59.4 146.3,60.4 144.9,61.4 143.5,62.4 142.1,63.5 140.7,64.5 139.4,65.6 138.1,66.8 136.8,67.9 135.5,69.1 134.2,70.3 133.0,71.5 131.8,72.7 130.6,73.9 129.4,75.2 128.2,76.5 127.0,77.8 125.9,79.1 124.8,80.4 123.7,81.8 122.7,83.1 121.6,84.5 120.6,85.9 119.6,87.3 118.6,88.8 117.7,90.2 116.7,91.7 115.8,93.1 115.0,94.6 114.1,96.1 113.3,97.6 112.4,99.2 111.7,100.7 110.9,102.3 110.2,103.8 109.4,105.4 108.8,107.0 108.1,108.6 107.4,110.2 106.8,111.8 106.2,113.5 105.7,115.1 105.1,116.8 104.6,118.4 104.2,120.1 103.7,121.7 103.3,123.4 102.9,125.1 102.5,126.8 102.1,128.5 101.8,130.2 101.5,131.9 101.2,133.6 101.0,135.3 100.8,137.0 100.6,138.8 100.4,140.5 100.3,142.2 100.2,143.9 100.1,145.7 100.0,147.4 100.0,149.1 100.0,150.9 100.0,152.6 100.1,154.3 100.2,156.1 100.3,157.8 100.4,159.5 100.6,161.2 100.8,163.0 101.0,164.7 101.2,166.4 101.5,168.1 101.8,169.8 102.1,171.5 102.5,173.2 102.9,174.9 103.3,176.6 103.7,178.3 104.2,179.9 104.6,181.6 105.1,183.2 105.7,184.9 106.2,186.5 106.8,188.2 107.4,189.8 108.1,191.4 108.8,193.0 109.4,194.6 110.2,196.2 110.9,197.7 111.7,199.3 112.4,200.8 113.3,202.4 114.1,203.9 115.0,205.4 115.8,206.9 116.7,208.3 117.7,209.8 118.6,211.2 119.6,212.7 120.6,214.1 121.6,215.5 122.7,216.9 123.7,218.2 124.8,219.6 125.9,220.9 127.0,222.2 128.2,223.5 129.4,224.8 130.6,226.1 131.8,227.3 133.0,228.5 134.2,229.7 135.5,230.9 136.8,232.1 138.1,233.2 139.4,234.4 140.7,235.5 142.1,236.5 143.5,237.6 144.9,238.6 146.3,239.6 147.7,240.6 149.1,241.6 150.6,242.6 152.0,243.5 153.5,244.4 155.0,245.3 156.5,246.1 158.0,246.9 159.6,247.8 161.1,248.5 162.7,249.3 164.2,250.0 165.8,250.7 167.4,251.4 169.0,252.1 170.6,252.7 172.2,253.3 173.9,253.9 175.5,254.5 177.2,255.0 178.8,255.5 180.5,256.0 182.2,256.4 183.8,256.8 185.5,257.2 187.2,257.6 188.9,258.0 190.6,258.3 192.3,258.6 194.0,258.8 195.7,259.1 197.5,259.3 199.2,259.5 200.9,259.6 202.6,259.8 204.4,259.9 206.1,259.9 207.8,260.0 209.6,260.0 211.3,260.0 213.0,260.0 214.8,259.9 216.5,259.8 218.2,259.7 219.9,259.5 221.7,259.4 223.4,259.2 225.1,259.0 226.8,258.7 228.5,258.4 230.2,258.1 231.9,257.8 233.6,257.4 235.3,257.0 237.0,256.6 238.7,256.2 240.3,255.7 242.0,255.2 243.7,254.7 245.3,254.2 246.9,253.6 248.6,253.0 250.2,252.4 251.8,251.8 253.4,251.1 255.0,250.4 256.6,249.7 258.1,248.9 259.7,248.1 261.2,247.4 262.7,246.5 264.2,245.7 265.7,244.8 267.2,243.9 268.7,243.0 270.2,242.1 271.6,241.1 273.0,240.1 274.4,239.1 275.8,238.1 277.2,237.1 278.6,236.0 279.9,234.9 281.3,233.8 282.6,232.7 283.9,231.5 285.1,230.3 286.4,229.1 287.6,227.9 288.8,226.7 290.0,225.5 291.2,224.2 292.4,222.9 293.5,221.6 294.6,220.3 295.7,218.9 296.8,217.6 297.9,216.2 298.9,214.8 299.9,213.4 300.9,212.0 301.9,210.5 302.8,209.1 303.7,207.6 304.6,206.1 305.5,204.6 306.3,203.1 307.2,201.6 308.0,200.1 308.7,198.5 309.5,196.9 310.2,195.4 310.9,193.8 311.6,192.2 312.2,190.6 312.9,189.0 313.5,187.4 314.0,185.7 314.6,184.1 315.1,182.4 315.6,180.8 316.1,179.1 316.5,177.4 316.9,175.7 317.3,174.1 317.7,172.4 318.0,170.7 318.4,169.0 318.6,167.3 318.9,165.5 319.1,163.8 319.3,162.1 319.5,160.4 319.7,158.7 319.8,156.9 319.9,155.2 319.9,153.5 320.0,151.7 320.0,150.0" fill="none" stroke="#cfc8b6" stroke-width="2" stroke-dasharray="4 3"/><polyline points="320.0,150.0 287.8,72.2 210.0,40.0 132.2,72.2 100.0,150.0 132.2,227.8 210.0,260.0 287.8,227.8 320.0,150.0" fill="none" stroke="#b5491f" stroke-width="2.2"/><circle cx="320.0" cy="150.0" r="3.5" fill="#1f5d4c"/><circle cx="287.8" cy="72.2" r="3.5" fill="#1f5d4c"/><circle cx="210.0" cy="40.0" r="3.5" fill="#1f5d4c"/><circle cx="132.2" cy="72.2" r="3.5" fill="#1f5d4c"/><circle cx="100.0" cy="150.0" r="3.5" fill="#1f5d4c"/><circle cx="132.2" cy="227.8" r="3.5" fill="#1f5d4c"/><circle cx="210.0" cy="260.0" r="3.5" fill="#1f5d4c"/><circle cx="287.8" cy="227.8" r="3.5" fill="#1f5d4c"/><text x="210" y="150" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" fill="#5f6b62">ℓ(γ,P) ≤ ℓ(γ)</text><text x="210.0" y="270" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12.5" fill="#b5491f" font-weight="600">chords (polygonal length)</text><text x="210.0" y="288" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" fill="#5f6b62">refine the partition → length increases up to ℓ(γ)</text></svg><figcaption><b>Block 3.</b> Polygonal length sums the chord lengths over a partition; refining the partition raises ℓ(γ,P) monotonically up to the true length ℓ(γ) = ∫‖γ′‖.</figcaption></figure>
+
+  <div class="box thm"><span class="lbl">Core facts</span>
+  For $\gamma:[0,1]\to\mathbb R^n$ continuously differentiable: <strong>metric derivative</strong> $|\dot\gamma|(t)=\|\gamma'(t)\|_2$, and <strong>length</strong>
+  $$\ell(\gamma)=\int_0^1 \|\gamma'(t)\|_2\,dt=\int_0^1\sqrt{\gamma_1'(t)^2+\cdots+\gamma_n'(t)^2}\,dt.$$
+  Length is <strong>independent of parametrization</strong>: if $\gamma=f\circ\phi$ with $\phi$ a $C^1$ bijection, $\ell$ is unchanged.</div>
+
+  <h3>Solution logic</h3>
+  <div class="box recipe"><span class="lbl">Recipe · compute a curve length (PS3 P1, P4)</span>
+  (1) Differentiate each component. (2) Form $\|\gamma'(t)\|_2=\sqrt{\sum_i \gamma_i'(t)^2}$ and <em>simplify under the root first</em> — most exam curves are rigged so the radicand collapses. (3) Integrate over $[0,1]$.
+  <br><br><strong>Worked (PS3 P1):</strong> $f(t)=\big(t,\ \tfrac{2}{3}t^{3/2}\big)$, so $f_1'=1$ and $f_2'=t^{1/2}$. Then $\|f'(t)\|_2=\sqrt{1+t}$, which integrates cleanly:
+  $$\ell(f)=\int_0^1\sqrt{1+t}\,dt=\Big[\tfrac{2}{3}(1+t)^{3/2}\Big]_0^1=\tfrac{2}{3}\big(2\sqrt2-1\big)\approx1.219.$$
+  Note how the $t^{3/2}$ component was chosen precisely so the radicand becomes the linear $1+t$ — exam length problems are almost always rigged this way, so simplify under the root before integrating.</div>
+
+  <div class="box recipe"><span class="lbl">Recipe · reparametrization length (PS3 P4)</span>
+  For $\gamma=f\circ\phi$, $\phi(t)=\pi t^2$ on $[0,1]$ into $[0,\pi]$, $f(x)=(\cos x,\sin x)$: chain rule $\gamma'(t)=\phi'(t)f'(\phi(t))$, so $|\dot\gamma|(t)=|\phi'(t)|\,\|f'(\phi(t))\|=2\pi t\cdot 1=2\pi t$. Length $=\int_0^1 2\pi t\,dt=\pi$ — exactly half the unit circle, as it should be (upper semicircle).</div>
+
+  <div class="box idea"><span class="lbl">Numerical companions (PS3 P2)</span>
+  <strong>Polygonal length:</strong> sum $\sum_j \|\gamma(t_j)-\gamma(t_{j-1})\|$ over a partition — converges up to $\ell(\gamma)$ from below. <strong>Midpoint rule:</strong> approximate $\int_0^1\|\gamma'\|$ by $\sum_j \|\gamma'(m_j)\|\,\Delta t$ at midpoints $m_j$. Compare both against the analytic value.</div>
+  <figure class="fig"><svg viewBox="0 0 420 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;height:auto;display:block;margin:0 auto"><rect width="420" height="360" fill="none"/><line x1="40" y1="180" x2="400" y2="180" stroke="#cfc8b6" stroke-width="1"/><line x1="210" y1="20" x2="210" y2="320" stroke="#cfc8b6" stroke-width="1"/><polyline points="210.0,180.0 210.3,180.0 210.5,180.0 210.7,179.9 211.0,179.9 211.2,179.8 211.5,179.7 211.7,179.6 211.9,179.5 212.2,179.4 212.4,179.2 212.6,179.1 212.8,178.9 213.0,178.7 213.2,178.5 213.3,178.3 213.5,178.1 213.7,177.8 213.8,177.6 213.9,177.3 214.0,177.1 214.2,176.8 214.2,176.5 214.3,176.2 214.4,175.9 214.4,175.6 214.5,175.2 214.5,174.9 214.5,174.6 214.4,174.3 214.4,173.9 214.4,173.6 214.3,173.2 214.2,172.9 214.1,172.5 214.0,172.2 213.8,171.8 213.7,171.5 213.5,171.1 213.3,170.8 213.1,170.5 212.8,170.1 212.6,169.8 212.3,169.5 212.0,169.2 211.7,168.9 211.4,168.6 211.1,168.3 210.7,168.0 210.4,167.7 210.0,167.5 209.6,167.2 209.1,167.0 208.7,166.8 208.3,166.6 207.8,166.4 207.3,166.2 206.8,166.1 206.3,165.9 205.8,165.8 205.3,165.7 204.8,165.6 204.2,165.6 203.7,165.5 203.1,165.5 202.6,165.5 202.0,165.5 201.4,165.6 200.8,165.7 200.2,165.7 199.6,165.9 199.1,166.0 198.5,166.2 197.9,166.3 197.3,166.5 196.7,166.8 196.1,167.0 195.5,167.3 194.9,167.6 194.3,167.9 193.7,168.3 193.2,168.7 192.6,169.1 192.1,169.5 191.5,169.9 191.0,170.4 190.5,170.9 190.0,171.4 189.5,172.0 189.0,172.5 188.5,173.1 188.1,173.7 187.7,174.4 187.2,175.0 186.9,175.7 186.5,176.4 186.1,177.1 185.8,177.8 185.5,178.6 185.2,179.3 185.0,180.1 184.7,180.9 184.5,181.7 184.3,182.6 184.2,183.4 184.1,184.3 184.0,185.1 183.9,186.0 183.8,186.9 183.8,187.8 183.9,188.7 183.9,189.6 184.0,190.5 184.1,191.4 184.2,192.3 184.4,193.2 184.6,194.1 184.9,195.1 185.1,196.0 185.5,196.9 185.8,197.8 186.2,198.7 186.6,199.6 187.0,200.5 187.5,201.4 188.0,202.3 188.6,203.1 189.1,204.0 189.7,204.8 190.4,205.7 191.0,206.5 191.7,207.3 192.5,208.0 193.2,208.8 194.0,209.5 194.9,210.2 195.7,210.9 196.6,211.6 197.5,212.2 198.4,212.8 199.4,213.4 200.4,214.0 201.4,214.5 202.5,215.0 203.5,215.5 204.6,215.9 205.7,216.3 206.8,216.7 208.0,217.0 209.1,217.3 210.3,217.6 211.5,217.8 212.7,218.0 213.9,218.1 215.1,218.2 216.4,218.3 217.6,218.3 218.9,218.3 220.2,218.2 221.4,218.1 222.7,218.0 224.0,217.8 225.3,217.6 226.5,217.3 227.8,217.0 229.1,216.7 230.3,216.3 231.6,215.8 232.9,215.3 234.1,214.8 235.3,214.2 236.5,213.6 237.8,212.9 238.9,212.2 240.1,211.5 241.3,210.7 242.4,209.9 243.5,209.0 244.6,208.1 245.7,207.1 246.7,206.1 247.7,205.1 248.7,204.1 249.7,202.9 250.6,201.8 251.5,200.6 252.3,199.4 253.2,198.2 253.9,196.9 254.7,195.6 255.4,194.3 256.1,192.9 256.7,191.5 257.3,190.1 257.8,188.6 258.3,187.1 258.8,185.7 259.2,184.1 259.5,182.6 259.8,181.0 260.1,179.5 260.3,177.9 260.4,176.3 260.6,174.7 260.6,173.1 260.6,171.4 260.6,169.8 260.5,168.1 260.3,166.5 260.1,164.8 259.8,163.2 259.5,161.6 259.1,159.9 258.7,158.3 258.2,156.6 257.7,155.0 257.1,153.4 256.5,151.8 255.8,150.2 255.0,148.7 254.2,147.1 253.3,145.6 252.4,144.1 251.5,142.6 250.4,141.1 249.4,139.7 248.2,138.3 247.1,136.9 245.9,135.6 244.6,134.3 243.3,133.0 241.9,131.8 240.5,130.6 239.1,129.4 237.6,128.3 236.1,127.2 234.5,126.2 232.9,125.2 231.2,124.3 229.6,123.4 227.9,122.6 226.1,121.8 224.3,121.1 222.5,120.4 220.7,119.8 218.8,119.3 216.9,118.8 215.0,118.4 213.1,118.0 211.1,117.7 209.2,117.4 207.2,117.2 205.2,117.1 203.2,117.0 201.2,117.0 199.2,117.1 197.1,117.2 195.1,117.4 193.1,117.6 191.1,118.0 189.0,118.4 187.0,118.8 185.0,119.3 183.0,119.9 181.0,120.6 179.1,121.3 177.1,122.1 175.2,122.9 173.2,123.8 171.4,124.8 169.5,125.9 167.6,127.0 165.8,128.1 164.1,129.4 162.3,130.7 160.6,132.0 158.9,133.4 157.3,134.9 155.7,136.4 154.2,138.0 152.7,139.6 151.2,141.3 149.8,143.0 148.5,144.8 147.2,146.7 145.9,148.6 144.7,150.5 143.6,152.5 142.6,154.5 141.5,156.5 140.6,158.6 139.7,160.7 138.9,162.9 138.2,165.1 137.5,167.3 136.9,169.6 136.3,171.9 135.9,174.2 135.5,176.5 135.1,178.8 134.9,181.2 134.7,183.6 134.6,185.9 134.6,188.3 134.6,190.7 134.8,193.2 135.0,195.6 135.3,198.0 135.6,200.4 136.1,202.8 136.6,205.2 137.2,207.6 137.8,209.9 138.6,212.3 139.4,214.6 140.3,217.0 141.3,219.3 142.4,221.5 143.5,223.8 144.7,226.0 146.0,228.2 147.3,230.3 148.7,232.4 150.2,234.5 151.8,236.5 153.4,238.5 155.1,240.5 156.9,242.3 158.7,244.2 160.6,246.0 162.6,247.7 164.6,249.4 166.7,251.0 168.8,252.5 171.0,254.0 173.2,255.4 175.5,256.8 177.9,258.0 180.2,259.2 182.7,260.4 185.1,261.4 187.6,262.4 190.2,263.3 192.8,264.1 195.4,264.9 198.0,265.6 200.7,266.1 203.4,266.6 206.1,267.1 208.9,267.4 211.6,267.6 214.4,267.8 217.2,267.9 219.9,267.8 222.7,267.7 225.5,267.5 228.3,267.2 231.1,266.9 233.9,266.4 236.7,265.8 239.5,265.2 242.2,264.5 245.0,263.6 247.7,262.7 250.4,261.7 253.0,260.6 255.7,259.5 258.3,258.2 260.9,256.8 263.4,255.4 265.9,253.9 268.4,252.3 270.8,250.6 273.1,248.8 275.4,247.0 277.7,245.1 279.9,243.1 282.0,241.0 284.1,238.9 286.1,236.7 288.1,234.4 290.0,232.0 291.8,229.6 293.5,227.2 295.2,224.6 296.8,222.0 298.3,219.4 299.7,216.7 301.0,213.9 302.3,211.1 303.5,208.3 304.6,205.4 305.6,202.5 306.5,199.5 307.3,196.5 308.0,193.4 308.6,190.4 309.1,187.3 309.6,184.2 309.9,181.0 310.1,177.9 310.3,174.7 310.3,171.6 310.2,168.4 310.1,165.2 309.8,162.0 309.4,158.8 309.0,155.6 308.4,152.5 307.7,149.3 306.9,146.2 306.1,143.1 305.1,140.0 304.0,136.9 302.8,133.8 301.5,130.8 300.2,127.8 298.7,124.9 297.1,122.0 295.5,119.1 293.7,116.3 291.9,113.6 289.9,110.9 287.9,108.2 285.8,105.6 283.6,103.1 281.3,100.6 278.9,98.2 276.4,95.9 273.9,93.7 271.3,91.5 268.6,89.4 265.9,87.4 263.1,85.4 260.2,83.6 257.2,81.8 254.2,80.2 251.1,78.6 248.0,77.1 244.8,75.7 241.6,74.5 238.3,73.3 235.0,72.2 231.7,71.2 228.3,70.3 224.9,69.6 221.4,68.9 217.9,68.3 214.4,67.9 210.9,67.6 207.3,67.3 203.8,67.2 200.2,67.2 196.6,67.3 193.1,67.6 189.5,67.9 185.9,68.4 182.4,68.9 178.8,69.6 175.3,70.4 171.8,71.3 168.3,72.4 164.8,73.5 161.4,74.7 158.0,76.1 154.6,77.6 151.3,79.1 148.0,80.8 144.8,82.6 141.6,84.5 138.5,86.5 135.4,88.6 132.4,90.8 129.5,93.1 126.6,95.5 123.8,98.0 121.1,100.6 118.5,103.3 115.9,106.0 113.4,108.9 111.0,111.8 108.7,114.8 106.5,117.9 104.4,121.1 102.3,124.3 100.4,127.6 98.6,131.0 96.9,134.4 95.3,137.9 93.8,141.5 92.4,145.1 91.1,148.7 89.9,152.4 88.9,156.2 87.9,160.0 87.1,163.8 86.4,167.6 85.8,171.5 85.4,175.4 85.0,179.3 84.8,183.3 84.7,187.2 84.8,191.2 85.0,195.2 85.2,199.1 85.7,203.1 86.2,207.0 86.9,211.0 87.7,214.9 88.6,218.8 89.6,222.7 90.8,226.6 92.1,230.4 93.5,234.2 95.1,237.9 96.7,241.6 98.5,245.3 100.4,248.9 102.4,252.5 104.5,256.0 106.8,259.4 109.1,262.8 111.6,266.0 114.2,269.3 116.9,272.4 119.6,275.5 122.5,278.5 125.5,281.4 128.6,284.2 131.7,286.9 135.0,289.5 138.4,292.0 141.8,294.4 145.3,296.7 148.9,298.9 152.6,301.0 156.3,303.0 160.1,304.9 164.0,306.6 167.9,308.2 171.9,309.7 175.9,311.1 180.0,312.4 184.1,313.5 188.3,314.5 192.5,315.4 196.8,316.1 201.0,316.7 205.3,317.1 209.6,317.5 214.0,317.7 218.3,317.7 222.7,317.6 227.0,317.4 231.4,317.1 235.7,316.6 240.1,315.9 244.4,315.2 248.7,314.3 253.0,313.2 257.2,312.0 261.5,310.7 265.6,309.3 269.8,307.7 273.9,306.0 277.9,304.1 281.9,302.1 285.9,300.0 289.8,297.8 293.6,295.4 297.3,292.9 301.0,290.3 304.6,287.6 308.1,284.7 311.5,281.8 314.8,278.7 318.1,275.5 321.2,272.2 324.3,268.8 327.2,265.3 330.0,261.8 332.8,258.1 335.4,254.3 337.9,250.4 340.3,246.5 342.5,242.5 344.6,238.4 346.6,234.2 348.5,230.0 350.3,225.7 351.9,221.3 353.3,216.9 354.7,212.4 355.9,207.9 356.9,203.3 357.8,198.7 358.6,194.1 359.2,189.4 359.7,184.7 360.0,180.0" fill="none" stroke="#1f5d4c" stroke-width="2.2"/><line x1="374.1" y1="-204.1" x2="-148.2" y2="423.0" stroke="#b5491f" stroke-width="2.5"/><circle cx="112.9" cy="109.5" r="4.5" fill="#b5491f"/><text x="120.9" y="101.5" font-family="Space Grotesk,sans-serif" font-size="13" fill="#b5491f" font-weight="600">f(t₀)</text><text x="300" y="40" font-family="Space Grotesk,sans-serif" font-size="12.5" fill="#1f5d4c" font-weight="600">curve f(t)</text><text x="270" y="58" font-family="Space Grotesk,sans-serif" font-size="12.5" fill="#b5491f" font-weight="600">affine approx at t₀</text><text x="210.0" y="348" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" fill="#5f6b62">The affine map h ↦ f(t₀)+h·f′(t₀) is the tangent line</text></svg><figcaption><b>Block 3.</b> The affine approximation h ↦ f(t₀)+h·f′(t₀) is the tangent line to the curve at f(t₀) — the curve version of the gradient's tangent plane.</figcaption></figure>
+
+
+  <div class="practice">
+    <span class="lbl">Practice · Block 3</span>
+    <ol>
+      <li>Compute the length of $\gamma(t)=(e^t\cos t,\, e^t\sin t)$ on $[0,1]$.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$\gamma_1'=e^t(\cos t-\sin t),\ \gamma_2'=e^t(\sin t+\cos t)$. Then $\|\gamma'\|^2=e^{2t}[(\cos t-\sin t)^2+(\sin t+\cos t)^2]=2e^{2t}$, so $\|\gamma'\|=\sqrt2\,e^t$. Length $=\sqrt2\int_0^1 e^t\,dt=\sqrt2(e-1)$.</div></details></li>
+      <li>Find the length of the parabola arc $\gamma(t)=(t,t^2)$, $t\in[0,1]$, leaving the answer as an integral and then evaluating.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$\|\gamma'\|=\sqrt{1+4t^2}$. $\int_0^1\sqrt{1+4t^2}\,dt=\tfrac12\big[t\sqrt{1+4t^2}+\tfrac12\operatorname{arcsinh}(2t)\big]_0^1=\tfrac{\sqrt5}{2}+\tfrac14\ln(2+\sqrt5)\approx1.479$.</div></details></li>
+      <li>Show the length of $\gamma(t)=(\cos 2\pi t,\sin 2\pi t)$ is unchanged under $\phi(t)=t^3$ reparametrization.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$|\dot\gamma_\phi|(t)=|\phi'(t)|\,\|f'(\phi(t))\|=3t^2\cdot 2\pi$; integrate $\int_0^1 6\pi t^2 dt=2\pi$, same as the direct $\int_0^1 2\pi\,dt=2\pi$. Invariance confirmed.</div></details></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ BLOCK 4 ============ -->
+<section id="b4">
+  <h2><span class="tag">Block 4</span>Differentiability, gradient &amp; the affine-approximation pipeline</h2>
+  <div class="maps">Covers <span class="pschip">PS4</span> <span class="pschip">PS5</span> · highest-frequency computation on the exam.</div>
+
+  <h3>What to know</h3>
+  <figure class="fig"><svg viewBox="0 0 380 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:380px;height:auto;display:block;margin:0 auto"><rect width="380" height="360" fill="none"/><circle cx="190" cy="180" r="28" fill="none" stroke="#cfc8b6" stroke-width="1.4"/><circle cx="190" cy="180" r="56" fill="none" stroke="#cfc8b6" stroke-width="1.4"/><circle cx="190" cy="180" r="84" fill="none" stroke="#cfc8b6" stroke-width="1.4"/><circle cx="190" cy="180" r="112" fill="none" stroke="#cfc8b6" stroke-width="1.4"/><line x1="232.0" y1="180.0" x2="248.0" y2="180.0" stroke="#b5491f" stroke-width="1.6"/><line x1="248.0" y1="180.0" x2="243.7" y2="177.4" stroke="#b5491f" stroke-width="1.6"/><line x1="248.0" y1="180.0" x2="243.7" y2="182.6" stroke="#b5491f" stroke-width="1.6"/><line x1="274.0" y1="180.0" x2="290.0" y2="180.0" stroke="#b5491f" stroke-width="1.6"/><line x1="290.0" y1="180.0" x2="285.7" y2="177.4" stroke="#b5491f" stroke-width="1.6"/><line x1="290.0" y1="180.0" x2="285.7" y2="182.6" stroke="#b5491f" stroke-width="1.6"/><line x1="226.4" y1="159.0" x2="240.2" y2="151.0" stroke="#b5491f" stroke-width="1.6"/><line x1="240.2" y1="151.0" x2="235.2" y2="150.9" stroke="#b5491f" stroke-width="1.6"/><line x1="240.2" y1="151.0" x2="237.8" y2="155.4" stroke="#b5491f" stroke-width="1.6"/><line x1="262.7" y1="138.0" x2="276.6" y2="130.0" stroke="#b5491f" stroke-width="1.6"/><line x1="276.6" y1="130.0" x2="271.6" y2="129.9" stroke="#b5491f" stroke-width="1.6"/><line x1="276.6" y1="130.0" x2="274.2" y2="134.4" stroke="#b5491f" stroke-width="1.6"/><line x1="211.0" y1="143.6" x2="219.0" y2="129.8" stroke="#b5491f" stroke-width="1.6"/><line x1="219.0" y1="129.8" x2="214.6" y2="132.2" stroke="#b5491f" stroke-width="1.6"/><line x1="219.0" y1="129.8" x2="219.1" y2="134.8" stroke="#b5491f" stroke-width="1.6"/><line x1="232.0" y1="107.3" x2="240.0" y2="93.4" stroke="#b5491f" stroke-width="1.6"/><line x1="240.0" y1="93.4" x2="235.6" y2="95.8" stroke="#b5491f" stroke-width="1.6"/><line x1="240.0" y1="93.4" x2="240.1" y2="98.4" stroke="#b5491f" stroke-width="1.6"/><line x1="190.0" y1="138.0" x2="190.0" y2="122.0" stroke="#b5491f" stroke-width="1.6"/><line x1="190.0" y1="122.0" x2="187.4" y2="126.3" stroke="#b5491f" stroke-width="1.6"/><line x1="190.0" y1="122.0" x2="192.6" y2="126.3" stroke="#b5491f" stroke-width="1.6"/><line x1="190.0" y1="96.0" x2="190.0" y2="80.0" stroke="#b5491f" stroke-width="1.6"/><line x1="190.0" y1="80.0" x2="187.4" y2="84.3" stroke="#b5491f" stroke-width="1.6"/><line x1="190.0" y1="80.0" x2="192.6" y2="84.3" stroke="#b5491f" stroke-width="1.6"/><line x1="169.0" y1="143.6" x2="161.0" y2="129.8" stroke="#b5491f" stroke-width="1.6"/><line x1="161.0" y1="129.8" x2="160.9" y2="134.8" stroke="#b5491f" stroke-width="1.6"/><line x1="161.0" y1="129.8" x2="165.4" y2="132.2" stroke="#b5491f" stroke-width="1.6"/><line x1="148.0" y1="107.3" x2="140.0" y2="93.4" stroke="#b5491f" stroke-width="1.6"/><line x1="140.0" y1="93.4" x2="139.9" y2="98.4" stroke="#b5491f" stroke-width="1.6"/><line x1="140.0" y1="93.4" x2="144.4" y2="95.8" stroke="#b5491f" stroke-width="1.6"/><line x1="153.6" y1="159.0" x2="139.8" y2="151.0" stroke="#b5491f" stroke-width="1.6"/><line x1="139.8" y1="151.0" x2="142.2" y2="155.4" stroke="#b5491f" stroke-width="1.6"/><line x1="139.8" y1="151.0" x2="144.8" y2="150.9" stroke="#b5491f" stroke-width="1.6"/><line x1="117.3" y1="138.0" x2="103.4" y2="130.0" stroke="#b5491f" stroke-width="1.6"/><line x1="103.4" y1="130.0" x2="105.8" y2="134.4" stroke="#b5491f" stroke-width="1.6"/><line x1="103.4" y1="130.0" x2="108.4" y2="129.9" stroke="#b5491f" stroke-width="1.6"/><line x1="148.0" y1="180.0" x2="132.0" y2="180.0" stroke="#b5491f" stroke-width="1.6"/><line x1="132.0" y1="180.0" x2="136.3" y2="182.6" stroke="#b5491f" stroke-width="1.6"/><line x1="132.0" y1="180.0" x2="136.3" y2="177.4" stroke="#b5491f" stroke-width="1.6"/><line x1="106.0" y1="180.0" x2="90.0" y2="180.0" stroke="#b5491f" stroke-width="1.6"/><line x1="90.0" y1="180.0" x2="94.3" y2="182.6" stroke="#b5491f" stroke-width="1.6"/><line x1="90.0" y1="180.0" x2="94.3" y2="177.4" stroke="#b5491f" stroke-width="1.6"/><line x1="153.6" y1="201.0" x2="139.8" y2="209.0" stroke="#b5491f" stroke-width="1.6"/><line x1="139.8" y1="209.0" x2="144.8" y2="209.1" stroke="#b5491f" stroke-width="1.6"/><line x1="139.8" y1="209.0" x2="142.2" y2="204.6" stroke="#b5491f" stroke-width="1.6"/><line x1="117.3" y1="222.0" x2="103.4" y2="230.0" stroke="#b5491f" stroke-width="1.6"/><line x1="103.4" y1="230.0" x2="108.4" y2="230.1" stroke="#b5491f" stroke-width="1.6"/><line x1="103.4" y1="230.0" x2="105.8" y2="225.6" stroke="#b5491f" stroke-width="1.6"/><line x1="169.0" y1="216.4" x2="161.0" y2="230.2" stroke="#b5491f" stroke-width="1.6"/><line x1="161.0" y1="230.2" x2="165.4" y2="227.8" stroke="#b5491f" stroke-width="1.6"/><line x1="161.0" y1="230.2" x2="160.9" y2="225.2" stroke="#b5491f" stroke-width="1.6"/><line x1="148.0" y1="252.7" x2="140.0" y2="266.6" stroke="#b5491f" stroke-width="1.6"/><line x1="140.0" y1="266.6" x2="144.4" y2="264.2" stroke="#b5491f" stroke-width="1.6"/><line x1="140.0" y1="266.6" x2="139.9" y2="261.6" stroke="#b5491f" stroke-width="1.6"/><line x1="190.0" y1="222.0" x2="190.0" y2="238.0" stroke="#b5491f" stroke-width="1.6"/><line x1="190.0" y1="238.0" x2="192.6" y2="233.7" stroke="#b5491f" stroke-width="1.6"/><line x1="190.0" y1="238.0" x2="187.4" y2="233.7" stroke="#b5491f" stroke-width="1.6"/><line x1="190.0" y1="264.0" x2="190.0" y2="280.0" stroke="#b5491f" stroke-width="1.6"/><line x1="190.0" y1="280.0" x2="192.6" y2="275.7" stroke="#b5491f" stroke-width="1.6"/><line x1="190.0" y1="280.0" x2="187.4" y2="275.7" stroke="#b5491f" stroke-width="1.6"/><line x1="211.0" y1="216.4" x2="219.0" y2="230.2" stroke="#b5491f" stroke-width="1.6"/><line x1="219.0" y1="230.2" x2="219.1" y2="225.2" stroke="#b5491f" stroke-width="1.6"/><line x1="219.0" y1="230.2" x2="214.6" y2="227.8" stroke="#b5491f" stroke-width="1.6"/><line x1="232.0" y1="252.7" x2="240.0" y2="266.6" stroke="#b5491f" stroke-width="1.6"/><line x1="240.0" y1="266.6" x2="240.1" y2="261.6" stroke="#b5491f" stroke-width="1.6"/><line x1="240.0" y1="266.6" x2="235.6" y2="264.2" stroke="#b5491f" stroke-width="1.6"/><line x1="226.4" y1="201.0" x2="240.2" y2="209.0" stroke="#b5491f" stroke-width="1.6"/><line x1="240.2" y1="209.0" x2="237.8" y2="204.6" stroke="#b5491f" stroke-width="1.6"/><line x1="240.2" y1="209.0" x2="235.2" y2="209.1" stroke="#b5491f" stroke-width="1.6"/><line x1="262.7" y1="222.0" x2="276.6" y2="230.0" stroke="#b5491f" stroke-width="1.6"/><line x1="276.6" y1="230.0" x2="274.2" y2="225.6" stroke="#b5491f" stroke-width="1.6"/><line x1="276.6" y1="230.0" x2="271.6" y2="230.1" stroke="#b5491f" stroke-width="1.6"/><circle cx="190" cy="180" r="4" fill="#1f5d4c"/><text x="198" y="196" font-family="Space Grotesk,sans-serif" font-size="12" fill="#1f5d4c" font-weight="600">min</text><text x="190.0" y="26" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="13" fill="#10211c" font-weight="600">∇f points "uphill", ⟂ to level sets</text><text x="190.0" y="348" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" fill="#5f6b62">f(x,y)=x²+y²: circular contours, gradient = 2(x,y)</text></svg><figcaption><b>Block 4.</b> The gradient is perpendicular to level sets and points toward steepest increase. The affine approximation f(x₀)+∇f(x₀)·(x−x₀) is the tangent plane built from it.</figcaption></figure>
+
+  <div class="box thm"><span class="lbl">Derivative ↔ gradient ↔ Jacobian</span>
+  For $f:\mathbb R^n\to\mathbb R$ differentiable, the derivative is the row $f'(x)=\nabla f(x)^\top$ and
+  $$f(x_0+h)=f(x_0)+\nabla f(x_0)^\top h + o(\|h\|).$$
+  For $f:\mathbb R^n\to\mathbb R^m$, the <strong>Jacobian</strong> $J_f(x)\in\mathbb R^{m\times n}$ has rows $\nabla f_i(x)^\top$, and the affine approximation is $f(x_0)+J_f(x_0)(x-x_0)$. <strong>Chain rule:</strong> $J_{g\circ f}(x)=J_g(f(x))\,J_f(x)$.</div>
+  <div class="box def"><span class="lbl">Fréchet derivative</span>
+  $f$ is Fréchet-differentiable at $x_0$ if a bounded linear map $A$ satisfies $\frac{\|f(x_0+h)-f(x_0)-Ah\|}{\|h\|}\to 0$. In $\mathbb R^n$ this $A$ is exactly $J_f(x_0)$.</div>
+
+  <h3>The pipeline (memorize the motion, not formulas)</h3>
+  <div class="box recipe"><span class="lbl">Recipe · gradient → affine approx → estimate (PS4 P1–P3, PS5 P4)</span>
+  <ol>
+    <li><strong>Gradient:</strong> partial-differentiate componentwise. e.g. $f=x^2y+y^2\Rightarrow\nabla f=(2xy,\ x^2+2y)$.</li>
+    <li><strong>Evaluate</strong> at the base point $x_0$.</li>
+    <li><strong>Affine approx:</strong> $F(x)=f(x_0)+\nabla f(x_0)^\top(x-x_0)$ (scalar) or $f(x_0)+J_f(x_0)(x-x_0)$ (vector).</li>
+    <li><strong>Estimate a nearby value</strong> by plugging into $F$ (PS5 P4d: $f(1.01,0.98)$).</li>
+  </ol></div>
+
+  <div class="box recipe"><span class="lbl">Recipe · least-squares derivative &amp; normal equations (PS5 P2)</span>
+  $L(x)=\|Ax-b\|^2$. Expand $L=x^\top A^\top A x-2b^\top Ax+b^\top b$. Fréchet derivative: $L'(x)h=2(Ax-b)^\top A h$, i.e. $\nabla L(x)=2A^\top(Ax-b)$. Setting it to $0$ gives the <strong>normal equations</strong> $A^\top Ax=A^\top b$; convexity (Hessian $2A^\top A\succeq0$) makes any critical point a global minimum.</div>
+
+  <div class="box recipe"><span class="lbl">Recipe · chain rule by hand (PS5 P3)</span>
+  $f(x,y)=(x^2,y^2)^\top$, $g(u,v)=u-v$. $J_g=(1,-1)$, $J_f=\begin{pmatrix}2x&0\\0&2y\end{pmatrix}$, so $(g\circ f)'=(1,-1)\begin{pmatrix}2x&0\\0&2y\end{pmatrix}=(2x,\ -2y)$. Sanity check: $g\circ f=x^2-y^2$, gradient $(2x,-2y)$. ✓</div>
+
+  <div class="box pitfall"><span class="lbl">Pitfall</span>Gradient is a <em>column</em>, the derivative is a <em>row</em>. When you multiply $J_f(x_0)(x-x_0)$, dimensions must read $m\times n$ times $n\times1$. Mixing these up is the most common lost point on this block.</div>
+
+  <div class="practice">
+    <span class="lbl">Practice · Block 4</span>
+    <ol>
+      <li>For $f(x,y)=e^{xy}$, compute $\nabla f$, the affine approximation at $(1,0)$, and use it to estimate $f(1.1,0.1)$.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$\nabla f=(y e^{xy},\,x e^{xy})$; at $(1,0)$: $f=1$, $\nabla f=(0,1)$. $F(x,y)=1+0(x-1)+1(y-0)=1+y$. Estimate $f(1.1,0.1)\approx1.1$ (true $e^{0.11}\approx1.116$).</div></details></li>
+      <li>$f(x,y)=(x+y,\,xy)^\top$. Find $J_f$, its value at $(2,3)$, and the affine approximation there; estimate $f(2.05,2.98)$.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$J_f=\begin{pmatrix}1&1\\y&x\end{pmatrix}$; at $(2,3)$: $\begin{pmatrix}1&1\\3&2\end{pmatrix}$, $f(2,3)=(5,6)$. $F=(5,6)+\begin{pmatrix}1&1\\3&2\end{pmatrix}\begin{pmatrix}0.05\\-0.02\end{pmatrix}=(5.03,\,6.11)$. True $f=(5.03,6.109)$.</div></details></li>
+      <li>$L(x)=\|Ax-b\|^2$ with $A=\begin{pmatrix}1&0\\1&1\\0&1\end{pmatrix},\ b=(1,2,2)^\top$. Write $A^\top A x=A^\top b$ and solve.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$A^\top A=\begin{pmatrix}2&1\\1&2\end{pmatrix}$, $A^\top b=\begin{pmatrix}3\\4\end{pmatrix}$. Solve: $x=\tfrac13(2\cdot3-? )$… directly $\begin{pmatrix}2&1\\1&2\end{pmatrix}x=\begin{pmatrix}3\\4\end{pmatrix}\Rightarrow x=\begin{pmatrix}2/3\\5/3\end{pmatrix}$.</div></details></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ BLOCK 5 ============ -->
+<section id="b5">
+  <h2><span class="tag">Block 5</span>Taylor's formula, the Hessian &amp; classifying extrema</h2>
+  <div class="maps">Covers <span class="pschip">PS4 P5</span> <span class="pschip">PS6</span> <span class="pschip">PS7 P1–P2</span> <span class="pschip">PS8 P1–P2</span>.</div>
+
+  <h3>What to know</h3>
+  <figure class="fig"><svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;height:auto;display:block;margin:0 auto"><rect width="560" height="230" fill="none"/><line x1="43" y1="108" x2="147" y2="108" stroke="#cfc8b6" stroke-width="1"/><line x1="95" y1="56" x2="95" y2="160" stroke="#cfc8b6" stroke-width="1"/><polyline points="93.8,120.7 93.3,120.7 92.5,120.5 91.9,120.4 91.1,120.2 90.6,120.0 90.1,119.8 89.5,119.5 89.0,119.3 88.4,119.0 87.9,118.6 87.4,118.3 87.1,118.0 86.6,117.6 86.2,117.2 85.8,116.8 85.4,116.4 85.0,115.9 84.7,115.6 84.4,115.1 84.0,114.6 83.7,114.0 83.5,113.5 83.2,112.9 83.0,112.4 82.8,111.9 82.6,111.1 82.5,110.5 82.3,109.7 82.3,109.2 82.2,108.4 82.2,107.6 82.3,106.8 82.3,106.3 82.5,105.5 82.6,104.9 82.8,104.1 83.0,103.6 83.2,103.1 83.5,102.5 83.7,102.0 84.0,101.4 84.4,100.9 84.7,100.4 85.0,100.1 85.4,99.6 85.8,99.2 86.2,98.8 86.6,98.4 87.1,98.0 87.4,97.7 87.9,97.4 88.4,97.0 89.0,96.7 89.5,96.5 90.1,96.2 90.6,96.0 91.1,95.8 91.9,95.6 92.5,95.5 93.3,95.3 93.8,95.3 94.6,95.2 95.4,95.2 96.2,95.3 96.7,95.3 97.5,95.5 98.1,95.6 98.9,95.8 99.4,96.0 99.9,96.2 100.5,96.5 101.0,96.7 101.6,97.0 102.1,97.4 102.6,97.7 102.9,98.0 103.4,98.4 103.8,98.8 104.2,99.2 104.6,99.6 105.0,100.1 105.3,100.4 105.6,100.9 106.0,101.4 106.3,102.0 106.5,102.5 106.8,103.1 107.0,103.6 107.2,104.1 107.4,104.9 107.5,105.5 107.7,106.3 107.7,106.8 107.8,107.6 107.8,108.4 107.7,109.2 107.7,109.7 107.5,110.5 107.4,111.1 107.2,111.9 107.0,112.4 106.8,112.9 106.5,113.5 106.3,114.0 106.0,114.6 105.6,115.1 105.3,115.6 105.0,115.9 104.6,116.4 104.2,116.8 103.8,117.2 103.4,117.6 102.9,118.0 102.6,118.3 102.1,118.6 101.6,119.0 101.0,119.3 100.5,119.5 99.9,119.8 99.4,120.0 98.9,120.2 98.1,120.4 97.5,120.5 96.7,120.7 96.2,120.7 95.4,120.8 94.6,120.8 93.8,120.7" fill="none" stroke="#1f5d4c" stroke-width="1.7"/><polyline points="93.5,130.1 93.0,130.0 92.2,130.0 91.4,129.8 90.9,129.7 90.1,129.6 89.5,129.4 88.9,129.3 88.2,129.1 87.6,128.9 87.1,128.7 86.6,128.5 86.0,128.2 85.4,127.9 84.8,127.7 84.3,127.4 83.9,127.1 83.4,126.8 82.8,126.5 82.3,126.1 81.8,125.8 81.5,125.5 81.0,125.1 80.5,124.7 80.2,124.4 79.6,123.9 79.3,123.6 78.8,123.1 78.5,122.8 78.1,122.3 77.7,121.9 77.5,121.5 77.1,121.0 76.7,120.4 76.4,120.0 76.1,119.6 75.9,119.1 75.6,118.6 75.3,118.0 75.0,117.5 74.8,117.0 74.5,116.4 74.3,115.7 74.0,115.1 73.9,114.6 73.7,114.0 73.5,113.2 73.4,112.7 73.2,111.9 73.1,111.3 73.0,110.5 72.9,109.7 72.9,109.2 72.9,108.4 72.9,107.6 72.9,106.8 72.9,106.3 73.0,105.5 73.1,104.7 73.2,104.1 73.4,103.3 73.5,102.8 73.7,102.0 73.9,101.4 74.0,100.9 74.3,100.3 74.5,99.6 74.8,99.0 75.0,98.5 75.3,98.0 75.6,97.4 75.9,96.9 76.1,96.4 76.4,96.0 76.7,95.6 77.1,95.0 77.5,94.5 77.7,94.1 78.1,93.7 78.5,93.2 78.8,92.9 79.3,92.4 79.6,92.1 80.2,91.6 80.5,91.3 81.0,90.9 81.5,90.5 81.8,90.2 82.3,89.9 82.8,89.5 83.4,89.2 83.9,88.9 84.3,88.6 84.8,88.3 85.4,88.1 86.0,87.8 86.6,87.5 87.1,87.3 87.6,87.1 88.2,86.9 88.9,86.7 89.5,86.6 90.1,86.4 90.9,86.3 91.4,86.2 92.2,86.0 93.0,86.0 93.5,85.9 94.3,85.9 95.1,85.9 95.9,85.9 96.6,85.9 97.3,86.0 98.1,86.1 98.8,86.2 99.4,86.3 100.1,86.5 100.8,86.6 101.3,86.8 102.0,87.0 102.6,87.2 103.2,87.4 103.7,87.6 104.2,87.9 104.8,88.1 105.3,88.4 105.8,88.7 106.4,89.0 106.9,89.3 107.4,89.7 107.8,89.9 108.2,90.3 108.8,90.7 109.2,91.0 109.6,91.4 110.1,91.8 110.4,92.1 110.9,92.6 111.2,92.9 111.6,93.4 112.0,93.8 112.3,94.2 112.7,94.8 113.1,95.2 113.3,95.6 113.7,96.1 114.0,96.6 114.3,97.2 114.6,97.7 114.9,98.2 115.1,98.8 115.4,99.3 115.6,99.8 115.8,100.4 116.0,101.0 116.2,101.7 116.4,102.2 116.5,102.9 116.7,103.6 116.8,104.2 116.9,104.9 117.0,105.7 117.1,106.4 117.1,107.1 117.1,107.9 117.1,108.7 117.1,109.5 117.0,110.0 117.0,110.8 116.8,111.6 116.7,112.1 116.6,112.9 116.4,113.5 116.3,114.1 116.1,114.8 115.9,115.4 115.7,115.9 115.5,116.4 115.2,117.0 114.9,117.6 114.7,118.2 114.4,118.7 114.1,119.1 113.8,119.6 113.5,120.2 113.1,120.7 112.8,121.2 112.5,121.5 112.1,122.0 111.7,122.5 111.4,122.8 110.9,123.4 110.6,123.7 110.1,124.2 109.8,124.5 109.3,124.9 108.9,125.3 108.5,125.5 108.0,125.9 107.4,126.3 107.0,126.6 106.6,126.9 106.1,127.1 105.6,127.4 105.0,127.7 104.5,128.0 104.0,128.2 103.4,128.5 102.7,128.7 102.1,129.0 101.6,129.1 101.0,129.3 100.2,129.5 99.7,129.6 98.9,129.8 98.3,129.9 97.5,130.0 96.7,130.1 96.2,130.1 95.4,130.1 94.6,130.1 93.8,130.1" fill="none" stroke="#1f5d4c" stroke-width="1.7"/><polyline points="92.2,139.2 91.7,139.1 90.9,139.0 90.1,138.9 89.5,138.8 88.7,138.7 88.2,138.5 87.4,138.4 86.8,138.2 86.3,138.1 85.5,137.8 85.0,137.6 84.4,137.5 83.9,137.3 83.3,137.0 82.7,136.8 82.1,136.5 81.5,136.2 81.0,136.0 80.4,135.7 79.9,135.4 79.4,135.2 79.0,134.9 78.5,134.6 78.0,134.3 77.5,133.9 76.9,133.6 76.6,133.3 76.1,133.0 75.6,132.6 75.2,132.2 74.8,131.9 74.3,131.4 73.9,131.1 73.5,130.7 73.1,130.3 72.7,129.9 72.3,129.5 71.9,129.1 71.6,128.7 71.1,128.2 70.8,127.8 70.4,127.4 70.0,126.9 69.7,126.4 69.4,126.1 69.1,125.5 68.7,125.0 68.4,124.5 68.1,124.0 67.8,123.6 67.6,123.1 67.3,122.6 67.0,122.0 66.8,121.5 66.5,120.9 66.2,120.3 66.0,119.7 65.7,119.1 65.5,118.6 65.4,118.0 65.2,117.5 64.9,116.7 64.8,116.2 64.6,115.6 64.5,114.8 64.3,114.3 64.2,113.5 64.1,112.9 64.0,112.1 63.9,111.3 63.8,110.8 63.8,110.0 63.7,109.2 63.7,108.4 63.7,107.6 63.7,106.8 63.8,106.0 63.8,105.2 63.9,104.7 64.0,103.9 64.1,103.1 64.2,102.5 64.3,101.7 64.5,101.2 64.6,100.4 64.8,99.8 64.9,99.3 65.2,98.5 65.4,98.0 65.5,97.4 65.7,96.9 66.0,96.3 66.2,95.7 66.5,95.1 66.8,94.5 67.0,94.0 67.3,93.4 67.6,92.9 67.8,92.4 68.1,92.0 68.4,91.5 68.7,91.0 69.1,90.5 69.4,89.9 69.7,89.6 70.0,89.1 70.4,88.6 70.8,88.2 71.1,87.8 71.6,87.3 71.9,86.9 72.3,86.5 72.7,86.1 73.1,85.7 73.5,85.3 73.9,84.9 74.3,84.6 74.8,84.1 75.2,83.8 75.6,83.4 76.1,83.0 76.6,82.7 76.9,82.4 77.5,82.1 78.0,81.7 78.5,81.4 79.0,81.1 79.4,80.8 79.9,80.6 80.4,80.3 81.0,80.0 81.5,79.8 82.1,79.5 82.7,79.2 83.3,79.0 83.9,78.7 84.4,78.5 85.0,78.4 85.5,78.2 86.3,77.9 86.8,77.8 87.4,77.6 88.2,77.5 88.7,77.3 89.5,77.2 90.1,77.1 90.9,77.0 91.7,76.9 92.2,76.8 93.0,76.8 93.8,76.7 94.6,76.7 95.4,76.7 96.2,76.7 97.0,76.8 97.8,76.8 98.3,76.9 99.1,77.0 99.9,77.1 100.5,77.2 101.3,77.3 101.8,77.5 102.6,77.6 103.2,77.8 103.7,77.9 104.5,78.2 105.0,78.4 105.6,78.5 106.1,78.7 106.7,79.0 107.3,79.2 107.9,79.5 108.5,79.8 109.0,80.0 109.6,80.3 110.1,80.6 110.6,80.8 111.0,81.1 111.5,81.4 112.0,81.7 112.5,82.1 113.1,82.4 113.4,82.7 113.9,83.0 114.4,83.4 114.8,83.8 115.2,84.1 115.7,84.6 116.1,84.9 116.5,85.3 116.9,85.7 117.3,86.1 117.7,86.5 118.1,86.9 118.4,87.3 118.9,87.8 119.2,88.2 119.6,88.6 120.0,89.1 120.3,89.6 120.6,89.9 120.9,90.5 121.3,91.0 121.6,91.5 121.9,92.0 122.2,92.4 122.4,92.9 122.7,93.4 123.0,94.0 123.2,94.5 123.5,95.1 123.8,95.7 124.0,96.3 124.3,96.9 124.5,97.4 124.6,98.0 124.8,98.5 125.1,99.3 125.2,99.8 125.4,100.4 125.5,101.2 125.7,101.7 125.8,102.5 125.9,103.1 126.0,103.9 126.1,104.7 126.2,105.2 126.2,106.0 126.3,106.8 126.3,107.6 126.3,108.4 126.3,109.2 126.2,110.0 126.2,110.8 126.1,111.3 126.0,112.1 125.9,112.9 125.8,113.5 125.7,114.3 125.5,114.8 125.4,115.6 125.2,116.2 125.1,116.7 124.8,117.5 124.6,118.0 124.5,118.6 124.3,119.1 124.0,119.7 123.8,120.3 123.5,120.9 123.2,121.5 123.0,122.0 122.7,122.6 122.4,123.1 122.2,123.6 121.9,124.0 121.6,124.5 121.3,125.0 120.9,125.5 120.6,126.1 120.3,126.4 120.0,126.9 119.6,127.4 119.2,127.8 118.9,128.2 118.4,128.7 118.1,129.1 117.7,129.5 117.3,129.9 116.9,130.3 116.5,130.7 116.1,131.1 115.7,131.4 115.2,131.9 114.8,132.2 114.4,132.6 113.9,133.0 113.4,133.3 113.1,133.6 112.5,133.9 112.0,134.3 111.5,134.6 111.0,134.9 110.6,135.2 110.1,135.4 109.6,135.7 109.0,136.0 108.5,136.2 107.9,136.5 107.3,136.8 106.7,137.0 106.1,137.3 105.6,137.5 105.0,137.6 104.5,137.8 103.7,138.1 103.2,138.2 102.6,138.4 101.8,138.5 101.3,138.7 100.5,138.8 99.9,138.9 99.1,139.0 98.3,139.1 97.8,139.2 97.0,139.2 96.2,139.3 95.4,139.3 94.6,139.3 93.8,139.3 93.0,139.2 92.2,139.2" fill="none" stroke="#1f5d4c" stroke-width="1.7"/><polyline points="91.4,147.2 90.9,147.2 90.1,147.1 89.2,147.0 88.7,146.9 87.9,146.7 87.4,146.6 86.6,146.5 86.0,146.3 85.2,146.2 84.7,146.0 84.2,145.9 83.4,145.6 82.8,145.5 82.3,145.3 81.7,145.1 81.0,144.8 80.4,144.6 79.9,144.4 79.3,144.1 78.8,143.9 78.3,143.7 77.7,143.4 77.2,143.1 76.7,142.9 76.1,142.6 75.6,142.3 75.1,142.0 74.5,141.6 74.0,141.3 73.6,141.0 73.2,140.8 72.7,140.4 72.1,140.1 71.6,139.7 71.3,139.4 70.8,139.1 70.3,138.6 69.9,138.4 69.4,138.0 69.0,137.6 68.6,137.3 68.1,136.8 67.8,136.5 67.3,136.0 67.0,135.7 66.5,135.2 66.2,134.9 65.7,134.4 65.4,134.0 65.0,133.6 64.6,133.1 64.4,132.7 63.9,132.2 63.6,131.7 63.3,131.4 62.9,130.9 62.6,130.3 62.2,129.8 62.0,129.4 61.7,129.0 61.4,128.5 61.0,127.9 60.7,127.4 60.4,126.9 60.1,126.3 59.9,125.8 59.6,125.3 59.3,124.7 59.1,124.2 58.9,123.7 58.6,123.1 58.4,122.6 58.2,122.0 57.9,121.3 57.7,120.7 57.5,120.2 57.4,119.6 57.1,118.8 57.0,118.3 56.8,117.8 56.7,117.0 56.5,116.4 56.4,115.6 56.3,115.1 56.1,114.3 56.0,113.8 55.9,112.9 55.8,112.1 55.8,111.6 55.7,110.8 55.7,110.0 55.6,109.2 55.6,108.4 55.6,107.6 55.6,106.8 55.7,106.0 55.7,105.2 55.8,104.4 55.8,103.9 55.9,103.1 56.0,102.2 56.1,101.7 56.3,100.9 56.4,100.4 56.5,99.6 56.7,99.0 56.8,98.2 57.0,97.7 57.1,97.2 57.4,96.4 57.5,95.8 57.7,95.3 57.9,94.7 58.2,94.0 58.4,93.4 58.6,92.9 58.9,92.3 59.1,91.8 59.3,91.3 59.6,90.7 59.9,90.2 60.1,89.7 60.4,89.1 60.7,88.6 61.0,88.1 61.4,87.5 61.7,87.0 62.0,86.6 62.2,86.2 62.6,85.7 62.9,85.1 63.3,84.6 63.6,84.3 63.9,83.8 64.4,83.3 64.6,82.9 65.0,82.4 65.4,82.0 65.7,81.6 66.2,81.1 66.5,80.8 67.0,80.3 67.3,80.0 67.8,79.5 68.1,79.2 68.6,78.7 69.0,78.4 69.4,78.0 69.9,77.6 70.3,77.4 70.8,76.9 71.3,76.6 71.6,76.3 72.1,75.9 72.7,75.6 73.2,75.2 73.6,75.0 74.0,74.7 74.5,74.4 75.1,74.0 75.6,73.7 76.1,73.4 76.7,73.1 77.2,72.9 77.7,72.6 78.3,72.3 78.8,72.1 79.3,71.9 79.9,71.6 80.4,71.4 81.0,71.2 81.7,70.9 82.3,70.7 82.8,70.5 83.4,70.4 84.2,70.1 84.7,70.0 85.2,69.8 86.0,69.7 86.6,69.5 87.4,69.4 87.9,69.3 88.7,69.1 89.2,69.0 90.1,68.9 90.9,68.8 91.4,68.8 92.2,68.7 93.0,68.7 93.8,68.6 94.6,68.6 95.4,68.6 96.2,68.6 97.0,68.7 97.8,68.7 98.6,68.8 99.1,68.8 99.9,68.9 100.8,69.0 101.3,69.1 102.1,69.3 102.6,69.4 103.4,69.5 104.0,69.7 104.8,69.8 105.3,70.0 105.8,70.1 106.6,70.4 107.2,70.5 107.7,70.7 108.3,70.9 109.0,71.2 109.6,71.4 110.1,71.6 110.7,71.9 111.2,72.1 111.7,72.3 112.3,72.6 112.8,72.9 113.3,73.1 113.9,73.4 114.4,73.7 114.9,74.0 115.5,74.4 116.0,74.7 116.4,75.0 116.8,75.2 117.3,75.6 117.9,75.9 118.4,76.3 118.7,76.6 119.2,76.9 119.7,77.4 120.1,77.6 120.6,78.0 121.0,78.4 121.4,78.7 121.9,79.2 122.2,79.5 122.7,80.0 123.0,80.3 123.5,80.8 123.8,81.1 124.3,81.6 124.6,82.0 125.0,82.4 125.4,82.9 125.6,83.3 126.1,83.8 126.4,84.3 126.7,84.6 127.1,85.1 127.4,85.7 127.8,86.2 128.0,86.6 128.3,87.0 128.6,87.5 129.0,88.1 129.3,88.6 129.6,89.1 129.9,89.7 130.1,90.2 130.4,90.7 130.7,91.3 130.9,91.8 131.1,92.3 131.4,92.9 131.6,93.4 131.8,94.0 132.1,94.7 132.3,95.3 132.5,95.8 132.6,96.4 132.9,97.2 133.0,97.7 133.2,98.2 133.3,99.0 133.5,99.6 133.6,100.4 133.7,100.9 133.9,101.7 134.0,102.2 134.1,103.1 134.2,103.9 134.2,104.4 134.3,105.2 134.3,106.0 134.4,106.8 134.4,107.6 134.4,108.4 134.4,109.2 134.3,110.0 134.3,110.8 134.2,111.6 134.2,112.1 134.1,112.9 134.0,113.8 133.9,114.3 133.7,115.1 133.6,115.6 133.5,116.4 133.3,117.0 133.2,117.8 133.0,118.3 132.9,118.8 132.6,119.6 132.5,120.2 132.3,120.7 132.1,121.3 131.8,122.0 131.6,122.6 131.4,123.1 131.1,123.7 130.9,124.2 130.7,124.7 130.4,125.3 130.1,125.8 129.9,126.3 129.6,126.9 129.3,127.4 129.0,127.9 128.6,128.5 128.3,129.0 128.0,129.4 127.8,129.8 127.4,130.3 127.1,130.9 126.7,131.4 126.4,131.7 126.1,132.2 125.6,132.7 125.4,133.1 125.0,133.6 124.6,134.0 124.3,134.4 123.8,134.9 123.5,135.2 123.0,135.7 122.7,136.0 122.2,136.5 121.9,136.8 121.4,137.3 121.0,137.6 120.6,138.0 120.1,138.4 119.7,138.6 119.2,139.1 118.7,139.4 118.4,139.7 117.9,140.1 117.3,140.4 116.8,140.8 116.4,141.0 116.0,141.3 115.5,141.6 114.9,142.0 114.4,142.3 113.9,142.6 113.3,142.9 112.8,143.1 112.3,143.4 111.7,143.7 111.2,143.9 110.7,144.1 110.1,144.4 109.6,144.6 109.0,144.8 108.3,145.1 107.7,145.3 107.2,145.5 106.6,145.6 105.8,145.9 105.3,146.0 104.8,146.2 104.0,146.3 103.4,146.5 102.6,146.6 102.1,146.7 101.3,146.9 100.8,147.0 99.9,147.1 99.1,147.2 98.6,147.2 97.8,147.3 97.0,147.3 96.2,147.4 95.4,147.4 94.6,147.4 93.8,147.4 93.0,147.3 92.2,147.3 91.4,147.2" fill="none" stroke="#1f5d4c" stroke-width="1.7"/><circle cx="95" cy="108" r="3.2" fill="#1f5d4c"/><text x="95" y="180" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" fill="#10211c" font-weight="600">det H&gt;0, a&gt;0 — min</text><line x1="230" y1="108" x2="334" y2="108" stroke="#cfc8b6" stroke-width="1"/><line x1="282" y1="56" x2="282" y2="160" stroke="#cfc8b6" stroke-width="1"/><polyline points="278.4,147.2 279.2,147.3 280.0,147.3 280.8,147.4 281.6,147.4 282.4,147.4 283.2,147.4 284.0,147.3 284.8,147.3 285.6,147.2 286.1,147.2 286.9,147.1 287.8,147.0 288.3,146.9 289.1,146.7 289.6,146.6 290.4,146.5 291.0,146.3 291.8,146.2 292.3,146.0 292.8,145.9 293.6,145.6 294.2,145.5 294.7,145.3 295.3,145.1 296.0,144.8 296.6,144.6 297.1,144.4 297.7,144.1 298.2,143.9 298.7,143.7 299.3,143.4 299.8,143.1 300.3,142.9 300.9,142.6 301.4,142.3 301.9,142.0 302.5,141.6 303.0,141.3 303.4,141.0 303.8,140.8 304.3,140.4 304.9,140.1 305.4,139.7 305.7,139.4 306.2,139.1 306.7,138.6 307.1,138.4 307.6,138.0 308.0,137.6 308.4,137.3 308.9,136.8 309.2,136.5 309.7,136.0 310.0,135.7 310.5,135.2 310.8,134.9 311.3,134.4 311.6,134.0 312.0,133.6 312.4,133.1 312.6,132.7 313.1,132.2 313.4,131.7 313.7,131.4 314.1,130.9 314.4,130.3 314.8,129.8 315.0,129.4 315.3,129.0 315.6,128.5 316.0,127.9 316.3,127.4 316.6,126.9 316.9,126.3 317.1,125.8 317.4,125.3 317.7,124.7 317.9,124.2 318.1,123.7 318.4,123.1 318.6,122.6 318.8,122.0 319.1,121.3 319.3,120.7 319.5,120.2 319.6,119.6 319.9,118.8 320.0,118.3 320.2,117.8 320.3,117.0 320.5,116.4 320.6,115.6 320.7,115.1 320.9,114.3 321.0,113.8 321.1,112.9 321.2,112.1 321.2,111.6 321.3,110.8 321.3,110.0 321.4,109.2 321.4,108.4 321.4,107.6 321.4,106.8 321.3,106.0 321.3,105.2 321.2,104.4 321.2,103.9 321.1,103.1 321.0,102.2 320.9,101.7 320.7,100.9 320.6,100.4 320.5,99.6 320.3,99.0 320.2,98.2 320.0,97.7 319.9,97.2 319.6,96.4 319.5,95.8 319.3,95.3 319.1,94.7 318.8,94.0 318.6,93.4 318.4,92.9 318.1,92.3 317.9,91.8 317.7,91.3 317.4,90.7 317.1,90.2 316.9,89.7 316.6,89.1 316.3,88.6 316.0,88.1 315.6,87.5 315.3,87.0 315.0,86.6 314.8,86.2 314.4,85.7 314.1,85.1 313.7,84.6 313.4,84.3 313.1,83.8 312.6,83.3 312.4,82.9 312.0,82.4 311.6,82.0 311.3,81.6 310.8,81.1 310.5,80.8 310.0,80.3 309.7,80.0 309.2,79.5 308.9,79.2 308.4,78.7 308.0,78.4 307.6,78.0 307.1,77.6 306.7,77.4 306.2,76.9 305.7,76.6 305.4,76.3 304.9,75.9 304.3,75.6 303.8,75.2 303.4,75.0 303.0,74.7 302.5,74.4 301.9,74.0 301.4,73.7 300.9,73.4 300.3,73.1 299.8,72.9 299.3,72.6 298.7,72.3 298.2,72.1 297.7,71.9 297.1,71.6 296.6,71.4 296.0,71.2 295.3,70.9 294.7,70.7 294.2,70.5 293.6,70.4 292.8,70.1 292.3,70.0 291.8,69.8 291.0,69.7 290.4,69.5 289.6,69.4 289.1,69.3 288.3,69.1 287.8,69.0 286.9,68.9 286.1,68.8 285.6,68.8 284.8,68.7 284.0,68.7 283.2,68.6 282.4,68.6 281.6,68.6 280.8,68.6 280.0,68.7 279.2,68.7 278.4,68.8 277.9,68.8 277.1,68.9 276.2,69.0 275.7,69.1 274.9,69.3 274.4,69.4 273.6,69.5 273.0,69.7 272.2,69.8 271.7,70.0 271.2,70.1 270.4,70.4 269.8,70.5 269.3,70.7 268.7,70.9 268.0,71.2 267.4,71.4 266.9,71.6 266.3,71.9 265.8,72.1 265.3,72.3 264.7,72.6 264.2,72.9 263.7,73.1 263.1,73.4 262.6,73.7 262.1,74.0 261.5,74.4 261.0,74.7 260.6,75.0 260.2,75.2 259.7,75.6 259.1,75.9 258.6,76.3 258.3,76.6 257.8,76.9 257.3,77.4 256.9,77.6 256.4,78.0 256.0,78.4 255.6,78.7 255.1,79.2 254.8,79.5 254.3,80.0 254.0,80.3 253.5,80.8 253.2,81.1 252.7,81.6 252.4,82.0 252.0,82.4 251.6,82.9 251.4,83.3 250.9,83.8 250.6,84.3 250.3,84.6 249.9,85.1 249.6,85.7 249.2,86.2 249.0,86.6 248.7,87.0 248.4,87.5 248.0,88.1 247.7,88.6 247.4,89.1 247.1,89.7 246.9,90.2 246.6,90.7 246.3,91.3 246.1,91.8 245.9,92.3 245.6,92.9 245.4,93.4 245.2,94.0 244.9,94.7 244.7,95.3 244.5,95.8 244.4,96.4 244.1,97.2 244.0,97.7 243.8,98.2 243.7,99.0 243.5,99.6 243.4,100.4 243.3,100.9 243.1,101.7 243.0,102.2 242.9,103.1 242.8,103.9 242.8,104.4 242.7,105.2 242.7,106.0 242.6,106.8 242.6,107.6 242.6,108.4 242.6,109.2 242.7,110.0 242.7,110.8 242.8,111.6 242.8,112.1 242.9,112.9 243.0,113.8 243.1,114.3 243.3,115.1 243.4,115.6 243.5,116.4 243.7,117.0 243.8,117.8 244.0,118.3 244.1,118.8 244.4,119.6 244.5,120.2 244.7,120.7 244.9,121.3 245.2,122.0 245.4,122.6 245.6,123.1 245.9,123.7 246.1,124.2 246.3,124.7 246.6,125.3 246.9,125.8 247.1,126.3 247.4,126.9 247.7,127.4 248.0,127.9 248.4,128.5 248.7,129.0 249.0,129.4 249.2,129.8 249.6,130.3 249.9,130.9 250.3,131.4 250.6,131.7 250.9,132.2 251.4,132.7 251.6,133.1 252.0,133.6 252.4,134.0 252.7,134.4 253.2,134.9 253.5,135.2 254.0,135.7 254.3,136.0 254.8,136.5 255.1,136.8 255.6,137.3 256.0,137.6 256.4,138.0 256.9,138.4 257.3,138.6 257.8,139.1 258.3,139.4 258.6,139.7 259.1,140.1 259.7,140.4 260.2,140.8 260.6,141.0 261.0,141.3 261.5,141.6 262.1,142.0 262.6,142.3 263.1,142.6 263.7,142.9 264.2,143.1 264.7,143.4 265.3,143.7 265.8,143.9 266.3,144.1 266.9,144.4 267.4,144.6 268.0,144.8 268.7,145.1 269.3,145.3 269.8,145.5 270.4,145.6 271.2,145.9 271.7,146.0 272.2,146.2 273.0,146.3 273.6,146.5 274.4,146.6 274.9,146.7 275.7,146.9 276.2,147.0 277.1,147.1 277.9,147.2 278.4,147.2" fill="none" stroke="#b5491f" stroke-width="1.7"/><polyline points="279.2,139.2 280.0,139.2 280.8,139.3 281.6,139.3 282.4,139.3 283.2,139.3 284.0,139.2 284.8,139.2 285.3,139.1 286.1,139.0 286.9,138.9 287.5,138.8 288.3,138.7 288.8,138.5 289.6,138.4 290.2,138.2 290.7,138.1 291.5,137.8 292.0,137.6 292.6,137.5 293.1,137.3 293.7,137.0 294.3,136.8 294.9,136.5 295.5,136.2 296.0,136.0 296.6,135.7 297.1,135.4 297.6,135.2 298.0,134.9 298.5,134.6 299.0,134.3 299.5,133.9 300.1,133.6 300.4,133.3 300.9,133.0 301.4,132.6 301.8,132.2 302.2,131.9 302.7,131.4 303.1,131.1 303.5,130.7 303.9,130.3 304.3,129.9 304.7,129.5 305.1,129.1 305.4,128.7 305.9,128.2 306.2,127.8 306.6,127.4 307.0,126.9 307.3,126.4 307.6,126.1 307.9,125.5 308.3,125.0 308.6,124.5 308.9,124.0 309.2,123.6 309.4,123.1 309.7,122.6 310.0,122.0 310.2,121.5 310.5,120.9 310.8,120.3 311.0,119.7 311.3,119.1 311.5,118.6 311.6,118.0 311.8,117.5 312.1,116.7 312.2,116.2 312.4,115.6 312.5,114.8 312.7,114.3 312.8,113.5 312.9,112.9 313.0,112.1 313.1,111.3 313.2,110.8 313.2,110.0 313.3,109.2 313.3,108.4 313.3,107.6 313.3,106.8 313.2,106.0 313.2,105.2 313.1,104.7 313.0,103.9 312.9,103.1 312.8,102.5 312.7,101.7 312.5,101.2 312.4,100.4 312.2,99.8 312.1,99.3 311.8,98.5 311.6,98.0 311.5,97.4 311.3,96.9 311.0,96.3 310.8,95.7 310.5,95.1 310.2,94.5 310.0,94.0 309.7,93.4 309.4,92.9 309.2,92.4 308.9,92.0 308.6,91.5 308.3,91.0 307.9,90.5 307.6,89.9 307.3,89.6 307.0,89.1 306.6,88.6 306.2,88.2 305.9,87.8 305.4,87.3 305.1,86.9 304.7,86.5 304.3,86.1 303.9,85.7 303.5,85.3 303.1,84.9 302.7,84.6 302.2,84.1 301.8,83.8 301.4,83.4 300.9,83.0 300.4,82.7 300.1,82.4 299.5,82.1 299.0,81.7 298.5,81.4 298.0,81.1 297.6,80.8 297.1,80.6 296.6,80.3 296.0,80.0 295.5,79.8 294.9,79.5 294.3,79.2 293.7,79.0 293.1,78.7 292.6,78.5 292.0,78.4 291.5,78.2 290.7,77.9 290.2,77.8 289.6,77.6 288.8,77.5 288.3,77.3 287.5,77.2 286.9,77.1 286.1,77.0 285.3,76.9 284.8,76.8 284.0,76.8 283.2,76.7 282.4,76.7 281.6,76.7 280.8,76.7 280.0,76.8 279.2,76.8 278.7,76.9 277.9,77.0 277.1,77.1 276.5,77.2 275.7,77.3 275.2,77.5 274.4,77.6 273.8,77.8 273.3,77.9 272.5,78.2 272.0,78.4 271.4,78.5 270.9,78.7 270.3,79.0 269.7,79.2 269.1,79.5 268.5,79.8 268.0,80.0 267.4,80.3 266.9,80.6 266.4,80.8 266.0,81.1 265.5,81.4 265.0,81.7 264.5,82.1 263.9,82.4 263.6,82.7 263.1,83.0 262.6,83.4 262.2,83.8 261.8,84.1 261.3,84.6 260.9,84.9 260.5,85.3 260.1,85.7 259.7,86.1 259.3,86.5 258.9,86.9 258.6,87.3 258.1,87.8 257.8,88.2 257.4,88.6 257.0,89.1 256.7,89.6 256.4,89.9 256.1,90.5 255.7,91.0 255.4,91.5 255.1,92.0 254.8,92.4 254.6,92.9 254.3,93.4 254.0,94.0 253.8,94.5 253.5,95.1 253.2,95.7 253.0,96.3 252.7,96.9 252.5,97.4 252.4,98.0 252.2,98.5 251.9,99.3 251.8,99.8 251.6,100.4 251.5,101.2 251.3,101.7 251.2,102.5 251.1,103.1 251.0,103.9 250.9,104.7 250.8,105.2 250.8,106.0 250.7,106.8 250.7,107.6 250.7,108.4 250.7,109.2 250.8,110.0 250.8,110.8 250.9,111.3 251.0,112.1 251.1,112.9 251.2,113.5 251.3,114.3 251.5,114.8 251.6,115.6 251.8,116.2 251.9,116.7 252.2,117.5 252.4,118.0 252.5,118.6 252.7,119.1 253.0,119.7 253.2,120.3 253.5,120.9 253.8,121.5 254.0,122.0 254.3,122.6 254.6,123.1 254.8,123.6 255.1,124.0 255.4,124.5 255.7,125.0 256.1,125.5 256.4,126.1 256.7,126.4 257.0,126.9 257.4,127.4 257.8,127.8 258.1,128.2 258.6,128.7 258.9,129.1 259.3,129.5 259.7,129.9 260.1,130.3 260.5,130.7 260.9,131.1 261.3,131.4 261.8,131.9 262.2,132.2 262.6,132.6 263.1,133.0 263.6,133.3 263.9,133.6 264.5,133.9 265.0,134.3 265.5,134.6 266.0,134.9 266.4,135.2 266.9,135.4 267.4,135.7 268.0,136.0 268.5,136.2 269.1,136.5 269.7,136.8 270.3,137.0 270.9,137.3 271.4,137.5 272.0,137.6 272.5,137.8 273.3,138.1 273.8,138.2 274.4,138.4 275.2,138.5 275.7,138.7 276.5,138.8 277.1,138.9 277.9,139.0 278.7,139.1 279.2,139.2" fill="none" stroke="#b5491f" stroke-width="1.7"/><polyline points="280.5,130.1 281.3,130.1 282.1,130.1 282.9,130.1 283.6,130.1 284.3,130.0 285.1,129.9 285.8,129.8 286.4,129.7 287.1,129.5 287.8,129.4 288.3,129.2 289.0,129.0 289.6,128.8 290.2,128.6 290.7,128.4 291.2,128.1 291.8,127.9 292.3,127.6 292.8,127.3 293.4,127.0 293.9,126.7 294.4,126.3 294.8,126.1 295.2,125.7 295.8,125.3 296.2,125.0 296.6,124.6 297.1,124.2 297.4,123.9 297.9,123.4 298.2,123.1 298.6,122.6 299.0,122.2 299.3,121.8 299.7,121.2 300.1,120.8 300.3,120.4 300.7,119.9 301.0,119.4 301.3,118.8 301.6,118.3 301.9,117.8 302.1,117.2 302.4,116.7 302.6,116.2 302.8,115.6 303.0,115.0 303.2,114.3 303.4,113.8 303.5,113.1 303.7,112.4 303.8,111.8 303.9,111.1 304.0,110.3 304.1,109.6 304.1,108.9 304.1,108.1 304.1,107.3 304.1,106.5 304.0,106.0 304.0,105.2 303.8,104.4 303.7,103.9 303.6,103.1 303.4,102.5 303.3,101.9 303.1,101.2 302.9,100.6 302.7,100.1 302.5,99.6 302.2,99.0 301.9,98.4 301.7,97.8 301.4,97.3 301.1,96.9 300.8,96.4 300.5,95.8 300.1,95.3 299.8,94.8 299.5,94.5 299.1,94.0 298.7,93.5 298.4,93.2 297.9,92.6 297.6,92.3 297.1,91.8 296.8,91.5 296.3,91.1 295.9,90.7 295.5,90.5 295.0,90.1 294.4,89.7 294.0,89.4 293.6,89.1 293.1,88.9 292.6,88.6 292.0,88.3 291.5,88.0 291.0,87.8 290.4,87.5 289.7,87.3 289.1,87.0 288.6,86.9 288.0,86.7 287.2,86.5 286.7,86.4 285.9,86.2 285.3,86.1 284.5,86.0 283.7,85.9 283.2,85.9 282.4,85.9 281.6,85.9 280.8,85.9 280.3,85.9 279.5,86.0 278.7,86.1 278.1,86.2 277.3,86.4 276.8,86.5 276.0,86.7 275.4,86.9 274.9,87.0 274.3,87.3 273.6,87.5 273.0,87.8 272.5,88.0 272.0,88.3 271.4,88.6 270.9,88.9 270.4,89.1 270.0,89.4 269.6,89.7 269.0,90.1 268.5,90.5 268.1,90.7 267.7,91.1 267.2,91.5 266.9,91.8 266.4,92.3 266.1,92.6 265.6,93.2 265.3,93.5 264.9,94.0 264.5,94.5 264.2,94.8 263.9,95.3 263.5,95.8 263.2,96.4 262.9,96.9 262.6,97.3 262.3,97.8 262.1,98.4 261.8,99.0 261.5,99.6 261.3,100.1 261.1,100.6 260.9,101.2 260.7,101.9 260.6,102.5 260.4,103.1 260.3,103.9 260.2,104.4 260.0,105.2 260.0,106.0 259.9,106.5 259.9,107.3 259.9,108.1 259.9,108.9 259.9,109.6 260.0,110.3 260.1,111.1 260.2,111.8 260.3,112.4 260.5,113.1 260.6,113.8 260.8,114.3 261.0,115.0 261.2,115.6 261.4,116.2 261.6,116.7 261.9,117.2 262.1,117.8 262.4,118.3 262.7,118.8 263.0,119.4 263.3,119.9 263.7,120.4 263.9,120.8 264.3,121.2 264.7,121.8 265.0,122.2 265.4,122.6 265.8,123.1 266.1,123.4 266.6,123.9 266.9,124.2 267.4,124.6 267.8,125.0 268.2,125.3 268.8,125.7 269.2,126.1 269.6,126.3 270.1,126.7 270.6,127.0 271.2,127.3 271.7,127.6 272.2,127.9 272.8,128.1 273.3,128.4 273.8,128.6 274.4,128.8 275.0,129.0 275.7,129.2 276.2,129.4 276.9,129.5 277.6,129.7 278.2,129.8 278.9,129.9 279.7,130.0 280.4,130.1" fill="none" stroke="#b5491f" stroke-width="1.7"/><polyline points="280.8,120.7 281.6,120.8 282.4,120.8 283.2,120.7 283.7,120.7 284.5,120.5 285.1,120.4 285.9,120.2 286.4,120.0 286.9,119.8 287.5,119.5 288.0,119.3 288.6,119.0 289.1,118.6 289.6,118.3 289.9,118.0 290.4,117.6 290.8,117.2 291.2,116.8 291.6,116.4 292.0,115.9 292.3,115.6 292.6,115.1 293.0,114.6 293.3,114.0 293.5,113.5 293.8,112.9 294.0,112.4 294.2,111.9 294.4,111.1 294.5,110.5 294.7,109.7 294.7,109.2 294.8,108.4 294.8,107.6 294.7,106.8 294.7,106.3 294.5,105.5 294.4,104.9 294.2,104.1 294.0,103.6 293.8,103.1 293.5,102.5 293.3,102.0 293.0,101.4 292.6,100.9 292.3,100.4 292.0,100.1 291.6,99.6 291.2,99.2 290.8,98.8 290.4,98.4 289.9,98.0 289.6,97.7 289.1,97.4 288.6,97.0 288.0,96.7 287.5,96.5 286.9,96.2 286.4,96.0 285.9,95.8 285.1,95.6 284.5,95.5 283.7,95.3 283.2,95.3 282.4,95.2 281.6,95.2 280.8,95.3 280.3,95.3 279.5,95.5 278.9,95.6 278.1,95.8 277.6,96.0 277.1,96.2 276.5,96.5 276.0,96.7 275.4,97.0 274.9,97.4 274.4,97.7 274.1,98.0 273.6,98.4 273.2,98.8 272.8,99.2 272.4,99.6 272.0,100.1 271.7,100.4 271.4,100.9 271.0,101.4 270.7,102.0 270.5,102.5 270.2,103.1 270.0,103.6 269.8,104.1 269.6,104.9 269.5,105.5 269.3,106.3 269.3,106.8 269.2,107.6 269.2,108.4 269.3,109.2 269.3,109.7 269.5,110.5 269.6,111.1 269.8,111.9 270.0,112.4 270.2,112.9 270.5,113.5 270.7,114.0 271.0,114.6 271.4,115.1 271.7,115.6 272.0,115.9 272.4,116.4 272.8,116.8 273.2,117.2 273.6,117.6 274.1,118.0 274.4,118.3 274.9,118.6 275.4,119.0 276.0,119.3 276.5,119.5 277.1,119.8 277.6,120.0 278.1,120.2 278.9,120.4 279.5,120.5 280.3,120.7 280.8,120.7" fill="none" stroke="#b5491f" stroke-width="1.7"/><circle cx="282" cy="108" r="3.2" fill="#b5491f"/><text x="282" y="180" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" fill="#10211c" font-weight="600">det H&gt;0, a&lt;0 — max</text><line x1="417" y1="108" x2="521" y2="108" stroke="#cfc8b6" stroke-width="1"/><line x1="469" y1="56" x2="469" y2="160" stroke="#cfc8b6" stroke-width="1"/><polyline points="444.1,148.0 444.5,147.7 445.1,147.4 445.6,147.1 446.1,146.8 446.7,146.5 447.2,146.1 447.7,145.9 448.2,145.6 448.7,145.3 449.2,145.1 449.7,144.8 450.2,144.5 450.7,144.3 451.2,144.0 451.8,143.7 452.4,143.5 452.9,143.2 453.5,142.9 454.1,142.6 454.7,142.4 455.2,142.2 455.8,142.0 456.3,141.8 456.8,141.6 457.6,141.3 458.2,141.1 458.7,140.9 459.3,140.8 460.0,140.6 460.6,140.4 461.3,140.2 461.9,140.1 462.5,140.0 463.2,139.8 463.9,139.7 464.6,139.6 465.4,139.5 466.0,139.4 466.7,139.4 467.5,139.3 468.3,139.3 469.1,139.3 469.9,139.3 470.7,139.3 471.5,139.4 472.1,139.4 472.9,139.5 473.7,139.6 474.2,139.7 475.0,139.9 475.6,140.0 476.4,140.2 476.9,140.3 477.7,140.5 478.2,140.6 478.8,140.8 479.6,141.0 480.1,141.2 480.6,141.4 481.2,141.6 481.9,141.8 482.5,142.1 483.0,142.3 483.6,142.5 484.1,142.8 484.7,143.0 485.2,143.2 485.7,143.5 486.3,143.7 486.8,144.0 487.3,144.3 487.9,144.5 488.4,144.8 488.9,145.1 489.5,145.4 490.0,145.7 490.5,146.0 491.1,146.3 491.6,146.6 492.1,146.9 492.6,147.2 493.0,147.5 493.5,147.7" fill="none" stroke="#a6822b" stroke-width="1.7"/><polyline points="493.9,68.0 493.5,68.3 492.9,68.6 492.4,68.9 491.9,69.2 491.3,69.5 490.8,69.9 490.3,70.1 489.8,70.4 489.3,70.7 488.8,70.9 488.3,71.2 487.8,71.5 487.3,71.7 486.8,72.0 486.2,72.3 485.6,72.5 485.1,72.8 484.5,73.1 483.9,73.4 483.3,73.6 482.8,73.8 482.2,74.0 481.7,74.2 481.2,74.4 480.4,74.7 479.8,74.9 479.3,75.1 478.7,75.2 478.0,75.4 477.4,75.6 476.7,75.8 476.1,75.9 475.5,76.0 474.8,76.2 474.1,76.3 473.4,76.4 472.6,76.5 472.0,76.6 471.3,76.6 470.5,76.7 469.7,76.7 468.9,76.7 468.1,76.7 467.3,76.7 466.5,76.6 465.9,76.6 465.1,76.5 464.3,76.4 463.8,76.3 463.0,76.1 462.4,76.0 461.6,75.8 461.1,75.7 460.3,75.5 459.8,75.4 459.2,75.2 458.4,75.0 457.9,74.8 457.4,74.6 456.8,74.4 456.1,74.2 455.5,73.9 455.0,73.7 454.4,73.5 453.9,73.2 453.3,73.0 452.8,72.8 452.3,72.5 451.7,72.3 451.2,72.0 450.7,71.7 450.1,71.5 449.6,71.2 449.1,70.9 448.5,70.6 448.0,70.3 447.5,70.0 446.9,69.7 446.4,69.4 445.9,69.1 445.4,68.8 445.0,68.5 444.5,68.3" fill="none" stroke="#a6822b" stroke-width="1.7"/><polyline points="434.5,148.0 434.9,147.6 435.4,147.2 435.7,146.9 436.2,146.5 436.7,146.1 437.0,145.8 437.6,145.4 437.9,145.1 438.4,144.7 438.9,144.3 439.2,144.0 439.7,143.6 440.2,143.2 440.5,142.9 441.0,142.5 441.5,142.1 441.8,141.8 442.4,141.4 442.9,141.0 443.2,140.8 443.7,140.4 444.2,140.0 444.6,139.7 445.1,139.3 445.6,138.9 446.0,138.6 446.4,138.3 446.9,137.9 447.4,137.6 447.8,137.3 448.3,137.0 448.8,136.6 449.3,136.2 449.7,136.0 450.1,135.6 450.7,135.3 451.2,134.9 451.7,134.6 452.1,134.4 452.5,134.1 453.1,133.7 453.6,133.4 454.2,133.1 454.7,132.8 455.2,132.5 455.7,132.2 456.1,131.9 456.7,131.7 457.2,131.4 457.7,131.1 458.3,130.9 458.9,130.6 459.5,130.3 460.0,130.1 460.6,129.9 461.1,129.7 461.6,129.5 462.3,129.3 463.0,129.1 463.5,128.9 464.3,128.7 464.9,128.6 465.7,128.5 466.2,128.4 467.0,128.3 467.8,128.2 468.6,128.2 469.4,128.2 470.2,128.2 471.0,128.3 471.8,128.4 472.3,128.5 473.1,128.6 473.7,128.7 474.5,128.9 475.0,129.1 475.7,129.3 476.4,129.5 476.9,129.7 477.4,129.9 478.0,130.1 478.5,130.3 479.1,130.6 479.7,130.9 480.3,131.1 480.8,131.4 481.3,131.7 481.9,131.9 482.3,132.2 482.8,132.5 483.3,132.8 483.8,133.1 484.4,133.4 484.9,133.7 485.5,134.1 485.9,134.4 486.3,134.6 486.8,134.9 487.3,135.3 487.9,135.6 488.3,136.0 488.7,136.2 489.2,136.6 489.7,137.0 490.2,137.3 490.6,137.6 491.1,137.9 491.6,138.3 492.0,138.6 492.4,138.9 492.9,139.3 493.4,139.7 493.8,140.0 494.3,140.4 494.8,140.8 495.1,141.0 495.6,141.4 496.2,141.8 496.5,142.1 497.0,142.5 497.5,142.9 497.8,143.2 498.3,143.6 498.8,144.0 499.1,144.3 499.6,144.7 500.1,145.1 500.4,145.4 501.0,145.8 501.3,146.1 501.8,146.5 502.3,146.9 502.6,147.2 503.1,147.6 503.5,148.0" fill="none" stroke="#a6822b" stroke-width="1.7"/><polyline points="503.5,68.0 503.1,68.4 502.6,68.8 502.3,69.1 501.8,69.5 501.3,69.9 501.0,70.2 500.4,70.6 500.1,70.9 499.6,71.3 499.1,71.7 498.8,72.0 498.3,72.4 497.8,72.8 497.5,73.1 497.0,73.5 496.5,73.9 496.2,74.2 495.6,74.6 495.1,75.0 494.8,75.2 494.3,75.6 493.8,76.0 493.4,76.3 492.9,76.7 492.4,77.1 492.0,77.4 491.6,77.7 491.1,78.1 490.6,78.4 490.2,78.7 489.7,79.0 489.2,79.4 488.7,79.8 488.3,80.0 487.9,80.4 487.3,80.7 486.8,81.1 486.3,81.4 485.9,81.6 485.5,81.9 484.9,82.3 484.4,82.6 483.8,82.9 483.3,83.2 482.8,83.5 482.3,83.8 481.9,84.1 481.3,84.3 480.8,84.6 480.3,84.9 479.7,85.1 479.1,85.4 478.5,85.7 478.0,85.9 477.4,86.1 476.9,86.3 476.4,86.5 475.7,86.7 475.0,86.9 474.5,87.1 473.7,87.3 473.1,87.4 472.3,87.5 471.8,87.6 471.0,87.7 470.2,87.8 469.4,87.8 468.6,87.8 467.8,87.8 467.0,87.7 466.2,87.6 465.7,87.5 464.9,87.4 464.3,87.3 463.5,87.1 463.0,86.9 462.3,86.7 461.6,86.5 461.1,86.3 460.6,86.1 460.0,85.9 459.5,85.7 458.9,85.4 458.3,85.1 457.7,84.9 457.2,84.6 456.7,84.3 456.1,84.1 455.7,83.8 455.2,83.5 454.7,83.2 454.2,82.9 453.6,82.6 453.1,82.3 452.5,81.9 452.1,81.6 451.7,81.4 451.2,81.1 450.7,80.7 450.1,80.4 449.7,80.0 449.3,79.8 448.8,79.4 448.3,79.0 447.8,78.7 447.4,78.4 446.9,78.1 446.4,77.7 446.0,77.4 445.6,77.1 445.1,76.7 444.6,76.3 444.2,76.0 443.7,75.6 443.2,75.2 442.9,75.0 442.4,74.6 441.8,74.2 441.5,73.9 441.0,73.5 440.5,73.1 440.2,72.8 439.7,72.4 439.2,72.0 438.9,71.7 438.4,71.3 437.9,70.9 437.6,70.6 437.0,70.2 436.7,69.9 436.2,69.5 435.7,69.1 435.4,68.8 434.9,68.4 434.5,68.0" fill="none" stroke="#a6822b" stroke-width="1.7"/><polyline points="430.0,148.0 430.3,147.7 430.9,147.2 431.1,146.9 431.7,146.4 432.0,146.1 432.5,145.6 432.8,145.3 433.3,144.8 433.6,144.5 434.1,144.1 434.4,143.7 434.9,143.3 435.3,142.9 435.7,142.5 436.1,142.1 436.5,141.7 436.9,141.3 437.3,141.0 437.8,140.5 438.1,140.2 438.6,139.7 438.9,139.4 439.4,138.9 439.7,138.6 440.2,138.1 440.6,137.8 441.0,137.4 441.4,137.0 441.8,136.6 442.3,136.2 442.6,135.9 443.1,135.4 443.4,135.1 444.0,134.6 444.3,134.3 444.8,133.8 445.1,133.6 445.6,133.1 446.0,132.7 446.4,132.3 446.8,131.9 447.2,131.6 447.7,131.1 448.0,130.9 448.5,130.4 448.9,130.1 449.3,129.6 449.7,129.3 450.1,128.9 450.6,128.5 450.9,128.2 451.5,127.7 451.8,127.4 452.3,127.0 452.7,126.6 453.1,126.3 453.6,125.8 454.0,125.5 454.4,125.2 454.9,124.7 455.2,124.5 455.8,124.0 456.2,123.7 456.6,123.4 457.1,122.9 457.6,122.6 457.9,122.3 458.4,121.9 459.0,121.5 459.3,121.2 459.8,120.9 460.3,120.5 460.8,120.2 461.2,119.9 461.7,119.6 462.2,119.3 462.7,119.0 463.2,118.7 463.8,118.4 464.3,118.2 464.9,117.9 465.4,117.7 466.1,117.5 466.7,117.3 467.3,117.2 468.1,117.1 468.9,117.0 469.7,117.1 470.5,117.2 471.0,117.3 471.8,117.5 472.3,117.6 472.9,117.8 473.4,118.1 473.9,118.3 474.5,118.6 475.0,118.9 475.6,119.2 476.1,119.5 476.6,119.8 477.2,120.2 477.6,120.4 478.0,120.7 478.5,121.1 479.0,121.5 479.4,121.8 479.8,122.1 480.4,122.5 480.8,122.8 481.2,123.2 481.7,123.6 482.1,123.9 482.5,124.3 483.0,124.7 483.4,125.0 483.8,125.4 484.3,125.8 484.7,126.1 485.2,126.5 485.6,126.9 486.0,127.2 486.5,127.7 486.8,128.0 487.3,128.4 487.7,128.7 488.1,129.2 488.6,129.5 488.9,129.9 489.4,130.3 489.7,130.6 490.3,131.1 490.6,131.4 491.1,131.9 491.5,132.2 491.9,132.6 492.3,133.0 492.7,133.3 493.2,133.8 493.5,134.1 494.0,134.6 494.3,134.9 494.8,135.4 495.2,135.7 495.6,136.1 496.0,136.5 496.4,136.9 496.9,137.3 497.2,137.6 497.7,138.1 498.0,138.4 498.6,138.9 498.8,139.2 499.4,139.7 499.7,140.0 500.2,140.5 500.5,140.8 501.0,141.2 501.3,141.6 501.8,142.0 502.2,142.4 502.6,142.8 503.0,143.2 503.4,143.5 503.8,144.0 504.2,144.3 504.7,144.8 505.0,145.1 505.5,145.6 505.8,145.9 506.3,146.4 506.6,146.7 507.1,147.2 507.4,147.5 507.9,148.0" fill="none" stroke="#a6822b" stroke-width="1.7"/><polyline points="508.0,68.0 507.7,68.3 507.1,68.8 506.9,69.1 506.3,69.6 506.0,69.9 505.5,70.4 505.2,70.7 504.7,71.2 504.4,71.5 503.9,71.9 503.6,72.3 503.1,72.7 502.7,73.1 502.3,73.5 501.9,73.9 501.5,74.3 501.1,74.7 500.7,75.0 500.2,75.5 499.9,75.8 499.4,76.3 499.1,76.6 498.6,77.1 498.3,77.4 497.8,77.9 497.4,78.2 497.0,78.6 496.6,79.0 496.2,79.4 495.7,79.8 495.4,80.1 494.9,80.6 494.6,80.9 494.0,81.4 493.7,81.7 493.2,82.2 492.9,82.4 492.4,82.9 492.0,83.3 491.6,83.7 491.2,84.1 490.8,84.4 490.3,84.9 490.0,85.1 489.5,85.6 489.1,85.9 488.7,86.4 488.3,86.7 487.9,87.1 487.4,87.5 487.1,87.8 486.5,88.3 486.2,88.6 485.7,89.0 485.3,89.4 484.9,89.7 484.4,90.2 484.0,90.5 483.6,90.8 483.1,91.3 482.8,91.5 482.2,92.0 481.8,92.3 481.4,92.6 480.9,93.1 480.4,93.4 480.1,93.7 479.6,94.1 479.0,94.5 478.7,94.8 478.2,95.1 477.7,95.5 477.2,95.8 476.8,96.1 476.3,96.4 475.8,96.7 475.3,97.0 474.8,97.3 474.2,97.6 473.7,97.8 473.1,98.1 472.6,98.3 471.9,98.5 471.3,98.7 470.7,98.8 469.9,98.9 469.1,99.0 468.3,98.9 467.5,98.8 467.0,98.7 466.2,98.5 465.7,98.4 465.1,98.2 464.6,97.9 464.1,97.7 463.5,97.4 463.0,97.1 462.4,96.8 461.9,96.5 461.4,96.2 460.8,95.8 460.4,95.6 460.0,95.3 459.5,94.9 459.0,94.5 458.6,94.2 458.2,93.9 457.6,93.5 457.2,93.2 456.8,92.8 456.3,92.4 455.9,92.1 455.5,91.7 455.0,91.3 454.6,91.0 454.2,90.6 453.7,90.2 453.3,89.9 452.8,89.5 452.4,89.1 452.0,88.8 451.5,88.3 451.2,88.0 450.7,87.6 450.3,87.3 449.9,86.8 449.4,86.5 449.1,86.1 448.6,85.7 448.3,85.4 447.7,84.9 447.4,84.6 446.9,84.1 446.5,83.8 446.1,83.4 445.7,83.0 445.3,82.7 444.8,82.2 444.5,81.9 444.0,81.4 443.7,81.1 443.2,80.6 442.8,80.3 442.4,79.9 442.0,79.5 441.6,79.1 441.1,78.7 440.8,78.4 440.3,77.9 440.0,77.6 439.4,77.1 439.2,76.8 438.6,76.3 438.3,76.0 437.8,75.5 437.5,75.2 437.0,74.8 436.7,74.4 436.2,74.0 435.8,73.6 435.4,73.2 435.0,72.8 434.6,72.5 434.2,72.0 433.8,71.7 433.3,71.2 433.0,70.9 432.5,70.4 432.2,70.1 431.7,69.6 431.4,69.3 430.9,68.8 430.6,68.5 430.1,68.0" fill="none" stroke="#a6822b" stroke-width="1.7"/><polyline points="429.0,147.0 429.3,146.7 429.8,146.1 430.1,145.9 430.6,145.3 430.9,145.0 431.4,144.5 431.7,144.2 432.2,143.7 432.5,143.4 432.9,142.9 433.3,142.6 433.7,142.1 434.1,141.7 434.5,141.3 434.9,140.9 435.3,140.5 435.7,140.1 436.0,139.7 436.5,139.2 436.8,138.9 437.3,138.4 437.6,138.1 438.1,137.6 438.4,137.3 438.9,136.8 439.2,136.4 439.6,136.0 440.0,135.6 440.4,135.2 440.8,134.7 441.1,134.4 441.6,133.9 441.9,133.6 442.4,133.0 442.7,132.7 443.2,132.2 443.4,131.9 443.9,131.4 444.3,131.0 444.7,130.6 445.1,130.2 445.4,129.8 445.9,129.3 446.1,129.0 446.6,128.5 446.9,128.1 447.4,127.7 447.7,127.3 448.1,126.9 448.5,126.4 448.8,126.1 449.3,125.5 449.6,125.2 450.0,124.7 450.4,124.3 450.7,123.9 451.2,123.4 451.5,123.0 451.8,122.6 452.3,122.1 452.5,121.8 453.0,121.2 453.3,120.8 453.6,120.4 454.1,119.9 454.4,119.4 454.7,119.1 455.1,118.6 455.5,118.0 455.8,117.7 456.1,117.2 456.5,116.7 456.8,116.2 457.1,115.8 457.4,115.3 457.7,114.8 458.0,114.3 458.3,113.8 458.6,113.2 458.8,112.7 459.1,112.1 459.3,111.6 459.5,110.9 459.7,110.3 459.8,109.7 459.9,108.9 460.0,108.1 459.9,107.3 459.8,106.5 459.7,106.0 459.5,105.2 459.4,104.7 459.2,104.1 458.9,103.6 458.7,103.1 458.4,102.5 458.1,102.0 457.8,101.4 457.5,100.9 457.2,100.4 456.8,99.8 456.6,99.4 456.3,99.0 455.9,98.5 455.5,98.0 455.2,97.6 454.9,97.2 454.5,96.6 454.2,96.2 453.8,95.8 453.4,95.3 453.1,94.9 452.7,94.5 452.3,94.0 452.0,93.6 451.6,93.2 451.2,92.7 450.9,92.3 450.5,91.8 450.1,91.4 449.8,91.0 449.3,90.5 449.0,90.2 448.6,89.7 448.3,89.3 447.8,88.9 447.5,88.4 447.1,88.1 446.7,87.6 446.4,87.3 445.9,86.7 445.6,86.4 445.1,85.9 444.8,85.5 444.4,85.1 444.0,84.7 443.7,84.3 443.2,83.8 442.9,83.5 442.4,83.0 442.1,82.7 441.6,82.2 441.3,81.8 440.9,81.4 440.5,81.0 440.1,80.6 439.7,80.1 439.4,79.8 438.9,79.3 438.6,79.0 438.1,78.4 437.8,78.2 437.3,77.6 437.0,77.3 436.5,76.8 436.2,76.5 435.8,76.0 435.4,75.7 435.0,75.2 434.6,74.8 434.2,74.4 433.8,74.0 433.5,73.6 433.0,73.2 432.7,72.8 432.2,72.3 431.9,72.0 431.4,71.5 431.1,71.2 430.6,70.7 430.3,70.4 429.8,69.9 429.5,69.6 429.0,69.1" fill="none" stroke="#a6822b" stroke-width="1.7"/><polyline points="509.0,69.0 508.7,69.3 508.2,69.9 507.9,70.1 507.4,70.7 507.1,71.0 506.6,71.5 506.3,71.8 505.8,72.3 505.5,72.6 505.1,73.1 504.7,73.4 504.3,73.9 503.9,74.3 503.5,74.7 503.1,75.1 502.7,75.5 502.3,75.9 502.0,76.3 501.5,76.8 501.2,77.1 500.7,77.6 500.4,77.9 499.9,78.4 499.6,78.7 499.1,79.2 498.8,79.6 498.4,80.0 498.0,80.4 497.6,80.8 497.2,81.3 496.9,81.6 496.4,82.1 496.1,82.4 495.6,83.0 495.3,83.3 494.8,83.8 494.6,84.1 494.1,84.6 493.7,85.0 493.3,85.4 492.9,85.8 492.6,86.2 492.1,86.7 491.9,87.0 491.4,87.5 491.1,87.9 490.6,88.3 490.3,88.7 489.9,89.1 489.5,89.6 489.2,89.9 488.7,90.5 488.4,90.8 488.0,91.3 487.6,91.7 487.3,92.1 486.8,92.6 486.5,93.0 486.2,93.4 485.7,93.9 485.5,94.2 485.0,94.8 484.7,95.2 484.4,95.6 483.9,96.1 483.6,96.6 483.3,96.9 482.9,97.4 482.5,98.0 482.2,98.3 481.9,98.8 481.5,99.3 481.2,99.8 480.9,100.2 480.6,100.7 480.3,101.2 480.0,101.7 479.7,102.2 479.4,102.8 479.2,103.3 478.9,103.9 478.7,104.4 478.5,105.1 478.3,105.7 478.2,106.3 478.1,107.1 478.0,107.9 478.1,108.7 478.2,109.5 478.3,110.0 478.5,110.8 478.6,111.3 478.8,111.9 479.1,112.4 479.3,112.9 479.6,113.5 479.9,114.0 480.2,114.6 480.5,115.1 480.8,115.6 481.2,116.2 481.4,116.6 481.7,117.0 482.1,117.5 482.5,118.0 482.8,118.4 483.1,118.8 483.5,119.4 483.8,119.8 484.2,120.2 484.6,120.7 484.9,121.1 485.3,121.5 485.7,122.0 486.0,122.4 486.4,122.8 486.8,123.3 487.1,123.7 487.5,124.2 487.9,124.6 488.2,125.0 488.7,125.5 489.0,125.8 489.4,126.3 489.7,126.7 490.2,127.1 490.5,127.6 490.9,127.9 491.3,128.4 491.6,128.7 492.1,129.3 492.4,129.6 492.9,130.1 493.2,130.5 493.6,130.9 494.0,131.3 494.3,131.7 494.8,132.2 495.1,132.5 495.6,133.0 495.9,133.3 496.4,133.8 496.7,134.2 497.1,134.6 497.5,135.0 497.9,135.4 498.3,135.9 498.6,136.2 499.1,136.7 499.4,137.0 499.9,137.6 500.2,137.8 500.7,138.4 501.0,138.7 501.5,139.2 501.8,139.5 502.2,140.0 502.6,140.3 503.0,140.8 503.4,141.2 503.8,141.6 504.2,142.0 504.5,142.4 505.0,142.8 505.3,143.2 505.8,143.7 506.1,144.0 506.6,144.5 506.9,144.8 507.4,145.3 507.7,145.6 508.2,146.1 508.5,146.4 509.0,146.9" fill="none" stroke="#a6822b" stroke-width="1.7"/><polyline points="429.0,142.5 429.4,142.1 429.8,141.6 430.1,141.3 430.5,140.8 430.9,140.3 431.2,140.0 431.6,139.4 431.9,139.1 432.3,138.6 432.7,138.1 433.0,137.8 433.4,137.3 433.8,136.8 434.1,136.5 434.5,136.0 434.9,135.5 435.2,135.2 435.6,134.6 436.0,134.1 436.2,133.8 436.6,133.3 437.0,132.8 437.3,132.4 437.7,131.9 438.1,131.4 438.4,131.0 438.7,130.6 439.1,130.1 439.4,129.6 439.7,129.2 440.0,128.7 440.4,128.2 440.8,127.7 441.0,127.3 441.4,126.9 441.7,126.3 442.1,125.8 442.4,125.3 442.6,124.9 442.9,124.5 443.3,123.9 443.6,123.4 443.9,122.8 444.2,122.3 444.5,121.8 444.8,121.3 445.1,120.9 445.3,120.3 445.6,119.8 445.9,119.3 446.1,118.7 446.4,118.1 446.7,117.5 446.9,117.0 447.1,116.4 447.3,115.9 447.5,115.4 447.7,114.7 447.9,114.0 448.1,113.5 448.3,112.7 448.4,112.1 448.5,111.3 448.6,110.8 448.7,110.0 448.8,109.2 448.8,108.4 448.8,107.6 448.8,106.8 448.7,106.0 448.6,105.2 448.5,104.7 448.4,103.9 448.3,103.3 448.1,102.5 447.9,102.0 447.7,101.3 447.5,100.6 447.3,100.1 447.1,99.6 446.9,99.0 446.7,98.5 446.4,97.9 446.1,97.3 445.9,96.7 445.6,96.2 445.3,95.7 445.1,95.1 444.8,94.7 444.5,94.2 444.2,93.7 443.9,93.2 443.6,92.6 443.3,92.1 442.9,91.5 442.6,91.1 442.4,90.7 442.1,90.2 441.7,89.7 441.4,89.1 441.0,88.7 440.8,88.3 440.4,87.8 440.0,87.3 439.7,86.8 439.4,86.4 439.1,85.9 438.7,85.4 438.4,85.0 438.1,84.6 437.7,84.1 437.3,83.6 437.0,83.2 436.6,82.7 436.2,82.2 436.0,81.9 435.6,81.4 435.2,80.8 434.9,80.5 434.5,80.0 434.1,79.5 433.8,79.2 433.4,78.7 433.0,78.2 432.7,77.9 432.3,77.4 431.9,76.9 431.6,76.6 431.2,76.0 430.9,75.7 430.5,75.2 430.1,74.7 429.8,74.4 429.4,73.9 429.0,73.5" fill="none" stroke="#a6822b" stroke-width="1.7"/><polyline points="509.0,73.5 508.6,73.9 508.2,74.4 507.9,74.7 507.5,75.2 507.1,75.7 506.8,76.0 506.4,76.6 506.1,76.9 505.7,77.4 505.3,77.9 505.0,78.2 504.6,78.7 504.2,79.2 503.9,79.5 503.5,80.0 503.1,80.5 502.8,80.8 502.4,81.4 502.0,81.9 501.8,82.2 501.4,82.7 501.0,83.2 500.7,83.6 500.3,84.1 499.9,84.6 499.6,85.0 499.3,85.4 498.9,85.9 498.6,86.4 498.3,86.8 498.0,87.3 497.6,87.8 497.2,88.3 497.0,88.7 496.6,89.1 496.3,89.7 495.9,90.2 495.6,90.7 495.4,91.1 495.1,91.5 494.7,92.1 494.4,92.6 494.1,93.2 493.8,93.7 493.5,94.2 493.2,94.7 492.9,95.1 492.7,95.7 492.4,96.2 492.1,96.7 491.9,97.3 491.6,97.9 491.3,98.5 491.1,99.0 490.9,99.6 490.7,100.1 490.5,100.6 490.3,101.3 490.1,102.0 489.9,102.5 489.7,103.3 489.6,103.9 489.5,104.7 489.4,105.2 489.3,106.0 489.2,106.8 489.2,107.6 489.2,108.4 489.2,109.2 489.3,110.0 489.4,110.8 489.5,111.3 489.6,112.1 489.7,112.7 489.9,113.5 490.1,114.0 490.3,114.7 490.5,115.4 490.7,115.9 490.9,116.4 491.1,117.0 491.3,117.5 491.6,118.1 491.9,118.7 492.1,119.3 492.4,119.8 492.7,120.3 492.9,120.9 493.2,121.3 493.5,121.8 493.8,122.3 494.1,122.8 494.4,123.4 494.7,123.9 495.1,124.5 495.4,124.9 495.6,125.3 495.9,125.8 496.3,126.3 496.6,126.9 497.0,127.3 497.2,127.7 497.6,128.2 498.0,128.7 498.3,129.2 498.6,129.6 498.9,130.1 499.3,130.6 499.6,131.0 499.9,131.4 500.3,131.9 500.7,132.4 501.0,132.8 501.4,133.3 501.8,133.8 502.0,134.1 502.4,134.6 502.8,135.2 503.1,135.5 503.5,136.0 503.9,136.5 504.2,136.8 504.6,137.3 505.0,137.8 505.3,138.1 505.7,138.6 506.1,139.1 506.4,139.4 506.8,140.0 507.1,140.3 507.5,140.8 507.9,141.3 508.2,141.6 508.6,142.1 509.0,142.5" fill="none" stroke="#a6822b" stroke-width="1.7"/><polyline points="429.0,132.9 429.3,132.5 429.6,131.9 429.9,131.4 430.2,130.9 430.5,130.3 430.9,129.8 431.1,129.3 431.4,128.8 431.7,128.3 431.9,127.8 432.2,127.3 432.5,126.8 432.7,126.3 433.0,125.8 433.3,125.2 433.5,124.6 433.8,124.1 434.1,123.5 434.4,122.9 434.6,122.3 434.8,121.8 435.0,121.2 435.2,120.7 435.4,120.2 435.7,119.4 435.9,118.8 436.1,118.3 436.2,117.7 436.4,117.0 436.6,116.4 436.8,115.7 436.9,115.1 437.0,114.5 437.2,113.8 437.3,113.1 437.4,112.4 437.5,111.6 437.6,111.0 437.6,110.3 437.7,109.5 437.7,108.7 437.7,107.9 437.7,107.1 437.7,106.3 437.6,105.5 437.6,104.9 437.5,104.1 437.4,103.3 437.3,102.8 437.1,102.0 437.0,101.4 436.8,100.6 436.7,100.1 436.5,99.3 436.4,98.8 436.2,98.2 436.0,97.4 435.8,96.9 435.6,96.4 435.4,95.8 435.2,95.1 434.9,94.5 434.7,94.0 434.5,93.4 434.2,92.9 434.0,92.3 433.8,91.8 433.5,91.3 433.3,90.7 433.0,90.2 432.7,89.7 432.5,89.1 432.2,88.6 431.9,88.1 431.6,87.5 431.3,87.0 431.0,86.5 430.7,85.9 430.4,85.4 430.1,84.9 429.8,84.4 429.5,84.0 429.3,83.5" fill="none" stroke="#a6822b" stroke-width="1.7"/><polyline points="509.0,83.1 508.7,83.5 508.4,84.1 508.1,84.6 507.8,85.1 507.5,85.7 507.1,86.2 506.9,86.7 506.6,87.2 506.3,87.7 506.1,88.2 505.8,88.7 505.5,89.2 505.3,89.7 505.0,90.2 504.7,90.8 504.5,91.4 504.2,91.9 503.9,92.5 503.6,93.1 503.4,93.7 503.2,94.2 503.0,94.8 502.8,95.3 502.6,95.8 502.3,96.6 502.1,97.2 501.9,97.7 501.8,98.3 501.6,99.0 501.4,99.6 501.2,100.3 501.1,100.9 501.0,101.5 500.8,102.2 500.7,102.9 500.6,103.6 500.5,104.4 500.4,105.0 500.4,105.7 500.3,106.5 500.3,107.3 500.3,108.1 500.3,108.9 500.3,109.7 500.4,110.5 500.4,111.1 500.5,111.9 500.6,112.7 500.7,113.2 500.9,114.0 501.0,114.6 501.2,115.4 501.3,115.9 501.5,116.7 501.6,117.2 501.8,117.8 502.0,118.6 502.2,119.1 502.4,119.6 502.6,120.2 502.8,120.9 503.1,121.5 503.3,122.0 503.5,122.6 503.8,123.1 504.0,123.7 504.2,124.2 504.5,124.7 504.7,125.3 505.0,125.8 505.3,126.3 505.5,126.9 505.8,127.4 506.1,127.9 506.4,128.5 506.7,129.0 507.0,129.5 507.3,130.1 507.6,130.6 507.9,131.1 508.2,131.6 508.5,132.0 508.7,132.5" fill="none" stroke="#a6822b" stroke-width="1.7"/><circle cx="469" cy="108" r="3.2" fill="#a6822b"/><text x="469" y="180" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" fill="#10211c" font-weight="600">det H&lt;0 — saddle</text><text x="280.0" y="20" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="13" fill="#10211c" font-weight="600">Level-set signatures of the 2×2 Hessian test</text></svg><figcaption><b>Block 5.</b> The Hessian's signature shows in the level sets: nested closed curves around a min or max, a hyperbolic cross at a saddle (det H < 0).</figcaption></figure>
+
+  <div class="box thm"><span class="lbl">Theorem · Second-order Taylor in $\mathbb R^n$</span>
+  $$f(x)=f(x_0)+\nabla f(x_0)^\top(x-x_0)+\tfrac12(x-x_0)^\top H_f(x_0)(x-x_0)+o(\|x-x_0\|^2),$$
+  where $H_f=\big(\partial_i\partial_j f\big)$ is the <strong>Hessian</strong> (symmetric when $f\in C^2$, by Schwarz/Clairaut).</div>
+  <div class="box thm"><span class="lbl">Theorem · Second-order test</span>
+  At a critical point ($\nabla f=0$): $H_f\succ0$ ⇒ local min; $H_f\prec0$ ⇒ local max; $H_f$ indefinite ⇒ saddle; semidefinite/singular ⇒ test inconclusive.</div>
+  <div class="box idea"><span class="lbl">The 2×2 shortcut</span>
+  For $H=\begin{pmatrix}a&b\\b&c\end{pmatrix}$: $\det H=ac-b^2$. If $\det H>0$ and $a>0$ → min; $\det H>0,\ a<0$ → max; $\det H<0$ → saddle; $\det H=0$ → inconclusive.</div>
+
+  <h3>Solution logic</h3>
+  <div class="box recipe"><span class="lbl">Recipe · find &amp; classify all critical points (PS6 P3–P4, PS7 P2, PS8 P1–P2)</span>
+  <ol>
+    <li>Solve $\nabla f=0$ for all critical points (don't lose branches — factor carefully).</li>
+    <li>Compute $H_f$ symbolically.</li>
+    <li>Plug each critical point into $H_f$, apply the 2×2 shortcut (or eigenvalue signs in higher dim).</li>
+    <li>If singular, fall back to direct inspection along lines through the point.</li>
+  </ol>
+  <strong>Worked (PS7 P2):</strong> $f=x^4+y^4-2x^2-2y^2$. $\nabla f=(4x^3-4x,\,4y^3-4y)=0\Rightarrow x,y\in\{0,\pm1\}$ → 9 critical points. $H_f=\operatorname{diag}(12x^2-4,\,12y^2-4)$. At $(0,0)$: $\operatorname{diag}(-4,-4)$ → max. At $(\pm1,\pm1)$: $\operatorname{diag}(8,8)$ → min. At mixed $(0,\pm1),(\pm1,0)$: signs differ → saddles.</div>
+
+  <div class="box recipe"><span class="lbl">Recipe · Taylor polynomial of given order (PS7 P1)</span>
+  For $f(x,y)=\log(1+x+y)$ at $(0,0)$: substitute $u=x+y$, use the 1-D series $\log(1+u)=u-\tfrac{u^2}{2}+\tfrac{u^3}{3}-\cdots$, then re-expand $u=x+y$. Order-3 polynomial $=(x+y)-\tfrac12(x+y)^2+\tfrac13(x+y)^3$. Evaluate at $(0.1,0.1)$: $u=0.2$ ⇒ $0.2-0.02+0.00267=0.18267$.</div>
+
+  <div class="box idea"><span class="lbl">Why PS4 P5 works</span>When $f(x,y)=g(x+y)$, the multivariable Taylor of $f$ collapses to the 1-D Taylor of $g$ at $t=x+y$, because all mixed partials are equal ($\partial_x=\partial_y=g'$). Order-1 matches the affine approximation; order-2 with $g=e^t$ matches the Hessian form. This is a "recognize the structure" question, not a grind.</div>
+
+  <div class="practice">
+    <span class="lbl">Practice · Block 5</span>
+    <ol>
+      <li>Classify all critical points of $f(x,y)=x^3-3xy+y^3$.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$\nabla f=(3x^2-3y,\,3y^2-3x)=0\Rightarrow y=x^2,\ x=y^2\Rightarrow x^4=x\Rightarrow x\in\{0,1\}$. Points $(0,0),(1,1)$. $H=\begin{pmatrix}6x&-3\\-3&6y\end{pmatrix}$. At $(0,0)$: $\det=-9<0$ → saddle. At $(1,1)$: $\det=36-9=27>0$, $a=6>0$ → local min.</div></details></li>
+      <li>Give the order-2 Taylor polynomial of $f(x,y)=e^{x}\cos y$ at $(0,0)$ and use it to approximate $f(0.1,0.1)$.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$f(0,0)=1$, $\nabla f=(e^x\cos y,\,-e^x\sin y)\to(1,0)$, $H=\begin{pmatrix}1&0\\0&-1\end{pmatrix}$ at origin. $P_2=1+x+\tfrac12(x^2-y^2)$. At $(0.1,0.1)$: $1+0.1+\tfrac12(0.01-0.01)=1.1$ (true $\approx1.0997$).</div></details></li>
+      <li>For $f(x,y)=\sqrt{1+x^2+y^2}$ (PS8 P1), find and classify critical points.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$\nabla f=\frac{1}{\sqrt{1+x^2+y^2}}(x,y)=0\Rightarrow(0,0)$ only. $H(0,0)=I\succ0$ → global min, $f(0,0)=1$.</div></details></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ BLOCK 6 ============ -->
+<section id="b6">
+  <h2><span class="tag">Block 6</span>Convexity</h2>
+  <div class="maps">Covers <span class="pschip">PS7 P3</span> · supports the optimization block.</div>
+
+  <h3>What to know</h3>
+  <div class="box def"><span class="lbl">Definitions &amp; characterizations</span>
+  $f$ convex: $f(\lambda x+(1-\lambda)y)\le\lambda f(x)+(1-\lambda)f(y)$ for $\lambda\in[0,1]$.
+  <strong>First-order</strong> ($C^1$): $f(y)\ge f(x)+\nabla f(x)^\top(y-x)$. <strong>Second-order</strong> ($C^2$): $H_f\succeq0$ everywhere. <strong>Jensen:</strong> $f\big(\sum\lambda_i x_i\big)\le\sum\lambda_i f(x_i)$ for weights summing to 1.</div>
+
+  <h3>Solution logic — the three closure rules (PS7 P3)</h3>
+  <div class="box recipe"><span class="lbl">Recipe · prove these convex</span>
+  <ul>
+    <li><strong>Nonneg. combination</strong> $\sum\alpha_i f_i$, $\alpha_i\ge0$: add the convexity inequalities scaled by $\alpha_i$. Sum of convex is convex; scaling by $\ge0$ preserves it.</li>
+    <li><strong>Pointwise max</strong> $g=\max_i f_i$: for each $i$, $f_i(\lambda x+(1-\lambda)y)\le\lambda f_i(x)+(1-\lambda)f_i(y)\le\lambda g(x)+(1-\lambda)g(y)$. Take max over $i$ on the left.</li>
+    <li><strong>Affine precomposition</strong> $g(x)=f_1(Ax-b)$: convexity is preserved by affine maps because $A(\lambda x+(1-\lambda)y)-b=\lambda(Ax-b)+(1-\lambda)(Ay-b)$; feed into $f_1$'s convexity.</li>
+  </ul></div>
+  <div class="box idea"><span class="lbl">Exam tip</span>These three appear constantly. Each is a 3–4 line proof. Rehearse them until you can write them without thinking — they are free points.</div>
+
+  <div class="practice">
+    <span class="lbl">Practice · Block 6</span>
+    <ol>
+      <li>Show that if $f$ is convex and $\phi:\mathbb R\to\mathbb R$ is convex and nondecreasing, then $\phi\circ f$ is convex.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$f(\lambda x+(1-\lambda)y)\le\lambda f(x)+(1-\lambda)f(y)$; apply $\phi$ (nondecreasing) then its convexity: $\phi(f(\cdots))\le\phi(\lambda f(x)+(1-\lambda)f(y))\le\lambda\phi(f(x))+(1-\lambda)\phi(f(y))$.</div></details></li>
+      <li>Use the second-order test to show $f(x)=x^\top Qx$ is convex iff $Q\succeq0$.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$H_f=Q+Q^\top$ (=$2Q$ if symmetric). Convex $\iff H_f\succeq0\iff Q\succeq0$.</div></details></li>
+      <li>Prove $-\log x$ is convex on $(0,\infty)$ and deduce AM–GM for two numbers via Jensen.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$(-\log x)''=1/x^2>0$ → convex. Jensen with $\lambda=\tfrac12$: $-\log\frac{a+b}{2}\le-\tfrac12\log a-\tfrac12\log b=-\log\sqrt{ab}$, i.e. $\frac{a+b}{2}\ge\sqrt{ab}$.</div></details></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ BLOCK 7 ============ -->
+<section id="b7">
+  <h2><span class="tag">Block 7</span>Optimization algorithms: GD, SGD, mini-batch</h2>
+  <div class="maps">Covers <span class="pschip">PS7 P4</span> <span class="pschip">PS8 P2</span> <span class="pschip">PS13 P4</span> · heavy Julia component.</div>
+
+  <h3>What to know</h3>
+  <figure class="fig"><svg viewBox="0 0 420 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;height:auto;display:block;margin:0 auto"><rect width="420" height="320" fill="none"/><polyline points="231.2,160.0 230.3,159.2 229.4,158.5 228.5,157.8 227.6,157.2 226.8,156.6 225.9,156.2 225.1,155.7 224.3,155.3 223.6,154.9 222.9,154.6 222.2,154.3 221.6,154.0 221.0,153.8 220.4,153.6 219.9,153.3 219.3,153.2 218.8,153.0 218.4,152.8 217.9,152.6 217.4,152.5 217.0,152.3 216.6,152.2 216.2,152.1 215.8,152.0 215.4,151.8 215.0,151.7 214.6,151.6 214.2,151.5 213.9,151.4 213.5,151.3 213.2,151.2 212.8,151.1 212.4,151.1 212.1,151.0 211.7,150.9 211.4,150.8 211.0,150.7 210.6,150.6 210.3,150.6 209.9,150.5 209.5,150.4 209.1,150.3 208.7,150.3 208.3,150.2 207.9,150.1 207.5,150.1 207.1,150.0 206.6,149.9 206.1,149.9 205.6,149.8 205.1,149.7 204.6,149.7 204.0,149.6 203.4,149.6 202.8,149.5 202.1,149.5 201.4,149.4 200.7,149.4 199.9,149.4 199.1,149.4 198.2,149.4 197.3,149.5 196.3,149.5 195.2,149.6 194.1,149.8 193.0,150.0 191.9,150.3 190.8,150.6 189.7,151.0 188.7,151.6 187.8,152.2 187.1,153.0 186.6,153.8 186.3,154.8 186.3,155.7 186.6,156.7 187.0,157.7 187.6,158.7 188.4,159.6 189.2,160.4 190.1,161.2 191.0,161.9 191.9,162.5 192.8,163.1 193.7,163.6 194.5,164.1 195.3,164.5 196.0,164.9 196.8,165.2 197.4,165.5 198.1,165.8 198.7,166.1 199.3,166.3 199.9,166.5 200.4,166.8 200.9,166.9 201.4,167.1 201.9,167.3 202.3,167.4 202.8,167.6 203.2,167.7 203.6,167.9 204.0,168.0 204.4,168.1 204.8,168.2 205.2,168.3 205.6,168.4 205.9,168.5 206.3,168.6 206.7,168.7 207.0,168.8 207.4,168.9 207.7,169.0 208.1,169.1 208.4,169.2 208.8,169.2 209.2,169.3 209.5,169.4 209.9,169.5 210.3,169.5 210.7,169.6 211.1,169.7 211.5,169.8 211.9,169.8 212.3,169.9 212.7,170.0 213.2,170.0 213.6,170.1 214.1,170.2 214.6,170.2 215.2,170.3 215.7,170.3 216.3,170.4 216.9,170.5 217.5,170.5 218.2,170.5 218.9,170.6 219.7,170.6 220.5,170.6 221.4,170.6 222.3,170.6 223.2,170.5 224.2,170.4 225.3,170.3 226.4,170.1 227.5,169.9 228.7,169.6 229.8,169.2 230.8,168.7 231.8,168.1 232.6,167.4 233.2,166.6 233.6,165.7 233.7,164.7 233.6,163.8 233.2,162.8 232.7,161.8 232.0,160.9 231.2,160.0" fill="none" stroke="#cfc8b6" stroke-width="1.4"/><polyline points="246.7,160.0 245.2,158.6 243.7,157.3 242.1,156.2 240.6,155.1 239.0,154.2 237.6,153.3 236.2,152.6 234.8,151.9 233.6,151.2 232.3,150.7 231.2,150.2 230.1,149.7 229.0,149.3 228.1,148.9 227.1,148.5 226.2,148.1 225.3,147.8 224.5,147.5 223.7,147.2 222.9,147.0 222.1,146.7 221.4,146.5 220.7,146.3 220.0,146.1 219.3,145.9 218.7,145.7 218.0,145.5 217.4,145.3 216.7,145.1 216.1,145.0 215.5,144.8 214.9,144.7 214.2,144.5 213.6,144.4 213.0,144.2 212.4,144.1 211.8,143.9 211.1,143.8 210.5,143.7 209.8,143.5 209.2,143.4 208.5,143.3 207.8,143.2 207.1,143.0 206.4,142.9 205.7,142.8 204.9,142.7 204.1,142.6 203.3,142.4 202.4,142.3 201.5,142.2 200.6,142.1 199.6,142.0 198.6,141.9 197.5,141.8 196.4,141.8 195.2,141.7 193.9,141.7 192.5,141.6 191.1,141.6 189.5,141.7 187.9,141.7 186.2,141.8 184.4,142.0 182.5,142.3 180.6,142.6 178.6,143.1 176.7,143.7 174.8,144.5 173.0,145.4 171.5,146.6 170.3,147.9 169.4,149.3 169.0,150.9 169.0,152.6 169.4,154.3 170.2,156.1 171.2,157.7 172.5,159.3 174.0,160.7 175.5,162.0 177.1,163.3 178.7,164.4 180.2,165.4 181.7,166.2 183.1,167.1 184.5,167.8 185.8,168.4 187.1,169.0 188.2,169.6 189.4,170.1 190.4,170.5 191.5,171.0 192.4,171.3 193.4,171.7 194.2,172.0 195.1,172.3 195.9,172.6 196.7,172.9 197.5,173.1 198.2,173.4 199.0,173.6 199.7,173.8 200.3,174.0 201.0,174.2 201.7,174.4 202.3,174.6 203.0,174.8 203.6,174.9 204.2,175.1 204.8,175.3 205.5,175.4 206.1,175.6 206.7,175.7 207.3,175.9 207.9,176.0 208.6,176.1 209.2,176.3 209.8,176.4 210.5,176.5 211.2,176.7 211.8,176.8 212.5,176.9 213.2,177.0 214.0,177.1 214.7,177.3 215.5,177.4 216.3,177.5 217.1,177.6 218.0,177.7 218.9,177.8 219.9,177.9 220.9,178.0 221.9,178.1 223.1,178.2 224.2,178.3 225.5,178.3 226.8,178.4 228.2,178.4 229.7,178.4 231.2,178.3 232.9,178.2 234.7,178.1 236.5,177.9 238.4,177.5 240.4,177.1 242.3,176.6 244.3,175.9 246.1,175.1 247.8,174.0 249.2,172.8 250.2,171.4 250.9,169.9 251.1,168.2 250.9,166.5 250.3,164.8 249.3,163.1 248.1,161.5 246.7,160.0" fill="none" stroke="#cfc8b6" stroke-width="1.4"/><polyline points="262.0,160.0 259.8,158.0 257.6,156.2 255.4,154.6 253.2,153.1 251.1,151.8 249.0,150.6 247.0,149.5 245.1,148.5 243.3,147.6 241.6,146.8 240.0,146.1 238.4,145.4 236.9,144.8 235.5,144.2 234.2,143.7 232.9,143.2 231.7,142.8 230.5,142.4 229.3,142.0 228.2,141.6 227.2,141.2 226.1,140.9 225.1,140.6 224.1,140.3 223.2,140.0 222.2,139.7 221.3,139.5 220.4,139.2 219.5,139.0 218.6,138.7 217.7,138.5 216.9,138.3 216.0,138.1 215.1,137.9 214.2,137.7 213.4,137.5 212.5,137.3 211.6,137.1 210.7,136.9 209.8,136.7 208.8,136.5 207.9,136.4 206.9,136.2 205.9,136.0 204.9,135.8 203.9,135.7 202.8,135.5 201.7,135.3 200.5,135.2 199.3,135.0 198.0,134.9 196.7,134.7 195.3,134.6 193.9,134.4 192.3,134.3 190.7,134.2 189.0,134.1 187.2,134.1 185.3,134.0 183.2,134.0 181.1,134.1 178.8,134.2 176.4,134.3 173.8,134.6 171.2,134.9 168.4,135.5 165.7,136.1 162.9,137.0 160.2,138.1 157.7,139.4 155.6,141.0 153.8,142.8 152.6,144.9 152.0,147.2 152.0,149.6 152.6,152.0 153.7,154.4 155.2,156.7 157.0,159.0 159.1,161.0 161.3,162.9 163.5,164.6 165.7,166.2 167.9,167.6 170.0,168.8 172.0,170.0 173.9,171.0 175.8,171.9 177.6,172.8 179.2,173.6 180.8,174.3 182.3,174.9 183.8,175.5 185.1,176.0 186.5,176.5 187.7,177.0 188.9,177.4 190.1,177.9 191.2,178.2 192.3,178.6 193.4,178.9 194.4,179.3 195.4,179.6 196.3,179.9 197.3,180.1 198.2,180.4 199.1,180.7 200.0,180.9 200.9,181.1 201.8,181.4 202.7,181.6 203.6,181.8 204.4,182.0 205.3,182.2 206.2,182.4 207.1,182.6 208.0,182.8 208.9,183.0 209.8,183.2 210.7,183.4 211.6,183.6 212.6,183.7 213.6,183.9 214.6,184.1 215.6,184.3 216.7,184.4 217.8,184.6 218.9,184.7 220.1,184.9 221.3,185.1 222.6,185.2 224.0,185.4 225.4,185.5 226.9,185.6 228.5,185.7 230.1,185.8 231.9,185.9 233.7,186.0 235.7,186.0 237.8,186.0 240.1,185.9 242.4,185.8 244.9,185.6 247.5,185.2 250.2,184.8 253.0,184.2 255.7,183.5 258.5,182.5 261.1,181.3 263.4,179.8 265.4,178.1 266.9,176.1 267.8,174.0 268.1,171.6 267.8,169.2 266.9,166.8 265.6,164.4 263.9,162.1 262.0,160.0" fill="none" stroke="#cfc8b6" stroke-width="1.4"/><polyline points="277.1,160.0 274.3,157.5 271.5,155.1 268.6,153.0 265.8,151.1 263.0,149.4 260.3,147.8 257.8,146.4 255.3,145.2 253.0,144.0 250.8,143.0 248.7,142.0 246.7,141.2 244.8,140.4 243.0,139.6 241.2,139.0 239.6,138.3 238.0,137.8 236.4,137.2 235.0,136.7 233.5,136.2 232.2,135.8 230.8,135.3 229.5,134.9 228.3,134.6 227.0,134.2 225.8,133.8 224.6,133.5 223.4,133.2 222.3,132.9 221.1,132.6 220.0,132.3 218.9,132.0 217.7,131.7 216.6,131.4 215.5,131.2 214.3,130.9 213.2,130.7 212.0,130.4 210.9,130.2 209.7,129.9 208.5,129.7 207.3,129.5 206.0,129.2 204.7,129.0 203.4,128.8 202.1,128.6 200.7,128.4 199.2,128.2 197.7,128.0 196.2,127.7 194.5,127.6 192.8,127.4 191.1,127.2 189.2,127.0 187.2,126.9 185.1,126.7 182.9,126.6 180.6,126.5 178.1,126.5 175.5,126.5 172.7,126.5 169.7,126.6 166.6,126.9 163.3,127.2 159.9,127.7 156.3,128.3 152.7,129.2 149.2,130.3 145.7,131.7 142.5,133.4 139.7,135.5 137.5,137.9 135.9,140.5 135.1,143.5 135.1,146.5 135.9,149.7 137.3,152.8 139.2,155.8 141.6,158.6 144.3,161.3 147.1,163.7 149.9,166.0 152.8,168.0 155.6,169.8 158.3,171.4 160.9,172.9 163.5,174.2 165.8,175.4 168.1,176.5 170.3,177.5 172.3,178.4 174.3,179.2 176.1,180.0 177.9,180.7 179.6,181.4 181.2,182.0 182.8,182.5 184.3,183.0 185.8,183.5 187.2,184.0 188.5,184.4 189.8,184.9 191.1,185.3 192.4,185.6 193.6,186.0 194.8,186.3 196.0,186.7 197.1,187.0 198.3,187.3 199.4,187.6 200.6,187.9 201.7,188.2 202.8,188.4 204.0,188.7 205.1,189.0 206.2,189.2 207.4,189.5 208.5,189.7 209.7,189.9 210.9,190.2 212.1,190.4 213.3,190.6 214.6,190.9 215.9,191.1 217.2,191.3 218.6,191.5 220.0,191.7 221.5,191.9 223.0,192.2 224.6,192.4 226.3,192.5 228.0,192.7 229.9,192.9 231.8,193.1 233.8,193.2 236.0,193.3 238.2,193.4 240.7,193.5 243.2,193.5 245.9,193.5 248.8,193.4 251.8,193.3 255.0,193.0 258.4,192.6 261.9,192.0 265.5,191.3 269.0,190.3 272.6,189.1 275.9,187.5 278.9,185.6 281.5,183.4 283.4,180.8 284.6,178.0 285.0,175.0 284.6,171.9 283.5,168.8 281.8,165.7 279.6,162.8 277.1,160.0" fill="none" stroke="#cfc8b6" stroke-width="1.4"/><polyline points="279.0,118.0 252.4,185.0 248.2,165.2 240.3,168.1 234.9,165.6 230.3,164.9 226.6,163.9 223.6,163.2 221.1,162.6 219.0,162.1 217.4,161.7 216.0,161.4 214.9,161.2 214.0,160.9 213.3,160.8 212.7,160.6 212.2,160.5 211.8,160.4 211.5,160.3" fill="none" stroke="#b5491f" stroke-width="2"/><circle cx="279.0" cy="118.0" r="2.4" fill="#b5491f"/><circle cx="252.4" cy="185.0" r="2.4" fill="#b5491f"/><circle cx="248.2" cy="165.2" r="2.4" fill="#b5491f"/><circle cx="240.3" cy="168.1" r="2.4" fill="#b5491f"/><circle cx="234.9" cy="165.6" r="2.4" fill="#b5491f"/><circle cx="230.3" cy="164.9" r="2.4" fill="#b5491f"/><circle cx="226.6" cy="163.9" r="2.4" fill="#b5491f"/><circle cx="223.6" cy="163.2" r="2.4" fill="#b5491f"/><circle cx="221.1" cy="162.6" r="2.4" fill="#b5491f"/><circle cx="219.0" cy="162.1" r="2.4" fill="#b5491f"/><circle cx="217.4" cy="161.7" r="2.4" fill="#b5491f"/><circle cx="216.0" cy="161.4" r="2.4" fill="#b5491f"/><circle cx="214.9" cy="161.2" r="2.4" fill="#b5491f"/><circle cx="214.0" cy="160.9" r="2.4" fill="#b5491f"/><circle cx="213.3" cy="160.8" r="2.4" fill="#b5491f"/><circle cx="212.7" cy="160.6" r="2.4" fill="#b5491f"/><circle cx="212.2" cy="160.5" r="2.4" fill="#b5491f"/><circle cx="211.8" cy="160.4" r="2.4" fill="#b5491f"/><circle cx="211.5" cy="160.3" r="2.4" fill="#b5491f"/><circle cx="210.0" cy="160.0" r="4" fill="#1f5d4c"/><text x="217.0" y="174.0" font-family="Space Grotesk,sans-serif" font-size="11" fill="#1f5d4c" font-weight="600">min</text><text x="210.0" y="22" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="13" fill="#10211c" font-weight="600">Gradient descent zig-zags down the valley</text><text x="210.0" y="310" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11.5" fill="#5f6b62">steps ⟂ contours; elongated ellipses ⇒ slow zig-zag</text></svg><figcaption><b>Block 7.</b> Each gradient-descent step moves opposite ∇f, i.e. perpendicular to the contour. Elongated (ill-conditioned) ellipses force the slow zig-zag; the step size τ must satisfy 0 < τ < 1/λₘₐₓ for the quadratic to converge.</figcaption></figure>
+
+  <div class="box thm"><span class="lbl">Gradient descent &amp; $L$-smoothness</span>
+  Iteration $x_{k+1}=x_k-\eta\nabla f(x_k)$. If $\nabla f$ is <strong>$L$-Lipschitz</strong> ($\|\nabla f(x)-\nabla f(y)\|\le L\|x-y\|$) and $f$ convex, GD with $\eta\le 1/L$ converges; for the quadratic case convergence is governed by the spectrum of the iteration matrix.</div>
+  <div class="box thm"><span class="lbl">SGD &amp; mini-batch for finite sums</span>
+  For $f=\tfrac1n\sum_i f_i$: SGD uses one $\nabla f_{i_k}$ per step; mini-batch averages over a batch $B_k$. Cheaper per step, noisier path, same minimizer in expectation.</div>
+
+  <h3>Solution logic</h3>
+  <div class="box recipe"><span class="lbl">Recipe · least-squares finite-sum gradient (PS7 P4)</span>
+  $f(x)=\tfrac1n\sum_i(a_i^\top x-b_i)^2$. Chain rule per term: $\nabla(a_i^\top x-b_i)^2=2(a_i^\top x-b_i)a_i$, so $\nabla f(x)=\tfrac{2}{n}\sum_i(a_i^\top x-b_i)a_i$. Then GD/SGD/MB differ only in <em>which</em> terms enter each step.</div>
+
+  <div class="box recipe"><span class="lbl">Recipe · GD as a linear map; stable step sizes (PS13 P4)</span>
+  For quadratic $f(x,y)=x^2+2xy+5y^2$: $\nabla f=2\begin{pmatrix}1&1\\1&5\end{pmatrix}u$. GD: $u_{k+1}=u_k-\tau\nabla f(u_k)=(I-2\tau Q)u_k=:A_\tau u_k$ with $Q=\begin{pmatrix}1&1\\1&5\end{pmatrix}$. $u_k\to0$ for all $u_0$ $\iff$ spectral radius $\rho(A_\tau)<1$ $\iff$ $|1-2\tau\mu|<1$ for both eigenvalues $\mu$ of $Q$ $\iff$ $0<\tau<1/\mu_{\max}$. Find eigenvalues of $Q$ ($\mu=3\pm\sqrt5$); stable range $0<\tau<\dfrac{1}{3+\sqrt5}$.</div>
+
+  <div class="box recipe"><span class="lbl">Recipe · Lipschitz gradient bound (PS8 P2b)</span>
+  For $f=\sin x+\cos y$, $\nabla f=(\cos x,-\sin y)$, $H_f=\operatorname{diag}(-\sin x,-\cos y)$ with entries bounded by 1, so $\|H_f\|\le1$ ⇒ $\nabla f$ is $1$-Lipschitz. In general $L=\sup\|H_f\|$ (operator norm of the Hessian).</div>
+
+  <div class="practice">
+    <span class="lbl">Practice · Block 7</span>
+    <ol>
+      <li>For $f(x)=\tfrac12 x^\top Q x$ with $Q\succ0$, show GD converges for $0<\tau<2/\lambda_{\max}(Q)$.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$u_{k+1}=(I-\tau Q)u_k$. Eigenvalues $1-\tau\lambda_i$; need $|1-\tau\lambda_i|<1$ for all $i$ ⇒ $0<\tau\lambda_i<2$ ⇒ $0<\tau<2/\lambda_{\max}$.</div></details></li>
+      <li>Compute $L$ (Lipschitz constant of $\nabla f$) for $f(x,y)=\tfrac12(x^2+10y^2)$ and state the GD-stable step range.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$H=\operatorname{diag}(1,10)$, $L=\|H\|=10$. Convergence for $0<\tau<2/10=0.2$; fastest at $\tau=2/(1+10)$.</div></details></li>
+      <li>Explain in 3 sentences why SGD's loss curve $f(x_k)$ is non-monotone while full GD's is (for convex $f$, small $\eta$).
+        <details class="sol"><summary>Solution sketch</summary><div class="body">Full GD uses the exact gradient, so with $\eta\le1/L$ each step decreases $f$ monotonically. SGD replaces the gradient by a single-sample estimate that is unbiased but noisy, so individual steps can increase $f$. On average the trajectory still descends, giving a jagged-but-decreasing curve.</div></details></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ BLOCK 8 ============ -->
+<section id="b8">
+  <h2><span class="tag">Block 8</span>Newton's method · implicit &amp; inverse function theorems</h2>
+  <div class="maps">Covers <span class="pschip">PS8 P3–P4</span> <span class="pschip">PS10</span> <span class="pschip">PS11 P1–P2</span>.</div>
+
+  <h3>What to know</h3>
+  <figure class="fig"><svg viewBox="0 0 440 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:440px;height:auto;display:block;margin:0 auto"><rect width="440" height="320" fill="none"/><line x1="40" y1="182.1" x2="420" y2="182.1" stroke="#cfc8b6" stroke-width="1"/><line x1="50.0" y1="20" x2="50.0" y2="290" stroke="#cfc8b6" stroke-width="1"/><polyline points="50.0,249.7 51.7,249.7 53.4,249.7 55.1,249.7 56.8,249.6 58.5,249.6 60.1,249.5 61.8,249.4 63.5,249.4 65.2,249.3 66.9,249.2 68.6,249.1 70.3,248.9 72.0,248.8 73.7,248.7 75.4,248.5 77.1,248.3 78.7,248.2 80.4,248.0 82.1,247.8 83.8,247.6 85.5,247.4 87.2,247.1 88.9,246.9 90.6,246.6 92.3,246.4 94.0,246.1 95.7,245.8 97.4,245.5 99.0,245.2 100.7,244.9 102.4,244.6 104.1,244.2 105.8,243.9 107.5,243.5 109.2,243.2 110.9,242.8 112.6,242.4 114.3,242.0 116.0,241.6 117.6,241.2 119.3,240.7 121.0,240.3 122.7,239.8 124.4,239.4 126.1,238.9 127.8,238.4 129.5,237.9 131.2,237.4 132.9,236.9 134.6,236.4 136.2,235.8 137.9,235.3 139.6,234.7 141.3,234.1 143.0,233.6 144.7,233.0 146.4,232.4 148.1,231.7 149.8,231.1 151.5,230.5 153.2,229.8 154.9,229.2 156.5,228.5 158.2,227.8 159.9,227.2 161.6,226.5 163.3,225.7 165.0,225.0 166.7,224.3 168.4,223.5 170.1,222.8 171.8,222.0 173.5,221.3 175.1,220.5 176.8,219.7 178.5,218.9 180.2,218.1 181.9,217.2 183.6,216.4 185.3,215.5 187.0,214.7 188.7,213.8 190.4,212.9 192.1,212.0 193.7,211.1 195.4,210.2 197.1,209.3 198.8,208.4 200.5,207.4 202.2,206.5 203.9,205.5 205.6,204.5 207.3,203.5 209.0,202.5 210.7,201.5 212.4,200.5 214.0,199.5 215.7,198.4 217.4,197.4 219.1,196.3 220.8,195.3 222.5,194.2 224.2,193.1 225.9,192.0 227.6,190.9 229.3,189.7 231.0,188.6 232.6,187.4 234.3,186.3 236.0,185.1 237.7,183.9 239.4,182.7 241.1,181.5 242.8,180.3 244.5,179.1 246.2,177.9 247.9,176.6 249.6,175.4 251.2,174.1 252.9,172.8 254.6,171.5 256.3,170.3 258.0,168.9 259.7,167.6 261.4,166.3 263.1,165.0 264.8,163.6 266.5,162.2 268.2,160.9 269.8,159.5 271.5,158.1 273.2,156.7 274.9,155.3 276.6,153.9 278.3,152.4 280.0,151.0 281.7,149.5 283.4,148.0 285.1,146.6 286.8,145.1 288.5,143.6 290.1,142.1 291.8,140.5 293.5,139.0 295.2,137.5 296.9,135.9 298.6,134.4 300.3,132.8 302.0,131.2 303.7,129.6 305.4,128.0 307.1,126.4 308.7,124.7 310.4,123.1 312.1,121.5 313.8,119.8 315.5,118.1 317.2,116.4 318.9,114.8 320.6,113.0 322.3,111.3 324.0,109.6 325.7,107.9 327.3,106.1 329.0,104.4 330.7,102.6 332.4,100.8 334.1,99.0 335.8,97.2 337.5,95.4 339.2,93.6 340.9,91.8 342.6,89.9 344.3,88.1 346.0,86.2 347.6,84.4 349.3,82.5 351.0,80.6 352.7,78.7 354.4,76.7 356.1,74.8 357.8,72.9 359.5,70.9 361.2,69.0 362.9,67.0 364.6,65.0 366.2,63.0 367.9,61.0 369.6,59.0 371.3,57.0 373.0,55.0 374.7,52.9 376.4,50.9 378.1,48.8 379.8,46.7 381.5,44.6 383.2,42.5 384.8,40.4 386.5,38.3" fill="none" stroke="#1f5d4c" stroke-width="2.2"/><line x1="240.4" y1="182.1" x2="240.4" y2="176.1" stroke="#10211c" stroke-width="1"/><text x="240.4" y="198.1" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" fill="#10211c">√2</text><line x1="346.2" y1="86.0" x2="259.3" y2="182.1" stroke="#b5491f" stroke-width="1.6"/><line x1="346.2" y1="182.1" x2="346.2" y2="86.0" stroke="#b5491f" stroke-width="1" stroke-dasharray="3 2"/><circle cx="346.2" cy="86.0" r="3" fill="#b5491f"/><text x="346.2" y="178.1" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="10.5" fill="#b5491f" font-weight="600">x0</text><line x1="259.3" y1="168.0" x2="241.2" y2="182.1" stroke="#a6822b" stroke-width="1.6"/><line x1="259.3" y1="182.1" x2="259.3" y2="168.0" stroke="#a6822b" stroke-width="1" stroke-dasharray="3 2"/><circle cx="259.3" cy="168.0" r="3" fill="#a6822b"/><text x="259.3" y="178.1" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="10.5" fill="#a6822b" font-weight="600">x1</text><line x1="241.2" y1="181.5" x2="240.4" y2="182.1" stroke="#7a3414" stroke-width="1.6"/><line x1="241.2" y1="182.1" x2="241.2" y2="181.5" stroke="#7a3414" stroke-width="1" stroke-dasharray="3 2"/><circle cx="241.2" cy="181.5" r="3" fill="#7a3414"/><text x="241.2" y="178.1" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="10.5" fill="#7a3414" font-weight="600">x2</text><text x="220.0" y="22" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="13" fill="#10211c" font-weight="600">Newton = follow the tangent to its root</text><text x="220.0" y="312" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" fill="#5f6b62">f(x)=x²−2, x₀=2.2 → fast (quadratic) approach to √2</text></svg><figcaption><b>Block 8.</b> Newton replaces f by its tangent at xₖ and jumps to where that tangent hits zero. Near a simple root the error squares each step (quadratic convergence).</figcaption></figure>
+
+  <div class="box thm"><span class="lbl">Newton iterations</span>
+  <strong>1-D:</strong> $x_{k+1}=x_k-\dfrac{f(x_k)}{f'(x_k)}$. <strong>$\mathbb R^n$:</strong> $x_{k+1}=x_k-J_f(x_k)^{-1}f(x_k)$, solved each step as a linear system $J_f(x_k)\,\Delta=-f(x_k)$ (in Julia: <code>A\b</code>). Converges <strong>quadratically</strong> near a simple root.</div>
+  <div class="box thm"><span class="lbl">Implicit &amp; Inverse Function Theorems</span>
+  <strong>IFT:</strong> if $F(a,b)=0$ and $\partial_y F(a,b)\neq0$, then locally $y=g(x)$ with $g'(x)=-\dfrac{\partial_x F}{\partial_y F}$. <strong>Inverse FT:</strong> if $J_f(x_0)$ is invertible, $f$ is locally a $C^1$ diffeomorphism with $J_{f^{-1}}=J_f^{-1}$.</div>
+
+  <h3>Solution logic</h3>
+  <div class="box recipe"><span class="lbl">Recipe · Newton as linearize-and-solve (PS8 P3)</span>
+  The affine approximation at $x_k$ is $F_k(x)=f(x_k)+f'(x_k)(x-x_k)$. Solving $F_k(x)=0$ gives $x=x_k-f(x_k)/f'(x_k)$ — exactly the Newton step. That's the whole justification: <em>Newton replaces $f$ by its tangent and takes the tangent's root.</em></div>
+
+  <div class="box recipe"><span class="lbl">Recipe · Newton by hand in $\mathbb R^n$ (PS10 P1)</span>
+  For $f(x,y)=(x^2+y^2-1,\ x-y)$, $J_f=\begin{pmatrix}2x&2y\\1&-1\end{pmatrix}$. From $X_0$: compute $f(X_0)$, $J_f(X_0)$, solve $J_f\Delta=-f(X_0)$, set $X_1=X_0+\Delta$; repeat for $X_2$. Compare to the true roots $(\pm\tfrac{1}{\sqrt2},\pm\tfrac{1}{\sqrt2})$ to report the error.</div>
+
+  <div class="box recipe"><span class="lbl">Recipe · IFT to get $y=g(x)$ (PS11 P1)</span>
+  $f(x,y)=x^3+x-2y$. $\partial_y f=-2\neq0$ everywhere, so IFT applies at every zero: $y=g(x)$ exists locally. Here you can even solve explicitly: $y=\tfrac12(x^3+x)$, and $g'(x)=\tfrac12(3x^2+1)$ — matches $-\partial_x f/\partial_y f=-(3x^2+1)/(-2)$. ✓</div>
+
+  <div class="box idea"><span class="lbl">Convergence orders (PS10 P4)</span>
+  <strong>Linear:</strong> $x_k=2^{-k}$ → $|x_{k+1}|/|x_k|=\tfrac12$ const. <strong>Quadratic:</strong> $x_k=2^{-2^k}$ → $|x_{k+1}|/|x_k|^2=1$. On a log-axis plot, linear is a straight line; quadratic curves sharply downward. Newton on a simple root is quadratic; on the gradient $\nabla f$ for $f=\|Ax-b\|^2$ (linear system) Newton converges in <em>one</em> step.</div>
+  <figure class="fig"><svg viewBox="0 0 440 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:440px;height:auto;display:block;margin:0 auto"><rect width="440" height="300" fill="none"/><line x1="55" y1="40" x2="55" y2="260" stroke="#cfc8b6" stroke-width="1"/><line x1="55" y1="260" x2="420" y2="260" stroke="#cfc8b6" stroke-width="1"/><line x1="51" y1="40.0" x2="55" y2="40.0" stroke="#5f6b62" stroke-width="1"/><text x="48" y="43.0" text-anchor="end" font-family="Space Grotesk,sans-serif" font-size="9.5" fill="#5f6b62">10^0</text><line x1="51" y1="88.9" x2="55" y2="88.9" stroke="#5f6b62" stroke-width="1"/><text x="48" y="91.9" text-anchor="end" font-family="Space Grotesk,sans-serif" font-size="9.5" fill="#5f6b62">10^-4</text><line x1="51" y1="137.8" x2="55" y2="137.8" stroke="#5f6b62" stroke-width="1"/><text x="48" y="140.8" text-anchor="end" font-family="Space Grotesk,sans-serif" font-size="9.5" fill="#5f6b62">10^-8</text><line x1="51" y1="186.7" x2="55" y2="186.7" stroke="#5f6b62" stroke-width="1"/><text x="48" y="189.7" text-anchor="end" font-family="Space Grotesk,sans-serif" font-size="9.5" fill="#5f6b62">10^-12</text><line x1="51" y1="235.6" x2="55" y2="235.6" stroke="#5f6b62" stroke-width="1"/><text x="48" y="238.6" text-anchor="end" font-family="Space Grotesk,sans-serif" font-size="9.5" fill="#5f6b62">10^-16</text><polyline points="55.0,40.0 105.0,43.7 155.0,47.4 205.0,51.0 255.0,54.7 305.0,58.4 355.0,62.1 405.0,65.8" fill="none" stroke="#1f5d4c" stroke-width="2.2"/><polyline points="55.0,43.7 125.0,47.4 195.0,54.7 265.0,69.4 335.0,98.9 405.0,157.7" fill="none" stroke="#b5491f" stroke-width="2.2"/><circle cx="55.0" cy="40.0" r="2.6" fill="#1f5d4c"/><circle cx="105.0" cy="43.7" r="2.6" fill="#1f5d4c"/><circle cx="155.0" cy="47.4" r="2.6" fill="#1f5d4c"/><circle cx="205.0" cy="51.0" r="2.6" fill="#1f5d4c"/><circle cx="255.0" cy="54.7" r="2.6" fill="#1f5d4c"/><circle cx="305.0" cy="58.4" r="2.6" fill="#1f5d4c"/><circle cx="355.0" cy="62.1" r="2.6" fill="#1f5d4c"/><circle cx="405.0" cy="65.8" r="2.6" fill="#1f5d4c"/><circle cx="55.0" cy="43.7" r="2.6" fill="#b5491f"/><circle cx="125.0" cy="47.4" r="2.6" fill="#b5491f"/><circle cx="195.0" cy="54.7" r="2.6" fill="#b5491f"/><circle cx="265.0" cy="69.4" r="2.6" fill="#b5491f"/><circle cx="335.0" cy="98.9" r="2.6" fill="#b5491f"/><circle cx="405.0" cy="157.7" r="2.6" fill="#b5491f"/><text x="410" y="58.4" text-anchor="end" font-family="Space Grotesk,sans-serif" font-size="12" fill="#1f5d4c" font-weight="600">linear (straight)</text><text x="271.0" y="73.4" font-family="Space Grotesk,sans-serif" font-size="12" fill="#b5491f" font-weight="600">quadratic (curves down)</text><text x="220.0" y="22" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="13" fill="#10211c" font-weight="600">Convergence rates on a log axis</text><text x="220.0" y="290" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11.5" fill="#5f6b62">iteration k  →   error |xₖ−x*|</text></svg><figcaption><b>Block 8.</b> On a log error-axis, linear convergence is a straight line; quadratic convergence (Newton at a simple root) bends sharply downward.</figcaption></figure>
+
+
+  <div class="box pitfall"><span class="lbl">Pitfall (PS10 P3)</span>If $J_f$ is singular at/near a point (e.g. where $\det J_f=0$), Newton's step blows up or stalls. Always note where $\det J_f=0$ before iterating.</div>
+
+  <div class="practice">
+    <span class="lbl">Practice · Block 8</span>
+    <ol>
+      <li>Do two Newton steps by hand for $f(x)=x^2-2$ from $x_0=1$. How close to $\sqrt2$?
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$x_1=1-\frac{-1}{2}=1.5$; $x_2=1.5-\frac{0.25}{3}=1.41\overline{6}$. $\sqrt2\approx1.41421$, error $\approx0.0025$ — quadratic convergence visible.</div></details></li>
+      <li>For $f(x,y)=(e^{x}\cos y,\ e^{x}\sin y)$ (PS11 P2), show $J_f$ is invertible everywhere but $f$ is not globally injective.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$\det J_f=e^{2x}(\cos^2y+\sin^2y)=e^{2x}>0$ always → locally invertible (Inverse FT). Not globally injective: $f(x,y)=f(x,y+2\pi)$, since sin/cos are $2\pi$-periodic.</div></details></li>
+      <li>Use IFT on $x^2+y^2=1$ near $(0,1)$ to get $y=g(x)$ and $g'(0)$.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$F=x^2+y^2-1$, $\partial_yF=2y=2\neq0$ at $(0,1)$. $g'(x)=-\frac{2x}{2y}=-x/y$; $g'(0)=0$. (Explicitly $g(x)=\sqrt{1-x^2}$.)</div></details></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ BLOCK 9 ============ -->
+<section id="b9">
+  <h2><span class="tag">Block 9</span>Constrained extrema · submanifolds &amp; Lagrange multipliers</h2>
+  <div class="maps">Covers <span class="pschip">PS11 P3–P4</span> <span class="pschip">PS12</span> <span class="pschip">PS13</span>.</div>
+
+  <h3>What to know</h3>
+  <figure class="fig"><svg viewBox="0 0 400 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:400px;height:auto;display:block;margin:0 auto"><rect width="400" height="360" fill="none"/><polyline points="241.8,180.0 241.8,178.7 241.7,177.4 241.6,176.0 241.5,174.7 241.3,173.4 241.1,172.1 240.8,170.8 240.5,169.5 240.1,168.3 239.8,167.0 239.3,165.8 238.9,164.5 238.3,163.3 237.8,162.1 237.2,160.9 236.6,159.8 235.9,158.6 235.2,157.5 234.5,156.4 233.8,155.3 233.0,154.3 232.1,153.2 231.3,152.2 230.4,151.3 229.5,150.3 228.5,149.4 227.5,148.5 226.5,147.7 225.5,146.8 224.4,146.1 223.3,145.3 222.2,144.6 221.1,143.9 219.9,143.2 218.8,142.6 217.6,142.1 216.4,141.5 215.2,141.0 213.9,140.6 212.7,140.1 211.4,139.8 210.1,139.4 208.8,139.1 207.6,138.9 206.2,138.7 204.9,138.5 203.6,138.3 202.3,138.2 201.0,138.2 199.7,138.2 198.3,138.2 197.0,138.3 195.7,138.4 194.4,138.6 193.1,138.8 191.8,139.0 190.5,139.3 189.2,139.6 188.0,140.0 186.7,140.4 185.5,140.8 184.2,141.3 183.0,141.8 181.8,142.3 180.6,142.9 179.5,143.6 178.3,144.2 177.2,144.9 176.1,145.7 175.0,146.4 174.0,147.2 173.0,148.1 172.0,149.0 171.0,149.9 170.1,150.8 169.2,151.7 168.3,152.7 167.5,153.7 166.6,154.8 165.9,155.8 165.1,156.9 164.4,158.1 163.7,159.2 163.1,160.3 162.5,161.5 161.9,162.7 161.4,163.9 160.9,165.1 160.5,166.4 160.0,167.6 159.7,168.9 159.3,170.2 159.1,171.5 158.8,172.8 158.6,174.1 158.4,175.4 158.3,176.7 158.2,178.0 158.2,179.3 158.2,180.7 158.2,182.0 158.3,183.3 158.4,184.6 158.6,185.9 158.8,187.2 159.1,188.5 159.3,189.8 159.7,191.1 160.0,192.4 160.5,193.6 160.9,194.9 161.4,196.1 161.9,197.3 162.5,198.5 163.1,199.7 163.7,200.8 164.4,201.9 165.1,203.1 165.9,204.2 166.6,205.2 167.5,206.3 168.3,207.3 169.2,208.3 170.1,209.2 171.0,210.1 172.0,211.0 173.0,211.9 174.0,212.8 175.0,213.6 176.1,214.3 177.2,215.1 178.3,215.8 179.5,216.4 180.6,217.1 181.8,217.7 183.0,218.2 184.2,218.7 185.5,219.2 186.7,219.6 188.0,220.0 189.2,220.4 190.5,220.7 191.8,221.0 193.1,221.2 194.4,221.4 195.7,221.6 197.0,221.7 198.3,221.8 199.7,221.8 201.0,221.8 202.3,221.8 203.6,221.7 204.9,221.5 206.2,221.3 207.6,221.1 208.8,220.9 210.1,220.6 211.4,220.2 212.7,219.9 213.9,219.4 215.2,219.0 216.4,218.5 217.6,217.9 218.8,217.4 219.9,216.8 221.1,216.1 222.2,215.4 223.3,214.7 224.4,213.9 225.5,213.2 226.5,212.3 227.5,211.5 228.5,210.6 229.5,209.7 230.4,208.7 231.3,207.8 232.1,206.8 233.0,205.7 233.8,204.7 234.5,203.6 235.2,202.5 235.9,201.4 236.6,200.2 237.2,199.1 237.8,197.9 238.3,196.7 238.9,195.5 239.3,194.2 239.8,193.0 240.1,191.7 240.5,190.5 240.8,189.2 241.1,187.9 241.3,186.6 241.5,185.3 241.6,184.0 241.7,182.6 241.8,181.3 241.8,180.0" fill="none" stroke="#b5491f" stroke-width="2.3"/><polyline points="241.8,180.0 241.8,179.3 241.7,178.7 241.6,178.0 241.5,177.4 241.3,176.7 241.1,176.1 240.8,175.4 240.5,174.8 240.1,174.1 239.8,173.5 239.3,172.9 238.9,172.3 238.3,171.7 237.8,171.1 237.2,170.5 236.6,169.9 235.9,169.3 235.2,168.7 234.5,168.2 233.8,167.7 233.0,167.1 232.1,166.6 231.3,166.1 230.4,165.6 229.5,165.2 228.5,164.7 227.5,164.3 226.5,163.8 225.5,163.4 224.4,163.0 223.3,162.6 222.2,162.3 221.1,161.9 219.9,161.6 218.8,161.3 217.6,161.0 216.4,160.8 215.2,160.5 213.9,160.3 212.7,160.1 211.4,159.9 210.1,159.7 208.8,159.6 207.6,159.4 206.2,159.3 204.9,159.2 203.6,159.2 202.3,159.1 201.0,159.1 199.7,159.1 198.3,159.1 197.0,159.1 195.7,159.2 194.4,159.3 193.1,159.4 191.8,159.5 190.5,159.6 189.2,159.8 188.0,160.0 186.7,160.2 185.5,160.4 184.2,160.6 183.0,160.9 181.8,161.2 180.6,161.5 179.5,161.8 178.3,162.1 177.2,162.5 176.1,162.8 175.0,163.2 174.0,163.6 173.0,164.0 172.0,164.5 171.0,164.9 170.1,165.4 169.2,165.9 168.3,166.4 167.5,166.9 166.6,167.4 165.9,167.9 165.1,168.5 164.4,169.0 163.7,169.6 163.1,170.2 162.5,170.8 161.9,171.4 161.4,172.0 160.9,172.6 160.5,173.2 160.0,173.8 159.7,174.5 159.3,175.1 159.1,175.7 158.8,176.4 158.6,177.0 158.4,177.7 158.3,178.4 158.2,179.0 158.2,179.7 158.2,180.3 158.2,181.0 158.3,181.6 158.4,182.3 158.6,183.0 158.8,183.6 159.1,184.3 159.3,184.9 159.7,185.5 160.0,186.2 160.5,186.8 160.9,187.4 161.4,188.0 161.9,188.6 162.5,189.2 163.1,189.8 163.7,190.4 164.4,191.0 165.1,191.5 165.9,192.1 166.6,192.6 167.5,193.1 168.3,193.6 169.2,194.1 170.1,194.6 171.0,195.1 172.0,195.5 173.0,196.0 174.0,196.4 175.0,196.8 176.1,197.2 177.2,197.5 178.3,197.9 179.5,198.2 180.6,198.5 181.8,198.8 183.0,199.1 184.2,199.4 185.5,199.6 186.7,199.8 188.0,200.0 189.2,200.2 190.5,200.4 191.8,200.5 193.1,200.6 194.4,200.7 195.7,200.8 197.0,200.9 198.3,200.9 199.7,200.9 201.0,200.9 202.3,200.9 203.6,200.8 204.9,200.8 206.2,200.7 207.6,200.6 208.8,200.4 210.1,200.3 211.4,200.1 212.7,199.9 213.9,199.7 215.2,199.5 216.4,199.2 217.6,199.0 218.8,198.7 219.9,198.4 221.1,198.1 222.2,197.7 223.3,197.4 224.4,197.0 225.5,196.6 226.5,196.2 227.5,195.7 228.5,195.3 229.5,194.8 230.4,194.4 231.3,193.9 232.1,193.4 233.0,192.9 233.8,192.3 234.5,191.8 235.2,191.3 235.9,190.7 236.6,190.1 237.2,189.5 237.8,188.9 238.3,188.3 238.9,187.7 239.3,187.1 239.8,186.5 240.1,185.9 240.5,185.2 240.8,184.6 241.1,183.9 241.3,183.3 241.5,182.6 241.6,182.0 241.7,181.3 241.8,180.7 241.8,180.0" fill="none" stroke="#1f5d4c" stroke-width="1.5" stroke-dasharray="4 3"/><polyline points="283.6,180.0 283.6,178.7 283.5,177.4 283.3,176.0 283.0,174.7 282.6,173.4 282.1,172.1 281.6,170.8 281.0,169.5 280.3,168.3 279.5,167.0 278.6,165.8 277.7,164.5 276.7,163.3 275.6,162.1 274.4,160.9 273.2,159.8 271.9,158.6 270.5,157.5 269.0,156.4 267.5,155.3 265.9,154.3 264.3,153.2 262.5,152.2 260.8,151.3 258.9,150.3 257.0,149.4 255.0,148.5 253.0,147.7 251.0,146.8 248.8,146.1 246.7,145.3 244.5,144.6 242.2,143.9 239.9,143.2 237.6,142.6 235.2,142.1 232.8,141.5 230.3,141.0 227.8,140.6 225.3,140.1 222.8,139.8 220.3,139.4 217.7,139.1 215.1,138.9 212.5,138.7 209.9,138.5 207.3,138.3 204.6,138.2 202.0,138.2 199.3,138.2 196.7,138.2 194.1,138.3 191.4,138.4 188.8,138.6 186.2,138.8 183.6,139.0 181.0,139.3 178.5,139.6 175.9,140.0 173.4,140.4 170.9,140.8 168.5,141.3 166.0,141.8 163.6,142.3 161.3,142.9 158.9,143.6 156.7,144.2 154.4,144.9 152.2,145.7 150.1,146.4 148.0,147.2 146.0,148.1 144.0,149.0 142.0,149.9 140.2,150.8 138.3,151.7 136.6,152.7 134.9,153.7 133.3,154.8 131.7,155.8 130.2,156.9 128.8,158.1 127.5,159.2 126.2,160.3 125.0,161.5 123.8,162.7 122.8,163.9 121.8,165.1 120.9,166.4 120.1,167.6 119.4,168.9 118.7,170.2 118.1,171.5 117.6,172.8 117.2,174.1 116.9,175.4 116.6,176.7 116.5,178.0 116.4,179.3 116.4,180.7 116.5,182.0 116.6,183.3 116.9,184.6 117.2,185.9 117.6,187.2 118.1,188.5 118.7,189.8 119.4,191.1 120.1,192.4 120.9,193.6 121.8,194.9 122.8,196.1 123.8,197.3 125.0,198.5 126.2,199.7 127.5,200.8 128.8,201.9 130.2,203.1 131.7,204.2 133.3,205.2 134.9,206.3 136.6,207.3 138.3,208.3 140.2,209.2 142.0,210.1 144.0,211.0 146.0,211.9 148.0,212.8 150.1,213.6 152.2,214.3 154.4,215.1 156.7,215.8 158.9,216.4 161.3,217.1 163.6,217.7 166.0,218.2 168.5,218.7 170.9,219.2 173.4,219.6 175.9,220.0 178.5,220.4 181.0,220.7 183.6,221.0 186.2,221.2 188.8,221.4 191.4,221.6 194.1,221.7 196.7,221.8 199.3,221.8 202.0,221.8 204.6,221.8 207.3,221.7 209.9,221.5 212.5,221.3 215.1,221.1 217.7,220.9 220.3,220.6 222.8,220.2 225.3,219.9 227.8,219.4 230.3,219.0 232.8,218.5 235.2,217.9 237.6,217.4 239.9,216.8 242.2,216.1 244.5,215.4 246.7,214.7 248.8,213.9 251.0,213.2 253.0,212.3 255.0,211.5 257.0,210.6 258.9,209.7 260.8,208.7 262.5,207.8 264.3,206.8 265.9,205.7 267.5,204.7 269.0,203.6 270.5,202.5 271.9,201.4 273.2,200.2 274.4,199.1 275.6,197.9 276.7,196.7 277.7,195.5 278.6,194.2 279.5,193.0 280.3,191.7 281.0,190.5 281.6,189.2 282.1,187.9 282.6,186.6 283.0,185.3 283.3,184.0 283.5,182.6 283.6,181.3 283.6,180.0" fill="none" stroke="#a6822b" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="241.8" cy="180.0" r="4" fill="#1f5d4c"/><line x1="241.8" y1="180.0" x2="263.8" y2="180.0" stroke="#1f5d4c" stroke-width="2.2"/><line x1="241.8" y1="180.0" x2="263.8" y2="180.0" stroke="#10211c" stroke-width="1.2"/><text x="249.8" y="198.0" text-anchor="start" font-family="Space Grotesk,sans-serif" font-size="11" fill="#1f5d4c" font-weight="600">nearest</text><circle cx="200.0" cy="138.2" r="4" fill="#a6822b"/><line x1="200.0" y1="138.2" x2="200.0" y2="116.2" stroke="#a6822b" stroke-width="2.2"/><line x1="200.0" y1="138.2" x2="200.0" y2="116.2" stroke="#10211c" stroke-width="1.2"/><text x="208.0" y="130.2" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" fill="#a6822b" font-weight="600">farthest</text><text x="200.0" y="22" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="13" fill="#10211c" font-weight="600">At an extremum: ∇f ∥ ∇g (tangency)</text><text x="200.0" y="334" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11.5" fill="#b5491f" font-weight="600">red: constraint 4x²+y²=16</text><text x="200.0" y="350" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11.5" fill="#5f6b62">dashed: level sets of f=x²+y² touch tangentially</text></svg><figcaption><b>Block 9.</b> A constrained extremum sits where a level set of f touches the constraint curve tangentially — equivalently ∇f ∥ ∇g, which is the Lagrange condition.</figcaption></figure>
+
+  <div class="box def"><span class="lbl">Submanifold &amp; tangent/normal space</span>
+  $M=\{x:g(x)=0\}$, $g:\mathbb R^n\to\mathbb R^r$, is a $(n-r)$-dim submanifold if $J_g(x)$ has full rank $r$ on $M$. <strong>Tangent space</strong> $T_xM=\ker J_g(x)$; <strong>normal space</strong> $N_xM=\operatorname{span}\{\nabla g_1,\dots,\nabla g_r\}$.</div>
+  <div class="box thm"><span class="lbl">Theorem · Lagrange multipliers</span>
+  At a constrained extremum, $\nabla f(x)=\sum_{i=1}^r\lambda_i\nabla g_i(x)$ together with $g(x)=0$. Solve this system for $(x,\lambda)$.</div>
+
+  <h3>Solution logic</h3>
+  <div class="box recipe"><span class="lbl">Recipe · the Lagrange multiplier method (PS12 P1,P3; PS13)</span>
+  <ol>
+    <li>Write the stationarity system $\nabla f=\sum\lambda_i\nabla g_i$ and the constraints $g_i=0$.</li>
+    <li>Solve — usually by ratioing equations to eliminate $\lambda$, then using the constraint.</li>
+    <li>Evaluate $f$ at every candidate; largest = max, smallest = min.</li>
+  </ol>
+  <strong>Worked (PS12 P1):</strong> $f=xyz$ on $x^2+y^2+z^2=12$. $\nabla f=(yz,xz,xy)=2\lambda(x,y,z)$. From symmetry $x^2=y^2=z^2=4$ ⇒ $x,y,z=\pm2$. $f=\pm8$. Max $8$ at even number of minus signs, min $-8$ otherwise.</div>
+
+  <div class="box recipe"><span class="lbl">Recipe · prove $M$ is a submanifold (PS11 P3–P4, PS13 P1)</span>
+  Compute $J_g$ and show it has full row rank everywhere on $M$. e.g. sphere $g=\|x\|^2-1$: $\nabla g=2x\neq0$ on $M$ → rank 1 → $(n-1)$-dim submanifold; $T_xM=\{v:x^\top v=0\}=x^\perp$, $N_xM=\operatorname{span}\{x\}$.</div>
+
+  <div class="box recipe"><span class="lbl">Recipe · Lagrangian Hessian / bordered system for classification (PS13 P3)</span>
+  Form $L(x,\lambda)=f(x)-\lambda^\top g(x)$. Stationary points solve $\nabla_x L=0,\ g=0$. Classify by the Hessian $H_xL$ restricted to the tangent space $T_xM$ (or via the bordered Hessian). For Newton on constraints, iterate on $F(x,\lambda)=\big(\nabla_xL,\ g\big)$ with Jacobian $\begin{pmatrix}H_xL&-J_g^\top\\J_g&0\end{pmatrix}$.</div>
+
+  <div class="box idea"><span class="lbl">AM–GM via Lagrange (PS13 P1)</span>
+  Maximize $f=x_1\cdots x_n$ on $\sum x_i=n$, $x_i>0$. Stationarity gives $\nabla f=\lambda(1,\dots,1)$, i.e. $\prod_{j\neq i}x_j$ equal for all $i$ ⇒ all $x_i$ equal ⇒ $x_i=1$ ⇒ $f\le1$, equality iff all $x_i=1$. This <em>is</em> AM–GM.</div>
+
+  <div class="practice">
+    <span class="lbl">Practice · Block 9</span>
+    <ol>
+      <li>Find the points of the ellipse $4x^2+y^2=16$ closest to and farthest from the origin (PS12 P2 variant).
+        <details class="sol"><summary>Solution sketch</summary><div class="body">Minimize/maximize $x^2+y^2$ s.t. $4x^2+y^2=16$. $\nabla:(2x,2y)=\lambda(8x,2y)$. Either $x=0$ (⇒ $y=\pm4$, dist 4, farthest) or $y=0$ (⇒ $x=\pm2$, dist 2, closest).</div></details></li>
+      <li>Minimize $f=x^2+y^2+z^2$ s.t. $x+y+z=6,\ x-y=2$ (PS12 P3).
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$\nabla f=\lambda(1,1,1)+\mu(1,-1,0)$ gives $2x=\lambda+\mu,\ 2y=\lambda-\mu,\ 2z=\lambda$. Substitute into $x+y+z=6$: $\tfrac{\lambda+\mu}{2}+\tfrac{\lambda-\mu}{2}+\tfrac{\lambda}{2}=\tfrac{3\lambda}{2}=6\Rightarrow\lambda=4$. And $x-y=\mu=2$. Hence $x=3,\ y=1,\ z=2$, the unique minimizer, with $f=9+1+4=14$.</div></details></li>
+      <li>Show $M=\{x\in\mathbb R^3: x_1^2+x_2^2=1,\ x_3=x_1\}$ is a 1-dim submanifold (PS11 P4).
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$g=(x_1^2+x_2^2-1,\ x_3-x_1)$, $J_g=\begin{pmatrix}2x_1&2x_2&0\\-1&0&1\end{pmatrix}$. On $M$, $(x_1,x_2)\neq(0,0)$, and the two rows are independent (second has a nonzero in column 3 where the first is 0) → rank 2 → $3-2=1$-dim submanifold.</div></details></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ BLOCK 10 ============ -->
+<section id="b10">
+  <h2><span class="tag">Block 10</span>Operator norms &amp; the (von) Neumann series</h2>
+  <div class="maps">Covers <span class="pschip">PS9</span> · textbook §7.5.</div>
+
+  <h3>What to know</h3>
+  <div class="box def"><span class="lbl">Operator norm</span>
+  For linear $A$, $\|A\|=\sup_{\|x\|=1}\|Ax\|$, depending on the chosen norms on domain/codomain.
+  <strong>Sum-norm (1-norm) ⇒ column-sum:</strong> $\|A\|_1=\max_j\sum_i|a_{ij}|$. <strong>Max-norm (∞-norm) ⇒ row-sum:</strong> $\|A\|_\infty=\max_i\sum_j|a_{ij}|$.</div>
+  <div class="box thm"><span class="lbl">Theorem · Neumann series</span>
+  In a Banach algebra $L(B)$, if $\|g\|<1$ then $\mathrm{id}-g$ is invertible and $(\mathrm{id}-g)^{-1}=\sum_{k=0}^\infty g^k$. Finite identity: $\sum_{k=0}^n g^k=(\mathrm{id}-g^{n+1})(\mathrm{id}-g)^{-1}$.</div>
+
+  <h3>Solution logic</h3>
+  <div class="box recipe"><span class="lbl">Recipe · prove $\|A\|_1=$ column-sum (PS9 P1a)</span>
+  <strong>Upper bound:</strong> $\|Ax\|_1=\sum_i|\sum_j a_{ij}x_j|\le\sum_j|x_j|\sum_i|a_{ij}|\le(\max_j\sum_i|a_{ij}|)\|x\|_1$. <strong>Attained:</strong> pick $x=e_{j^*}$ (unit vector at the maximizing column) → $\|Ae_{j^*}\|_1=\sum_i|a_{ij^*}|=$ the max. Equality both ways ⇒ the sup is the column-sum. The $\|A\|_\infty$ proof is the transpose argument with $x=\pm$ signs of the maximizing row.</div>
+
+  <div class="box recipe"><span class="lbl">Recipe · Neumann inverse by hand (PS9 P3a)</span>
+  To invert $A$, write $A=\mathrm{id}-g$ with $\|g\|<1$, then $A^{-1}=\sum_k g^k$. For a diagonal $A=\operatorname{diag}(\tfrac12,\tfrac13,\tfrac14)$: $g=\mathrm{id}-A=\operatorname{diag}(\tfrac12,\tfrac23,\tfrac34)$, and $A^{-1}=\sum_k g^k=\operatorname{diag}\big(\tfrac{1}{1-1/2},\tfrac{1}{1-2/3},\tfrac{1}{1-3/4}\big)=\operatorname{diag}(2,3,4)$. ✓</div>
+
+  <div class="box recipe"><span class="lbl">Recipe · induction for the partial-sum identity (PS9 P2b)</span>
+  Base $n=0$: $\mathrm{id}=(\mathrm{id}-g)(\mathrm{id}-g)^{-1}$ ✓. Step: assume $\sum_0^n g^k=(\mathrm{id}-g^{n+1})(\mathrm{id}-g)^{-1}$; add $g^{n+1}$ and factor to get $(\mathrm{id}-g^{n+2})(\mathrm{id}-g)^{-1}$. This is the matrix/operator version of the geometric-sum formula $\sum_0^n x^k=\frac{1-x^{n+1}}{1-x}$ — that is the connection PS9 P2a points at.</div>
+
+  <div class="box recipe"><span class="lbl">Recipe · a linear functional that is unbounded (PS9 P4)</span>
+  On $C([0,1])$ with $\|f\|=\int_0^1|f|$, the evaluation $S(f)=f(0)$ is linear but not continuous: take $f_n$ a tall thin spike at 0 with $\int|f_n|=\tfrac1n\to0$ but $f_n(0)=1$. So $S(f_n)\not\to0$ while $\|f_n\|\to0$ ⇒ unbounded. With the sup-norm $\|f\|_\infty$ instead, $|S(f)|\le\|f\|_\infty$, so $S$ becomes continuous.</div>
+
+  <div class="practice">
+    <span class="lbl">Practice · Block 10</span>
+    <ol>
+      <li>Give matrices with $\|A\|_1=\|A\|_\infty$, $\|A\|_1>\|A\|_\infty$, $\|A\|_1<\|A\|_\infty$ (PS9 P1c).
+        <details class="sol"><summary>Solution sketch</summary><div class="body">Equal: the identity $I$ (both $=1$), or any symmetric matrix. Greater ($\|A\|_1>\|A\|_\infty$): $A=\begin{pmatrix}3&0\\1&0\end{pmatrix}$ has max column sum $4$ but max row sum $3$. Less ($\|A\|_1<\|A\|_\infty$): the transpose $\begin{pmatrix}3&1\\0&0\end{pmatrix}$ has max column sum $3$, max row sum $4$. (Transposing swaps the two norms, which is the quick way to flip the inequality.)</div></details></li>
+      <li>Use the Neumann series to approximate $(\mathrm{id}-g)^{-1}$ for $g=\begin{pmatrix}0&0.1\\0.2&0\end{pmatrix}$ to 2 terms and bound the error.
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$\|g\|_\infty=0.2<1$. $S_1=I+g=\begin{pmatrix}1&0.1\\0.2&1\end{pmatrix}$. Tail $\le\|g\|^2/(1-\|g\|)=0.04/0.8=0.05$ in $\infty$-norm.</div></details></li>
+      <li>Prove: if $\|g\|<1$, the series $\sum g^k$ converges in operator norm. (Block-10 core.)
+        <details class="sol"><summary>Solution sketch</summary><div class="body">$\|g^k\|\le\|g\|^k$ and $\sum\|g\|^k=\frac{1}{1-\|g\|}<\infty$. By completeness of $L(B)$ and absolute convergence (Weierstrass M-test analog), the partial sums form a Cauchy sequence, hence converge.</div></details></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ JULIA ============ -->
+<section id="julia">
+  <h2><span class="tag">Code</span>Julia template bank</h2>
+  <p>The exam's coding tasks recur with small variations. Re-type these from blank until fluent — don't just read them.</p>
+
+  <h4>$p$-metric &amp; unit-ball scatter (PS1)</h4>
+<pre><span class="cm"># p-metric and unit-ball visualization</span>
+dp(x,y,p) = sum(abs.(x .- y).^p)^(1/p)
+dinf(x,y) = maximum(abs.(x .- y))
+
+<span class="kw">using</span> Plots
+<span class="kw">function</span> unitball(p; N=400)
+    g = range(-1.2, 1.2, N)
+    pts = [(a,b) <span class="kw">for</span> a <span class="kw">in</span> g, b <span class="kw">in</span> g <span class="kw">if</span> dp([a,b],[0,0],p) ≤ 1]
+    scatter(first.(pts), last.(pts), ms=1, legend=false, aspect_ratio=1)
+<span class="kw">end</span></pre>
+  <div class="box pitfall"><span class="lbl">Numerical note (you will hit this)</span>For very large $p$, <code>abs.(x.-y).^p</code> overflows to <code>Inf</code>/<code>NaN</code> before the $1/p$ root rescues it. To illustrate the $d_p\to d_\infty$ limit safely, factor out the max first: $d_p=m\big(\sum_k(|x_k-y_k|/m)^p\big)^{1/p}$ with $m=d_\infty$. This is also the cleaner way to <em>prove</em> the limit.</div>
+
+  <h4>Curve length: polygonal + midpoint (PS3)</h4>
+<pre><span class="kw">using</span> ForwardDiff, LinearAlgebra
+polylen(f; n=1000) = (t=range(0,1,n); sum(norm(f(t[j+1])-f(t[j])) <span class="kw">for</span> j <span class="kw">in</span> 1:n-1))
+<span class="kw">function</span> midlen(f; n=1000)
+    t = range(0,1,n+1); h = step(t)
+    sum(norm(ForwardDiff.derivative(f, (t[j]+t[j+1])/2)) <span class="kw">for</span> j <span class="kw">in</span> 1:n) * h
+<span class="kw">end</span></pre>
+
+  <h4>Affine approximation of a curve (PS3)</h4>
+<pre><span class="kw">function</span> affineApprox(f, t0)
+    df0 = ForwardDiff.derivative(f, t0)
+    h -> f(t0) .+ h .* df0
+<span class="kw">end</span></pre>
+
+  <h4>Gradient descent / SGD / mini-batch (PS7 P4)</h4>
+<pre><span class="kw">function</span> gd(∇f, x0; η=0.01, N=50_000)
+    x = copy(x0); hist = Float64[]
+    <span class="kw">for</span> k <span class="kw">in</span> 1:N
+        x -= η .* ∇f(x); push!(hist, fval(x))
+    <span class="kw">end</span>
+    x, hist
+<span class="kw">end</span>
+<span class="cm"># SGD: use one term ∇f_i(x) chosen by i = 1 + (k % n)</span>
+<span class="cm"># mini-batch: average ∇f_i over a batch B_k of size m</span></pre>
+
+  <h4>Newton 1-D with history (PS8 P4)</h4>
+<pre><span class="kw">function</span> myNewton(f, x0, tol, maxiter)
+    df(x) = ForwardDiff.derivative(f, x)
+    x = x0; iters = [x0]
+    <span class="kw">for</span> k <span class="kw">in</span> 1:maxiter
+        xn = x - f(x)/df(x); push!(iters, xn)
+        abs(xn - x) < tol && <span class="kw">return</span> xn, k, iters
+        x = xn
+    <span class="kw">end</span>
+    x, maxiter, iters
+<span class="kw">end</span></pre>
+
+  <h4>Newton in $\mathbb R^n$ (PS10)</h4>
+<pre><span class="kw">function</span> newtonND(f, x0; tol=1e-12, maxiter=50)
+    x = copy(x0)
+    <span class="kw">for</span> k <span class="kw">in</span> 1:maxiter
+        J = ForwardDiff.jacobian(f, x); F = f(x)
+        norm(F) < tol && <span class="kw">return</span> x, k
+        x += J \ (-F)         <span class="cm"># solve J Δ = -F</span>
+    <span class="kw">end</span>
+    x, maxiter
+<span class="kw">end</span></pre>
+
+  <h4>von Neumann inverse (PS9)</h4>
+<pre><span class="kw">function</span> myNeumann(A; n=150)
+    g = I - A; S = zero(A) + I; gk = copy(g) <span class="cm"># S = I, gk = g</span>
+    <span class="kw">for</span> k <span class="kw">in</span> 1:n
+        S += gk; gk *= g
+    <span class="kw">end</span>
+    S                          <span class="cm"># ≈ A^{-1} when ‖I-A‖ < 1</span>
+<span class="kw">end</span>
+<span class="cm"># PS9 P2a connection: the scalar geometric sum sum_{k=0}^n x^k</span>
+<span class="cm"># is myNeumann applied to the 1x1 "matrix" A = 1 - x, since</span>
+<span class="cm"># sum x^k = (1-x)^{-1} = A^{-1} when |x| < 1.</span>
+myGeometricSum(x, n) = myNeumann(fill(1 - x, 1, 1); n=n)[1]</pre>
+
+  <h4>Constrained Newton via Lagrangian (PS13)</h4>
+<pre><span class="kw">function</span> newtonConstrained(f, g, x0, λ0; tol=1e-10, maxiter=30)
+    x = copy(x0); λ = copy(λ0); n = length(x); r = length(λ)
+    <span class="kw">for</span> k <span class="kw">in</span> 1:maxiter
+        ∇f = ForwardDiff.gradient(f, x)
+        G  = ForwardDiff.jacobian(g, x)
+        L(z) = f(z) - dot(λ, g(z))
+        H  = ForwardDiff.hessian(L, x)
+        F  = vcat(∇f - G'λ, g(x))
+        norm(F) < tol && <span class="kw">return</span> x, λ, k
+        K = [H -G'; G zeros(r,r)]
+        Δ = K \ (-F)
+        x += Δ[1:n]; λ += Δ[n+1:end]
+    <span class="kw">end</span>
+    x, λ, maxiter
+<span class="kw">end</span></pre>
+</section>
+
+<!-- ============ CHEAT SHEET ============ -->
+<section id="cheats">
+  <h2><span class="tag">Condense</span>One-page cheat sheet</h2>
+  <table>
+    <tr><th>Need</th><th>Key object / formula</th><th>Where</th></tr>
+    <tr><td>Length of curve</td><td>$\ell(\gamma)=\int_0^1\|\gamma'(t)\|_2\,dt$; metric deriv $=\|\gamma'(t)\|_2$</td><td>PS3</td></tr>
+    <tr><td>Affine approx (scalar)</td><td>$f(x_0)+\nabla f(x_0)^\top(x-x_0)$</td><td>PS4,5</td></tr>
+    <tr><td>Affine approx (vector)</td><td>$f(x_0)+J_f(x_0)(x-x_0)$</td><td>PS5</td></tr>
+    <tr><td>Chain rule</td><td>$J_{g\circ f}=J_g(f)\,J_f$</td><td>PS5</td></tr>
+    <tr><td>Least squares</td><td>$\nabla\|Ax-b\|^2=2A^\top(Ax-b)$; min ⇔ $A^\top Ax=A^\top b$</td><td>PS5,7,10</td></tr>
+    <tr><td>2nd-order Taylor</td><td>$f_0+\nabla f_0^\top h+\tfrac12 h^\top H_f h+o(\|h\|^2)$</td><td>PS6,7</td></tr>
+    <tr><td>2×2 classification</td><td>$\det H>0,a>0$ min; $\det H>0,a<0$ max; $\det H<0$ saddle</td><td>PS6,7,8</td></tr>
+    <tr><td>Convex (C²)</td><td>$H_f\succeq0$; closed under $+$, nonneg scale, max, affine precomp.</td><td>PS7</td></tr>
+    <tr><td>GD step</td><td>$x_{k+1}=x_k-\eta\nabla f$; stable $0<\eta<2/\lambda_{\max}(H)$</td><td>PS7,13</td></tr>
+    <tr><td>Newton 1-D / ND</td><td>$x-f/f'$ ; $x-J_f^{-1}f$ (solve $J\Delta=-f$)</td><td>PS8,10</td></tr>
+    <tr><td>IFT slope</td><td>$g'(x)=-\partial_xF/\partial_yF$</td><td>PS11</td></tr>
+    <tr><td>Submanifold</td><td>$g^{-1}(0)$, $\operatorname{rank}J_g=r$ → dim $n-r$; $T_xM=\ker J_g$</td><td>PS11,12,13</td></tr>
+    <tr><td>Lagrange</td><td>$\nabla f=\sum\lambda_i\nabla g_i,\ g=0$</td><td>PS12,13</td></tr>
+    <tr><td>Operator norms</td><td>$\|A\|_1=$ max col sum; $\|A\|_\infty=$ max row sum</td><td>PS9</td></tr>
+    <tr><td>Neumann</td><td>$\|g\|<1\Rightarrow(\mathrm{id}-g)^{-1}=\sum g^k$</td><td>PS9</td></tr>
+  </table>
+
+  <h4>The six results you must be able to PROVE cold</h4>
+  <ol>
+    <li>Continuity $\iff$ preimages of open sets are open (PS1 P3).</li>
+    <li>$\ell(\gamma)=\int\|\gamma'\|$ and $|\dot\gamma|=\|\gamma'\|$ (Block 3).</li>
+    <li>The three convexity closure rules (PS7 P3).</li>
+    <li>$\nabla\|Ax-b\|^2=2A^\top(Ax-b)$ and the normal-equation characterization (PS5 P2).</li>
+    <li>$\|A\|_1=$ column-sum / $\|A\|_\infty=$ row-sum (PS9 P1).</li>
+    <li>Neumann partial-sum identity by induction (PS9 P2b).</li>
+  </ol>
+</section>
+
+<!-- ============ CHECKPOINT MOCK ============ -->
+<section id="mock">
+  <h2><span class="tag">Self-grade</span>Checkpoint mock (days 7 &amp; 15)</h2>
+  <p>Twelve problems spanning every block, sized for ~90 minutes closed-book. Verified answers are hidden — attempt on paper first, then expand. These are deliberately phrased like the real problem sets.</p>
+  <div class="practice">
+    <span class="lbl">Mock · attempt before expanding</span>
+    <ol>
+      <li>Show $d_\infty$ is a metric on $\mathbb R^n$, then prove $d_\infty\le d_p$.
+        <details class="sol"><summary>Answer</summary><div class="body">M1/M2 trivial; M3 from per-coordinate triangle inequality then max over $k$. $d_\infty\le d_p$ because one term already dominates: $d_\infty^p=\max_k|x_k-y_k|^p\le\sum_k|x_k-y_k|^p=d_p^p$.</div></details></li>
+      <li>Is $f(x)=\tfrac14(x^2+1)$ a contraction on $[0,1]$? Find its fixed point.
+        <details class="sol"><summary>Answer</summary><div class="body">$|f'|=|x/2|\le\tfrac12<1$ and $f([0,1])\subseteq[\tfrac14,\tfrac12]$, so yes ($L=\tfrac12$). Fixed point: $x=\tfrac14(x^2+1)\Rightarrow x^2-4x+1=0\Rightarrow x=2-\sqrt3\approx0.268$.</div></details></li>
+      <li>Length of $\gamma(t)=(t,\tfrac23 t^{3/2})$ on $[0,1]$.
+        <details class="sol"><summary>Answer</summary><div class="body">$\|\gamma'\|=\sqrt{1+t}$, $\ell=\tfrac23(2\sqrt2-1)\approx1.219$.</div></details></li>
+      <li>$f(x,y)=x^2y+y^2$. Give $\nabla f$ and the affine approximation at $(1,1)$.
+        <details class="sol"><summary>Answer</summary><div class="body">$\nabla f=(2xy,\,x^2+2y)\to(2,3)$; $f(1,1)=2$. $F(x,y)=2+2(x-1)+3(y-1)$.</div></details></li>
+      <li>$L(x)=\|Ax-b\|^2$. Derive $\nabla L$ and the minimizer condition.
+        <details class="sol"><summary>Answer</summary><div class="body">$\nabla L=2A^\top(Ax-b)$; global min $\iff A^\top Ax=A^\top b$ (Hessian $2A^\top A\succeq0$ ⇒ convex).</div></details></li>
+      <li>Classify all critical points of $f=x^4+y^4-2x^2-2y^2$.
+        <details class="sol"><summary>Answer</summary><div class="body">9 critical points. $(0,0)$ max; $(\pm1,\pm1)$ minima; $(0,\pm1),(\pm1,0)$ saddles. (Hessian $\operatorname{diag}(12x^2-4,12y^2-4)$.)</div></details></li>
+      <li>Prove the pointwise max of convex functions is convex.
+        <details class="sol"><summary>Answer</summary><div class="body">For each $i$: $f_i(\lambda x+(1-\lambda)y)\le\lambda f_i(x)+(1-\lambda)f_i(y)\le\lambda g(x)+(1-\lambda)g(y)$. Take max over $i$ on the left.</div></details></li>
+      <li>For GD on $f(x,y)=x^2+2xy+5y^2$ written $u_{k+1}=A_\tau u_k$, find all $\tau$ with $u_k\to0$.
+        <details class="sol"><summary>Answer</summary><div class="body">$A_\tau=I-2\tau Q$, $Q=\begin{pmatrix}1&1\\1&5\end{pmatrix}$, eigenvalues $3\pm\sqrt5$. Need $|1-2\tau\mu|<1$ both ⇒ $0<\tau<\tfrac{1}{3+\sqrt5}\approx0.191$.</div></details></li>
+      <li>Two Newton steps for $f(x,y)=(x^2+y^2-1,\ x-y)$ from $(1,\tfrac12)$.
+        <details class="sol"><summary>Answer</summary><div class="body">$X_1=(0.75,0.75)$, $X_2\approx(0.7083,0.7083)$; true root $(1/\sqrt2,1/\sqrt2)\approx(0.7071,0.7071)$, error $\approx1.2\times10^{-3}$.</div></details></li>
+      <li>Use the IFT on $x^3+x-2y=0$ to express $y=g(x)$ and give $g'$.
+        <details class="sol"><summary>Answer</summary><div class="body">$\partial_y f=-2\neq0$ everywhere ⇒ IFT applies. $y=g(x)=\tfrac12(x^3+x)$, $g'(x)=\tfrac12(3x^2+1)$.</div></details></li>
+      <li>Extrema of $f=xyz$ on $x^2+y^2+z^2=12$.
+        <details class="sol"><summary>Answer</summary><div class="body">Lagrange ⇒ $x^2=y^2=z^2=4$. Max $f=8$, min $f=-8$ at $(\pm2,\pm2,\pm2)$ (sign of product decides).</div></details></li>
+      <li>Prove $\|A\|_\infty$ equals the maximum row sum.
+        <details class="sol"><summary>Answer</summary><div class="body">$\|Ax\|_\infty=\max_i|\sum_j a_{ij}x_j|\le\max_i\sum_j|a_{ij}|\,\|x\|_\infty$. Attained at $x_j=\operatorname{sign}(a_{i^*j})$ for the max-sum row $i^*$, giving equality.</div></details></li>
+    </ol>
+  </div>
+  <div class="callout"><strong>Grading guide:</strong> 10+/12 → on track for a strong result; 7–9 → solid, drill the missed blocks; ≤6 → repeat the relevant Week-1/2 days before moving on. Re-take a fresh shuffle on day 15.</div>
+</section>
+
+<!-- ============ EXAM STRATEGY ============ -->
+<section id="exam">
+  <h2><span class="tag">Game day</span>Exam-day strategy</h2>
+  <ul>
+    <li><strong>Triage first.</strong> Scan all problems; the compute-heavy ones (gradients, Hessian classification, Lagrange, Newton steps) are fastest points — bank them before any proof.</li>
+    <li><strong>Show the recipe explicitly.</strong> For classification: state $\nabla f=0$ solutions, write $H_f$, then conclude. Partial credit lives in the visible steps.</li>
+    <li><strong>Simplify under the root before integrating</strong> on any length problem — if the radicand isn't collapsing, recheck your derivative.</li>
+    <li><strong>Dimension-check every matrix product.</strong> Gradient column vs derivative row is the most common silent error.</li>
+    <li><strong>For "justify/interpret" prompts</strong> (e.g. Newton as linearization), one clean sentence plus the tangent-root computation is the full answer.</li>
+    <li><strong>For convexity / submanifold / norm proofs,</strong> lead with the one key inequality or rank statement; don't pad.</li>
+    <li><strong>Budget Julia answers:</strong> a correct loop skeleton with the right update line scores even if syntax is imperfect. Write the math of the update as a comment.</li>
+    <li><strong>Leave 5 minutes</strong> to re-evaluate $f$ at each Lagrange candidate — forgetting to compare values is how max/min get swapped.</li>
+  </ul>
+</section>
+
+<!-- ============ RESOURCES ============ -->
+<section id="resources">
+  <h2><span class="tag">Go deeper</span>External resources, ranked</h2>
+  <div class="res">
+    <div class="r"><b>3Blue1Brown — Essence of Calculus &amp; Essence of Linear Algebra</b> <span class="w">(YouTube, free)</span><br>Best intuition for derivative-as-scaling, gradient, Jacobian, and the geometry behind gradient descent. Watch the gradient/Jacobian clips before Block 4–5.</div>
+    <div class="r"><b>Boyd &amp; Vandenberghe — <em>Convex Optimization</em></b> <span class="w">(free PDF, stanford.edu/~boyd/cvxbook)</span><br>§3 convexity, §5 Lagrangian. Directly covers Blocks 6, 7, 9.</div>
+    <div class="r"><b>Stephen Boyd — Stanford EE364A lectures</b> <span class="w">(free video + slides)</span><br>Gradient methods, Newton's method, convergence rates. Pair with Blocks 7–8.</div>
+    <div class="r"><b>MIT OCW 18.02 Multivariable Calculus</b> <span class="w">(free)</span><br>Partial derivatives, second-derivative test, Lagrange multipliers, implicit differentiation. Backbone for Blocks 4, 5, 9.</div>
+    <div class="r"><b>Terence Tao — <em>Analysis II</em></b> <span class="w">(text)</span><br>Rigorous metric-space topology, continuity, connectedness — the proof style for Blocks 1–2.</div>
+    <div class="r"><b>Charles Pugh — <em>Real Mathematical Analysis</em></b> <span class="w">(text)</span><br>Clean treatments of continuity, the IFT/Inverse FT, and multivariable differentiation. Blocks 2, 8.</div>
+    <div class="r"><b>Ehler — <em>Mathematical Structures of Computation</em>, ch. 11 &amp; §7.5</b> <span class="w">(your primary text)</span><br>The exam tracks this directly; everything else is for intuition. Always reconcile external material back to its definitions and notation.</div>
+  </div>
+  <hr class="rule">
+  <p class="muted" style="font-size:14px">Built from your 13 problem sets and the course text. Treat the practice problems as the core — re-derive, don't re-read. Update this guide's living sections as new problem sets arrive.</p>
+</section>
+
+</main>
+</div>
+
+<div id="progress"></div>
+<div id="overlay"></div>
+<button id="toTop" aria-label="Back to top">↑</button>
+<div class="topbar">
+  <button class="ham" aria-label="Open navigation">☰</button>
+  <span class="ttl">Analysis · Study Guide</span>
+  <span class="spacer"></span>
+  <button class="btn-ui js-theme" aria-label="Toggle dark mode" style="padding:6px 10px">◐</button>
+</div>
+
+<script>
+(function(){
+  var root = document.documentElement, body = document.body;
+
+  /* ---- theme (persisted, respects system preference) ---- */
+  var saved = localStorage.getItem('asg-theme');
+  if (saved) root.setAttribute('data-theme', saved);
+  else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    root.setAttribute('data-theme', 'dark');
+  function syncLabels(){
+    var dark = root.getAttribute('data-theme') === 'dark';
+    document.querySelectorAll('.js-theme .tl').forEach(function(el){ el.textContent = dark ? 'Light' : 'Dark'; });
+    document.querySelectorAll('.js-theme .ti').forEach(function(el){ el.textContent = dark ? '☀' : '◐'; });
+  }
+  function toggleTheme(){
+    var dark = root.getAttribute('data-theme') === 'dark';
+    if (dark) root.removeAttribute('data-theme'); else root.setAttribute('data-theme','dark');
+    localStorage.setItem('asg-theme', dark ? 'light' : 'dark');
+    syncLabels();
+  }
+  document.querySelectorAll('.js-theme').forEach(function(b){ b.addEventListener('click', toggleTheme); });
+  syncLabels();
+
+  /* ---- reading progress + back-to-top ---- */
+  var prog = document.getElementById('progress'), toTop = document.getElementById('toTop');
+  function onScroll(){
+    var st = window.scrollY || root.scrollTop;
+    var sh = root.scrollHeight - root.clientHeight;
+    prog.style.width = (sh > 0 ? (st / sh * 100) : 0) + '%';
+    toTop.classList.toggle('show', st > 420);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  toTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  /* ---- mobile off-canvas nav ---- */
+  function closeNav(){ body.classList.remove('nav-open'); }
+  function openNav(){ body.classList.add('nav-open'); }
+  var ham = document.querySelector('.topbar .ham');
+  if (ham) ham.addEventListener('click', openNav);
+  document.getElementById('overlay').addEventListener('click', closeNav);
+  var navClose = document.querySelector('nav .nav-close');
+  if (navClose) navClose.addEventListener('click', closeNav);
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeNav(); });
+
+  /* ---- scrollspy: highlight current section in nav ---- */
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav a[href^="#"]'));
+  var map = {};
+  links.forEach(function(a){
+    var id = a.getAttribute('href').slice(1), el = document.getElementById(id);
+    if (el) map[id] = a;
+    a.addEventListener('click', function(){ if (window.innerWidth <= 900) closeNav(); });
+  });
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){
+          links.forEach(function(a){ a.classList.remove('active'); });
+          if (map[e.target.id]) map[e.target.id].classList.add('active');
+        }
+      });
+    }, {rootMargin:'-45% 0px -50% 0px', threshold:0});
+    Object.keys(map).forEach(function(id){ io.observe(document.getElementById(id)); });
+  }
+
+  /* ---- copy buttons on code blocks ---- */
+  document.querySelectorAll('pre').forEach(function(pre){
+    var original = pre.innerText;
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn'; btn.type = 'button'; btn.textContent = 'Copy';
+    btn.addEventListener('click', function(){
+      navigator.clipboard.writeText(original).then(function(){
+        btn.textContent = 'Copied'; btn.classList.add('done');
+        setTimeout(function(){ btn.textContent = 'Copy'; btn.classList.remove('done'); }, 1400);
+      });
+    });
+    pre.appendChild(btn);
+  });
+
+  /* ---- make wide tables scroll within themselves instead of overflowing the page ---- */
+  document.querySelectorAll('main table').forEach(function(t){
+    if (t.parentElement && t.parentElement.classList.contains('scroll-x')) return;
+    var w = document.createElement('div');
+    w.className = 'scroll-x';
+    t.parentNode.insertBefore(w, t);
+    w.appendChild(t);
+  });
+})();
+</script>
+</body>
+</html>
