@@ -4,8 +4,6 @@ A practice-first study guide for *Analysis in Data Science* (Ehler, *Mathematica
 Structures of Computation*, ch. 11 & §7.5), organized into ten topic blocks tied to
 the course's 13 problem sets.
 
-**Live page:** open [`index.html`](index.html) in a browser, or enable GitHub Pages
-(Settings → Pages → deploy from `main` / root) to serve it at
 `https://kulchankas.github.io/analysis/`.
 
 ## Features
