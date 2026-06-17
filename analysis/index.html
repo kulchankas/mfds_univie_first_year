@@ -126,6 +126,41 @@
     padding: 0.15rem 0.45rem;
   }
   .grid-sets { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.6rem; }
+  .feature {
+    display: block;
+    background: linear-gradient(180deg, var(--bg-card), var(--bg-elevated));
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: clamp(1.4rem, 4vw, 1.9rem);
+    text-decoration: none;
+    color: inherit;
+    margin: 1.75rem 0 0.5rem;
+    transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .feature:hover, .feature:focus-visible {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    outline: none;
+  }
+  .feature-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 0.7rem;
+  }
+  .feature-title {
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.3rem, 4.5vw, 1.7rem);
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    margin-bottom: 0.6rem;
+  }
+  .feature-desc { color: var(--text-muted); font-size: 0.96rem; margin-bottom: 1.1rem; }
+  .feature-cta { font-weight: 600; font-size: 0.9rem; color: var(--accent); display: inline-flex; align-items: center; gap: 0.45rem; }
   footer {
     margin-top: clamp(3rem, 8vw, 4.5rem);
     padding-top: 1.5rem;
@@ -147,7 +182,14 @@
 
   <div class="eyebrow">Universität Wien · Analysis</div>
   <h1>Analysis</h1>
-  <p class="lede">Lecture notes and the complete problem-set archive. PDFs open in your browser.</p>
+  <p class="lede">A full exam study guide, plus lecture notes and the complete problem-set archive.</p>
+
+  <a class="feature" href="study-guide/">
+    <div class="feature-tag">★ Exam study guide</div>
+    <div class="feature-title">Analysis in Data Science — Exam Study Guide</div>
+    <p class="feature-desc">Ten topic blocks (metric spaces → operator norms) with state / prove / compute framing, worked recipes, practice problems with hidden solutions, a 2.5-week plan, and a one-page cheat sheet.</p>
+    <span class="feature-cta">Open study guide →</span>
+  </a>
 
   <h2>Lecture notes</h2>
   <div class="doc-list">
