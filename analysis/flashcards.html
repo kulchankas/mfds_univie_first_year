@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a1612">
+<meta name="description" content="Spaced-repetition flashcards for Analysis — Day 1: metric spaces, completeness & compactness (Book Project pp. 11–23).">
+<title>Flashcards — Analysis (spaced repetition)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, startup: { typeset: false } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --bg: #1a1612; --bg-elevated: #221d18; --bg-card: #1f1a15;
+    --border: #3a342c; --border-soft: #2a251f;
+    --text: #f5efe4; --text-muted: #b8aa97; --text-dim: #8a7e6e;
+    --accent: #e0b888; --accent-hover: #ecc89c;
+    --again: #c87060; --hard: #d99a7e; --good: #8bc6a0; --easy: #8fb8de;
+    --glow: rgba(224, 184, 136, 0.14);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    -webkit-font-smoothing: antialiased; min-height: 100vh;
+    background-image: radial-gradient(900px 500px at 50% -10%, var(--glow), transparent 70%);
+    background-repeat: no-repeat;
+  }
+  .wrap {
+    max-width: 720px; margin: 0 auto;
+    padding: clamp(1.5rem, 5vw, 2.5rem) clamp(1.1rem, 5vw, 1.75rem) 4rem;
+    padding-left: max(clamp(1.1rem,5vw,1.75rem), env(safe-area-inset-left));
+    padding-right: max(clamp(1.1rem,5vw,1.75rem), env(safe-area-inset-right));
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: .4rem; color: var(--text-dim);
+    text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: .8rem;
+    letter-spacing: .02em; margin-bottom: 1.5rem; transition: color .15s ease;
+  }
+  .back-link:hover { color: var(--accent); }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace; font-weight: 500; color: var(--accent);
+    font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .8rem;
+  }
+  h1 { font-family: 'Sora', sans-serif; font-weight: 600; font-size: clamp(1.8rem, 6vw, 2.4rem);
+    letter-spacing: -.03em; line-height: 1.08; margin-bottom: .5rem; }
+  .sub { color: var(--text-muted); font-size: .98rem; margin-bottom: 1.5rem; }
+
+  .stats { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin-bottom: 1rem;
+    font-family: 'JetBrains Mono', monospace; font-size: .82rem; color: var(--text-dim); }
+  .stats b { color: var(--accent); font-weight: 700; }
+  .bar { height: 6px; background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 99px; overflow: hidden; margin-bottom: 1.5rem; }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s ease; }
+
+  .card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
+    padding: clamp(1.5rem, 5vw, 2.2rem); min-height: 240px;
+    display: flex; flex-direction: column;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.28);
+  }
+  .card-meta { display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: .72rem; }
+  .chip { text-transform: uppercase; letter-spacing: .06em; font-weight: 700;
+    padding: .15rem .55rem; border-radius: 5px; border: 1px solid var(--border); color: var(--accent); background: var(--bg-elevated); }
+  .chip.def { color: var(--accent); }
+  .chip.thm { color: var(--good); border-color: rgba(139,198,160,.4); }
+  .chip.lemma { color: var(--easy); border-color: rgba(143,184,222,.4); }
+  .chip.example { color: var(--hard); border-color: rgba(217,154,126,.4); }
+  .card-ref { color: var(--text-dim); }
+  .q { font-size: 1.12rem; line-height: 1.55; }
+  .q b { color: var(--accent); }
+  .divider { border: none; border-top: 1px dashed var(--border); margin: 1.2rem 0; }
+  .a { color: var(--text-muted); font-size: 1rem; line-height: 1.65; }
+  .a b, .a strong { color: var(--text); font-weight: 600; }
+  .hidden { display: none !important; }
+
+  .controls { margin-top: 1.5rem; }
+  .btn {
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: .95rem;
+    border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text);
+    border-radius: 10px; padding: .8rem 1rem; cursor: pointer; width: 100%;
+    transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:hover { border-color: var(--accent); }
+  .btn:active { transform: scale(.985); }
+  .btn.primary { background: var(--accent); color: #221a10; border-color: var(--accent); }
+  .grades { display: grid; grid-template-columns: repeat(4, 1fr); gap: .55rem; }
+  .grades .btn { padding: .7rem .3rem; font-size: .86rem; }
+  .grades .btn small { display: block; font-family: 'JetBrains Mono', monospace; font-weight: 400;
+    font-size: .68rem; opacity: .65; margin-top: .15rem; }
+  .g-again { border-color: rgba(200,112,96,.5); color: var(--again); }
+  .g-hard  { border-color: rgba(217,154,126,.5); color: var(--hard); }
+  .g-good  { border-color: rgba(139,198,160,.5); color: var(--good); }
+  .g-easy  { border-color: rgba(143,184,222,.5); color: var(--easy); }
+  .hint { text-align: center; color: var(--text-dim); font-size: .76rem; margin-top: 1rem;
+    font-family: 'JetBrains Mono', monospace; }
+  .done { text-align: center; padding: 2rem 1rem; }
+  .done h2 { font-family: 'Sora', sans-serif; font-weight: 600; margin-bottom: .6rem; }
+  .done p { color: var(--text-muted); margin-bottom: 1.3rem; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; max-width: 420px; margin: 0 auto; }
+  .reset { background: none; border: none; color: var(--text-dim); font-size: .76rem;
+    font-family: 'JetBrains Mono', monospace; cursor: pointer; margin-top: 2rem; text-decoration: underline; }
+  .reset:hover { color: var(--again); }
+  footer { margin-top: 3rem; padding-top: 1.3rem; border-top: 1px solid var(--border-soft);
+    color: var(--text-dim); font-size: .82rem; }
+  footer a { color: var(--accent); text-decoration: none; }
+  mjx-container { color: inherit !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="index.html">← Analysis</a>
+  <div class="eyebrow">Analysis · Spaced repetition</div>
+  <h1>Flashcards</h1>
+  <p class="sub"><b style="color:var(--accent)">Day 1</b> — Metric spaces, completeness &amp; compactness. Extracted from <a href="notes/Book_Project.pdf" style="color:var(--accent)">Book Project</a> pp. 11–23. More days will be added.</p>
+
+  <div class="stats" id="stats"></div>
+  <div class="bar"><i id="prog"></i></div>
+
+  <div id="app"></div>
+
+  <button class="reset" id="reset">Reset all progress for this deck</button>
+
+  <footer>
+    Leitner-style scheduling, stored locally in your browser — no account, nothing leaves your device.
+    Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+
+<!-- ===== Card source (literal HTML so the LaTeX survives) ===== -->
+<div id="src" hidden>
+
+  <article data-tag="Definition" data-ref="§1.1.1 · p.11">
+    <div class="q">Define a <b>metric</b> $d$ on a set $X\neq\emptyset$, and when $(X,d)$ is a metric space.</div>
+    <div class="a">$d:X\times X\to[0,\infty)$ is a <b>metric</b> if for all $x,y,z$: <b>(M1)</b> symmetry $d(x,y)=d(y,x)$; <b>(M2)</b> triangle inequality $d(x,z)\le d(x,y)+d(y,z)$; <b>(M3)</b> definiteness $d(x,y)=0\iff x=y$. Then $(X,d)$ is a <b>metric space</b>.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="§1.1.3 · p.11">
+    <div class="q">When does a sequence $(x_n)\subseteq X$ <b>converge</b> to $x$ in a metric space?</div>
+    <div class="a">$x_n\to x$ iff $\forall\varepsilon>0\ \exists N\ \forall n\ge N:\ d(x_n,x)\le\varepsilon$. Equivalently $d(x_n,x)\to 0$.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 1.1.6 · p.12">
+    <div class="q">If $x_n\to x$ and $x_n\to x'$ in a metric space — conclusion, and the one-line proof?</div>
+    <div class="a"><b>Limits are unique:</b> $x=x'$. Proof: $d(x,x')\le d(x,x_n)+d(x_n,x')\to 0$, so $d(x,x')=0$, hence $x=x'$.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="§1.1.7 · p.13">
+    <div class="q">Define <b>order $r>1$</b>, <b>linear</b>, and <b>sublinear</b> convergence of $x_k\to x$.</div>
+    <div class="a">Order $r$: $\exists c>0:\ d(x_{k+1},x)\le c\,d(x_k,x)^r$. &nbsp;Linear: $\exists c\in(0,1):\ d(x_{k+1},x)\le c\,d(x_k,x)$. &nbsp;Sublinear: $\limsup_k d(x_k,x)^{1/k}=1$.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="§1.1.10 · p.14">
+    <div class="q">What is an <b>isometry</b> $f:X\to Y$?</div>
+    <div class="a">$d_Y(f(x),f(x'))=d_X(x,x')$ for all $x,x'$ — it <b>preserves distances</b>.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="§1.1.11 · p.14">
+    <div class="q">When is a sequence (or subset) in a metric space <b>bounded</b>?</div>
+    <div class="a">$\exists x\in X,\ C>0:\ d(x_n,x)\le C$ for all $n$ (resp. $d(s,x)\le C$ for all $s\in S$). The anchor point $x$ is arbitrary — changing it only changes $C$.</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="Lem 1.1.12 · p.14">
+    <div class="q">Why is every <b>convergent</b> sequence <b>bounded</b>?</div>
+    <div class="a">Past some $N$, $d(x_n,x)<1$; then $d(x_n,x)\le\max\{d(x_1,x),\dots,d(x_{N-1},x),1\}$ for all $n$.</div>
+  </article>
+
+  <article data-tag="Example" data-ref="§1.1.13–14 · p.14–15">
+    <div class="q">Give the <b>taxicab</b>, <b>maximum</b>, and <b>discrete</b> metrics.</div>
+    <div class="a">Taxicab: $d_1(x,y)=|x_1-y_1|+|x_2-y_2|$. &nbsp;Maximum: $d_{\max}(x,y)=\max\{|x_1-y_1|,|x_2-y_2|\}$. &nbsp;Discrete: $d(x,y)=0$ if $x=y$, else $1$ (converges $\iff$ eventually constant).</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="Lem 1.1.15 · p.15">
+    <div class="q">In $\mathbb R$, when does monotonicity force convergence?</div>
+    <div class="a">A sequence that is <b>monotonically increasing and bounded above converges</b> (to its supremum). Uses order-completeness of $\mathbb R$.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 1.1.17 · p.16">
+    <div class="q">State the density of $\mathbb Q$ in $\mathbb R$.</div>
+    <div class="a">For every $x\in\mathbb R$ there is $(x_n)\subseteq\mathbb Q$ with $x_n\to x$. We say <b>$\mathbb Q$ is dense in $\mathbb R$</b>.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="§1.2.1 · p.17">
+    <div class="q">Define a <b>Cauchy sequence</b>.</div>
+    <div class="a">$\forall\varepsilon>0\ \exists N\ \forall n,m\ge N:\ d(x_n,x_m)\le\varepsilon$ — terms get arbitrarily close <em>to each other</em>, no limit required.</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="Lem 1.2.3 · p.17">
+    <div class="q">Relationship between <b>convergent</b> and <b>Cauchy</b> sequences?</div>
+    <div class="a">Every convergent sequence is Cauchy. (The converse holds only in <b>complete</b> spaces.)</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="§1.2.5 · p.18">
+    <div class="q">When is a metric space <b>complete</b>?</div>
+    <div class="a">When <b>every Cauchy sequence converges</b> to a limit inside the space.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="1.2.6–1.2.8 · p.18–19">
+    <div class="q">Which of $\mathbb Q,\ \mathbb R,\ \mathbb C$ are complete?</div>
+    <div class="a"><b>$\mathbb R$ and $\mathbb C$ are complete; $\mathbb Q$ is not.</b> Counterexample: the iteration $x_{n+1}=\tfrac12(x_n+2/x_n)$ is Cauchy in $\mathbb Q$ but $\to\sqrt 2\notin\mathbb Q$.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="§1.2.10–11 · p.20">
+    <div class="q">What is a <b>subsequence</b>, and how does it relate to convergence?</div>
+    <div class="a">$(x_{n_j})_j$ via strictly increasing indices $n_0<n_1<\cdots$. If $x_n\to x$, then <b>every subsequence $\to x$</b>.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 1.2.13 · p.20">
+    <div class="q">State <b>Bolzano–Weierstraß</b>.</div>
+    <div class="a">Every <b>bounded</b> sequence in $\mathbb R$ has a <b>convergent subsequence</b>. (Proof by repeated interval bisection / nested intervals.)</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="§1.3.1 · p.21">
+    <div class="q">Define <b>(sequential) compactness</b> of a metric space $X$.</div>
+    <div class="a">Every sequence in $X$ has a subsequence converging to a limit <b>in $X$</b> — sequences cannot "escape" the space.</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="Lem 1.3.2 · p.21">
+    <div class="q">Does <b>compact</b> imply <b>complete</b>?</div>
+    <div class="a">Yes. A Cauchy sequence has a convergent subsequence (compactness), and a Cauchy sequence with a convergent subsequence converges.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="§1.3.3 · p.22">
+    <div class="q">Define the ball $B_\varepsilon(x)$ and the open (interior) ball $\mathring B_\varepsilon(x)$.</div>
+    <div class="a">$B_\varepsilon(x)=\{y\in X: d(x,y)\le\varepsilon\}$ (this text's $B$ is the <b>closed</b> ball); $\mathring B_\varepsilon(x)=\{y: d(x,y)<\varepsilon\}$ (open).</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="§1.3.3 · p.22">
+    <div class="q">Define <b>open</b>, <b>closed</b>, and <b>neighborhood</b>.</div>
+    <div class="a">$S$ <b>open</b>: $\forall x\in S\ \exists\varepsilon>0:\ B_\varepsilon(x)\subseteq S$. &nbsp;$S$ <b>closed</b>: $X\setminus S$ is open. &nbsp;<b>Neighborhood</b> of $x$: a set containing some ball $B_\varepsilon(x)$. ($\emptyset$ and $X$ are both open and closed.)</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="Lem 1.3.6 · p.22">
+    <div class="q">Sequential characterization of a <b>closed</b> set $S$?</div>
+    <div class="a">$S$ is closed $\iff$ it contains the limit of <b>every</b> convergent sequence $(x_n)\subseteq S$ with $x_n\to x\in X$.</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="Lem 1.3.7 · p.23">
+    <div class="q">What does <b>compactness</b> imply about a subset (any metric space)?</div>
+    <div class="a">A compact subset is <b>closed and bounded</b>. (Unbounded ⇒ an "escape" sequence; not closed ⇒ a limit outside, both contradict compactness.)</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 1.3.11 · p.23">
+    <div class="q">State the <b>Heine–Borel</b> theorem in $\mathbb R$.</div>
+    <div class="a">$K\subseteq\mathbb R$ (standard metric) is <b>compact $\iff$ closed and bounded</b>. E.g. $[a,b]$ is compact; $(0,1)$ is not.</div>
+  </article>
+
+</div>
+
+<script>
+(function(){
+  const KEY = 'fc_analysis_day1_v1';
+  const DAY = 86400000;
+  const intervalsDays = [0, 1, 3, 8, 21, 60]; // box 0..5
+  const tagClass = { 'Definition':'def', 'Theorem':'thm', 'Lemma':'lemma', 'Example':'example' };
+
+  const DECK = [...document.querySelectorAll('#src > article')].map((el,i)=>({
+    id: 'c'+i,
+    tag: el.dataset.tag,
+    ref: el.dataset.ref,
+    q: el.querySelector('.q').innerHTML,
+    a: el.querySelector('.a').innerHTML
+  }));
+
+  let store = {};
+  try { store = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){ store = {}; }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch(e){} };
+  const st = id => store[id] || { box:0, due:0, seen:false };
+  const now = () => Date.now();
+
+  const app = document.getElementById('app');
+  const statsEl = document.getElementById('stats');
+  const progEl = document.getElementById('prog');
+
+  let queue = [], sessionTotal = 0, current = null;
+
+  function buildQueue(){
+    queue = DECK.filter(c => st(c.id).due <= now());
+    // new cards last so reviews come first
+    queue.sort((a,b)=> (st(a.id).seen===st(b.id).seen) ? 0 : (st(a.id).seen?-1:1));
+    sessionTotal = queue.length;
+  }
+
+  function typeset(el){
+    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([el]).catch(()=>{});
+  }
+
+  function renderStats(){
+    const dueNow = DECK.filter(c=>st(c.id).due<=now()).length;
+    const learned = DECK.filter(c=>st(c.id).box>=3).length;
+    const fresh = DECK.filter(c=>!st(c.id).seen).length;
+    statsEl.innerHTML = `<span><b>${dueNow}</b> due</span><span><b>${fresh}</b> new</span><span><b>${learned}</b> learned</span><span><b>${DECK.length}</b> total</span>`;
+    const done = sessionTotal - queue.length;
+    progEl.style.width = sessionTotal ? (100*done/sessionTotal)+'%' : '100%';
+  }
+
+  function nextDue(){
+    const ds = DECK.map(c=>st(c.id).due).filter(d=>d>now());
+    if (!ds.length) return null;
+    const ms = Math.min(...ds) - now();
+    const hrs = ms/3600000;
+    if (hrs < 1) return Math.max(1,Math.round(ms/60000))+' min';
+    if (hrs < 24) return Math.round(hrs)+' h';
+    return Math.round(hrs/24)+' d';
+  }
+
+  function showDone(){
+    current = null;
+    const nd = nextDue();
+    app.innerHTML = `<div class="card done">
+      <h2>✓ All caught up</h2>
+      <p>${nd ? 'Next card due in <b style="color:var(--accent)">'+nd+'</b>.' : 'Nothing scheduled — you have reviewed everything.'}</p>
+      <div class="row2">
+        <button class="btn" id="again-all">Review all again</button>
+        <a class="btn" href="study-guide/#b1" style="text-align:center;text-decoration:none;display:block">Study Block 1 →</a>
+      </div>
+    </div>`;
+    document.getElementById('again-all').onclick = ()=>{ queue = DECK.slice(); sessionTotal = queue.length; showCard(); };
+    renderStats();
+  }
+
+  function showCard(){
+    if (!queue.length) return showDone();
+    current = queue[0];
+    app.innerHTML = `<div class="card">
+        <div class="card-meta"><span class="chip ${tagClass[current.tag]||''}">${current.tag}</span><span class="card-ref">${current.ref}</span></div>
+        <div class="q">${current.q}</div>
+        <div id="backwrap" class="hidden"><hr class="divider"><div class="a">${current.a}</div></div>
+        <div class="controls" id="controls">
+          <button class="btn primary" id="reveal">Show answer</button>
+        </div>
+        <div class="hint">Space = reveal · 1 again · 2 hard · 3 good · 4 easy</div>
+      </div>`;
+    const card = app.querySelector('.card');
+    typeset(card);
+    document.getElementById('reveal').onclick = reveal;
+    renderStats();
+  }
+
+  function reveal(){
+    document.getElementById('backwrap').classList.remove('hidden');
+    document.getElementById('controls').innerHTML = `<div class="grades">
+        <button class="btn g-again" data-g="again">Again<small>&lt;10m</small></button>
+        <button class="btn g-hard" data-g="hard">Hard<small>1d</small></button>
+        <button class="btn g-good" data-g="good">Good<small>↑box</small></button>
+        <button class="btn g-easy" data-g="easy">Easy<small>↟↟</small></button>
+      </div>`;
+    document.querySelectorAll('.grades .btn').forEach(b => b.onclick = ()=>grade(b.dataset.g));
+    typeset(document.getElementById('backwrap'));
+  }
+
+  function grade(g){
+    if (!current) return;
+    const s = st(current.id); let box = s.box; s.seen = true;
+    if (g==='again'){ box = 0; s.due = now() + 10*60000; }
+    else if (g==='hard'){ box = Math.max(1, box); s.due = now() + 1*DAY; }
+    else if (g==='good'){ box = Math.min(box+1, 5); s.due = now() + intervalsDays[box]*DAY; }
+    else if (g==='easy'){ box = Math.min(box+2, 5); s.due = now() + Math.round(intervalsDays[box]*1.4)*DAY; }
+    s.box = box; store[current.id] = s; save();
+    queue.shift();
+    if (g==='again') queue.push(current); // re-show this session
+    showCard();
+  }
+
+  document.addEventListener('keydown', e=>{
+    if (!current) return;
+    const revealed = !document.getElementById('backwrap')?.classList.contains('hidden');
+    if (e.code==='Space'){ e.preventDefault(); if(!revealed) reveal(); }
+    else if (revealed && ['1','2','3','4'].includes(e.key)){
+      grade({'1':'again','2':'hard','3':'good','4':'easy'}[e.key]);
+    }
+  });
+
+  document.getElementById('reset').onclick = ()=>{
+    if (confirm('Reset all spaced-repetition progress for this deck?')){
+      store = {}; save(); buildQueue(); showCard();
+    }
+  };
+
+  buildQueue();
+  showCard();
+})();
+</script>
+</body>
+</html>

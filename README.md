@@ -36,6 +36,7 @@ First-year university maths — notes, proofs, mock exams, and problem sets for
 | Analysis | [/analysis/](https://kulchankas.github.io/mfds_univie_first_year/analysis/) |
 | Analysis · Study Guide | [/analysis/study-guide/](https://kulchankas.github.io/mfds_univie_first_year/analysis/study-guide/) |
 | Analysis · for Data Science | [/analysis/for-data-science.html](https://kulchankas.github.io/mfds_univie_first_year/analysis/for-data-science.html) |
+| Analysis · Flashcards | [/analysis/flashcards.html](https://kulchankas.github.io/mfds_univie_first_year/analysis/flashcards.html) |
 
 The old top-level `exam_notes.html` / `mock_exams.html` URLs still work — they
 redirect to their new homes under `linear-algebra/`.
