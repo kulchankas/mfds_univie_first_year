@@ -289,7 +289,12 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
   }
 
   function typeset(el){
-    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([el]).catch(()=>{});
+    // MathJax loads async — poll until it's ready, then typeset this element.
+    if (window.MathJax && MathJax.typesetPromise){
+      MathJax.typesetPromise([el]).catch(()=>{});
+    } else {
+      setTimeout(()=>typeset(el), 150);
+    }
   }
 
   function renderStats(){
