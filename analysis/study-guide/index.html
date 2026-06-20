@@ -353,6 +353,12 @@ section{scroll-margin-top:24px}
   $\;d_p(x,y)=\Big(\sum_{k=1}^n |x_k-y_k|^p\Big)^{1/p}$ for $p\in[1,\infty)$, and $\;d_\infty(x,y)=\max_k |x_k-y_k|$.
   Balls: $B_\varepsilon(x)=\{y: d(x,y)\le \varepsilon\}$ (closed), $\mathring B_\varepsilon(x)=\{y:d(x,y)<\varepsilon\}$ (open).</div>
 
+  <div class="box def"><span class="lbl">Definition · Convergence &amp; its speed (1.1.3, 1.1.7)</span>
+  $x_n\to x$ iff $\forall\varepsilon>0\,\exists N\,\forall n\ge N:\ d(x_n,x)\le\varepsilon$ (equivalently $d(x_n,x)\to 0$; $N=N(\varepsilon)$). The <strong>order of convergence</strong>: <strong>order $r>1$</strong> if $d(x_{k+1},x)\le c\,d(x_k,x)^r$; <strong>linear</strong> if $d(x_{k+1},x)\le c\,d(x_k,x)$ with $c\in(0,1)$; <strong>sublinear</strong> if $\limsup_k d(x_k,x)^{1/k}=1$. Chain: order $r\Rightarrow$ linear $\Rightarrow\limsup\|x_k-x\|^{1/k}<1$. (This is the language reused for Newton in Block 8.)</div>
+
+  <div class="box def"><span class="lbl">Definition · Cauchy, complete, and why $\mathbb R,\mathbb C$ qualify (1.2.1–1.2.8)</span>
+  <strong>Cauchy:</strong> $\forall\varepsilon>0\,\exists N\,\forall n,m\ge N:\ d(x_n,x_m)\le\varepsilon$ — terms bunch together without naming a limit. Convergent $\Rightarrow$ Cauchy always; a space is <strong>complete</strong> when the converse holds. $\mathbb Q$ is <em>not</em> complete (the Heron iteration for $\sqrt2$ is Cauchy in $\mathbb Q$, limit $\notin\mathbb Q$); $\mathbb R$ is complete, and $\mathbb C$ inherits it via $|z|^2=z\bar z=(x+\mathrm iy)(x-\mathrm iy)=x^2+y^2$, so $|z_n-z_m|^2=|x_n-x_m|^2+|y_n-y_m|^2$ splits a complex Cauchy sequence into two real ones.</div>
+
   <h3>Solution logic for the recurring tasks</h3>
 
   <h4><span class="spc s-prove">Prove</span> "$d$ is a metric"</h4>
@@ -406,6 +412,9 @@ section{scroll-margin-top:24px}
   <div class="box pitfall"><span class="lbl">Pitfall</span>"Closed and bounded $\Rightarrow$ compact" holds <strong>only</strong> in finite dimensions ($\mathbb R^n$, Heine–Borel). In an infinite-dimensional space the closed unit ball is closed and bounded yet <em>not</em> compact (the basis vectors $e_1,e_2,\dots$ satisfy $d(e_i,e_j)=\sqrt2$, so no subsequence is Cauchy). And $\mathbb R$ alone shows completeness never gives compactness on its own.</div>
 
   <p><strong>One-line memory:</strong> completeness = "limits that should exist, do" (no holes); compactness = completeness <em>plus</em> "nowhere to run" (totally bounded). Compactness is the stronger, more global property.</p>
+
+  <div class="box def"><span class="lbl">Handy · Truncating a metric (Lemma 1.3.12)</span>
+  $\tilde d(x,y)=\min\{1,d(x,y)\}$ is again a metric, and it leaves both <strong>convergence</strong> and <strong>compactness</strong> unchanged: $x_n\to x$ in $d\iff$ in $\tilde d$, and $K$ compact in $d\iff$ in $\tilde d$. So every metric space is equivalent to a <em>bounded</em> one — which is exactly why plain "bounded" is not a metric invariant, and why compactness needs <em>total</em> boundedness, not boundedness.</div>
 </section>
 
 <!-- ============ BLOCK 2 ============ -->
@@ -418,6 +427,19 @@ section{scroll-margin-top:24px}
   $f:X\to Y$ is continuous $\iff$ $f^{-1}(U)$ is open in $X$ for every open $U\subseteq Y$.</div>
   <div class="box def"><span class="lbl">Definitions you'll reuse</span>
   <strong>Contraction:</strong> $\exists L<1$ with $d(f(x),f(y))\le L\,d(x,y)$. <strong>Path-connected:</strong> any two points are joined by a continuous path $\gamma:[0,1]\to X$. <strong>Banach fixed-point:</strong> a contraction on a complete space has a unique fixed point, reached by iteration $x_{k+1}=f(x_k)$.</div>
+
+  <div class="box thm"><span class="lbl">Theorem · Continuity = preserving convergence (1.4.1–1.4.6)</span>
+  $f$ is continuous at $x$ iff $x_n\to x \Rightarrow f(x_n)\to f(x)$ (equivalent to the open-preimage version above). Compositions, sums and products of continuous maps are continuous, and $x\mapsto d(x,y_0)$ is continuous (1-Lipschitz).</div>
+
+  <div class="box thm"><span class="lbl">Theorem · The compactness payoff — EVT (1.4.7–1.4.8)</span>
+  If $X$ is compact and $f$ continuous, then $f(X)$ is <strong>compact</strong> (continuous image of a compact set is compact). Hence a continuous $f:X\to\mathbb R$ on a compact $X$ <strong>attains its maximum and minimum</strong> — the <strong>Extreme Value Theorem</strong>. This is <em>the</em> reason compactness matters for optimization: it guarantees a minimizer exists.</div>
+
+  <div class="box thm"><span class="lbl">Theorem · The connectedness payoff — IVT (1.4.10–1.4.14)</span>
+  Continuous images of path-connected sets are path-connected, and for $X\subseteq\mathbb R$: <strong>path-connected $\iff$ interval</strong>. Consequence — the <strong>Intermediate Value Theorem</strong>: continuous $f:[a,b]\to\mathbb R$ with $f(a)<0<f(b)$ has a root $\xi\in(a,b)$.
+  <br><strong>Why path-connectedness matters:</strong> (1) <em>IVT-style reasoning</em> — if $f$ is positive somewhere and negative somewhere on a connected set, it must vanish in between; (2) it tells you <em>whether you can continuously move between two solutions</em>.</div>
+
+  <div class="box recipe"><span class="lbl">Recipe · Bisection root-finding + error bound (1.4.15)</span>
+  For continuous $f$ with $f(a)>0,\ f(b)<0$: take the midpoint $x_n=\tfrac{a_n+b_n}{2}$, keep the half where the sign changes, repeat. The bracket halves each step, so $x_n\to$ a root $\hat x$ with <strong>error bound</strong> $|x_n-\hat x|\le \tfrac{1}{2^n}|b-a|$. Stop at a tolerance <code>tol</code>, but never below <strong>machine epsilon</strong> ($\approx$ <code>2*eps()</code>) — the smallest gap the computer can resolve, below which a number is indistinguishable from zero.</div>
 
   <h3>Solution logic</h3>
   <div class="box recipe"><span class="lbl">Recipe · continuity ⇔ preimages open (PS1 P3)</span>

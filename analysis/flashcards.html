@@ -119,7 +119,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
   <a class="back-link" href="index.html">← Analysis</a>
   <div class="eyebrow">Analysis · Spaced repetition</div>
   <h1>Flashcards</h1>
-  <p class="sub"><b style="color:var(--accent)">Day 1</b> — Metric spaces, completeness &amp; compactness. Extracted from <a href="notes/Book_Project.pdf" style="color:var(--accent)">Book Project</a> pp. 11–23. More days will be added.</p>
+  <p class="sub"><b style="color:var(--accent)">Day 1</b> — Metric spaces, completeness &amp; compactness. Extracted from <a href="notes/Book_Project.pdf" style="color:var(--accent)">Book Project</a> pp. 11–24. More days will be added.</p>
 
   <div class="stats" id="stats"></div>
   <div class="bar"><i id="prog"></i></div>
@@ -250,6 +250,26 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
   <article data-tag="Theorem" data-ref="Thm 1.3.11 · p.23">
     <div class="q">State the <b>Heine–Borel</b> theorem in $\mathbb R$.</div>
     <div class="a">$K\subseteq\mathbb R$ (standard metric) is <b>compact $\iff$ closed and bounded</b>. E.g. $[a,b]$ is compact; $(0,1)$ is not.</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="Lem 1.1.16 · p.16">
+    <div class="q">For $S\subseteq\mathbb R$ bounded above, how does $\sup S$ relate to sequences in $S$?</div>
+    <div class="a">There is a sequence $(x_n)\subseteq S$ with $x_n\to\sup S$ (dually for $\inf$). So the <b>supremum/infimum of a set are limits of points of the set</b>.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 1.1.18 · p.16">
+    <div class="q">If $a_n\to a$ in $\mathbb R$ and $a_n\ge 0$ for all $n$ — what about $a$?</div>
+    <div class="a">$a\ge 0$. Convergence respects <b>non-strict</b> inequalities (strict can fail: $1/n>0$ but $\to 0$).</div>
+  </article>
+
+  <article data-tag="Corollary" data-ref="Cor 1.1.19 · p.16">
+    <div class="q">If $a_n\to a$, $b_n\to b$ and $a_n\le b_n$ for all $n$ — conclusion?</div>
+    <div class="a">$a\le b$. (Apply 1.1.18 to $c_n=b_n-a_n\ge 0$.)</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="Lem 1.3.12 · p.24">
+    <div class="q">Define the truncated metric $\tilde d=\min\{1,d\}$ and state what it preserves.</div>
+    <div class="a">$\tilde d(x,y)=\min\{1,d(x,y)\}$ is a metric, and it preserves both <b>convergence</b> and <b>compactness</b>: $x_n\to x$ in $d\iff$ in $\tilde d$, and $K$ compact in $d\iff$ in $\tilde d$. (So every metric is equivalent to a <em>bounded</em> one — boundedness alone is not a metric invariant.)</div>
   </article>
 
 </div>
