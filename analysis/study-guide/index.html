@@ -373,7 +373,7 @@ section{scroll-margin-top:24px}
   Balls: $B_\varepsilon(x)=\{y: d(x,y)\le \varepsilon\}$ (closed), $\mathring B_\varepsilon(x)=\{y:d(x,y)<\varepsilon\}$ (open).</div>
 
   <div class="box def"><span class="lbl">Definition · Convergence &amp; its speed (1.1.3, 1.1.7)</span>
-  $x_n\to x$ iff $\forall\varepsilon>0\,\exists N\,\forall n\ge N:\ d(x_n,x)\le\varepsilon$ (equivalently $d(x_n,x)\to 0$; $N=N(\varepsilon)$). The <strong>order of convergence</strong>: <strong>order $r>1$</strong> if $d(x_{k+1},x)\le c\,d(x_k,x)^r$; <strong>linear</strong> if $d(x_{k+1},x)\le c\,d(x_k,x)$ with $c\in(0,1)$; <strong>sublinear</strong> if $\limsup_k d(x_k,x)^{1/k}=1$. Chain: order $r\Rightarrow$ linear $\Rightarrow\limsup\|x_k-x\|^{1/k}<1$. (This is the language reused for Newton in Block 8.)</div>
+  $x_n\to x$ iff $\forall\varepsilon>0\,\exists N\,\forall n\ge N:\ d(x_n,x)\le\varepsilon$ (equivalently $d(x_n,x)\to 0$; $N=N(\varepsilon)$). <em>Intuition: after some index $N$, the distance between the elements and the limit stays below any $\varepsilon>0$ you pick.</em> The <strong>order of convergence</strong>: <strong>order $r>1$</strong> if $d(x_{k+1},x)\le c\,d(x_k,x)^r$; <strong>linear</strong> if $d(x_{k+1},x)\le c\,d(x_k,x)$ with $c\in(0,1)$; <strong>sublinear</strong> if $\limsup_k d(x_k,x)^{1/k}=1$. Chain: order $r\Rightarrow$ linear $\Rightarrow\limsup\|x_k-x\|^{1/k}<1$. (This is the language reused for Newton in Block 8.)</div>
 
   <div class="box def"><span class="lbl">Definition · Cauchy, complete, and why $\mathbb R,\mathbb C$ qualify (1.2.1–1.2.8)</span>
   <strong>Cauchy:</strong> $\forall\varepsilon>0\,\exists N\,\forall n,m\ge N:\ d(x_n,x_m)\le\varepsilon$ — terms bunch together without naming a limit. Convergent $\Rightarrow$ Cauchy always; a space is <strong>complete</strong> when the converse holds. $\mathbb Q$ is <em>not</em> complete (the Heron iteration for $\sqrt2$ is Cauchy in $\mathbb Q$, limit $\notin\mathbb Q$); $\mathbb R$ is complete, and $\mathbb C$ inherits it via $|z|^2=z\bar z=(x+\mathrm iy)(x-\mathrm iy)=x^2+y^2$, so $|z_n-z_m|^2=|x_n-x_m|^2+|y_n-y_m|^2$ splits a complex Cauchy sequence into two real ones.</div>
@@ -448,7 +448,7 @@ section{scroll-margin-top:24px}
   <strong>Contraction:</strong> $\exists L<1$ with $d(f(x),f(y))\le L\,d(x,y)$. <strong>Path-connected:</strong> any two points are joined by a continuous path $\gamma:[0,1]\to X$. <strong>Banach fixed-point:</strong> a contraction on a complete space has a unique fixed point, reached by iteration $x_{k+1}=f(x_k)$.</div>
 
   <div class="box thm"><span class="lbl">Theorem · Continuity = preserving convergence (1.4.1–1.4.6)</span>
-  $f$ is continuous at $x$ iff $x_n\to x \Rightarrow f(x_n)\to f(x)$ (equivalent to the open-preimage version above). Compositions, sums and products of continuous maps are continuous, and $x\mapsto d(x,y_0)$ is continuous (1-Lipschitz).</div>
+  $f$ is continuous at $x$ iff $x_n\to x \Rightarrow f(x_n)\to f(x)$ (equivalent to the open-preimage version above). Compositions, sums and products of continuous maps are continuous, and $x\mapsto d(x,y_0)$ is continuous (1-Lipschitz) — it simply returns the distance from the fixed point $y_0$. <strong>Piecewise functions:</strong> at a junction point, check the limit from <em>both</em> sides — continuity fails if the one-sided limits disagree or differ from the value (e.g. $f(x)=4x^2+2$ for $x<0$ gives $\to 2\ne 1=f(0)$, so it is discontinuous at $0$).</div>
 
   <div class="box thm"><span class="lbl">Theorem · The compactness payoff — EVT (1.4.7–1.4.8)</span>
   If $X$ is compact and $f$ continuous, then $f(X)$ is <strong>compact</strong> (continuous image of a compact set is compact). Hence a continuous $f:X\to\mathbb R$ on a compact $X$ <strong>attains its maximum and minimum</strong> — the <strong>Extreme Value Theorem</strong>. This is <em>the</em> reason compactness matters for optimization: it guarantees a minimizer exists.</div>
@@ -457,11 +457,52 @@ section{scroll-margin-top:24px}
   Continuous images of path-connected sets are path-connected, and for $X\subseteq\mathbb R$: <strong>path-connected $\iff$ interval</strong>. Consequence — the <strong>Intermediate Value Theorem</strong>: continuous $f:[a,b]\to\mathbb R$ with $f(a)<0<f(b)$ has a root $\xi\in(a,b)$.
   <br><strong>Why path-connectedness matters:</strong> (1) <em>IVT-style reasoning</em> — if $f$ is positive somewhere and negative somewhere on a connected set, it must vanish in between; (2) it tells you <em>whether you can continuously move between two solutions</em>.</div>
 
+  <figure class="fig"><svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;height:auto;display:block;margin:0 auto">
+    <ellipse cx="140" cy="95" rx="115" ry="68" fill="none" stroke="#cfc8b6" stroke-width="1.5"/>
+    <path d="M72,120 C105,55 175,150 208,68" fill="none" stroke="#1f5d4c" stroke-width="2.5"/>
+    <circle cx="72" cy="120" r="5" fill="#b5491f"/><text x="56" y="123" font-family="Space Grotesk,sans-serif" font-size="15" fill="#10211c">x</text>
+    <circle cx="208" cy="68" r="5" fill="#b5491f"/><text x="216" y="66" font-family="Space Grotesk,sans-serif" font-size="15" fill="#10211c">y</text>
+    <text x="140" y="100" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="13" fill="#1f5d4c">γ(t)</text>
+    <text x="140" y="185" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="13" fill="#1f5d4c" font-weight="600">Path-connected: a path γ joins x to y</text>
+    <ellipse cx="360" cy="95" rx="52" ry="58" fill="none" stroke="#cfc8b6" stroke-width="1.5"/>
+    <ellipse cx="492" cy="95" rx="52" ry="58" fill="none" stroke="#cfc8b6" stroke-width="1.5"/>
+    <circle cx="360" cy="95" r="5" fill="#b5491f"/><text x="348" y="84" font-family="Space Grotesk,sans-serif" font-size="15" fill="#10211c">x</text>
+    <circle cx="492" cy="95" r="5" fill="#b5491f"/><text x="500" y="84" font-family="Space Grotesk,sans-serif" font-size="15" fill="#10211c">y</text>
+    <line x1="414" y1="95" x2="438" y2="95" stroke="#bb4d3a" stroke-width="2" stroke-dasharray="4 4"/>
+    <text x="426" y="83" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="16" fill="#bb4d3a">✕</text>
+    <text x="426" y="185" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="13" fill="#bb4d3a" font-weight="600">Not path-connected: no path between</text>
+  </svg><figcaption><b>Path-connectedness.</b> Why we need it: (1) <b>intermediate-value reasoning</b> — if a continuous function is positive somewhere and negative somewhere on a connected set, it must be zero in between; (2) knowing <b>whether we can move between two points</b> (solutions) without leaving the set.</figcaption></figure>
+
   <div class="box recipe"><span class="lbl">Recipe · Bisection root-finding + error bound (1.4.15)</span>
   For continuous $f$ with $f(a)>0,\ f(b)<0$: take the midpoint $x_n=\tfrac{a_n+b_n}{2}$, keep the half where the sign changes, repeat. The bracket halves each step, so $x_n\to$ a root $\hat x$ with <strong>error bound</strong> $|x_n-\hat x|\le \tfrac{1}{2^n}|b-a|$. Stop at a tolerance <code>tol</code>, but never below <strong>machine epsilon</strong> ($\approx$ <code>2*eps()</code>) — the smallest gap the computer can resolve, below which a number is indistinguishable from zero.</div>
 
+  <h4><code>myBisection</code> (the exam's root-finder)</h4>
+<pre><span class="kw">function</span> myBisection(f,a,b; tol=1e-4, maxiter=50)
+    x = Vector{Float64}(undef, maxiter)
+    <span class="kw">for</span> k <span class="kw">in</span> 1:maxiter
+        x[k] = (a+b)/2
+        <span class="kw">if</span> abs(a-b) &lt; tol || abs(f(x[k])) &lt; 2*eps()  <span class="cm"># stopping criteria</span>
+            <span class="kw">return</span> x[1:k]
+        <span class="kw">end</span>
+        <span class="kw">if</span> f(a)*f(x[k]) &lt; 0
+            b = x[k]
+        <span class="kw">else</span>
+            a = x[k]
+        <span class="kw">end</span>
+    <span class="kw">end</span>
+    println(<span class="cm">"no convergence"</span>)
+    <span class="kw">return</span> x
+<span class="kw">end</span>
+f(z) = z^2 - 2
+myBisection(f, 0, 2)   <span class="cm"># → converges to √2 ≈ 1.41421…</span></pre>
+
   <div class="box thm"><span class="lbl">Theorem · Banach Fixed-Point Theorem, in full (1.4.17)</span>
-  On a <strong>complete</strong> metric space, a <strong>contraction</strong> $d(f(x),f(y))\le q\,d(x,y)$ with $q\in[0,1)$ has a <strong>unique fixed point</strong> $x^\*$. From any $x_0$ the Picard iterates $x_{n+1}=f(x_n)$ converge <strong>linearly</strong> to $x^\*$, with the a-priori error bound $d(x_n,x^\*)\le \dfrac{q^{\,n}}{1-q}\,d(x_1,x_0)$. (Existence via showing the iterates are Cauchy; this is the "computational cycle" — completion, contraction, iterate, truncate.)</div>
+  The Banach fixed-point theorem <strong>finds a point that $f$ leaves unchanged</strong> ($f(x^*)=x^*$). A <strong>contraction</strong> <em>shrinks distances</em>: take two points, apply $f$ to both, and they end up closer than they started — $d(f(x),f(y))\le q\,d(x,y)$ with $q\in[0,1)$. On a <strong>complete</strong> space such an $f$ has a <strong>unique</strong> fixed point $x^*$, and from any $x_0$ the Picard iterates $x_{n+1}=f(x_n)$ converge <strong>linearly</strong> to it, with
+  $$d(x_n,x^*)\ \le\ \frac{q^{\,n}}{1-q}\,d(x_1,x_0).$$
+  Reading the bound: $d(x_n,x^*)$ is the <strong>current error</strong> — the distance between the $n$-th approximation and the actual true fixed point; $d(x_1,x_0)$ is the <strong>size of the first step</strong>; and $q$ is the <strong>shrinking factor</strong>. Since $q^{\,n}\to 0$, the factor $\tfrac{q^{n}}{1-q}$ acts as a <strong>"speed controller"</strong> — every step pushes the error a little closer to zero. (Existence: the iterates are Cauchy; completeness supplies the limit.)</div>
+
+  <div class="box recipe"><span class="lbl">Example · the computational cycle (CRTA) on $f(x)=\tfrac14 x^2$ (1.4.18)</span>
+  Start with $f_0:(0,1)\to(0,1)$, $x\mapsto\tfrac14 x^2$. <strong>C — Completion:</strong> extend to $f:[0,1]\to[0,1]$ (a complete space). <strong>R — Representation/iterate:</strong> $|f(x)-f(y)|=\tfrac14|x+y|\,|x-y|\le\tfrac12|x-y|$ so $q=\tfrac12$ is a contraction; from $x_0=1$ the iterates $x_{n+1}=\tfrac14x_n^2$ converge to the fixed point $x^*=0$ (solving $x=\tfrac14x^2$). <strong>T/A — Truncation &amp; approximation:</strong> with $d(x_1,x_0)=|\tfrac14-1|=\tfrac34$ the bound gives $|x_n|\le \dfrac{(1/2)^n}{1-1/2}\cdot\tfrac34 = 2^{-(n+1)}\cdot 3$ — geometric decay to $0$. (CRTA = Completion · Representation · Truncation · Approximation, the book's recurring computational cycle.)</div>
 
   <div class="box thm"><span class="lbl">Theorem · Three equivalent faces of continuity + sign-preservation (1.4.1–1.4.4)</span>
   $f$ continuous at $x$ $\iff$ <strong>(sequential)</strong> $x_n\to x\Rightarrow f(x_n)\to f(x)$ $\iff$ <strong>($\varepsilon$–$\delta$)</strong> $\forall\varepsilon\,\exists\delta:\ d_X(x,x')<\delta\Rightarrow d_Y(f(x),f(x'))<\varepsilon$. Globally $\iff$ <strong>$f^{-1}(U)$ open for every open $U$</strong> $\iff$ $f^{-1}(C)$ <strong>closed</strong> for every closed $C$ (complement). <strong>Sign-preservation (1.4.4):</strong> if $f$ is continuous and $f(x)>0$, then $f>0$ on a whole neighborhood of $x$.</div>

@@ -128,7 +128,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
     <ol class="tasks">
       <li>Show $f(x)=\tfrac12\big(x+\tfrac2x\big)$ maps $[1,2]\to[1,2]$, is a contraction, and find its fixed point.
         <details class="sol"><summary></summary><div class="body">$f'(x)=\tfrac12(1-2/x^2)$; on $[1,2]$, $2/x^2\in[\tfrac12,2]$ so $f'\in[-\tfrac12,\tfrac14]$, $|f'|\le\tfrac12<1$ ⇒ contraction ($L=\tfrac12$). $f(1)=f(2)=\tfrac32$ and the min is $f(\sqrt2)=\sqrt2$, so $f([1,2])\subseteq[\sqrt2,\tfrac32]\subset[1,2]$. Fixed point: $x=\tfrac12(x+2/x)\Rightarrow x=\sqrt2$ (the Heron iteration).</div></details></li>
-      <li>For $g(x)=\cos x$ on $[0,1]$ ($L=\sin 1\approx0.841$), bound the iterations from $x_0=0$ to reach error $10^{-3}$, using $d(x_n,x^\*)\le \tfrac{L^n}{1-L}d(x_1,x_0)$.
+      <li>For $g(x)=\cos x$ on $[0,1]$ ($L=\sin 1\approx0.841$), bound the iterations from $x_0=0$ to reach error $10^{-3}$, using $d(x_n,x^*)\le \tfrac{L^n}{1-L}d(x_1,x_0)$.
         <details class="sol"><summary></summary><div class="body">$d(x_1,x_0)=|\cos 0-0|=1$. Need $\tfrac{0.841^{\,n}}{0.159}\le10^{-3}$, i.e. $0.841^{\,n}\le1.59\times10^{-4}$, so $n\ge \dfrac{\ln(1.59\times10^{-4})}{\ln 0.841}\approx\dfrac{-8.75}{-0.173}\approx 51$ steps.</div></details></li>
     </ol></div>
     <div class="grp stretch"><div class="grp-lbl">🌱 Stretch</div>
@@ -261,7 +261,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
       <li>Newton for $\sqrt2$: $f(x)=x^2-2$, iterate twice from $x_0=2$.
         <details class="sol"><summary></summary><div class="body">$x_{k+1}=x_k-\tfrac{x_k^2-2}{2x_k}=\tfrac12\big(x_k+\tfrac2{x_k}\big)$. $x_1=\tfrac12(2+1)=1.5$; $x_2=\tfrac12(1.5+1.3333\ldots)=1.41\overline6$, already $\approx\sqrt2=1.41421\ldots$.</div></details></li>
       <li>State Newton's order of convergence near a simple root and why.
-        <details class="sol"><summary></summary><div class="body">Quadratic ($r=2$): $e_{k+1}\approx\tfrac{f''(x^\*)}{2f'(x^\*)}e_k^2$, from Taylor-expanding $f$ about the root. It needs $f'(x^\*)\ne0$ (simple root) and $x_0$ close enough.</div></details></li>
+        <details class="sol"><summary></summary><div class="body">Quadratic ($r=2$): $e_{k+1}\approx\tfrac{f''(x^*)}{2f'(x^*)}e_k^2$, from Taylor-expanding $f$ about the root. It needs $f'(x^*)\ne0$ (simple root) and $x_0$ close enough.</div></details></li>
     </ol></div>
     <div class="grp stretch"><div class="grp-lbl">🌱 Stretch</div>
     <ol class="tasks">
