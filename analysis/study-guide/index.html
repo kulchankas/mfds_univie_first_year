@@ -335,6 +335,25 @@ section{scroll-margin-top:24px}
     <tr><td><span class="day">17</span></td><td>Full mock #2 + light review</td><td>Second timed mock from this guide's practice problems. Skim cheat sheet. Sleep.</td><td>—</td></tr>
   </table>
   <div class="callout">If you fall behind, protect days 5–6 and 9–13 — those blocks carry the most exam weight (differentiation pipeline, optimization, Newton, constraints). Topology proofs (block 1–2) are lower yield if time is short.</div>
+
+  <details style="margin-top:1.6rem">
+    <summary style="cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.05rem;color:#d98a5e">🏃 Short on time? — the 10-day compressed plan</summary>
+    <p style="margin-top:.8rem">Same material as the 17-day plan, front-loaded into 10 days. It assumes ~4–6 focused hours/day and treats the <strong>computational blocks (4–9)</strong> as the priority. Two checkpoints keep you honest: a mid mock on <strong>day 5</strong> and two full mocks on <strong>days 9–10</strong>. Page numbers are into the <a href="../notes/Book_Project.pdf">Book Project</a> notes (📖).</p>
+    <table>
+      <tr><th>Day</th><th>Blocks &amp; 📖 pages</th><th>Do</th></tr>
+      <tr><td><span class="day">1</span></td><td><strong>Blocks 1–2</strong> · metric spaces, completeness, compactness, continuity, connectedness. <span style="opacity:.72">📖 pp. 11–38</span></td><td>Redo PS1 + PS2. Nail metric proofs, the $\varepsilon$–$N$ definition, Heine–Borel (compact ⇔ closed &amp; bounded), continuity ⇔ preimages open, Banach fixed-point.</td></tr>
+      <tr><td><span class="day">2</span></td><td><strong>Blocks 3–4</strong> · curves &amp; arc length; differentiability, gradient, Jacobian, affine approximation. <span style="opacity:.72">📖 pp. 61–70, 125–150</span></td><td>Redo PS3 + PS4 + PS5. Drill the <em>gradient → affine approximation → estimate a value</em> pipeline until automatic.</td></tr>
+      <tr><td><span class="day">3</span></td><td><strong>Block 5</strong> · Taylor in $\mathbb R^n$, the Hessian, classifying extrema. <span style="opacity:.72">📖 pp. 71–77, 89–96, 151–158</span></td><td>Redo PS6 + PS7 P1. Drill: critical points → Hessian → classify; memorize the $2\times2$ test.</td></tr>
+      <tr><td><span class="day">4</span></td><td><strong>Blocks 6–7</strong> · convexity; gradient descent, SGD, mini-batch, $L$-smoothness. <span style="opacity:.72">📖 pp. 76–78, 129–134, 158–165</span></td><td>Redo PS7 P3–P4 + PS8 P2. Prove the convexity closure rules; implement GD/SGD/MB on the least-squares example and plot $f(x_k)$.</td></tr>
+      <tr><td><span class="day">5</span></td><td><strong>Checkpoint mock</strong> (Blocks 1–7) + repair.</td><td>90-min closed-book set from PS1–PS8. Grade ruthlessly; log every miss; spend the rest of the day fixing the weakest item types.</td></tr>
+      <tr><td><span class="day">6</span></td><td><strong>Block 8</strong> · Newton in $\mathbb R^n$, convergence orders, implicit / inverse function theorems. <span style="opacity:.72">📖 pp. 166–172</span></td><td>Redo PS10 + PS11 P1–P2. Hand-iterate Newton twice; code <code>myNewton</code>; state IFT and "$y=g(x)$ locally, then differentiate implicitly."</td></tr>
+      <tr><td><span class="day">7</span></td><td><strong>Block 9</strong> · constrained extrema, submanifolds, Lagrange multipliers. <span style="opacity:.72">📖 pp. 173–183</span></td><td>Redo PS11 P3–P4 + PS12 + PS13 P1–P3. Drill the multiplier recipe; do the AM–GM proof (PS13 P1).</td></tr>
+      <tr><td><span class="day">8</span></td><td><strong>Block 10</strong> · operator norms, (von) Neumann series; build the cheat sheet. <span style="opacity:.72">📖 pp. 101–111</span></td><td>Redo PS9. Prove the $\|A\|_1$/$\|A\|_\infty$ identities; hand-compute a Neumann inverse. Write the one-page cheat sheet from blank.</td></tr>
+      <tr><td><span class="day">9</span></td><td><strong>Full mock #1</strong> (all blocks, timed) + proof rehearsal.</td><td>Simulate exam length closed-book. Mark, then re-prove the 6 must-prove results aloud; spend the afternoon only on missed item types.</td></tr>
+      <tr><td><span class="day">10</span></td><td><strong>Full mock #2</strong> + light review.</td><td>Second timed mock from this guide's practice problems. Re-run the Julia templates from blank, skim the cheat sheet, sleep.</td></tr>
+    </table>
+    <div class="callout">In a 10-day crunch, protect <strong>days 2–3</strong> (differentiation &amp; Taylor) and <strong>days 6–7</strong> (Newton &amp; constraints) — that's where the exam points are. If you must cut, trim the topology drills (day 1) and skip the optional Julia polish, not the mocks.</div>
+  </details>
 </section>
 
 <!-- ============ BLOCK 1 ============ -->
