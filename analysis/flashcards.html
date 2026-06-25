@@ -119,7 +119,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
   <a class="back-link" href="index.html">← Analysis</a>
   <div class="eyebrow">Analysis · Spaced repetition</div>
   <h1>Flashcards</h1>
-  <p class="sub"><b style="color:var(--accent)">Day 1</b> — Metric spaces, completeness &amp; compactness. Extracted from <a href="notes/Book_Project.pdf" style="color:var(--accent)">Book Project</a> pp. 11–24. More days will be added.</p>
+  <p class="sub"><b style="color:var(--accent)">Chapter 1</b> — Convergence &amp; continuity (metric spaces → uniform convergence). Extracted from <a href="notes/Book_Project.pdf" style="color:var(--accent)">Book Project</a> pp. 11–37. More chapters will be added.</p>
 
   <div class="stats" id="stats"></div>
   <div class="bar"><i id="prog"></i></div>
@@ -270,6 +270,51 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
   <article data-tag="Lemma" data-ref="Lem 1.3.12 · p.24">
     <div class="q">Define the truncated metric $\tilde d=\min\{1,d\}$ and state what it preserves.</div>
     <div class="a">$\tilde d(x,y)=\min\{1,d(x,y)\}$ is a metric, and it preserves both <b>convergence</b> and <b>compactness</b>: $x_n\to x$ in $d\iff$ in $\tilde d$, and $K$ compact in $d\iff$ in $\tilde d$. (So every metric is equivalent to a <em>bounded</em> one — boundedness alone is not a metric invariant.)</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="§1.4.1 · p.18–26">
+    <div class="q">Give two equivalent definitions of <b>continuity</b> of $f$ at $x$ (plus the global topological one).</div>
+    <div class="a"><b>Sequential:</b> $x_n\to x\Rightarrow f(x_n)\to f(x)$. &nbsp;<b>($\varepsilon$–$\delta$):</b> $\forall\varepsilon>0\,\exists\delta>0:\ d_X(x,x')<\delta\Rightarrow d_Y(f(x),f(x'))<\varepsilon$. &nbsp;<b>Global:</b> $f$ continuous $\iff f^{-1}(U)$ open for every open $U$ $\iff f^{-1}(C)$ closed for every closed $C$.</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="Lem 1.4.2/1.4.6 · p.19–20">
+    <div class="q">Are compositions continuous? Is $\varphi_y(x)=d(x,y)$ continuous?</div>
+    <div class="a">Yes — $g\circ f$ is continuous (sequential proof). And $\varphi_y(x)=d(x,y)$ is continuous because it is <b>1-Lipschitz</b>: $|d(x_n,y)-d(x,y)|\le d(x_n,x)$.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 1.4.7 · p.20">
+    <div class="q">If $X$ is compact and $f$ continuous, what about the image $f(X)$?</div>
+    <div class="a">$f(X)$ is <b>compact</b> — the continuous image of a compact set is compact.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 1.4.8 · p.20">
+    <div class="q">State the <b>Extreme Value Theorem</b>.</div>
+    <div class="a">A continuous $f:X\to\mathbb R$ on a <b>compact</b> $X$ <b>attains its max and min</b>: $\exists p,q\in X$ with $f(p)=\max_X f$, $f(q)=\min_X f$.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Def 1.4.10/Thm 1.4.12 · p.21">
+    <div class="q">Define <b>path-connected</b>; characterize path-connected subsets of $\mathbb R$.</div>
+    <div class="a">Path-connected: any $x,y$ are joined by a continuous $\gamma:[0,1]\to X$ with $\gamma(0)=x,\gamma(1)=y$. For $X\subseteq\mathbb R$: <b>path-connected $\iff$ $X$ is an interval</b>. (Continuous images of path-connected sets are path-connected.)</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 1.4.14 · p.22">
+    <div class="q">State the <b>Intermediate Value Theorem</b>.</div>
+    <div class="a">Continuous $f:[a,b]\to\mathbb R$ has $f([a,b])$ a closed bounded interval; if $f(a)<0<f(b)$ then $\exists\xi\in(a,b)$ with $f(\xi)=0$. (Bisection: $|x_n-\hat x|\le 2^{-n}|b-a|$.)</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 1.4.17 · p.24">
+    <div class="q">State the <b>Banach Fixed-Point Theorem</b> with its error estimate.</div>
+    <div class="a">On a <b>complete</b> space, a contraction $d(f(x),f(y))\le q\,d(x,y)$ with $q\in[0,1)$ has a <b>unique fixed point</b> $x^\*$; the iterates $x_{n+1}=f(x_n)$ converge linearly with $d(x_n,x^\*)\le \dfrac{q^{\,n}}{1-q}\,d(x_1,x_0)$.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Def 1.4.5/Thm 1.4.6 · p.28">
+    <div class="q">Define <b>uniform continuity</b> and give the key compactness result.</div>
+    <div class="a">$\forall\varepsilon>0\,\exists\delta>0\,\forall x_1,x_2:\ d_X(x_1,x_2)\le\delta\Rightarrow d_Y(f(x_1),f(x_2))\le\varepsilon$ — one $\delta$ works for <b>all</b> points. <b>On a compact domain, continuous $\Rightarrow$ uniformly continuous.</b></div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 1.4.7/1.4.11 · p.28–30">
+    <div class="q">What does <b>uniform convergence</b> preserve, and is $C_b(X,Y)$ complete?</div>
+    <div class="a">A <b>uniform</b> limit of continuous functions is continuous (pointwise is not enough — $f_n(x)=x^n$ on $[0,1]$). The bounded continuous functions $C_b(X,Y)$ with $d_\infty(f,g)=\sup_x d_Y(f(x),g(x))$ are <b>complete whenever $Y$ is</b>.</div>
   </article>
 
 </div>

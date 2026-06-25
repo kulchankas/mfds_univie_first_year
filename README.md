@@ -20,7 +20,7 @@ First-year university maths — notes, proofs, mock exams, and problem sets for
 │   ├── index.html             Analysis landing page
 │   ├── study-guide/           exam study guide (merged from kulchankas/analysis)
 │   ├── notes/                 lecture notes (PDF)
-│   └── problem-sets/          problem sheets 1–13 (PDF)
+│   └── problem-sets/          problem sheets 1–14 (PDF)
 ├── exam_notes.html            redirect → linear-algebra/exam_notes.html
 └── mock_exams.html            redirect → linear-algebra/mock_exams.html
 ```
