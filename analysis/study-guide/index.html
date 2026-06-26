@@ -501,17 +501,97 @@ myBisection(f, 0, 2)   <span class="cm"># → converges to √2 ≈ 1.41421…</
   $$d(x_n,x^*)\ \le\ \frac{q^{\,n}}{1-q}\,d(x_1,x_0).$$
   Reading the bound: $d(x_n,x^*)$ is the <strong>current error</strong> — the distance between the $n$-th approximation and the actual true fixed point; $d(x_1,x_0)$ is the <strong>size of the first step</strong>; and $q$ is the <strong>shrinking factor</strong>. Since $q^{\,n}\to 0$, the factor $\tfrac{q^{n}}{1-q}$ acts as a <strong>"speed controller"</strong> — every step pushes the error a little closer to zero. (Existence: the iterates are Cauchy; completeness supplies the limit.)</div>
 
+  <div class="box recipe"><span class="lbl">Where the quantitative bound comes from (the "I didn't get it" part)</span>
+  The bound is just a <strong>geometric series of step sizes</strong>. Each step shrinks by $q$: $d(x_{k+1},x_k)\le q\,d(x_k,x_{k-1})\le\cdots\le q^{\,k}\,d(x_1,x_0)$. The distance still to travel to the limit is at most the sum of <em>all future</em> steps:
+  $$d(x_n,x^*)\le\sum_{k\ge n}d(x_{k+1},x_k)\le\sum_{k\ge n}q^{\,k}\,d(x_1,x_0)=\frac{q^{\,n}}{1-q}\,d(x_1,x_0).$$
+  So in words: take <strong>one step you actually measured</strong>, $d(x_1,x_0)$; multiply by $q^{\,n}$ (how much $n$ steps have shrunk things) and by $\tfrac{1}{1-q}$ (the sum of the whole remaining tail). Because it uses only $x_0,x_1$ and $q$, you can evaluate it <em>before</em> iterating — an <strong>a-priori</strong> bound — to decide how many steps guarantee a target accuracy.</div>
+
   <div class="box recipe"><span class="lbl">Example · the computational cycle (CRTA) on $f(x)=\tfrac14 x^2$ (1.4.18)</span>
   Start with $f_0:(0,1)\to(0,1)$, $x\mapsto\tfrac14 x^2$. <strong>C — Completion:</strong> extend to $f:[0,1]\to[0,1]$ (a complete space). <strong>R — Representation/iterate:</strong> $|f(x)-f(y)|=\tfrac14|x+y|\,|x-y|\le\tfrac12|x-y|$ so $q=\tfrac12$ is a contraction; from $x_0=1$ the iterates $x_{n+1}=\tfrac14x_n^2$ converge to the fixed point $x^*=0$ (solving $x=\tfrac14x^2$). <strong>T/A — Truncation &amp; approximation:</strong> with $d(x_1,x_0)=|\tfrac14-1|=\tfrac34$ the bound gives $|x_n|\le \dfrac{(1/2)^n}{1-1/2}\cdot\tfrac34 = 2^{-(n+1)}\cdot 3$ — geometric decay to $0$. (CRTA = Completion · Representation · Truncation · Approximation, the book's recurring computational cycle.)</div>
 
   <div class="box thm"><span class="lbl">Theorem · Three equivalent faces of continuity + sign-preservation (1.4.1–1.4.4)</span>
   $f$ continuous at $x$ $\iff$ <strong>(sequential)</strong> $x_n\to x\Rightarrow f(x_n)\to f(x)$ $\iff$ <strong>($\varepsilon$–$\delta$)</strong> $\forall\varepsilon\,\exists\delta:\ d_X(x,x')<\delta\Rightarrow d_Y(f(x),f(x'))<\varepsilon$. Globally $\iff$ <strong>$f^{-1}(U)$ open for every open $U$</strong> $\iff$ $f^{-1}(C)$ <strong>closed</strong> for every closed $C$ (complement). <strong>Sign-preservation (1.4.4):</strong> if $f$ is continuous and $f(x)>0$, then $f>0$ on a whole neighborhood of $x$.</div>
 
+  <div class="box def"><span class="lbl">Why continuity preserves structure (Remark 1.4.19 — the "why?")</span>
+  Each "preservation" is just continuity applied to how that structure is <em>defined</em>:
+  <ul>
+    <li><strong>Convergence:</strong> continuity literally <em>is</em> "$x_n\to x\Rightarrow f(x_n)\to f(x)$" — limits are preserved by definition.</li>
+    <li><strong>Compactness:</strong> compact = "every sequence has a convergent subsequence"; push that subsequence through $f$ (it keeps converging) ⇒ $f(X)$ compact.</li>
+    <li><strong>Path-connectedness:</strong> a path $\gamma$ maps to the path $f\circ\gamma$, still continuous ⇒ the image stays path-connected.</li>
+    <li><strong>Topology:</strong> "$f^{-1}(\text{open})$ is open" is the topological face of continuity.</li>
+  </ul>
+  That is the "why": continuity is exactly the property that makes <em>approximate inputs give approximate outputs</em>, which is why almost all computation is built on continuous maps.</div>
+
+  <div class="box thm"><span class="lbl">The ($\varepsilon$–$\delta$) picture &amp; why it gives continuity (Lemma 1.4.1)</span>
+  $(\varepsilon$–$\delta)$ says: for every output tolerance $\varepsilon$ there is an input tolerance $\delta$ with $f\big(\mathring B_\delta(x)\big)\subseteq \mathring B_\varepsilon(f(x))$ — "stay within $\delta$ of $x$ and the output stays within $\varepsilon$ of $f(x)$."
+  <figure class="fig"><svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;height:auto;display:block;margin:0 auto">
+    <!-- panel A: continuous -->
+    <line x1="30" y1="185" x2="255" y2="185" stroke="#cfc8b6" stroke-width="1"/>
+    <line x1="40" y1="20" x2="40" y2="185" stroke="#cfc8b6" stroke-width="1"/>
+    <path d="M45,170 C110,150 150,70 245,40" fill="none" stroke="#1f5d4c" stroke-width="2.5"/>
+    <line x1="60" y1="90" x2="245" y2="90" stroke="#8a7e6e" stroke-width="1" stroke-dasharray="4 3"/>
+    <line x1="60" y1="120" x2="245" y2="120" stroke="#8a7e6e" stroke-width="1" stroke-dasharray="4 3"/>
+    <line x1="120" y1="30" x2="120" y2="185" stroke="#b5491f" stroke-width="1" stroke-dasharray="4 3"/>
+    <line x1="160" y1="30" x2="160" y2="185" stroke="#b5491f" stroke-width="1" stroke-dasharray="4 3"/>
+    <rect x="120" y="90" width="40" height="30" fill="#1f5d4c" opacity="0.14"/>
+    <circle cx="140" cy="105" r="4" fill="#b5491f"/>
+    <text x="44" y="86" font-family="Space Grotesk,sans-serif" font-size="12" fill="#8a7e6e">ε</text>
+    <text x="138" y="200" font-family="Space Grotesk,sans-serif" font-size="12" fill="#b5491f">δ</text>
+    <text x="140" y="206" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" fill="#1f5d4c" font-weight="600">continuous: f(δ-box) ⊆ ε-band</text>
+    <!-- panel B: jump -->
+    <line x1="315" y1="185" x2="540" y2="185" stroke="#cfc8b6" stroke-width="1"/>
+    <line x1="325" y1="20" x2="325" y2="185" stroke="#cfc8b6" stroke-width="1"/>
+    <line x1="330" y1="135" x2="430" y2="135" stroke="#1f5d4c" stroke-width="2.5"/>
+    <line x1="430" y1="65" x2="535" y2="65" stroke="#1f5d4c" stroke-width="2.5"/>
+    <line x1="345" y1="50" x2="535" y2="50" stroke="#8a7e6e" stroke-width="1" stroke-dasharray="4 3"/>
+    <line x1="345" y1="80" x2="535" y2="80" stroke="#8a7e6e" stroke-width="1" stroke-dasharray="4 3"/>
+    <line x1="410" y1="30" x2="410" y2="185" stroke="#b5491f" stroke-width="1" stroke-dasharray="4 3"/>
+    <line x1="450" y1="30" x2="450" y2="185" stroke="#b5491f" stroke-width="1" stroke-dasharray="4 3"/>
+    <circle cx="430" cy="65" r="4" fill="#b5491f"/>
+    <circle cx="420" cy="135" r="4" fill="#bb4d3a"/>
+    <text x="423" y="128" font-family="Space Grotesk,sans-serif" font-size="15" fill="#bb4d3a">✗</text>
+    <text x="430" y="206" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" fill="#bb4d3a" font-weight="600">jump: points in δ land outside the ε-band</text>
+  </svg><figcaption><b>Counterexample (right):</b> at a jump, take $\varepsilon$ smaller than the gap. <em>No</em> $\delta$ works — points just left of $x$ stay within $\delta$ but their images sit in the other branch, outside the $\varepsilon$-band.</figcaption></figure>
+  <strong>Why ($\varepsilon$–$\delta$) $\Rightarrow$ (sequential) continuity:</strong> let $x_n\to x$ and fix $\varepsilon$; take the matching $\delta$. Since $x_n\to x$, eventually $d(x_n,x)<\delta$, so $d(f(x_n),f(x))<\varepsilon$. As $\varepsilon$ was arbitrary, $f(x_n)\to f(x)$.</div>
+
+  <div class="box recipe"><span class="lbl">All the ways to show (or disprove) continuity — in one place</span>
+  <strong>To prove continuous:</strong> (a) <em>sequential</em> $x_n\to x\Rightarrow f(x_n)\to f(x)$; (b) <em>$\varepsilon$–$\delta$</em>; (c) <em>$f^{-1}(\text{open})$ is open</em>; (d) <em>$f^{-1}(\text{closed})$ is closed</em>; (e) <em>build from known-continuous pieces</em> — sums, products, compositions, coordinate maps $x\mapsto x_i$, and $x\mapsto d(x,y_0)$.
+  <br><strong>To disprove:</strong> give one sequence $x_n\to x$ with $f(x_n)\not\to f(x)$, <em>or</em> one open $U$ whose preimage isn't open.
+  <br><strong>Worked disproof (Heaviside):</strong> $f(x)=0$ for $x<0$ and $f(x)=1$ for $x\ge0$. Pick the open set $U=(0.5,1.5)$. Then $f(x)\in U\iff f(x)=1\iff x\ge0$, so $f^{-1}(U)=[0,\infty)$ — <strong>not open</strong> (the point $0$ has no surrounding interval inside it). Hence $f$ is <strong>not continuous</strong> (the jump is at $0$).</div>
+
   <div class="box thm"><span class="lbl">Theorem · Uniform continuity (1.4.5–1.4.6)</span>
   $f$ is <strong>uniformly continuous</strong> if one $\delta$ works for <em>all</em> points: $\forall\varepsilon\,\exists\delta\ \forall x_1,x_2:\ d_X(x_1,x_2)\le\delta\Rightarrow d_Y(f(x_1),f(x_2))\le\varepsilon$. <strong>Key result:</strong> a continuous function on a <strong>compact</strong> domain is automatically uniformly continuous (proof by extracting convergent subsequences from a would-be counterexample).</div>
 
+  <div class="box def"><span class="lbl">Plain vs uniform continuity — the difference, visualized</span>
+  The only difference is <strong>whether $\delta$ may depend on the point</strong>: plain continuity allows $\delta=\delta(x,\varepsilon)$ (a different $\delta$ at each $x$); uniform continuity demands one $\delta=\delta(\varepsilon)$ that works <em>everywhere at once</em>. It fails when the graph gets <em>arbitrarily steep</em>: e.g. $f(x)=x^2$ on $\mathbb R$ or $f(x)=1/x$ on $(0,1)$ are continuous but <strong>not</strong> uniformly continuous — the steeper it gets, the smaller a $\delta$ you need, and no single $\delta$ survives. On a <strong>compact</strong> domain steepness is bounded, so continuous $\Rightarrow$ uniformly continuous.
+  <figure class="fig"><svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;height:auto;display:block;margin:0 auto">
+    <line x1="30" y1="175" x2="540" y2="175" stroke="#cfc8b6" stroke-width="1"/>
+    <line x1="40" y1="15" x2="40" y2="175" stroke="#cfc8b6" stroke-width="1"/>
+    <path d="M45,170 Q330,165 520,25" fill="none" stroke="#1f5d4c" stroke-width="2.5"/>
+    <!-- shallow region: equal Δx → small Δf -->
+    <line x1="110" y1="30" x2="110" y2="175" stroke="#b5491f" stroke-width="1" stroke-dasharray="4 3"/>
+    <line x1="150" y1="30" x2="150" y2="175" stroke="#b5491f" stroke-width="1" stroke-dasharray="4 3"/>
+    <line x1="130" y1="161" x2="200" y2="161" stroke="#8a7e6e" stroke-width="1"/>
+    <line x1="130" y1="156" x2="200" y2="156" stroke="#8a7e6e" stroke-width="1"/>
+    <text x="205" y="162" font-family="Space Grotesk,sans-serif" font-size="11" fill="#5f6b62">small Δf</text>
+    <!-- steep region: same Δx → big Δf -->
+    <line x1="450" y1="15" x2="450" y2="175" stroke="#b5491f" stroke-width="1" stroke-dasharray="4 3"/>
+    <line x1="490" y1="15" x2="490" y2="175" stroke="#b5491f" stroke-width="1" stroke-dasharray="4 3"/>
+    <line x1="500" y1="92" x2="500" y2="40" stroke="#bb4d3a" stroke-width="2"/>
+    <text x="505" y="70" font-family="Space Grotesk,sans-serif" font-size="11" fill="#bb4d3a">big Δf</text>
+    <text x="125" y="192" font-family="Space Grotesk,sans-serif" font-size="11" fill="#b5491f">same δ</text>
+    <text x="462" y="192" font-family="Space Grotesk,sans-serif" font-size="11" fill="#b5491f">same δ</text>
+    <text x="280" y="195" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12" fill="#5f6b62">same Δx, far bigger output jump where the curve is steep ⇒ one δ can't cover both</text>
+  </svg><figcaption><b>Plain vs uniform.</b> Equal input windows (δ) give a tiny output change where the graph is shallow but a large one where it is steep — so a single δ fails globally. Compactness caps the steepness and rescues uniformity.</figcaption></figure></div>
+
   <div class="box thm"><span class="lbl">Theorem · Uniform convergence &amp; the space $C_b(X,Y)$ (1.4.7–1.4.11)</span>
   If $\sup_x d_Y(f_n(x),f(x))\to 0$ (<strong>uniform</strong> convergence), the limit of continuous $f_n$ is continuous — <em>pointwise is not enough</em> (e.g. $f_n(x)=x^n$ on $[0,1]$ has a discontinuous pointwise limit). The bounded continuous functions $C_b(X,Y)$ with $d_\infty(f,g)=\sup_x d_Y(f(x),g(x))$ form a metric space, and <strong>$C_b(X,Y)$ is complete whenever $Y$ is</strong> — the function-space completeness that powers Banach/Hilbert spaces in Block 10.</div>
+
+  <div class="box recipe"><span class="lbl">Pointwise vs uniform convergence — how to tell, and what it needs</span>
+  <strong>Pointwise:</strong> $f_n(x)\to f(x)$ for each fixed $x$ (the threshold $N$ may depend on $x$). <strong>Uniform:</strong> one $N$ works for all $x$ at once, i.e. $d_\infty(f_n,f)=\sup_x|f_n(x)-f(x)|\to 0$.
+  <br><strong>The test (do this):</strong> find the pointwise limit $f$, then compute $M_n=\sup_x|f_n(x)-f(x)|$. If $M_n\to0$ ⇒ <strong>uniform</strong>; if $M_n$ stays bounded away from $0$ ⇒ <strong>only pointwise</strong>.
+  <br><strong>Does $f_n$ have to be continuous?</strong> No — uniform convergence is defined for any functions (it is just $\sup$-distance $\to0$). Continuity of the $f_n$ is only needed for the <em>payoff</em>: "a uniform limit of <em>continuous</em> functions is continuous." (And for $d_\infty$ to be finite you work with <em>bounded</em> functions.) <strong>Shortcut consequence:</strong> if continuous $f_n$ converge to a <em>discontinuous</em> limit, the convergence <em>cannot</em> be uniform — it was only pointwise.
+  <br><strong>Example 1.4.9:</strong> $f_n(x)=x^n$ on $[0,1]$ → limit $0$ on $[0,1)$ and $1$ at $x=1$. The limit is discontinuous, and $M_n=\sup_{[0,1]}|x^n-f|\not\to0$ ⇒ <em>not</em> uniform. <strong>Example 1.4.10:</strong> $f_n=\mathbf 1_{[1/n,\,1]}$ → limit $1$ on $(0,1]$ and $0$ at $0$; again discontinuous ⇒ only pointwise.</div>
 
   <h3>Solution logic</h3>
   <div class="box recipe"><span class="lbl">Recipe · continuity ⇔ preimages open (PS1 P3)</span>
