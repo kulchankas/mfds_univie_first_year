@@ -475,6 +475,9 @@ section{scroll-margin-top:24px}
   <div class="box thm"><span class="lbl">Theorem · The compactness payoff — EVT (1.4.7–1.4.8)</span>
   If $X$ is compact and $f$ continuous, then $f(X)$ is <strong>compact</strong> (continuous image of a compact set is compact). Hence a continuous $f:X\to\mathbb R$ on a compact $X$ <strong>attains its maximum and minimum</strong> — the <strong>Extreme Value Theorem</strong>. This is <em>the</em> reason compactness matters for optimization: it guarantees a minimizer exists.</div>
 
+  <div class="box def"><span class="lbl">Definition 1.4.10 (path-connected)</span>
+  A metric space $X$ is <strong>path-connected</strong> if for all $x,y\in X$ there is a continuous map $\gamma:[0,1]\to X$ with $\gamma(0)=x$ and $\gamma(1)=y$. Such a $\gamma$ is called a <strong>path</strong> from $x$ to $y$.</div>
+
   <div class="box thm"><span class="lbl">Theorem · The connectedness payoff — IVT (1.4.10–1.4.14)</span>
   Continuous images of path-connected sets are path-connected, and for $X\subseteq\mathbb R$: <strong>path-connected $\iff$ interval</strong>. Consequence — the <strong>Intermediate Value Theorem</strong>: continuous $f:[a,b]\to\mathbb R$ with $f(a)<0<f(b)$ has a root $\xi\in(a,b)$.
   <br><strong>Why path-connectedness matters:</strong> (1) <em>IVT-style reasoning</em> — if $f$ is positive somewhere and negative somewhere on a connected set, it must vanish in between; (2) it tells you <em>whether you can continuously move between two solutions</em>.</div>
