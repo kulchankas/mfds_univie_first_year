@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a1612">
+<meta name="description" content="Algorithms & Data Structures (Schichl) — exam-priority proofs, problem sheets, and a self-study / exam-prep plan around CLRS.">
+<title>Algorithms &amp; Data Structures — Exam prep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1a1612;--bg-elevated:#221d18;--bg-card:#1f1a15;--border:#3a342c;--border-soft:#2a251f;
+    --text:#f5efe4;--text-muted:#b8aa97;--text-dim:#8a7e6e;--accent:#e0b888;--accent-hover:#ecc89c;
+    --general:#8fb8de;--specific:#e0b888;--glow:rgba(224,184,136,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;background-image:radial-gradient(900px 500px at 50% -10%,var(--glow),transparent 70%);background-repeat:no-repeat}
+  .wrap{max-width:780px;margin:0 auto;padding:clamp(2rem,6vw,3rem) clamp(1.1rem,5vw,1.75rem) 5rem;padding-left:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-left));padding-right:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-right))}
+  .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-dim);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;margin-bottom:1.5rem;transition:color .15s}
+  .back-link:hover{color:var(--accent)}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--accent);font-size:clamp(.74rem,2.6vw,.82rem);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem}
+  h1{font-family:'Sora',sans-serif;font-weight:600;font-size:clamp(2rem,7vw,2.9rem);line-height:1.06;letter-spacing:-.03em;margin-bottom:.7rem}
+  .lede{color:var(--text-muted);font-size:clamp(1rem,3.4vw,1.1rem);max-width:42em}
+  h2{font-family:'Sora',sans-serif;font-weight:600;font-size:clamp(1.35rem,4.5vw,1.7rem);letter-spacing:-.02em;margin:clamp(2.5rem,6vw,3.25rem) 0 1rem}
+  h3{font-family:'Sora',sans-serif;font-weight:600;font-size:1.05rem;margin:1.5rem 0 .5rem;color:var(--accent)}
+  .feature{display:block;background:linear-gradient(180deg,var(--bg-card),var(--bg-elevated));border:1px solid var(--border);border-radius:14px;padding:clamp(1.4rem,4vw,1.85rem);text-decoration:none;color:inherit;margin:1.5rem 0 .5rem;transition:transform .2s,border-color .2s,box-shadow .2s}
+  .feature:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 12px 30px rgba(0,0,0,.35)}
+  .feature-tag{font-family:'JetBrains Mono',monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.6rem}
+  .feature-title{font-family:'Sora',sans-serif;font-weight:600;font-size:clamp(1.25rem,4.5vw,1.6rem);letter-spacing:-.02em;margin-bottom:.5rem}
+  .feature-desc{color:var(--text-muted);font-size:.95rem;margin-bottom:1rem}
+  .feature-cta{font-weight:600;font-size:.9rem;color:var(--accent)}
+  .box{background:var(--bg-card);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:0 10px 10px 0;padding:1rem 1.25rem;margin:1.1rem 0;color:var(--text-muted);font-size:.95rem}
+  .box.general{border-left-color:var(--general)}
+  .box .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.55rem}
+  .box.general .lbl{color:var(--general)}
+  .box a{color:var(--accent)}
+  ul{margin:.3rem 0 0;padding-left:1.2rem} li{margin:.35rem 0}
+  .proof{margin:.4rem 0;padding-left:.2rem}
+  .proof b{color:var(--text)}
+  .ref{font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:600}
+  .topic{color:var(--text-dim);font-size:.92em}
+  .doc{display:flex;align-items:center;gap:.9rem;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:.8rem 1.1rem;text-decoration:none;color:inherit;margin:.5rem 0;transition:transform .15s,border-color .15s}
+  .doc:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .doc .ic{font-size:1rem}
+  .doc .t{flex:1;font-weight:500} .doc .t .s{color:var(--text-dim);font-weight:400;font-size:.9em}
+  .doc .ext{font-family:'JetBrains Mono',monospace;font-size:.68rem;text-transform:uppercase;color:var(--accent);border:1px solid var(--border);border-radius:5px;padding:.12rem .4rem}
+  .soon{border:1px dashed var(--border);border-radius:12px;padding:1.1rem 1.3rem;margin:1rem 0;color:var(--text-muted);background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(224,184,136,.025) 10px,rgba(224,184,136,.025) 20px)}
+  .soon .lbl{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+  footer{margin-top:3rem;padding-top:1.3rem;border-top:1px solid var(--border-soft);color:var(--text-dim);font-size:.82rem}
+  footer a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="../index.html">← All subjects</a>
+  <div class="eyebrow">Universität Wien · Prof. Schichl · SS 2026</div>
+  <h1>Algorithms &amp; Data Structures</h1>
+  <p class="lede">Course hub: the exam-priority proofs to master, the weekly problem sheets, and a self-study / exam-prep plan built around CLRS. The deep write-ups come next — this is the scaffold.</p>
+
+  <a class="feature" href="https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/">
+    <div class="feature-tag">📕 Primary text</div>
+    <div class="feature-title">CLRS — Introduction to Algorithms, 4th ed.</div>
+    <p class="feature-desc">Cormen, Leiserson, Rivest &amp; Stein. The course follows its numbering (the proof list below uses it). Not bundled here — it's a 144&nbsp;MB commercial book, available via the university library or MIT Press.</p>
+    <span class="feature-cta">MIT Press page →</span>
+  </a>
+
+  <h2>⭐ Exam-priority proofs</h2>
+  <p class="lede" style="font-size:1rem">The proofs the professor flagged as exam-relevant. Master these end-to-end.</p>
+
+  <div class="box general"><span class="lbl">General proof techniques</span>
+  <ul>
+    <li><b>Loop invariants</b> — prove correctness by <em>initialization</em> (holds before the loop), <em>maintenance</em> (preserved by each iteration), and <em>termination</em> (gives the desired result).</li>
+    <li><b>Master Theorem</b> — solving divide-and-conquer recurrences $T(n)=a\,T(n/b)+f(n)$ by comparing $f(n)$ with $n^{\log_b a}$.</li>
+    <li><b>Akra–Bazzi theorem</b> — the general recurrence method for unequal / non-uniform subproblem sizes, where the Master Theorem doesn't apply.</li>
+  </ul></div>
+
+  <div class="box"><span class="lbl">Specific proofs (CLRS numbering)</span>
+  <div class="proof"><span class="ref">Lemma 4.2, Lemma 4.3, Theorem 4.4</span> <span class="topic">— Ch. 4, recurrences / divide-and-conquer (the Master-theorem machinery)</span></div>
+  <div class="proof"><span class="ref">Lemma 5.4</span> <span class="topic">— Ch. 5, probabilistic analysis &amp; randomized algorithms</span></div>
+  <div class="proof"><span class="ref">Theorem 7.4</span> — including the formulation of <span class="ref">Lemmas 7.1–7.3</span> <span class="topic">— Ch. 7, expected running time of randomized quicksort</span></div>
+  <div class="proof"><span class="ref">Theorem 8.1</span> — including the preceding discussion <span class="topic">— Ch. 8, the $\Omega(n\lg n)$ comparison-sort lower bound</span></div>
+  <div class="proof"><span class="ref">Theorem 9.2</span> <span class="topic">— Ch. 9, medians &amp; order statistics (expected linear-time selection)</span></div>
+  <div class="proof"><span class="ref">Theorem 11.2, Theorem 11.8</span> <span class="topic">— Ch. 11, hash tables (chaining / universal &amp; open-address hashing)</span></div>
+  <div class="proof"><span class="ref">Theorem 15.1, Theorem 15.4</span> — including <span class="ref">Lemma 15.2</span> and <span class="ref">Lemma 15.3</span> <span class="topic">— Ch. 15 (confirm topic against your lecture notes)</span></div>
+  <div class="proof"><span class="ref">Theorem 17.2</span> <span class="topic">— Ch. 17, amortized analysis</span></div>
+  <p style="margin-top:.8rem;font-size:.88rem;color:var(--text-dim)">Chapter topics in grey are best-guess mappings from CLRS — confirm the exact statements against your lecture numbering. The full written-out proofs will live in the self-study section below.</p>
+  </div>
+
+  <h2>Problem sheets</h2>
+  <p class="lede" style="font-size:1rem">Prof. Schichl's weekly exercise sheets, grouped by topic.</p>
+  <h3>Foundations</h3>
+  <a class="doc" href="problem-sheets/ss26_algodat-12.pdf"><span class="ic">📄</span><span class="t">Asymptotics &amp; complexity <span class="s">· growth rates, time limits (Prob. 1–)</span></span><span class="ext">PDF</span></a>
+  <a class="doc" href="problem-sheets/Problem_14_Sheet_1_Algo_and_Data_Structures.pdf"><span class="ic">✅</span><span class="t">Worked solution: iterated log &amp; asymptotic ordering <span class="s">· Prob. 14–15</span></span><span class="ext">PDF</span></a>
+  <h3>Combinatorics &amp; probability</h3>
+  <a class="doc" href="problem-sheets/ss26_algodat-2.pdf"><span class="ic">📄</span><span class="t">Counting &amp; estimates I <span class="s">· Sheet 2</span></span><span class="ext">PDF</span></a>
+  <a class="doc" href="problem-sheets/ss26_algodat-3.pdf"><span class="ic">📄</span><span class="t">Counting &amp; estimates II <span class="s">· Prob. 30–31</span></span><span class="ext">PDF</span></a>
+  <a class="doc" href="problem-sheets/ss26_algodat-4.pdf"><span class="ic">📄</span><span class="t">Random sampling <span class="s">· Prob. 36–</span></span><span class="ext">PDF</span></a>
+  <a class="doc" href="problem-sheets/ss26_algodat-5.pdf"><span class="ic">📄</span><span class="t">Randomized search &amp; analysis <span class="s">· Prob. 44–</span></span><span class="ext">PDF</span></a>
+  <h3>Data structures</h3>
+  <a class="doc" href="problem-sheets/ss26_algodat-6.pdf"><span class="ic">📄</span><span class="t">Stacks &amp; queues <span class="s">· Prob. 52–</span></span><span class="ext">PDF</span></a>
+  <a class="doc" href="problem-sheets/ss26_algodat-7.pdf"><span class="ic">📄</span><span class="t">Binary search trees <span class="s">· Prob. 62–</span></span><span class="ext">PDF</span></a>
+  <a class="doc" href="problem-sheets/ss26_algodat-8.pdf"><span class="ic">📄</span><span class="t">Red–black trees <span class="s">· Prob. 73–</span></span><span class="ext">PDF</span></a>
+  <a class="doc" href="problem-sheets/ss26_algodat-11.pdf"><span class="ic">📄</span><span class="t">B-trees &amp; graphs <span class="s">· Prob. 100–</span></span><span class="ext">PDF</span></a>
+  <h3>Dynamic programming</h3>
+  <a class="doc" href="problem-sheets/ss26_algodat-9.pdf"><span class="ic">📄</span><span class="t">Rod cutting &amp; DP basics <span class="s">· Prob. 81–</span></span><span class="ext">PDF</span></a>
+  <a class="doc" href="problem-sheets/ss26_algodat-10.pdf"><span class="ic">📄</span><span class="t">Optimal BST &amp; reconstruction <span class="s">· Prob. 90–</span></span><span class="ext">PDF</span></a>
+
+  <h2>Self-study &amp; exam preparation</h2>
+  <div class="soon"><span class="lbl">🚧 Scaffold — to be filled in</span>
+  <p style="margin:.6rem 0 0">This is the placeholder we'll build out together. Planned contents:</p>
+  <ul>
+    <li><strong>Written-out exam proofs</strong> — each item in the priority list above, fully proved with the key idea highlighted.</li>
+    <li><strong>Topic notes</strong> — recurrences &amp; Master/Akra–Bazzi, sorting &amp; lower bounds, hashing, BST / red–black / B-trees, dynamic programming, amortized analysis.</li>
+    <li><strong>A study plan + flashcards + practice</strong>, like the Analysis section.</li>
+  </ul>
+  </div>
+  <div class="box"><span class="lbl">Start here — external resources</span>
+  <ul>
+    <li>🎓 <a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/">MIT 6.006 — Introduction to Algorithms</a> (OCW video course, CLRS-aligned).</li>
+    <li>📺 <a href="https://www.youtube.com/playlist?list=PLDN4rrl48XKpZkf03iYFl-O29szjTrs_O">Abdul Bari — Algorithms</a> (clear walkthroughs of sorting, DP, graphs).</li>
+    <li>🔎 <a href="https://visualgo.net/">VisuAlgo</a> — interactive visualizations of data structures &amp; algorithms (BSTs, red–black, hashing, sorting).</li>
+    <li>📕 CLRS 4th ed. — the definitive reference for every proof above.</li>
+  </ul></div>
+
+  <footer>
+    Problem sheets © Prof. Schichl; CLRS © its authors (linked, not hosted). Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+</body>
+</html>

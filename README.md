@@ -1,12 +1,12 @@
 # mfds_univie_first_year
 
 First-year university maths — notes, proofs, mock exams, problem sets, and
-self-study plans for **Linear Algebra**, **Analysis**, and **Linear Algebra
-for Data Science** (Universität Wien).
+self-study plans for **Linear Algebra**, **Analysis**, **Linear Algebra
+for Data Science**, and **Algorithms & Data Structures** (Universität Wien).
 
 ## Live site
 
-**https://kulchankas.github.io/mfds_univie_first_year/** — hub linking to all three subjects.
+**https://kulchankas.github.io/mfds_univie_first_year/** — hub linking to all four subjects.
 
 ## Structure
 
@@ -25,6 +25,9 @@ for Data Science** (Universität Wien).
 ├── linear-algebra-ds/
 │   ├── index.html             Linear Algebra for Data Science — self-study plan
 │   └── notes/                 course textbook (Mula & Wu, PDF)
+├── algorithms/
+│   ├── index.html             Algorithms & Data Structures — exam proofs + plan
+│   └── problem-sheets/        Prof. Schichl's weekly sheets (PDF)
 ├── exam_notes.html            redirect → linear-algebra/exam_notes.html
 └── mock_exams.html            redirect → linear-algebra/mock_exams.html
 ```
@@ -43,6 +46,7 @@ for Data Science** (Universität Wien).
 | Analysis · Flashcards | [/analysis/flashcards.html](https://kulchankas.github.io/mfds_univie_first_year/analysis/flashcards.html) |
 | Analysis · Daily practice | [/analysis/daily-practice.html](https://kulchankas.github.io/mfds_univie_first_year/analysis/daily-practice.html) |
 | Linear Algebra for Data Science | [/linear-algebra-ds/](https://kulchankas.github.io/mfds_univie_first_year/linear-algebra-ds/) |
+| Algorithms & Data Structures | [/algorithms/](https://kulchankas.github.io/mfds_univie_first_year/algorithms/) |
 
 The old top-level `exam_notes.html` / `mock_exams.html` URLs still work — they
 redirect to their new homes under `linear-algebra/`.
