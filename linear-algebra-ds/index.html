@@ -17,8 +17,8 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   :root{
     --bg:#1a1612;--bg-elevated:#221d18;--bg-card:#1f1a15;--border:#3a342c;--border-soft:#2a251f;
     --text:#f5efe4;--text-muted:#b8aa97;--text-dim:#8a7e6e;--accent:#e0b888;--accent-hover:#ecc89c;
-    --watch:#d99a7e;--read:#8fb8de;--prac:#8bc6a0;--ds:#c4a6df;--recall:#e8a87c;--glow:rgba(224,184,136,.14);
-    --recall-bg:rgba(232,168,124,.09);
+    --watch:#d99a7e;--read:#8fb8de;--prac:#8bc6a0;--ds:#c4a6df;--ml:#86c4c4;--recall:#e8a87c;--glow:rgba(224,184,136,.14);
+    --recall-bg:rgba(232,168,124,.09);--ml-bg:rgba(134,196,196,.09);
     --radius:12px;--radius-sm:8px;--ring:rgba(224,184,136,.42);--touch:44px;
     --watch-bg:rgba(217,154,126,.09);--read-bg:rgba(143,184,222,.09);--prac-bg:rgba(139,198,160,.09);--ds-bg:rgba(196,166,223,.09);
     --success:#8bc6a0;--danger:#d99a7e;
@@ -79,6 +79,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   .pill.prac{color:var(--prac);background:var(--prac-bg);border-color:rgba(139,198,160,.25)}
   .pill.ds{color:var(--ds);background:var(--ds-bg);border-color:rgba(196,166,223,.25)}
   .pill.recall{color:var(--recall);background:var(--recall-bg);border-color:rgba(232,168,124,.25)}
+  .pill.ml{color:var(--ml);background:var(--ml-bg);border-color:rgba(134,196,196,.25)}
 
   /* session recipe & exercise chips */
   .box.session{border-left-color:var(--read)}
@@ -153,8 +154,13 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   .row.prac{background:var(--prac-bg);border-left-color:var(--prac)}
   .row.ds{background:var(--ds-bg);border-left-color:var(--ds)}
   .row.recall{background:var(--recall-bg);border-left-color:var(--recall)}
+  .row.ml-intuition{background:var(--ml-bg);border-left-color:var(--ml)}
   .row .rl{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem}
-  .row.watch .rl{color:var(--watch)} .row.read .rl{color:var(--read)} .row.prac .rl{color:var(--prac)} .row.ds .rl{color:var(--ds)} .row.recall .rl{color:var(--recall)}
+  .row.watch .rl{color:var(--watch)} .row.read .rl{color:var(--read)} .row.prac .rl{color:var(--prac)} .row.ds .rl{color:var(--ds)} .row.ml-intuition .rl{color:var(--ml)} .row.recall .rl{color:var(--recall)}
+  .ml-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:.65rem;margin-top:.15rem}
+  .ml-part{background:var(--bg-elevated);border:1px solid rgba(134,196,196,.18);border-radius:var(--radius-sm);padding:.65rem .75rem}
+  .ml-part .ml-lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ml);margin-bottom:.35rem}
+  .ml-part p{font-size:.88rem;color:var(--text-muted);margin:0;line-height:1.55}
   .row p,.row div{color:var(--text-muted);font-size:.94rem}
   .row a{color:var(--accent);text-decoration:none} .row a:hover{text-decoration:underline}
   .check{width:var(--touch);height:var(--touch);flex-shrink:0;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:transparent;transition:border-color .15s,background .15s,color .15s}
@@ -222,7 +228,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
         <div class="stat-line"><span>Exercises done</span><strong id="stat-exercises">0 / 0</strong></div>
         <div class="stat-line"><span>Foundations</span><strong id="stat-found">0 / 4</strong></div>
         <div class="lane-pills" aria-label="Study lanes">
-          <span class="pill watch">Watch</span><span class="pill read">Read</span><span class="pill prac">Practise</span><span class="pill ds">Data science</span>
+          <span class="pill watch">Watch</span><span class="pill read">Read</span><span class="pill prac">Practise</span><span class="pill ds">Data science</span><span class="pill ml">ML intuition</span>
         </div>
       </div>
     </div>
@@ -323,6 +329,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
     <span><b style="color:var(--read)">📖 Read</b> — rigour</span>
     <span><b style="color:var(--prac)">🎯 Practise</b> — course exercises</span>
     <span><b style="color:var(--ds)">🤖 DS</b> — data-science payoff</span>
+    <span><b style="color:var(--ml)">🧠 ML intuition</b> — deeper ML/DS framing</span>
     <span><b style="color:var(--recall)">🗣 Recall</b> — before moving on</span>
   </div>
 
@@ -356,6 +363,14 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
     <div class="row ds"><span class="rl">🤖 In data science</span>
       <div class="cl-list" data-checklist-group="1-ds"></div>
       <div class="cl-progress" data-cl-progress="1-ds"></div>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 ML intuition</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Goal</span><p>Build the vocabulary for where data lives: vector spaces and subspaces, linear maps between spaces, dual vectors (linear functionals), and norms that measure size and stability. This chapter answers: <em>what structure do we assume when we write $\mathbf{x} \in \mathbb{R}^d$ or $f: V \to W$?</em></p></div>
+        <div class="ml-part"><span class="ml-lbl">Why ML/DS needs it</span><p>Every feature vector is a point in a space; every weight matrix is a linear map. Embeddings map discrete objects into continuous spaces. Regularization (L1/L2) is choosing a norm. The operator norm $\|A\|$ bounds how much a perturbation in input can blow up in output — central to conditioning, adversarial robustness, and understanding why some layers amplify noise.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Keep in mind</span><p>$\mathbb{R}^n$ is the workhorse, but the axioms matter: not every subset is a subspace (e.g. the first quadrant fails closure under negation). The dual space $V^*$ previews gradients and inner products in Ch 2. A matrix depends on your choice of basis; the underlying linear map does not. Operator norm is <em>not</em> the largest entry of the matrix.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Intuition to develop</span><p>Picture your dataset as a cloud of points in a high-dimensional room. A linear layer pushes that cloud through a fixed "door" (linear map) — no bending, only stretch, rotate, and shear. A norm tells you how far a point is from the origin; the operator norm tells you the worst-case stretch the door can apply. Explain to a friend: "We're learning the rules of the room our data lives in, before we measure angles or distances."</p></div>
+      </div>
     </div>
     <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Can you explain, without notes: (1) why $\mathbb{R}^2$ is a vector space but the first quadrant is not? (2) What is the dual of a vector space and why does it matter for inner products later? (3) How does a linear map become a matrix once you pick bases?</div></div>
   </div></details>
@@ -391,6 +406,14 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
       <div class="cl-list" data-checklist-group="2-ds"></div>
       <div class="cl-progress" data-cl-progress="2-ds"></div>
     </div>
+    <div class="row ml-intuition"><span class="rl">🧠 ML intuition</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Goal</span><p>Add geometry to vector spaces: inner products give angles and lengths, orthogonal projection finds the closest point in a subspace, and the adjoint pairs a map with its "reverse" action under the inner product. Least squares — the workhorse of supervised learning — is a projection problem.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Why ML/DS needs it</span><p>Linear regression with more features than perfect fit uses least squares: find $\hat{\mathbf{y}} = A\hat{\mathbf{x}}$ closest to $\mathbf{b}$ in the column space of $A$. Gram–Schmidt builds orthonormal bases used in QR decomposition (stable least squares). The adjoint/transpose appears in backpropagation and normal equations $A^*A\hat{x} = A^*b$. Riesz representation links linear functionals to vectors — the seed of kernel methods.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Keep in mind</span><p>Projection onto $\mathrm{Col}(A)$ is always defined; the formula $A(A^*A)^{-1}A^*$ needs full column rank. Gram–Schmidt in raw form can be numerically unstable — QR via Householder is what libraries use. Over $\mathbb{C}$, adjoint uses conjugate transpose, not plain transpose. Least squares minimizes $\|Ax - b\|_2$, not entrywise error.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Intuition to develop</span><p>Inner product = similarity score between two vectors. Orthogonal = genuinely independent directions. Projection = drop the component you can't explain, keep the best fit inside the model's span. Least squares = "find the compromise hyperplane that gets as close as possible to all target points." Explain to a friend: "We're finally measuring how far off our predictions are, and geometry tells us the unique best fix."</p></div>
+      </div>
+    </div>
     <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Can you explain: (1) why least-squares is "project $b$ onto $\mathrm{Col}(A)$"? (2) What Gram–Schmidt actually produces and why orthonormal bases simplify coordinates. (3) What the adjoint of an operator is and how it relates to the transpose.</div></div>
   </div></details>
 
@@ -419,6 +442,14 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
     <div class="row ds"><span class="rl">🤖 In data science</span>
       <div class="cl-list" data-checklist-group="3-ds"></div>
       <div class="cl-progress" data-cl-progress="3-ds"></div>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 ML intuition</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Goal</span><p>Understand functions of <em>two</em> vectors that are linear in each argument separately — bilinear and sesquilinear forms — and the tensor product $V \otimes W$ as the universal way to combine vector spaces without committing to coordinates first.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Why ML/DS needs it</span><p>A symmetric positive-definite bilinear form defines an ellipsoid — the geometry of Mahalanobis distance and Gaussian covariances. Quadratic forms $\mathbf{x}^T Q \mathbf{x}$ appear in loss landscapes and convex optimization (Hessians). Sesquilinear forms over $\mathbb{C}$ underpin complex inner products in quantum ML and signal processing. Tensor products formalize multi-index features, outer products, and higher-order structure in neural tensor networks and kernel design.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Keep in mind</span><p>Bilinear = linear in each slot over $\mathbb{R}$; sesquilinear = conjugate-linear in one slot (needed for $\mathbb{C}$). An inner product is a positive-definite sesquilinear form. $V \otimes W$ is <em>not</em> the direct product $V \times W$ — its dimension is $\dim V \cdot \dim W$. Symmetry and positive-definiteness are separate properties; check both.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Intuition to develop</span><p>A form is a machine that eats two vectors and outputs one number — like a generalized dot product. A quadratic form eats one vector and asks "how curved is the energy bowl at this point?" The tensor product says: "build a space whose coordinates are all products $v_i \otimes w_j$ — the natural home for interactions between two feature sets." Explain to a friend: "When two inputs interact multiplicatively, you're living in tensor land."</p></div>
+      </div>
     </div>
     <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Can you explain: (1) the difference between bilinear and sesquilinear — and which one matches an inner product over $\mathbb{C}$. (2) Why a symmetric positive-definite form defines an ellipsoid. (3) What $V \otimes W$ buys you that direct product doesn't.</div></div>
   </div></details>
@@ -454,6 +485,14 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
       <div class="cl-list" data-checklist-group="4-ds"></div>
       <div class="cl-progress" data-cl-progress="4-ds"></div>
     </div>
+    <div class="row ml-intuition"><span class="rl">🧠 ML intuition</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Goal</span><p>Define the determinant as the unique alternating $n$-linear form that measures oriented volume, connect it to invertibility, and use it for change-of-variables in multivariate calculus.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Why ML/DS needs it</span><p>The Jacobian determinant appears in normalizing flows, VAEs, and any density transformation: $p(\mathbf{z}) = p(\mathbf{x})\,|\det J|^{-1}$. For Gaussians, $\det(\Sigma)$ sets the normalization constant and volume of confidence ellipsoids — hence log-determinant tricks in GP inference and variational methods. Volume scaling explains why invertible layers must preserve (or track) how much probability mass is squeezed or expanded.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Keep in mind</span><p>$\det A = 0$ means the map collapses dimension — not invertible. Sign encodes orientation flip. $\det(AB) = \det A \det B$ matches composition. Cramer's rule is pedagogically nice but $O(n!)$ — never used at scale; LU/QR wins. In code, use <code>logdet</code> via Cholesky for positive-definite matrices to avoid overflow.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Intuition to develop</span><p>Apply a linear map to the unit cube; the determinant is how much the volume of that cube changes (negative = reflection). For a small nonlinear map, the Jacobian determinant is the local volume stretch. Explain to a friend: "Determinant tells you whether the transformation is reversible and how much space gets squashed or blown up — critical whenever you transform probability densities."</p></div>
+      </div>
+    </div>
     <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Can you explain: (1) determinant as volume scaling (sign included). (2) Why $\det(AB)=\det A \det B$ matches composition of linear maps. (3) When Cramer's rule is useful vs. when row reduction wins.</div></div>
   </div></details>
 
@@ -487,6 +526,14 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
     <div class="row ds"><span class="rl">🤖 In data science</span>
       <div class="cl-list" data-checklist-group="5-ds"></div>
       <div class="cl-progress" data-cl-progress="5-ds"></div>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 ML intuition</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Goal</span><p>Find directions that a linear map leaves invariant (eigenvectors) and the corresponding stretch factors (eigenvalues). Diagonalize when possible; otherwise use triangularization over $\mathbb{C}$. Extend to matrix functions like $e^{tA}$ via the characteristic polynomial and Cayley–Hamilton.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Why ML/DS needs it</span><p>PCA is eigendecomposition of the covariance matrix — variance along each eigenvector. Spectral clustering and PageRank are eigenvector problems on graph Laplacians/adjacency matrices. Power iteration finds dominant eigenvalues (used in recommender systems and NLP). Matrix exponentials $e^{tA}$ govern linear ODEs and continuous-time Markov chains; they appear in Neural ODEs and stability analysis of recurrent nets.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Keep in mind</span><p>Not every matrix is diagonalizable over $\mathbb{R}$ (rotation in $\mathbb{R}^2$ needs $\mathbb{C}$). Algebraic multiplicity $\geq$ geometric multiplicity. Symmetric matrices are the sweet case: real eigenvalues, orthogonal eigenvectors. Cayley–Hamilton says $p(A) = 0$ — useful for defining $f(A)$ but don't confuse characteristic polynomial with minimal polynomial. Large matrices: never compute characteristic polynomial explicitly.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Intuition to develop</span><p>An eigenvector is a direction the transformation doesn't bend — only stretches or flips. An eigenvalue tells you the stretch factor. Diagonalization = "find a coordinate system where the map is just scaling along each axis." Explain to a friend: "Eigenstuff finds the natural axes hidden in your data or dynamics — PCA literally ranks them by how much variance they carry."</p></div>
+      </div>
     </div>
     <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Can you explain: (1) geometric meaning of an eigenvector. (2) Why symmetric matrices have real eigenvalues and orthogonal eigenvectors. (3) What Cayley–Hamilton says and one place matrix functions use it.</div></div>
   </div></details>
@@ -533,6 +580,14 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
     <div class="row ds"><span class="rl">🤖 In data science</span>
       <div class="cl-list" data-checklist-group="6-ds"></div>
       <div class="cl-progress" data-cl-progress="6-ds"></div>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 ML intuition</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Goal</span><p>Diagonalize <em>normal</em> operators (spectral theorem) and decompose <em>any</em> matrix via SVD: $A = U\Sigma V^*$. Understand why these give optimal low-rank approximations and stable solutions to ill-posed linear systems.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Why ML/DS needs it</span><p>Truncated SVD = PCA on centered data, dimensionality reduction, denoising, and latent semantic analysis in NLP. Eckart–Young: keep top-$k$ singular values for best rank-$k$ approximation in Frobenius norm — the math behind image compression and recommender systems. Moore–Penrose pseudoinverse via SVD solves least squares even when $A$ is rank-deficient. Spectral theorem guarantees real orthonormal eigenbases for symmetric/Hermitian matrices — the foundation of covariance analysis.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Keep in mind</span><p>Spectral theorem requires normality ($AA^* = A^*A$); symmetry is the important special case. SVD always exists for any matrix, even non-square or non-diagonalizable. Singular values of $A$ are $\sqrt{\lambda_i(A^*A)}$ — not the same as eigenvalues of $A$ when $A$ is rectangular. PCA: center first, then eigendecompose covariance (or SVD the centered data matrix). Truncating too aggressively loses signal; too little retains noise.</p></div>
+        <div class="ml-part"><span class="ml-lbl">Intuition to develop</span><p>SVD finds three moves: rotate input ($V^*$), stretch along orthogonal axes ($\Sigma$), rotate output ($U$). Every matrix, no matter how messy, has this geometry. Truncating $\Sigma$ keeps the "loud" directions and drops the whispers — that's denoising and compression. Explain to a friend: "SVD is the Swiss Army knife: PCA, recommendations, pseudoinverse, and low-rank approximation all come from the same decomposition."</p></div>
+      </div>
     </div>
     <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Can you explain: (1) why every matrix has an SVD even when it's not diagonalizable. (2) How singular values relate to $\|A\|_2$ and to PCA. (3) What "normal operator" means and why the spectral theorem needs it.</div></div>
   </div></details>
