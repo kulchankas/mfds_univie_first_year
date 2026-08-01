@@ -47,8 +47,7 @@
   .doc .ic{font-size:1rem}
   .doc .t{flex:1;font-weight:500} .doc .t .s{color:var(--text-dim);font-weight:400;font-size:.9em}
   .doc .ext{font-family:'JetBrains Mono',monospace;font-size:.68rem;text-transform:uppercase;color:var(--accent);border:1px solid var(--border);border-radius:5px;padding:.12rem .4rem}
-  .soon{border:1px dashed var(--border);border-radius:12px;padding:1.1rem 1.3rem;margin:1rem 0;color:var(--text-muted);background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(224,184,136,.025) 10px,rgba(224,184,136,.025) 20px)}
-  .soon .lbl{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+  .x1{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:#221a10;background:#d99a7e;border-radius:5px;padding:.1rem .45rem;vertical-align:middle;letter-spacing:.03em;white-space:nowrap}
   footer{margin-top:3rem;padding-top:1.3rem;border-top:1px solid var(--border-soft);color:var(--text-dim);font-size:.82rem}
   footer a{color:var(--accent);text-decoration:none}
 </style>
@@ -58,7 +57,21 @@
   <a class="back-link" href="../index.html">← All subjects</a>
   <div class="eyebrow">Universität Wien · Prof. Schichl · SS 2026</div>
   <h1>Algorithms &amp; Data Structures</h1>
-  <p class="lede">Course hub: the exam-priority proofs to master, the weekly problem sheets, and a self-study / exam-prep plan built around CLRS. The deep write-ups come next — this is the scaffold.</p>
+  <p class="lede">Course hub: the real first-date exam with model solutions, every flagged proof written out, describe/define notes for the data structures, a recurrence drill bank, flashcards — and the weekly problem sheets.</p>
+
+  <a class="feature" href="mock-exam-1.html" style="border-color:rgba(217,154,126,.5)">
+    <div class="feature-tag">⭐ Start here — the real exam</div>
+    <div class="feature-title">Mock exam with solutions</div>
+    <p class="feature-desc">The actual first-date paper (2 July 2026) transcribed question by question — bubblesort invariants, four recurrences, heaps, red-black trees, Huffman — with grader-style model solutions and a predicted second-date paper for self-testing.</p>
+    <span class="feature-cta">Open the exam →</span>
+  </a>
+
+  <h2>Study kit</h2>
+  <a class="doc" href="exam-proofs.html"><span class="ic">🧾</span><span class="t">Exam proofs — all 11 flagged items, written out <span class="s">· loop invariants · Master/Akra–Bazzi · quicksort · lower bound · selection · hashing · Huffman · augmentation</span></span><span class="ext">HTML</span></a>
+  <a class="doc" href="data-structures.html"><span class="ic">🗂️</span><span class="t">Data-structure notes — the "describe &amp; define" half <span class="s">· heaps · BST/RBT · hashing · B-trees · sorting zoo · DP · greedy</span></span><span class="ext">HTML</span></a>
+  <a class="doc" href="recurrence-drills.html"><span class="ic">🧮</span><span class="t">Recurrence drills — decision procedure + 21 problems <span class="s">· incl. the extended case 2 and Akra–Bazzi the exam actually uses</span></span><span class="ext">HTML</span></a>
+  <a class="doc" href="flashcards.html"><span class="ic">🃏</span><span class="t">Flashcards — 47 cards, spaced repetition <span class="s">· same Leitner system as the Analysis deck</span></span><span class="ext">HTML</span></a>
+  <a class="doc" href="../study-plan.html"><span class="ic">📅</span><span class="t">The 6-week plan <span class="s">· Algorithms + Analysis + Linear Algebra in parallel</span></span><span class="ext">PLAN</span></a>
 
   <a class="feature" href="https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/">
     <div class="feature-tag">📕 Primary text</div>
@@ -72,9 +85,9 @@
 
   <div class="box general"><span class="lbl">General proof techniques</span>
   <ul>
-    <li><b>Loop invariants</b> — prove correctness by <em>initialization</em> (holds before the loop), <em>maintenance</em> (preserved by each iteration), and <em>termination</em> (gives the desired result).</li>
-    <li><b>Master Theorem</b> — solving divide-and-conquer recurrences $T(n)=a\,T(n/b)+f(n)$ by comparing $f(n)$ with $n^{\log_b a}$.</li>
-    <li><b>Akra–Bazzi theorem</b> — the general recurrence method for unequal / non-uniform subproblem sizes, where the Master Theorem doesn't apply.</li>
+    <li><b>Loop invariants</b> — prove correctness by <em>initialization</em>, <em>maintenance</em>, <em>termination</em>. <span class="x1">EXAM 1 · Q1, 8 pts</span> — bubblesort, worked on the <a href="mock-exam-1.html">mock page</a>; template + insertion sort on the <a href="exam-proofs.html#loopinv">proofs page</a>.</li>
+    <li><b>Master Theorem</b> — recurrences $T(n)=a\,T(n/b)+f(n)$ via $f$ vs. $n^{\log_b a}$. <span class="x1">EXAM 1 · Q2, 8 pts</span> — all four parts were the case-2/log-factor family: <a href="recurrence-drills.html">drill bank</a>.</li>
+    <li><b>Akra–Bazzi theorem</b> — the general method when the Master Theorem fails (unequal splits, $n/\lg n$ driving functions). <span class="x1">EXAM 1 · Q2b</span> — statement &amp; recipe on the <a href="exam-proofs.html#akra">proofs page</a>.</li>
   </ul></div>
 
   <div class="box"><span class="lbl">Specific proofs (CLRS numbering)</span>
@@ -84,9 +97,9 @@
   <div class="proof"><span class="ref">Theorem 8.1</span> — including the preceding discussion <span class="topic">— Ch. 8, the $\Omega(n\lg n)$ comparison-sort lower bound</span></div>
   <div class="proof"><span class="ref">Theorem 9.2</span> <span class="topic">— Ch. 9, medians &amp; order statistics (expected linear-time selection)</span></div>
   <div class="proof"><span class="ref">Theorem 11.2, Theorem 11.8</span> <span class="topic">— Ch. 11, hash tables (chaining / universal &amp; open-address hashing)</span></div>
-  <div class="proof"><span class="ref">Theorem 15.1, Theorem 15.4</span> — including <span class="ref">Lemma 15.2</span> and <span class="ref">Lemma 15.3</span> <span class="topic">— Ch. 15 (confirm topic against your lecture notes)</span></div>
-  <div class="proof"><span class="ref">Theorem 17.2</span> <span class="topic">— Ch. 17, amortized analysis</span></div>
-  <p style="margin-top:.8rem;font-size:.88rem;color:var(--text-dim)">Chapter topics in grey are best-guess mappings from CLRS — confirm the exact statements against your lecture numbering. The full written-out proofs will live in the self-study section below.</p>
+  <div class="proof"><span class="ref">Theorem 15.1, Theorem 15.4</span> — including <span class="ref">Lemma 15.2</span> and <span class="ref">Lemma 15.3</span> <span class="topic">— Ch. 15, greedy algorithms: activity selection &amp; <b>Huffman optimality</b></span> <span class="x1">EXAM 1 · Q5, 10 pts</span></div>
+  <div class="proof"><span class="ref">Theorem 17.2</span> <span class="topic">— Ch. 17, augmenting data structures (the red-black augmentation theorem)</span></div>
+  <p style="margin-top:.8rem;font-size:.88rem;color:var(--text-dim)">Chapter mappings confirmed against the first-date exam (Ch.&nbsp;15 = greedy/Huffman appeared verbatim as Q5). Every item is <a href="exam-proofs.html" style="color:var(--accent)">written out in full on the proofs page</a>. Note the exam also asks <em>describe</em> questions (heaps, red-black trees — 14 pts on the first date) that are <b>not</b> on this proof list: that material lives in the <a href="data-structures.html" style="color:var(--accent)">data-structure notes</a>.</p>
   </div>
 
   <h2>Problem sheets</h2>
@@ -109,12 +122,12 @@
   <a class="doc" href="problem-sheets/ss26_algodat-10.pdf"><span class="ic">📄</span><span class="t">Optimal BST &amp; reconstruction <span class="s">· Prob. 90–</span></span><span class="ext">PDF</span></a>
 
   <h2>Self-study &amp; exam preparation</h2>
-  <div class="soon"><span class="lbl">🚧 Scaffold — to be filled in</span>
-  <p style="margin:.6rem 0 0">This is the placeholder we'll build out together. Planned contents:</p>
+  <div class="box"><span class="lbl">How to prepare — the short version</span>
   <ul>
-    <li><strong>Written-out exam proofs</strong> — each item in the priority list above, fully proved with the key idea highlighted.</li>
-    <li><strong>Topic notes</strong> — recurrences &amp; Master/Akra–Bazzi, sorting &amp; lower bounds, hashing, BST / red–black / B-trees, dynamic programming, amortized analysis.</li>
-    <li><strong>A study plan + flashcards + practice</strong>, like the Analysis section.</li>
+    <li><strong>Calibrate first:</strong> skim the <a href="mock-exam-1.html">real first-date paper</a>. The format is fixed: correctness-by-invariant + four recurrences + two "describe a data structure" questions + one big proof (Huffman was 10&nbsp;pts).</li>
+    <li><strong>Then the two passes:</strong> content (<a href="data-structures.html">notes</a> + <a href="recurrence-drills.html">drills</a>) → <a href="exam-proofs.html">proofs from memory</a> → timed mocks. The full schedule, interleaved with Analysis and Linear Algebra, is the <a href="../study-plan.html">6-week plan</a>.</li>
+    <li><strong>Daily:</strong> the <a href="flashcards.html">flashcard deck</a> (20 min) — definitions, runtimes, Master cases, fixup cases.</li>
+    <li><strong>Rotation risk:</strong> flagged proofs that <em>didn't</em> appear on the first date (quicksort, lower bound, selection, hashing, augmentation) are prime candidates for the second — they're all on the proofs page.</li>
   </ul>
   </div>
   <div class="box"><span class="lbl">Start here — external resources</span>

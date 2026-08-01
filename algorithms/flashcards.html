@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a1612">
+<meta name="description" content="Spaced-repetition flashcards for Algorithms & Data Structures — heaps, red-black trees, hashing, Master theorem, loop invariants, sorting bounds, quicksort, Huffman.">
+<title>Flashcards — Algorithms &amp; Data Structures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, startup: { typeset: false } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --bg: #1a1612; --bg-elevated: #221d18; --bg-card: #1f1a15;
+    --border: #3a342c; --border-soft: #2a251f;
+    --text: #f5efe4; --text-muted: #b8aa97; --text-dim: #8a7e6e;
+    --accent: #e0b888; --accent-hover: #ecc89c;
+    --again: #c87060; --hard: #d99a7e; --good: #8bc6a0; --easy: #8fb8de;
+    --glow: rgba(224, 184, 136, 0.14);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    -webkit-font-smoothing: antialiased; min-height: 100vh;
+    background-image: radial-gradient(900px 500px at 50% -10%, var(--glow), transparent 70%);
+    background-repeat: no-repeat;
+  }
+  .wrap {
+    max-width: 720px; margin: 0 auto;
+    padding: clamp(1.5rem, 5vw, 2.5rem) clamp(1.1rem, 5vw, 1.75rem) 4rem;
+    padding-left: max(clamp(1.1rem,5vw,1.75rem), env(safe-area-inset-left));
+    padding-right: max(clamp(1.1rem,5vw,1.75rem), env(safe-area-inset-right));
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: .4rem; color: var(--text-dim);
+    text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: .8rem;
+    letter-spacing: .02em; margin-bottom: 1.5rem; transition: color .15s ease;
+  }
+  .back-link:hover { color: var(--accent); }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace; font-weight: 500; color: var(--accent);
+    font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .8rem;
+  }
+  h1 { font-family: 'Sora', sans-serif; font-weight: 600; font-size: clamp(1.8rem, 6vw, 2.4rem);
+    letter-spacing: -.03em; line-height: 1.08; margin-bottom: .5rem; }
+  .sub { color: var(--text-muted); font-size: .98rem; margin-bottom: 1.5rem; }
+  .stats { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin-bottom: 1rem;
+    font-family: 'JetBrains Mono', monospace; font-size: .82rem; color: var(--text-dim); }
+  .stats b { color: var(--accent); font-weight: 700; }
+  .bar { height: 6px; background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 99px; overflow: hidden; margin-bottom: 1.5rem; }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s ease; }
+  .card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
+    padding: clamp(1.5rem, 5vw, 2.2rem); min-height: 240px;
+    display: flex; flex-direction: column;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.28);
+  }
+  .card-meta { display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: .72rem; }
+  .chip { text-transform: uppercase; letter-spacing: .06em; font-weight: 700;
+    padding: .15rem .55rem; border-radius: 5px; border: 1px solid var(--border); color: var(--accent); background: var(--bg-elevated); }
+  .chip.def { color: var(--accent); }
+  .chip.thm { color: var(--good); border-color: rgba(139,198,160,.4); }
+  .chip.lemma { color: var(--easy); border-color: rgba(143,184,222,.4); }
+  .chip.algo { color: var(--hard); border-color: rgba(217,154,126,.4); }
+  .card-ref { color: var(--text-dim); }
+  .q { font-size: 1.12rem; line-height: 1.55; }
+  .q b { color: var(--accent); }
+  .divider { border: none; border-top: 1px dashed var(--border); margin: 1.2rem 0; }
+  .a { color: var(--text-muted); font-size: 1rem; line-height: 1.65; }
+  .a b, .a strong { color: var(--text); }
+  .a code { font-family:'JetBrains Mono',monospace; font-size:.85em; background:#14110d; color:var(--accent); padding:.06rem .3rem; border-radius:4px; }
+  .hidden { display: none !important; }
+  .controls { margin-top: 1.5rem; }
+  .btn {
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: .95rem;
+    border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text);
+    border-radius: 10px; padding: .8rem 1rem; cursor: pointer; width: 100%;
+    transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:hover { border-color: var(--accent); }
+  .btn:active { transform: scale(.985); }
+  .btn.primary { background: var(--accent); color: #221a10; border-color: var(--accent); }
+  .grades { display: grid; grid-template-columns: repeat(4, 1fr); gap: .55rem; }
+  .grades .btn { padding: .7rem .3rem; font-size: .86rem; }
+  .grades .btn small { display: block; font-family: 'JetBrains Mono', monospace; font-weight: 400;
+    font-size: .68rem; opacity: .65; margin-top: .15rem; }
+  .g-again { border-color: rgba(200,112,96,.5); color: var(--again); }
+  .g-hard  { border-color: rgba(217,154,126,.5); color: var(--hard); }
+  .g-good  { border-color: rgba(139,198,160,.5); color: var(--good); }
+  .g-easy  { border-color: rgba(143,184,222,.5); color: var(--easy); }
+  .hint { text-align: center; color: var(--text-dim); font-size: .76rem; margin-top: 1rem;
+    font-family: 'JetBrains Mono', monospace; }
+  .done { text-align: center; padding: 2rem 1rem; }
+  .done h2 { font-family: 'Sora', sans-serif; font-weight: 600; margin-bottom: .6rem; }
+  .done p { color: var(--text-muted); margin-bottom: 1.3rem; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; max-width: 420px; margin: 0 auto; }
+  .reset { background: none; border: none; color: var(--text-dim); font-size: .76rem;
+    font-family: 'JetBrains Mono', monospace; cursor: pointer; margin-top: 2rem; text-decoration: underline; }
+  .reset:hover { color: var(--again); }
+  footer { margin-top: 3rem; padding-top: 1.3rem; border-top: 1px solid var(--border-soft);
+    color: var(--text-dim); font-size: .82rem; }
+  footer a { color: var(--accent); text-decoration: none; }
+  mjx-container { color: inherit !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="index.html">← Algorithms &amp; Data Structures</a>
+  <div class="eyebrow">AlgoDat · Spaced repetition</div>
+  <h1>Flashcards</h1>
+  <p class="sub">47 cards over the whole exam surface: heaps · BST/red-black · hashing · recurrences · loop invariants · sorting bounds · quicksort &amp; selection · greedy/Huffman · DP · B-trees. Cards tagged with their CLRS reference.</p>
+
+  <div class="stats" id="stats"></div>
+  <div class="bar"><i id="prog"></i></div>
+
+  <div id="app"></div>
+
+  <button class="reset" id="reset">Reset all progress for this deck</button>
+
+  <footer>
+    Leitner-style scheduling, stored locally in your browser — no account, nothing leaves your device.
+    Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+
+<!-- ===== Card source (literal HTML so the LaTeX survives) ===== -->
+<div id="src" hidden>
+
+  <!-- ================= HEAPS ================= -->
+  <article data-tag="Definition" data-ref="Heaps · Ch 6">
+    <div class="q">Define a <b>binary min-heap</b> — both the shape and the ordering condition.</div>
+    <div class="a">A <b>nearly complete</b> binary tree (all levels full except possibly the last, filled left-to-right) with the <b>min-heap property</b>: $A[\mathrm{parent}(i)]\le A[i]$ for every non-root node. Consequence: the minimum is at the root $A[1]$.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Heaps · array layout">
+    <div class="q">Heap in an array $A[1..n]$: give the formulas for <b>parent</b>, <b>left</b>, <b>right</b> of index $i$, and the height of the heap.</div>
+    <div class="a">$\mathrm{parent}(i)=\lfloor i/2\rfloor$, $\mathrm{left}(i)=2i$, $\mathrm{right}(i)=2i+1$. Stored level by level, left to right. Height $=\lfloor\lg n\rfloor$. The leaves are the indices $\lfloor n/2\rfloor+1,\dots,n$.</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="MIN-HEAPIFY">
+    <div class="q"><b>MIN-HEAPIFY</b>$(A,i)$ — what does it assume, what does it do, and what is its running time?</div>
+    <div class="a">Assumes the subtrees at $\mathrm{left}(i)$, $\mathrm{right}(i)$ are already min-heaps but $A[i]$ may violate the property. It picks the <b>smallest</b> of $A[i]$ and its children; if not $A[i]$, swaps and <b>recurses where the big key landed</b> — the key <em>floats down</em>. Time $O(h)=O(\lg n)$.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="BUILD-MIN-HEAP">
+    <div class="q"><b>BUILD-MIN-HEAP</b>: from which index does the loop start, why, and why is the total time $O(n)$ rather than $O(n\lg n)$?</div>
+    <div class="a"><code>for i = ⌊n/2⌋ downto 1: MIN-HEAPIFY(A,i)</code> — indices above $\lfloor n/2\rfloor$ are <b>leaves</b>, already heaps. Cost: a node at height $h$ costs $O(h)$ and only $\lceil n/2^{h+1}\rceil$ nodes have height $h$, so $\sum_h \frac{n}{2^{h+1}}O(h)=O\big(n\sum_h h/2^h\big)=O(n)$ since $\sum h/2^h=2$.</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="MIN-HEAP-DECREASE-KEY">
+    <div class="q"><b>MIN-HEAP-DECREASE-KEY</b>$(A,i,key)$ — which direction does the element move, what is the loop condition, and the running time?</div>
+    <div class="a">Guard: error if $key&gt;A[i]$. Set $A[i]=key$, then <em>float up</em>: <code>while i&gt;1 and A[⌊i/2⌋]&gt;A[i]: swap; i=⌊i/2⌋</code>. (Opposite direction to HEAPIFY!) Time $O(\lg n)$.</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="Priority queue ops">
+    <div class="q">List the four <b>min-priority-queue</b> operations and how EXTRACT-MIN works.</div>
+    <div class="a">MINIMUM ($\Theta(1)$: return $A[1]$); <b>EXTRACT-MIN</b> ($O(\lg n)$: save $A[1]$, move $A[\text{heap-size}]$ to the root, shrink, MIN-HEAPIFY$(A,1)$); DECREASE-KEY ($O(\lg n)$); INSERT ($O(\lg n)$: append at the end, float up — equivalently insert $+\infty$ then decrease-key).</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="Heapsort">
+    <div class="q"><b>Heapsort</b>: procedure, running time, in place?, stable?</div>
+    <div class="a">BUILD-MAX-HEAP; then for $i=n$ downto $2$: swap $A[1]\leftrightarrow A[i]$, shrink the heap by one, MAX-HEAPIFY$(A,1)$. Time $\Theta(n\lg n)$, <b>in place</b>, <b>not stable</b>.</div>
+  </article>
+
+  <!-- ================= BST / RBT ================= -->
+  <article data-tag="Definition" data-ref="BST · Ch 12">
+    <div class="q">State the <b>binary-search-tree property</b> and how a binary tree is stored.</div>
+    <div class="a">For every node $x$: all keys in $x$'s <b>left</b> subtree $\le x.key\le$ all keys in $x$'s <b>right</b> subtree. Storage: linked nodes with <code>key</code>, <code>left</code>, <code>right</code>, <code>p</code> (parent) + satellite data, NIL for absent children, root pointer <code>T.root</code>. All basic ops run in $O(h)$.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="RBT · Ch 13">
+    <div class="q">Recite the <b>five red-black properties</b>, in order.</div>
+    <div class="a">1. Every node is <b>red or black</b>. 2. The <b>root</b> is black. 3. Every <b>leaf (NIL)</b> is black. 4. A <b>red node has only black children</b>. 5. All simple paths from a node down to descendant leaves have the <b>same number of black nodes</b> (black-height).</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="RBT height · Lemma 13.1">
+    <div class="q">Height bound of a red-black tree with $n$ internal nodes — statement and two-step proof idea.</div>
+    <div class="a">$h\le 2\lg(n+1)$. (i) Induction: the subtree at $x$ has $\ge 2^{bh(x)}-1$ internal nodes. (ii) Property 4 ⇒ at least half of any root-leaf path is black, so $bh(\text{root})\ge h/2$; hence $n\ge 2^{h/2}-1$.</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="RB-INSERT · plan">
+    <div class="q"><b>RB-INSERT</b>: the two stages, and why is the new node colored <b>red</b>?</div>
+    <div class="a">Stage 1: ordinary BST insertion of $z$; color $z$ <b>red</b>; stage 2: RB-INSERT-FIXUP. Red because that can never violate property 5 (black-heights unchanged) — only property 4 (red parent) or 2 (root) can break, and those are fixable locally.</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="RB fixup · Case 1">
+    <div class="q">Insert-fixup <b>Case 1</b> (uncle $y$ is <b>red</b>) — what happens?</div>
+    <div class="a"><b>Recolor only</b>: parent and uncle become black, grandparent becomes red, and $z\gets$ grandparent — the possible violation moves <b>two levels up</b> and the loop may repeat. No rotation.</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="RB fixup · Cases 2–3">
+    <div class="q">Insert-fixup <b>Cases 2 and 3</b> (uncle <b>black</b>) — triangle vs. line?</div>
+    <div class="a"><b>Case 2 (triangle)</b>: $z$ is the inner child — rotate at the <b>parent</b> to straighten into a line. <b>Case 3 (line)</b>: recolor parent black + grandparent red, rotate at the <b>grandparent</b> — done, loop terminates. At most <b>2 rotations</b> per insertion; total $O(\lg n)$.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Rotations">
+    <div class="q">What does <b>LEFT-ROTATE</b>$(T,x)$ do, what does it preserve, and what does it cost?</div>
+    <div class="a">$x$'s right child $y$ rises; $x$ becomes $y$'s left child; $y$'s old left subtree becomes $x$'s right subtree. Preserves the <b>BST inorder</b>; changes only $O(1)$ pointers — constant time. The rebalancing primitive of red-black trees.</div>
+  </article>
+
+  <!-- ================= HASHING ================= -->
+  <article data-tag="Definition" data-ref="Hashing · Ch 11">
+    <div class="q">Define the <b>load factor</b> and the <b>simple uniform hashing</b> assumption.</div>
+    <div class="a">$\alpha=n/m$ ($n$ keys, $m$ slots) — the average chain length. <b>Simple uniform hashing</b>: each key is equally likely to hash into each of the $m$ slots, independently of the other keys.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 11.1–11.2">
+    <div class="q">Chaining: expected cost of an <b>unsuccessful</b> and a <b>successful</b> search?</div>
+    <div class="a">Both $\Theta(1+\alpha)$ (Thms 11.1, 11.2). Unsuccessful: the searched slot's chain has expected length $\alpha$. Successful: examine the target + later-inserted colliders; the count works out to $1+\frac{\alpha}{2}-\frac{\alpha}{2n}$. With $n=O(m)$: expected $O(1)$ dictionary ops.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Open addressing · probing">
+    <div class="q">Name the three <b>probing schemes</b> of open addressing and the clustering problem of each.</div>
+    <div class="a"><b>Linear</b> $h(k,i)=(h'(k)+i)\bmod m$ — primary clustering (runs grow). <b>Quadratic</b> $(h'(k)+c_1i+c_2i^2)\bmod m$ — secondary clustering (equal $h'$ ⇒ same path). <b>Double hashing</b> $(h_1(k)+i\,h_2(k))\bmod m$ — closest to uniform hashing.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 11.6">
+    <div class="q">Open addressing, uniform hashing, $\alpha&lt;1$: expected probes in an <b>unsuccessful</b> search — bound and one-line reason?</div>
+    <div class="a">$\le\dfrac{1}{1-\alpha}$. Each successive probe hits an occupied slot with probability $\le\alpha$, so the probe count is dominated by a geometric series $\sum_i\alpha^i$. (Insertion has the same bound — Cor. 11.7.)</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 11.8">
+    <div class="q">Open addressing: expected probes in a <b>successful</b> search — bound and proof idea?</div>
+    <div class="a">$\le\dfrac1\alpha\ln\dfrac{1}{1-\alpha}$. A search for $k$ <b>retraces $k$'s insertion probes</b>; the $(i{+}1)$-st inserted key cost $\le\frac{m}{m-i}$; averaging: $\frac1\alpha(H_m-H_{m-n})\le\frac1\alpha\ln\frac{1}{1-\alpha}$ by the harmonic-integral bound. At $\alpha=\frac12$: $\approx1.39$ probes.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Universal hashing">
+    <div class="q">When is a family $\mathcal H$ of hash functions <b>universal</b>, and why use it?</div>
+    <div class="a">If for all $x\ne y$: $\Pr_{h\in\mathcal H}[h(x)=h(y)]\le 1/m$ (over the random choice of $h$). Defeats adversarial inputs — no fixed input is bad for a <em>randomly drawn</em> $h$. Example: $h_{ab}(k)=((ak+b)\bmod p)\bmod m$.</div>
+  </article>
+
+  <!-- ================= RECURRENCES ================= -->
+  <article data-tag="Theorem" data-ref="Master Theorem · Thm 4.1">
+    <div class="q">State the <b>Master Theorem</b> — all three cases for $T(n)=aT(n/b)+f(n)$.</div>
+    <div class="a">Watershed $W=n^{\log_b a}$. <b>1.</b> $f=O(n^{\log_b a-\varepsilon})$ ⇒ $T=\Theta(n^{\log_b a})$. <b>2.</b> $f=\Theta(n^{\log_b a}\lg^k n)$, $k\ge0$ ⇒ $T=\Theta(n^{\log_b a}\lg^{k+1}n)$. <b>3.</b> $f=\Omega(n^{\log_b a+\varepsilon})$ + regularity $af(n/b)\le cf(n)$, $c&lt;1$ ⇒ $T=\Theta(f(n))$.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Extended case 2">
+    <div class="q">$f(n)=\Theta\big(n^{\log_b a}\lg^k n\big)$: answers for $k&gt;-1$, $k=-1$, $k&lt;-1$?</div>
+    <div class="a">$k&gt;-1$: $\Theta(n^{\log_b a}\lg^{k+1}n)$. &nbsp;$k=-1$: $\Theta(n^{\log_b a}\lg\lg n)$ — <b>the exam-1 case</b> ($3T(n/3)+n/\lg n$). &nbsp;$k&lt;-1$: $\Theta(n^{\log_b a})$ (the level sum converges).</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Regularity condition">
+    <div class="q">What is the <b>regularity condition</b>, and when must you check it?</div>
+    <div class="a">$a\,f(n/b)\le c\,f(n)$ for some constant $c&lt;1$ and large $n$ — the per-level costs shrink geometrically toward the leaves. Required whenever you invoke <b>case 3</b>. For $f=n^s\lg^t n$ with $s&gt;\log_b a$ it holds ($a/b^s&lt;1$), but write the line.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Akra–Bazzi">
+    <div class="q">State the <b>Akra–Bazzi</b> theorem for $T(x)=g(x)+\sum_i a_iT(b_ix)$.</div>
+    <div class="a">Solve $\;\sum_i a_ib_i^{\,p}=1\;$ for $p$; then $T(x)=\Theta\!\Big(x^p\big(1+\int_1^x g(u)\,u^{-p-1}du\big)\Big)$. One term $aT(n/b)$ gives $p=\log_b a$ — the Master watershed. Handles unequal splits like $T(n/3)+T(2n/3)+n=\Theta(n\lg n)$.</div>
+  </article>
+
+  <article data-tag="Example" data-ref="Exam 1 · Q2b">
+    <div class="q">Solve $T(n)=3T(n/3)+\dfrac{n}{\lg n}$ — and which integral clinches it?</div>
+    <div class="a">$p=1$; $\int_2^n\frac{du}{u\lg u}=\Theta(\lg\lg n)$ using $\int\frac{du}{u\ln u}=\ln\ln u$. Answer: $\Theta(n\lg\lg n)$. Vanilla Master Theorem fails — $f$ is smaller than $n$ but not polynomially.</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="Lemma 4.2 · recursion tree">
+    <div class="q">The recursion-tree decomposition (Lemma 4.2): $T(n)=\,?$</div>
+    <div class="a">$T(n)=\Theta\big(n^{\log_b a}\big)+\sum_{j=0}^{\log_b n-1}a^jf(n/b^j)$ — leaf cost + level costs. Level $j$: $a^j$ nodes, each $f(n/b^j)$; the three cases are exactly "level sum grows / flat / shrinks geometrically" (Lemma 4.3).</div>
+  </article>
+
+  <!-- ================= LOOP INVARIANTS ================= -->
+  <article data-tag="Definition" data-ref="Loop invariants">
+    <div class="q">The three steps of a <b>loop-invariant proof</b> — name and content.</div>
+    <div class="a"><b>Initialization</b> — the invariant holds before the first iteration. <b>Maintenance</b> — if it holds at the start of an iteration, it holds at the start of the next. <b>Termination</b> — the loop ends, and invariant + exit condition give the desired property. (= induction: base, step, payoff.)</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Sorting correctness">
+    <div class="q">Which <b>three facts</b> together prove a sorting algorithm correct? (Exam 1, Q1a!)</div>
+    <div class="a">1. It <b>terminates</b>. 2. The output is <b>sorted</b>: $A'[1]\le\cdots\le A'[n]$. 3. The output is a <b>permutation</b> of the input — same values, same multiplicities. #3 is the classic forgotten point; for swap-only algorithms it's immediate.</div>
+  </article>
+
+  <article data-tag="Example" data-ref="Bubblesort · inner">
+    <div class="q">Bubblesort, inner loop (<code>for j = n downto i+1</code>): state the invariant.</div>
+    <div class="a">At the start of each iteration, $A[j]=\min A[j..n]$, and $A[j..n]$ is a permutation of its original contents. Termination at $j=i$ gives: $A[i]=\min A[i..n]$ — the minimum got bubbled to position $i$.</div>
+  </article>
+
+  <article data-tag="Example" data-ref="Bubblesort · outer">
+    <div class="q">Bubblesort, outer loop: state the invariant that yields sortedness.</div>
+    <div class="a">At the start of each iteration, $A[1..i-1]$ consists of the $i-1$ <b>smallest</b> original values <b>in sorted order</b> (and $A[i..n]$ is a permutation of the rest). At $i=n$: $A[1..n-1]$ sorted smallest values + $A[n]$ the maximum ⇒ fully sorted.</div>
+  </article>
+
+  <!-- ================= SORTING BOUNDS ================= -->
+  <article data-tag="Theorem" data-ref="Thm 8.1 · lower bound">
+    <div class="q">The comparison-sort <b>lower bound</b> — statement and three-step proof skeleton.</div>
+    <div class="a">Any comparison sort needs $\Omega(n\lg n)$ comparisons in the worst case. (i) Model runs as a binary <b>decision tree</b>; (ii) correctness ⇒ all $n!$ permutations are reachable leaves, so $2^h\ge n!$; (iii) $h\ge\lg(n!)\ge\frac n2\lg\frac n2=\Omega(n\lg n)$.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Beating n lg n">
+    <div class="q">Why are counting sort / radix sort not bound by $\Omega(n\lg n)$, and what do they cost?</div>
+    <div class="a">They are <b>not comparison sorts</b> — they inspect key <em>values</em>, so the decision-tree bound doesn't apply. Counting: $\Theta(n+k)$ for keys in $\{0..k\}$, stable. Radix: $\Theta(d(n+k))$, digit-by-digit (LSD) with a <b>stable</b> digit sort. Bucket: expected $\Theta(n)$ on uniform input.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Sorting table">
+    <div class="q">Quickfire: merge sort / heapsort / quicksort — worst-case time, stable?, in place?</div>
+    <div class="a">Merge: $\Theta(n\lg n)$, <b>stable</b>, not in place ($\Theta(n)$ extra). Heap: $\Theta(n\lg n)$, not stable, <b>in place</b>. Quick: worst $\Theta(n^2)$ but expected $\Theta(n\lg n)$, not stable, in place ($O(\lg n)$ stack).</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="Counting sort">
+    <div class="q">Describe <b>counting sort</b> in three steps. Why is its stability essential?</div>
+    <div class="a">(1) Histogram: $C[v]=$ #keys $=v$. (2) Prefix sums: $C[v]=$ #keys $\le v$. (3) Walk the input <b>right-to-left</b>, placing each key at $B[C[key]]$ and decrementing. Stability (equal keys keep order) is what lets <b>radix sort</b> use it per digit without destroying earlier digits' work.</div>
+  </article>
+
+  <!-- ================= RANDOMIZED ================= -->
+  <article data-tag="Lemma" data-ref="Lemma 7.2 · quicksort">
+    <div class="q">Randomized quicksort: $\Pr[z_i \text{ compared with } z_j]$ ($i&lt;j$) — value and the argument.</div>
+    <div class="a">$\dfrac{2}{j-i+1}$. Elements are compared only with a <b>pivot</b>. Consider the <em>first</em> pivot drawn from $Z_{ij}=\{z_i,\dots,z_j\}$: if strictly between, the pair separates forever; comparison happens iff it is $z_i$ or $z_j$ — 2 favourable out of $j-i+1$ equally likely.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 7.4 · quicksort">
+    <div class="q">Expected running time of randomized quicksort — result and the summation that proves it.</div>
+    <div class="a">$O(n\lg n)$. $\mathbb E[X]=\sum_{i&lt;j}\frac{2}{j-i+1}=\sum_{i=1}^{n-1}\sum_{k=1}^{n-i}\frac{2}{k+1}&lt;2nH_n=O(n\lg n)$; time is $O(n+X)$ (Lemma 7.1: ≤ $n$ P<small>ARTITION</small> calls).</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 9.2 · selection">
+    <div class="q">R<small>ANDOMIZED</small>-S<small>ELECT</small>: the recurrence for the expected time, and why the answer is $\Theta(n)$.</div>
+    <div class="a">$T(n)\le\frac2n\sum_{k=\lfloor n/2\rfloor}^{n-1}T(k)+O(n)$ — recurse into <b>one</b> side, worst-case the larger. Substitution with $T(k)\le ck$: $\frac{2c}{n}\cdot\frac{3n^2}{8}+an=\frac{3c}4n+an\le cn$ for $c\ge4a$. One-sided recursion ⇒ geometric total, no $\lg$ factor.</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="Lemma 5.4">
+    <div class="q">R<small>ANDOMIZE</small>-I<small>N</small>-P<small>LACE</small> (swap $A[i]$ with $A[\mathrm{RANDOM}(i,n)]$): the probabilistic loop invariant?</div>
+    <div class="a">Before iteration $i$: each $(i-1)$-permutation appears in $A[1..i-1]$ with probability $\frac{(n-i+1)!}{n!}$. Maintenance: $\frac{(n-i+1)!}{n!}\cdot\frac{1}{n-i+1}=\frac{(n-i)!}{n!}$. Termination $i=n+1$: every permutation with probability $1/n!$ — <b>uniform</b>.</div>
+  </article>
+
+  <!-- ================= GREEDY / HUFFMAN ================= -->
+  <article data-tag="Definition" data-ref="Prefix-free codes">
+    <div class="q">Define <b>prefix-free code</b>, its tree representation, and the cost $B(T)$.</div>
+    <div class="a">No codeword is a prefix of another ⇒ decoding is unambiguous. Represented by a <b>full binary tree</b>, characters at leaves, 0/1 = left/right, codeword length = depth. $B(T)=\sum_{c\in C}c.freq\cdot d_T(c)$ = total bits to encode the file; optimal = minimal $B(T)$.</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="HUFFMAN · Ch 15.3">
+    <div class="q">The <b>Huffman algorithm</b> — procedure and running time.</div>
+    <div class="a">Min-priority queue on frequency; repeat $n-1$ times: extract the two minima $x,y$, make a node $z$ with children $x,y$ and $z.freq=x.freq+y.freq$, insert $z$. Return the last node (root). $O(n\lg n)$ with a binary heap.</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="Lemma 15.2 · greedy choice">
+    <div class="q"><b>Lemma 15.2</b> — statement and the exchange inequality at its heart.</div>
+    <div class="a">If $x,y$ have the lowest frequencies, some <b>optimal</b> tree has $x,y$ as <b>sibling leaves at maximum depth</b>. Exchange $x$ with a deepest leaf $a$: $B(T)-B(T')=(a.freq-x.freq)(d_T(a)-d_T(x))\ge0$ — product of two nonnegatives; likewise for $y$. Cost never increases.</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="Lemma 15.3 · substructure">
+    <div class="q"><b>Lemma 15.3</b> — the merge bookkeeping and the contradiction step.</div>
+    <div class="a">Merge $x,y$ into $z$ ($z.freq=x.freq+y.freq$), $C'=(C\setminus\{x,y\})\cup\{z\}$. Key identity: $B(T)=B(T')+x.freq+y.freq$. If some $S$ beat $T$ for $C$, normalize $S$ (Lemma 15.2), contract $x,y\to z$: a tree for $C'$ cheaper than $T'$ — contradiction. So expanding an optimal $T'$ gives an optimal $T$.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 15.1 · activity selection">
+    <div class="q"><b>Theorem 15.1</b> (activity selection) — statement and the exchange argument.</div>
+    <div class="a">The earliest-finishing activity $a_m$ of subproblem $S_k$ is in <em>some</em> maximum-size compatible subset. Proof: take optimal $A_k$, let $a_j$ be its earliest finisher; swap $a_j\to a_m$. Since $f_m\le f_j$, everything else in $A_k$ (starting $\ge f_j\ge f_m$) stays compatible; size unchanged ⇒ still optimal.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Greedy method">
+    <div class="q">The two ingredients every greedy proof needs — and greedy vs. DP in one sentence.</div>
+    <div class="a"><b>Greedy-choice property</b> (some optimum is consistent with the locally best choice — shown by exchange) + <b>optimal substructure</b>. DP tries <em>all</em> choices and takes the best; greedy commits to one and must <em>prove</em> it safe.</div>
+  </article>
+
+  <!-- ================= DP / B-TREES ================= -->
+  <article data-tag="Definition" data-ref="Dynamic programming">
+    <div class="q">The two hallmarks of <b>dynamic programming</b>, and the rod-cutting recurrence.</div>
+    <div class="a"><b>Optimal substructure</b> + <b>overlapping subproblems</b> (cache pays). Rod cutting: $r_0=0$, $r_n=\max_{1\le i\le n}(p_i+r_{n-i})$ — $n$ subproblems × $O(n)$ choices = $O(n^2)$. Top-down = memoization; bottom-up = fill by size.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="B-trees · Ch 18">
+    <div class="q">Define a <b>B-tree</b> of minimum degree $t$ and say why B-trees exist.</div>
+    <div class="a">Search tree; non-root nodes hold between $t-1$ and $2t-1$ sorted keys ($k$ keys ⇒ $k+1$ children); <b>all leaves at the same depth</b>; height $\le\log_t\frac{n+1}2$. Built for <b>disk storage</b>: one node = one page read, so fat nodes (huge $t$) make the tree only 2–3 levels deep. Insert splits full nodes on the way down.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 17.2 · augmenting">
+    <div class="q">The <b>augmentation theorem</b> for red-black trees — hypothesis and conclusion.</div>
+    <div class="a">If attribute $f(x)$ is computable in $O(1)$ from $x$, $x.left$, $x.right$ alone (incl. their $f$-values), then insert/delete can maintain $f$ everywhere <b>without changing the $O(\lg n)$ cost</b>. Why: changes propagate only up one root path; rotations are repaired locally in $O(1)$. Example: subtree sizes ⇒ order-statistic trees.</div>
+  </article>
+
+</div>
+
+<script>
+(function(){
+  const KEY = 'fc_algodat_v1';
+  const DAY = 86400000;
+  const intervalsDays = [0, 1, 3, 8, 21, 60]; // box 0..5
+  const tagClass = { 'Definition':'def', 'Theorem':'thm', 'Lemma':'lemma', 'Algorithm':'algo', 'Example':'algo' };
+
+  const DECK = [...document.querySelectorAll('#src > article')].map((el,i)=>({
+    id: 'c'+i,
+    tag: el.dataset.tag,
+    ref: el.dataset.ref,
+    q: el.querySelector('.q').innerHTML,
+    a: el.querySelector('.a').innerHTML
+  }));
+
+  let store = {};
+  try { store = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){ store = {}; }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch(e){} };
+  const st = id => store[id] || { box:0, due:0, seen:false };
+  const now = () => Date.now();
+
+  const app = document.getElementById('app');
+  const statsEl = document.getElementById('stats');
+  const progEl = document.getElementById('prog');
+
+  let queue = [], sessionTotal = 0, current = null;
+
+  function buildQueue(){
+    queue = DECK.filter(c => st(c.id).due <= now());
+    queue.sort((a,b)=> (st(a.id).seen===st(b.id).seen) ? 0 : (st(a.id).seen?-1:1));
+    sessionTotal = queue.length;
+  }
+
+  function typeset(el){
+    if (window.MathJax && MathJax.typesetPromise){
+      MathJax.typesetPromise([el]).catch(()=>{});
+    } else {
+      setTimeout(()=>typeset(el), 150);
+    }
+  }
+
+  function renderStats(){
+    const dueNow = DECK.filter(c=>st(c.id).due<=now()).length;
+    const learned = DECK.filter(c=>st(c.id).box>=3).length;
+    const fresh = DECK.filter(c=>!st(c.id).seen).length;
+    statsEl.innerHTML = `<span><b>${dueNow}</b> due</span><span><b>${fresh}</b> new</span><span><b>${learned}</b> learned</span><span><b>${DECK.length}</b> total</span>`;
+    const done = sessionTotal - queue.length;
+    progEl.style.width = sessionTotal ? (100*done/sessionTotal)+'%' : '100%';
+  }
+
+  function nextDue(){
+    const ds = DECK.map(c=>st(c.id).due).filter(d=>d>now());
+    if (!ds.length) return null;
+    const ms = Math.min(...ds) - now();
+    const hrs = ms/3600000;
+    if (hrs < 1) return Math.max(1,Math.round(ms/60000))+' min';
+    if (hrs < 24) return Math.round(hrs)+' h';
+    return Math.round(hrs/24)+' d';
+  }
+
+  function showDone(){
+    current = null;
+    const nd = nextDue();
+    app.innerHTML = `<div class="card done">
+      <h2>✓ All caught up</h2>
+      <p>${nd ? 'Next card due in <b style="color:var(--accent)">'+nd+'</b>.' : 'Nothing scheduled — you have reviewed everything.'}</p>
+      <div class="row2">
+        <button class="btn" id="again-all">Review all again</button>
+        <a class="btn" href="mock-exam-1.html" style="text-align:center;text-decoration:none;display:block">Do the mock exam →</a>
+      </div>
+    </div>`;
+    document.getElementById('again-all').onclick = ()=>{ queue = DECK.slice(); sessionTotal = queue.length; showCard(); };
+    renderStats();
+  }
+
+  function showCard(){
+    if (!queue.length) return showDone();
+    current = queue[0];
+    app.innerHTML = `<div class="card">
+        <div class="card-meta"><span class="chip ${tagClass[current.tag]||''}">${current.tag}</span><span class="card-ref">${current.ref}</span></div>
+        <div class="q">${current.q}</div>
+        <div id="backwrap" class="hidden"><hr class="divider"><div class="a">${current.a}</div></div>
+        <div class="controls" id="controls">
+          <button class="btn primary" id="reveal">Show answer</button>
+        </div>
+        <div class="hint">Space = reveal · 1 again · 2 hard · 3 good · 4 easy</div>
+      </div>`;
+    const card = app.querySelector('.card');
+    typeset(card);
+    document.getElementById('reveal').onclick = reveal;
+    renderStats();
+  }
+
+  function reveal(){
+    document.getElementById('backwrap').classList.remove('hidden');
+    document.getElementById('controls').innerHTML = `<div class="grades">
+        <button class="btn g-again" data-g="again">Again<small>&lt;10m</small></button>
+        <button class="btn g-hard" data-g="hard">Hard<small>1d</small></button>
+        <button class="btn g-good" data-g="good">Good<small>↑box</small></button>
+        <button class="btn g-easy" data-g="easy">Easy<small>↟↟</small></button>
+      </div>`;
+    document.querySelectorAll('.grades .btn').forEach(b => b.onclick = ()=>grade(b.dataset.g));
+    typeset(document.getElementById('backwrap'));
+  }
+
+  function grade(g){
+    if (!current) return;
+    const s = st(current.id); let box = s.box; s.seen = true;
+    if (g==='again'){ box = 0; s.due = now() + 10*60000; }
+    else if (g==='hard'){ box = Math.max(1, box); s.due = now() + 1*DAY; }
+    else if (g==='good'){ box = Math.min(box+1, 5); s.due = now() + intervalsDays[box]*DAY; }
+    else if (g==='easy'){ box = Math.min(box+2, 5); s.due = now() + Math.round(intervalsDays[box]*1.4)*DAY; }
+    s.box = box; store[current.id] = s; save();
+    queue.shift();
+    if (g==='again') queue.push(current);
+    showCard();
+  }
+
+  document.addEventListener('keydown', e=>{
+    if (!current) return;
+    const revealed = !document.getElementById('backwrap')?.classList.contains('hidden');
+    if (e.code==='Space'){ e.preventDefault(); if(!revealed) reveal(); }
+    else if (revealed && ['1','2','3','4'].includes(e.key)){
+      grade({'1':'again','2':'hard','3':'good','4':'easy'}[e.key]);
+    }
+  });
+
+  document.getElementById('reset').onclick = ()=>{
+    if (confirm('Reset all spaced-repetition progress for this deck?')){
+      store = {}; save(); buildQueue(); showCard();
+    }
+  };
+
+  buildQueue();
+  showCard();
+})();
+</script>
+</body>
+</html>

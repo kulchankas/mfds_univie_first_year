@@ -129,6 +129,18 @@
   }
   .card-cta .arrow { transition: transform .2s ease; }
   .card:hover .card-cta .arrow, .card:focus-visible .card-cta .arrow { transform: translateX(4px); }
+  .plan-banner {
+    display: flex; align-items: center; gap: .8rem;
+    margin-top: 2rem; padding: .95rem 1.3rem;
+    background: var(--bg-card); border: 1px solid var(--accent);
+    border-radius: 12px; text-decoration: none; color: inherit;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .plan-banner:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.3); }
+  .plan-banner .ic { font-size: 1.2rem; }
+  .plan-banner .t { flex: 1; font-weight: 600; }
+  .plan-banner .t small { display: block; font-weight: 400; color: var(--text-muted); font-size: .85rem; }
+  .plan-banner .arrow { color: var(--accent); font-weight: 700; }
   .meta-row {
     display: flex;
     flex-wrap: wrap;
@@ -160,6 +172,12 @@
     <h1>University maths<br><em>notes &amp; practice</em></h1>
     <p class="lede">Distilled notes, must-know proofs, mock exams, and the full problem-set archive — for first-year Linear Algebra and Analysis.</p>
   </header>
+
+  <a class="plan-banner" href="study-plan.html">
+    <span class="ic">📅</span>
+    <span class="t">The 6-week exam plan<small>Algorithms · Analysis · Linear Algebra — one schedule, three parallel tracks</small></span>
+    <span class="arrow">→</span>
+  </a>
 
   <main class="docs">
     <a class="card" href="linear-algebra/index.html">

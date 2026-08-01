@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a1612">
+<meta name="description" content="The real first-date AlgoDat exam (2 July 2026), transcribed with full model solutions and grader notes — plus a predicted second-date paper for self-testing.">
+<title>Mock Exam — Algorithms &amp; Data Structures (real 1st-date paper + solutions)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#1a1612;--bg-elevated:#221d18;--bg-card:#1f1a15;--border:#3a342c;--border-soft:#2a251f;
+    --text:#f5efe4;--text-muted:#b8aa97;--text-dim:#8a7e6e;--accent:#e0b888;--accent-hover:#ecc89c;
+    --good:#8bc6a0;--warn:#d99a7e;--blue:#8fb8de;--glow:rgba(224,184,136,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased;min-height:100vh;background-image:radial-gradient(900px 500px at 50% -10%,var(--glow),transparent 70%);background-repeat:no-repeat}
+  .wrap{max-width:800px;margin:0 auto;padding:clamp(2rem,6vw,3rem) clamp(1.1rem,5vw,1.75rem) 5rem;padding-left:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-left));padding-right:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-right))}
+  .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-dim);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;margin-bottom:1.5rem;transition:color .15s}
+  .back-link:hover{color:var(--accent)}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--accent);font-size:clamp(.74rem,2.6vw,.82rem);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem}
+  h1{font-family:'Sora',sans-serif;font-weight:600;font-size:clamp(1.9rem,7vw,2.7rem);line-height:1.08;letter-spacing:-.03em;margin-bottom:.7rem}
+  .lede{color:var(--text-muted);font-size:clamp(.98rem,3.4vw,1.08rem);max-width:44em}
+  h2{font-family:'Sora',sans-serif;font-weight:600;font-size:clamp(1.3rem,4.5vw,1.6rem);letter-spacing:-.02em;margin:clamp(2.4rem,6vw,3rem) 0 1rem}
+  .pts{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--accent);border:1px solid var(--border);border-radius:5px;padding:.1rem .45rem;white-space:nowrap;vertical-align:middle}
+  .exam{background:#211c16;border:1px solid var(--border);border-radius:12px;padding:clamp(1.1rem,4vw,1.5rem);margin:1rem 0;color:var(--text-muted);font-size:.96rem}
+  .exam b{color:var(--text)}
+  .exam ol{margin:.4rem 0 0;padding-left:1.35rem}
+  .exam li{margin:.45rem 0}
+  pre.code{font-family:'JetBrains Mono',monospace;font-size:.84rem;line-height:1.55;background:#14110d;border:1px solid var(--border-soft);border-radius:10px;padding:.9rem 1.1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.8rem 0;color:var(--text)}
+  pre.code .kw{color:var(--blue)} pre.code .cm{color:var(--text-dim);font-style:italic}
+  details.sol{background:var(--bg-card);border:1px solid rgba(139,198,160,.35);border-radius:12px;margin:.8rem 0 1.8rem;overflow:hidden}
+  details.sol>summary{cursor:pointer;list-style:none;padding:.85rem 1.2rem;font-family:'Sora',sans-serif;font-weight:600;font-size:.95rem;color:var(--good)}
+  details.sol>summary::-webkit-details-marker{display:none}
+  details.sol>summary::before{content:'▸ ';font-size:.85em}
+  details.sol[open]>summary::before{content:'▾ '}
+  details.sol[open]>summary{border-bottom:1px solid var(--border-soft)}
+  .solbody{padding:1rem 1.25rem 1.3rem;color:var(--text-muted);font-size:.95rem}
+  .solbody p{margin:.6rem 0} .solbody b,.solbody strong{color:var(--text)}
+  .solbody ul,.solbody ol{margin:.4rem 0 .6rem;padding-left:1.3rem}
+  .solbody li{margin:.35rem 0}
+  .step{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--good)}
+  .inv{background:#1c2119;border:1px solid rgba(139,198,160,.3);border-left:4px solid var(--good);border-radius:0 8px 8px 0;padding:.7rem 1rem;margin:.7rem 0;color:var(--text)}
+  .grader{background:var(--bg-card);border:1px solid rgba(217,154,126,.35);border-left:4px solid var(--warn);border-radius:0 10px 10px 0;padding:.8rem 1.1rem;margin:.8rem 0;font-size:.9rem;color:var(--text-muted)}
+  .grader .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--warn);margin-bottom:.4rem}
+  .box{background:var(--bg-card);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:0 10px 10px 0;padding:1rem 1.25rem;margin:1.1rem 0;color:var(--text-muted);font-size:.95rem}
+  .box .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.5rem}
+  .box ul{margin:.3rem 0 0;padding-left:1.2rem} .box li{margin:.35rem 0}
+  .box a{color:var(--accent)}
+  .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1rem 0}
+  table{border-collapse:collapse;width:100%;font-size:.88rem}
+  th,td{border:1px solid var(--border);padding:.45rem .6rem;text-align:left;vertical-align:top}
+  th{background:#2a2218;color:var(--accent);font-weight:600;white-space:nowrap}
+  footer{margin-top:3rem;padding-top:1.3rem;border-top:1px solid var(--border-soft);color:var(--text-dim);font-size:.82rem}
+  footer a{color:var(--accent);text-decoration:none}
+  mjx-container{color:inherit !important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="index.html">← Algorithms &amp; Data Structures</a>
+  <div class="eyebrow">Universität Wien · Prof. Schichl · real exam paper</div>
+  <h1>Mock exam with solutions</h1>
+  <p class="lede">The <strong>actual first-date exam</strong> (2 July 2026), transcribed question by question, with model solutions written the way a grader wants to see them — and a predicted second-date paper at the bottom for self-testing. Five questions, <b style="color:var(--accent)">40 points</b> total.</p>
+
+  <div class="box"><span class="lbl">How to use this page</span>
+  <ul>
+    <li><strong>First pass:</strong> read each question, attempt it on paper <em>before</em> opening the solution.</li>
+    <li><strong>Second pass (a week later):</strong> simulate the whole paper under timed conditions, closed book, then grade yourself with the grader notes.</li>
+    <li>Points tell you where to invest: the Huffman proof alone (8&nbsp;pts) is worth as much as the entire heaps question.</li>
+  </ul></div>
+
+  <!-- ============================================================ Q1 -->
+  <h2>1 · Correctness of bubblesort <span class="pts">8 pts</span></h2>
+  <div class="exam">
+    <p>Bubblesort works by repeatedly swapping adjacent elements that are out of order. The procedure is</p>
+<pre class="code">1: <span class="kw">procedure</span> BUBBLESORT(A, n)
+2:   <span class="kw">for</span> i = 1 <span class="kw">to</span> n−1 <span class="kw">do</span>
+3:     <span class="kw">for</span> j = n <span class="kw">downto</span> i+1 <span class="kw">do</span>
+4:       <span class="kw">if</span> A[j] &lt; A[j−1] <span class="kw">then</span>
+5:         exchange A[j] with A[j−1]
+6:       <span class="kw">end if</span>
+7:     <span class="kw">end for</span>
+8:   <span class="kw">end for</span>
+9: <span class="kw">end procedure</span></pre>
+    <ol type="a">
+      <li>Let $A'$ denote the array $A$ after BUBBLESORT$(A,n)$ is executed. To prove that BUBBLESORT is correct, you need to prove that it terminates and that $A'[1]\le A'[2]\le\cdots\le A'[n]$. In order to show that BUBBLESORT actually sorts, what else do you need to prove? <span class="pts">1</span></li>
+      <li>State a precise loop invariant for the <b>for</b> $j=n$ <b>downto</b> $i+1$ loop in lines 3–7 and prove that it holds. <span class="pts">3</span></li>
+      <li>Using the termination condition of the loop invariant stated and proved above, state a loop invariant for the <b>for</b> $i=1$ <b>to</b> $n-1$ loop in lines 2–8 that allows you to prove the inequality above for the $A'$ array. <span class="pts">2</span></li>
+      <li>Prove that the loop invariant above holds and conclude that BUBBLESORT works. <span class="pts">2</span></li>
+    </ol>
+  </div>
+
+  <details class="sol"><summary>Model solution — Q1 (this is CLRS Problem 2-2, verbatim)</summary>
+  <div class="solbody">
+    <p><b>(a)</b> We must also prove that $A'$ is a <b>permutation of the original array $A$</b> — it contains exactly the same values with the same multiplicities. Sortedness alone is not enough: a procedure that overwrites $A$ with $[1,2,\dots,n]$ satisfies $A'[1]\le\cdots\le A'[n]$ but doesn't sort $A$. For BUBBLESORT this is immediate, because the only write it ever performs is an <em>exchange</em> of two entries (line 5), and exchanges preserve the multiset of values.</p>
+
+    <p><b>(b)</b> Fix an iteration of the outer loop, i.e. a value of $i$.</p>
+    <div class="inv"><b>Inner invariant.</b> At the start of each iteration of the loop of lines 3–7, $\;A[j]=\min\{A[k] : j\le k\le n\}$, and the subarray $A[j..n]$ is a permutation of the values that were in $A[j..n]$ when the loop started.</div>
+    <p><span class="step">Initialization</span> — Before the first iteration, $j=n$. The subarray $A[n..n]$ contains a single element, so trivially $A[n]=\min A[n..n]$, and nothing has been moved yet.</p>
+    <p><span class="step">Maintenance</span> — Suppose the invariant holds at the start of an iteration: $A[j]=\min A[j..n]$. The body compares $A[j]$ with $A[j-1]$ and swaps them if $A[j]&lt;A[j-1]$. Afterwards $A[j-1]=\min\{A[j-1],\,\text{old }A[j]\}=\min\{A[j-1],\,\min A[j..n]\}=\min A[j-1..n]$. Only positions $j-1,j$ were touched, so $A[j-1..n]$ is still a permutation of its original values. Decrementing $j$ makes the invariant hold at the start of the next iteration.</p>
+    <p><span class="step">Termination</span> — The loop ends when $j=i$. The invariant then says: $A[i]=\min A[i..n]$ — the inner loop has "bubbled" the smallest element of $A[i..n]$ into position $i$, permuting $A[i..n]$ and touching nothing left of $i$.</p>
+
+    <p><b>(c)</b></p>
+    <div class="inv"><b>Outer invariant.</b> At the start of each iteration of the loop of lines 2–8, the subarray $A[1..i-1]$ consists of the $i-1$ smallest values of the original array, <em>in sorted order</em>; and $A[i..n]$ is a permutation of the remaining $n-i+1$ original values. In particular every element of $A[1..i-1]$ is $\le$ every element of $A[i..n]$.</div>
+
+    <p><b>(d)</b></p>
+    <p><span class="step">Initialization</span> — $i=1$: the subarray $A[1..0]$ is empty, so the claim is vacuously true, and $A[1..n]$ is the whole original array.</p>
+    <p><span class="step">Maintenance</span> — Assume the invariant at the start of the iteration for $i$. By the termination of the inner invariant (part b), after lines 3–7 run we have $A[i]=\min A[i..n]$, with $A[i..n]$ merely permuted and $A[1..i-1]$ untouched. Then: (i) $A[1..i-1]$ is still the sorted list of the $i-1$ smallest values; (ii) $A[i]$ is the minimum of the remaining values, hence the $i$-th smallest overall, and $A[i-1]\le A[i]$ since everything in $A[1..i-1]$ is $\le$ everything in $A[i..n]$. So $A[1..i]$ is the sorted list of the $i$ smallest values and $A[i+1..n]$ holds the rest — exactly the invariant for $i+1$.</p>
+    <p><span class="step">Termination</span> — The outer loop ends with $i=n$. The invariant gives: $A[1..n-1]$ contains the $n-1$ smallest original values in sorted order, and $A[n]$ holds the remaining (largest) value, so $A'[1]\le A'[2]\le\cdots\le A'[n]$. Termination itself is clear: both loops are finite <b>for</b>-loops (the inner runs $n-i$ times, the outer $n-1$ times, $\Theta(n^2)$ iterations total). Together with the permutation property from (a), BUBBLESORT sorts correctly. $\blacksquare$</p>
+
+    <div class="grader"><span class="lbl">Grader notes — where the points live</span>
+    (a) the word <em>permutation</em> is the point — a classic 1-pt trap. (b) 1&nbsp;pt for a <em>precise</em> invariant (quantify the exact indices; "the array gets more sorted" earns 0), 2&nbsp;pts for the three labelled steps. (c) the invariant must be strong enough — it needs both "sorted" <em>and</em> "$\le$ everything to the right" (or "the $i-1$ smallest"), otherwise maintenance fails. (d) explicitly <em>use</em> the inner loop's termination in the maintenance step, and don't forget to say why the loops terminate.</div>
+  </div></details>
+
+  <!-- ============================================================ Q2 -->
+  <h2>2 · Runtime analysis <span class="pts">8 pts</span></h2>
+  <div class="exam">
+    <p>For the following recursions, give asymptotically tight upper and lower bounds for $T(n)$.</p>
+    <ol type="a">
+      <li>$T(n)=16\,T(n/4)+n^2$ <span class="pts">2</span></li>
+      <li>$T(n)=3\,T(n/3)+\dfrac{n}{\lg n}$ <span class="pts">2</span></li>
+      <li>$T(n)=4\,T(n/2)+n^2\lg n$ <span class="pts">2</span></li>
+      <li>$T(n)=2\,T(n/4)+\sqrt{n}$ <span class="pts">2</span></li>
+    </ol>
+  </div>
+
+  <details class="sol"><summary>Model solution — Q2 (note: all four are the case-2 / log-factor family!)</summary>
+  <div class="solbody">
+    <p>"Tight upper and lower bounds" = give $\Theta(\cdot)$, justified. In each part compute the watershed $n^{\log_b a}$ and compare with $f(n)$.</p>
+
+    <p><b>(a)</b> $a=16$, $b=4$: $n^{\log_4 16}=n^2$. Here $f(n)=n^2=\Theta(n^2\lg^0 n)$ — exact match (case&nbsp;2 of the Master Theorem, $k=0$). Hence
+    $$T(n)=\Theta(n^2\lg n).$$</p>
+
+    <p><b>(b)</b> $a=3$, $b=3$: $n^{\log_3 3}=n$, and $f(n)=n/\lg n=\Theta(n\lg^{-1}n)$. The <em>basic</em> Master Theorem does <b>not</b> apply: $f$ is smaller than $n$ but only by a $\lg$ factor, so it is not polynomially smaller (case 1 fails), and it isn't $\Theta(n)$ either (case 2 fails). Two clean routes:</p>
+    <ul>
+      <li><b>Extended case 2</b> with $k=-1$: if $f(n)=\Theta(n^{\log_b a}\lg^{-1}n)$ then $T(n)=\Theta(n^{\log_b a}\lg\lg n)$.</li>
+      <li><b>Akra–Bazzi</b>: $p$ solves $3\cdot(1/3)^p=1\Rightarrow p=1$. Then
+      $$T(n)=\Theta\!\Big(n^p\Big(1+\int_2^n\frac{f(u)}{u^{p+1}}\,du\Big)\Big)
+      =\Theta\!\Big(n\Big(1+\int_2^n\frac{du}{u\lg u}\Big)\Big),$$
+      and $\int_2^n\frac{du}{u\lg u}=\ln 2\,\big[\ln\ln u\big]_2^n=\Theta(\lg\lg n)$.</li>
+    </ul>
+    <p>Either way,
+    $$T(n)=\Theta(n\lg\lg n).$$</p>
+
+    <p><b>(c)</b> $a=4$, $b=2$: $n^{\log_2 4}=n^2$, and $f(n)=n^2\lg n=\Theta(n^2\lg^1 n)$ — extended case 2 with $k=1$:
+    $$T(n)=\Theta(n^2\lg^2 n).$$</p>
+
+    <p><b>(d)</b> $a=2$, $b=4$: $n^{\log_4 2}=n^{1/2}=\sqrt n$, and $f(n)=\sqrt n$ — exact match again (case 2, $k=0$):
+    $$T(n)=\Theta(\sqrt n\,\lg n).$$</p>
+
+    <div class="grader"><span class="lbl">Grader notes</span>
+    Show the three ingredients every time: $a,b$ and the watershed $n^{\log_b a}$ (computed, not asserted); the comparison with $f(n)$; the case invoked, then the $\Theta$ answer. Part (b) is the differentiator — it's there precisely to catch people who only know the three vanilla cases. Know the $k=-1\Rightarrow\lg\lg n$ rule <em>and</em> be able to run Akra–Bazzi. Full method + ~20 drills: <a href="recurrence-drills.html">recurrence drill bank</a>.</div>
+  </div></details>
+
+  <!-- ============================================================ Q3 -->
+  <h2>3 · Heaps <span class="pts">8 pts</span></h2>
+  <div class="exam">
+    <p>Describe what a heap is and what it is usually used for. Especially, talk about the following points:</p>
+    <ol type="a">
+      <li>Explain how a heap is represented in an array. <span class="pts">1</span></li>
+      <li>Describe the algorithms <b>MIN-HEAPIFY</b> and <b>BUILD-MIN-HEAP</b> for constructing a min heap. <span class="pts">3</span></li>
+      <li>Explain which algorithms are needed to turn a min heap into a min priority queue, and describe the algorithm <b>MIN-HEAP-DECREASE-KEY</b>. <span class="pts">3</span></li>
+      <li>What are the running times of MIN-HEAPIFY and MIN-HEAP-DECREASE-KEY? <span class="pts">1</span></li>
+    </ol>
+  </div>
+
+  <details class="sol"><summary>Model solution — Q3</summary>
+  <div class="solbody">
+    <p>A <b>(binary) min-heap</b> is a <em>nearly complete</em> binary tree — every level full except possibly the last, which is filled left to right — satisfying the <b>min-heap property</b>: for every node $i$ other than the root, $A[\mathrm{parent}(i)]\le A[i]$. The minimum therefore sits at the root. Heaps are used for <b>heapsort</b> and, above all, as <b>priority queues</b>.</p>
+
+    <p><b>(a) Array representation.</b> Store the tree level by level, left to right, in $A[1..n]$: the root is $A[1]$, and for a node at index $i$,
+    $\mathrm{parent}(i)=\lfloor i/2\rfloor$, $\mathrm{left}(i)=2i$, $\mathrm{right}(i)=2i+1$.
+    No pointers needed; <code>A.heap-size</code> tracks how much of the array is heap.</p>
+
+    <p><b>(b) MIN-HEAPIFY</b> fixes a single violation: it assumes the subtrees rooted at $\mathrm{left}(i)$ and $\mathrm{right}(i)$ are already min-heaps, but $A[i]$ may be larger than its children. It lets $A[i]$ <em>float down</em>:</p>
+<pre class="code">MIN-HEAPIFY(A, i)
+  l = 2i;  r = 2i+1;  smallest = i
+  <span class="kw">if</span> l ≤ A.heap-size <span class="kw">and</span> A[l] &lt; A[smallest]: smallest = l
+  <span class="kw">if</span> r ≤ A.heap-size <span class="kw">and</span> A[r] &lt; A[smallest]: smallest = r
+  <span class="kw">if</span> smallest ≠ i:
+    exchange A[i] with A[smallest]
+    MIN-HEAPIFY(A, smallest)          <span class="cm">// recurse where the big key landed</span></pre>
+    <p><b>BUILD-MIN-HEAP</b> turns an arbitrary array into a heap. The elements $A[\lfloor n/2\rfloor{+}1..n]$ are leaves — already 1-element heaps — so it suffices to heapify the internal nodes bottom-up:</p>
+<pre class="code">BUILD-MIN-HEAP(A, n)
+  A.heap-size = n
+  <span class="kw">for</span> i = ⌊n/2⌋ <span class="kw">downto</span> 1:
+    MIN-HEAPIFY(A, i)</pre>
+    <p>(Correctness by the invariant: at the start of each iteration, nodes $i+1,\dots,n$ are roots of min-heaps. Runtime is $O(n)$ — not $O(n\lg n)$ — because most nodes sit at small heights: $\sum_{h}\lceil n/2^{h+1}\rceil\,O(h)=O(n)$.)</p>
+
+    <p><b>(c) Min-priority queue.</b> A priority queue maintains a dynamic set with operations: <b>MIN-HEAP-MINIMUM</b> (return $A[1]$), <b>MIN-HEAP-EXTRACT-MIN</b> (remove and return the min: save $A[1]$, move $A[\text{heap-size}]$ to the root, shrink, MIN-HEAPIFY$(A,1)$), <b>MIN-HEAP-DECREASE-KEY</b>, and <b>MIN-HEAP-INSERT</b> (append the new key at the end, then float it up — implementable as insert $+\infty$ then decrease-key).</p>
+    <p><b>MIN-HEAP-DECREASE-KEY</b>$(A,i,key)$ lowers the key at position $i$ and restores the heap property by floating the element <em>up</em> (the mirror image of heapify's float-down):</p>
+<pre class="code">MIN-HEAP-DECREASE-KEY(A, i, key)
+  <span class="kw">if</span> key &gt; A[i]: <span class="kw">error</span> "new key is larger than current key"
+  A[i] = key
+  <span class="kw">while</span> i &gt; 1 <span class="kw">and</span> A[⌊i/2⌋] &gt; A[i]:
+    exchange A[i] with A[⌊i/2⌋]
+    i = ⌊i/2⌋</pre>
+
+    <p><b>(d) Running times.</b> Both MIN-HEAPIFY and MIN-HEAP-DECREASE-KEY walk one root-to-leaf (resp. leaf-to-root) path of a tree of height $\lfloor\lg n\rfloor$, doing $O(1)$ work per level: both are $O(\lg n)$.</p>
+
+    <div class="grader"><span class="lbl">Grader notes</span>
+    The pseudocode is the deliverable — write MIN-HEAPIFY, BUILD-MIN-HEAP and DECREASE-KEY <em>from memory</em> until it's automatic. Say the index formulas ($\lfloor i/2\rfloor,2i,2i{+}1$), the heap property, and mention that BUILD-MIN-HEAP starts at $\lfloor n/2\rfloor$ <em>because the rest are leaves</em>. Bonus credibility: BUILD-MIN-HEAP is $O(n)$.</div>
+  </div></details>
+
+  <!-- ============================================================ Q4 -->
+  <h2>4 · Red-black trees <span class="pts">6 pts</span></h2>
+  <div class="exam">
+    <ol type="a">
+      <li>Define what a binary search tree is, and describe how binary trees are stored. <span class="pts">1</span></li>
+      <li>What are the properties that define a red-black tree? <span class="pts">1</span></li>
+      <li>Provide the algorithms for inserting a new element in a red-black tree. <span class="pts">4</span></li>
+    </ol>
+  </div>
+
+  <details class="sol"><summary>Model solution — Q4</summary>
+  <div class="solbody">
+    <p><b>(a)</b> A <b>binary search tree</b> is a binary tree whose nodes each store a key, satisfying the <b>BST property</b>: for every node $x$, every key in $x$'s left subtree is $\le x.key$, and every key in $x$'s right subtree is $\ge x.key$. A binary tree is stored as <b>linked nodes</b>: each node holds <code>key</code> (+ satellite data) and three pointers — <code>left</code>, <code>right</code>, <code>p</code> (parent); absent children are NIL, and the tree is accessed through a root pointer. (Red-black trees use a single black sentinel <code>T.nil</code> for all NILs.)</p>
+
+    <p><b>(b)</b> A <b>red-black tree</b> is a BST with one extra bit per node (its color) satisfying the five <b>red-black properties</b>:</p>
+    <ol>
+      <li>Every node is either red or black.</li>
+      <li>The root is black.</li>
+      <li>Every leaf (NIL) is black.</li>
+      <li>A red node has only black children (never two reds in a row on a path).</li>
+      <li>For every node, all simple paths from it down to descendant leaves contain the same number of black nodes (its <em>black-height</em>).</li>
+    </ol>
+    <p>These force height $\le 2\lg(n+1)$, so all dictionary operations run in $O(\lg n)$.</p>
+
+    <p><b>(c)</b> Insertion has two stages. Stage 1: ordinary BST insertion of $z$, then color $z$ <b>red</b> (red, so property 5 is never broken — only possibly property 4, or 2 if $z$ is the root). Stage 2: repair with rotations + recoloring.</p>
+<pre class="code">RB-INSERT(T, z)
+  x = T.root;  y = T.nil
+  <span class="kw">while</span> x ≠ T.nil:                 <span class="cm">// walk down to the insertion point</span>
+    y = x
+    <span class="kw">if</span> z.key &lt; x.key: x = x.left <span class="kw">else</span>: x = x.right
+  z.p = y
+  <span class="kw">if</span> y == T.nil: T.root = z
+  <span class="kw">else if</span> z.key &lt; y.key: y.left = z
+  <span class="kw">else</span>: y.right = z
+  z.left = T.nil;  z.right = T.nil;  z.color = RED
+  RB-INSERT-FIXUP(T, z)</pre>
+    <p>The fixup loop runs while $z$'s parent is red (a property-4 violation). Let $z.p.p$ be the grandparent and $y$ the <b>uncle</b> (the grandparent's other child). Three cases (shown for $z.p$ a left child; mirror otherwise):</p>
+<pre class="code">RB-INSERT-FIXUP(T, z)
+  <span class="kw">while</span> z.p.color == RED:
+    <span class="kw">if</span> z.p == z.p.p.left:
+      y = z.p.p.right                        <span class="cm">// uncle</span>
+      <span class="kw">if</span> y.color == RED:                     <span class="cm">// Case 1: red uncle → recolor</span>
+        z.p.color = BLACK;  y.color = BLACK
+        z.p.p.color = RED;  z = z.p.p        <span class="cm">// push the problem two levels up</span>
+      <span class="kw">else</span>:
+        <span class="kw">if</span> z == z.p.right:                   <span class="cm">// Case 2: black uncle, “triangle”</span>
+          z = z.p;  LEFT-ROTATE(T, z)        <span class="cm">// convert to Case 3</span>
+        z.p.color = BLACK                    <span class="cm">// Case 3: black uncle, “line”</span>
+        z.p.p.color = RED
+        RIGHT-ROTATE(T, z.p.p)               <span class="cm">// terminates the loop</span>
+    <span class="kw">else</span>: (same, with “left” and “right” exchanged)
+  T.root.color = BLACK                       <span class="cm">// restore property 2</span></pre>
+    <p>The rotation primitive (constant time, preserves the BST property):</p>
+<pre class="code">LEFT-ROTATE(T, x)          <span class="cm">// x’s right child y rises; x becomes y’s left child</span>
+  y = x.right
+  x.right = y.left
+  <span class="kw">if</span> y.left ≠ T.nil: y.left.p = x
+  y.p = x.p
+  <span class="kw">if</span> x.p == T.nil: T.root = y
+  <span class="kw">else if</span> x == x.p.left: x.p.left = y
+  <span class="kw">else</span>: x.p.right = y
+  y.left = x;  x.p = y</pre>
+    <p>In words: <b>Case 1</b> (red uncle): recolor parent + uncle black, grandparent red, move $z$ up two levels — may repeat. <b>Case 2</b> (black uncle, $z$ the "inner" child): a rotation at the parent turns it into Case 3. <b>Case 3</b> (black uncle, $z$ the "outer" child): recolor parent black / grandparent red and rotate at the grandparent — done. Total: $O(\lg n)$ time, at most 2 rotations per insertion.</p>
+
+    <div class="grader"><span class="lbl">Grader notes</span>
+    4 points = they want the real algorithms, not a story. Structure your answer as: BST insert → color red → why only property 4 can break → the three fixup cases by uncle color and triangle/line shape, each with its recolor/rotation. Drawing the three cases as little diagrams earns clarity points. Diagrams + more detail: <a href="data-structures.html#rbt">data-structure notes → red-black trees</a>.</div>
+  </div></details>
+
+  <!-- ============================================================ Q5 -->
+  <h2>5 · Huffman codes <span class="pts">10 pts</span></h2>
+  <div class="exam">
+    <ol type="a">
+      <li>Provide the algorithm for constructing a Huffman code. <span class="pts">2</span></li>
+      <li>Prove that the Huffman code algorithm produces an optimal prefix-free code. <span class="pts">8</span></li>
+    </ol>
+  </div>
+
+  <details class="sol"><summary>Model solution — Q5 (= CLRS Lemmas 15.2, 15.3 + Theorem 15.4)</summary>
+  <div class="solbody">
+    <p><b>Setup.</b> A <b>prefix-free code</b> assigns each character a binary codeword such that no codeword is a prefix of another; equivalently, the code is a <b>full binary tree</b> $T$ (every internal node has two children) with the characters at the leaves, 0 = "go left", 1 = "go right". The codeword length of $c$ is its depth $d_T(c)$, and the cost of the tree is
+    $$B(T)=\sum_{c\in C} c.freq\cdot d_T(c),$$
+    the number of bits needed to encode the file. A code/tree is <b>optimal</b> if it minimizes $B(T)$.</p>
+
+    <p><b>(a) The algorithm.</b> Greedily merge the two least-frequent nodes, using a min-priority queue $Q$ keyed on frequency:</p>
+<pre class="code">HUFFMAN(C)
+  n = |C|
+  Q = C                              <span class="cm">// build min-priority queue of the characters</span>
+  <span class="kw">for</span> i = 1 <span class="kw">to</span> n−1:
+    z = <span class="kw">new</span> node
+    z.left  = x = EXTRACT-MIN(Q)
+    z.right = y = EXTRACT-MIN(Q)
+    z.freq  = x.freq + y.freq
+    INSERT(Q, z)
+  <span class="kw">return</span> EXTRACT-MIN(Q)              <span class="cm">// root of the code tree</span></pre>
+    <p>With a binary min-heap: $n-1$ iterations × $O(\lg n)$ per queue operation = $O(n\lg n)$.</p>
+
+    <p><b>(b) Optimality.</b> Two lemmas, then induction.</p>
+
+    <div class="inv"><b>Lemma 1 (greedy choice — CLRS 15.2).</b> Let $x,y$ be two characters of lowest frequency in $C$. Then there exists an optimal prefix-free code for $C$ in which the codewords of $x$ and $y$ have the same length and differ only in the last bit — i.e. some optimal tree has $x$ and $y$ as <em>sibling leaves at maximum depth</em>.</div>
+    <p><em>Proof.</em> Take any optimal tree $T$. Since $T$ is full, it has two sibling leaves $a,b$ at maximum depth; label them so that $a.freq\le b.freq$, and label $x,y$ so that $x.freq\le y.freq$. Because $x,y$ have the two smallest frequencies of all, $x.freq\le a.freq$ and $y.freq\le b.freq$. (If $x=b$ or $y=a$, swap roles/names — the boundary cases are routine; if $\{x,y\}=\{a,b\}$ we are already done.) Let $T'$ be $T$ with $x$ and $a$ exchanged. Then
+    $$B(T)-B(T')=(a.freq-x.freq)\,\bigl(d_T(a)-d_T(x)\bigr)\;\ge\;0,$$
+    since both factors are $\ge 0$ ($a$ sits at maximum depth). Exchanging $y$ and $b$ in $T'$ to get $T''$ likewise gives $B(T')-B(T'')\ge 0$. So $B(T'')\le B(T)$; as $T$ was optimal, $T''$ is optimal too — and it has $x,y$ as maximum-depth siblings. $\square$</p>
+
+    <div class="inv"><b>Lemma 2 (optimal substructure — CLRS 15.3).</b> Let $x,y$ be two minimum-frequency characters of $C$. Define $C'=(C\setminus\{x,y\})\cup\{z\}$ where $z$ is a new character with $z.freq=x.freq+y.freq$. If $T'$ is a tree of an optimal prefix-free code for $C'$, then the tree $T$ obtained from $T'$ by replacing the leaf $z$ with an internal node having children $x$ and $y$ is an optimal prefix-free code tree for $C$.</div>
+    <p><em>Proof.</em> First relate the costs. Each $c\in C\setminus\{x,y\}$ has $d_T(c)=d_{T'}(c)$, while $d_T(x)=d_T(y)=d_{T'}(z)+1$, so
+    $$B(T)=B(T')+x.freq+y.freq .$$
+    Suppose, for contradiction, $T$ is <em>not</em> optimal for $C$: some tree $S$ has $B(S)&lt;B(T)$. By Lemma&nbsp;1 we may assume $S$ has $x,y$ as sibling leaves. Replace $x$, $y$ and their common parent in $S$ by a single leaf $z$ (with $z.freq = x.freq+y.freq$) to obtain a tree $S'$ for $C'$ with
+    $$B(S')=B(S)-x.freq-y.freq\;&lt;\;B(T)-x.freq-y.freq\;=\;B(T'),$$
+    contradicting the optimality of $T'$ for $C'$. $\square$</p>
+
+    <div class="inv"><b>Theorem (CLRS 15.4).</b> Procedure HUFFMAN produces an optimal prefix-free code.</div>
+    <p><em>Proof.</em> Induction on $n=|C|$. <em>Base:</em> $n=2$ — any prefix-free code needs at least one bit per character, and HUFFMAN outputs codewords $0$ and $1$, which is optimal. <em>Step:</em> let $n&gt;2$ and assume HUFFMAN is optimal for alphabets of size $n-1$. On input $C$, the first iteration extracts two minimum-frequency characters $x,y$ and replaces them by a merged node $z$ with $z.freq=x.freq+y.freq$; the remaining $n-2$ iterations run HUFFMAN on exactly the alphabet $C'$ of Lemma&nbsp;2. By the induction hypothesis, the resulting tree $T'$ is optimal for $C'$; the final output $T$ is $T'$ with the leaf $z$ expanded into the siblings $x,y$. By Lemma&nbsp;2, $T$ is optimal for $C$. (Lemma&nbsp;1 is what makes the greedy first step <em>safe</em>: an optimal solution with $x,y$ as bottom-level siblings exists, so restricting attention to such solutions loses nothing.) $\blacksquare$</p>
+
+    <div class="grader"><span class="lbl">Grader notes — 8 points, budget them</span>
+    Roughly: setup (tree ↔ prefix-free code, cost $B(T)$) ≈ 1; Lemma 1 statement + exchange argument with the product-of-two-nonnegatives inequality ≈ 3; Lemma 2 statement + the $B(T)=B(T')+x.freq+y.freq$ computation + contradiction ≈ 3; assembling the induction ≈ 1. The two displayed equations are the heart — memorize them. This was the single biggest item on the paper; it is flagged (Thm 15.4 + Lemmas 15.2/15.3) and it <em>appeared</em>. Assume it can appear again.</div>
+  </div></details>
+
+  <!-- ============================================================ predicted -->
+  <h2>Predicted second-date paper (self-test)</h2>
+  <p class="lede" style="font-size:.98rem">Same skeleton, rotated topics. The flagged proofs that <em>didn't</em> appear on the first date are the natural candidates. Attempt this closed-book; answers are on the linked pages.</p>
+
+  <div class="exam">
+    <ol>
+      <li><b>Correctness of INSERTION-SORT</b> — (a) what three things must be proved? (b) state + prove the invariant of the inner <b>while</b> loop; (c) state the outer invariant; (d) prove it and conclude. <span class="pts">~8</span> <em style="color:var(--text-dim)">(→ worked in full on the <a href="exam-proofs.html#loopinv" style="color:var(--accent)">proofs page</a>)</em></li>
+      <li><b>Recurrences</b> — tight bounds for: (a) $T(n)=9T(n/3)+n^2\lg n$; (b) $T(n)=2T(n/2)+n/\lg n$; (c) $T(n)=5T(n/4)+n$; (d) $T(n)=4T(n/2)+n^2$. <span class="pts">~8</span> <em style="color:var(--text-dim)">(answers in the <a href="recurrence-drills.html" style="color:var(--accent)">drill bank</a>: $\Theta(n^2\lg^2 n)$, $\Theta(n\lg\lg n)$, $\Theta(n^{\log_4 5})$, $\Theta(n^2\lg n)$)</em></li>
+      <li><b>Hash tables</b> — direct addressing vs. hashing; chaining and the load factor $\alpha$; state and prove the expected search cost $\Theta(1+\alpha)$ (Thm 11.2); name the open-addressing probing schemes. <span class="pts">~8</span></li>
+      <li><b>B-trees or stacks/queues</b> — definition, storage, the basic operations and their costs. <span class="pts">~6</span></li>
+      <li><b>Big proof (rotation candidates)</b> — one of: expected running time of randomized quicksort (Thm 7.4 + Lemmas 7.1–7.3) · the $\Omega(n\lg n)$ comparison-sort lower bound (Thm 8.1) · expected linear-time selection (Thm 9.2) · open-addressing search bound (Thm 11.8). <span class="pts">~10</span> <em style="color:var(--text-dim)">(all written out on the <a href="exam-proofs.html" style="color:var(--accent)">proofs page</a>)</em></li>
+    </ol>
+  </div>
+
+  <div class="box"><span class="lbl">Point-maximizing habits (apply on every question)</span>
+  <ul>
+    <li><strong>Correctness proofs:</strong> name the three steps — <em>Initialization / Maintenance / Termination</em> — as labelled paragraphs; graders award per component. Never forget the <em>permutation</em> clause.</li>
+    <li><strong>Recurrences:</strong> always compute $n^{\log_b a}$ explicitly, name the case, answer in $\Theta$. If you claim case 3, check the regularity condition $a f(n/b)\le c f(n)$.</li>
+    <li><strong>Describe questions:</strong> pseudocode + one sentence of purpose + the runtime is the full-marks pattern. Rehearse writing MIN-HEAPIFY, DECREASE-KEY, RB-INSERT-FIXUP and HUFFMAN from memory.</li>
+    <li><strong>Big proofs:</strong> statement first, then the main idea in one sentence, then the details — if time runs out, the skeleton still earns most of the credit.</li>
+  </ul></div>
+
+  <footer>
+    Transcribed from the official first-date paper (2 July 2026) © Prof. Schichl / Universität Wien; solutions follow CLRS 4th ed. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a1612">
+<meta name="description" content="Describe-and-define notes for the AlgoDat exam: heaps, BSTs, red-black trees, hash tables, B-trees, stacks & queues, the sorting zoo, dynamic programming, and greedy — definitions, pseudocode, runtimes.">
+<title>Data structures &amp; algorithms — describe/define notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#1a1612;--bg-elevated:#221d18;--bg-card:#1f1a15;--border:#3a342c;--border-soft:#2a251f;
+    --text:#f5efe4;--text-muted:#b8aa97;--text-dim:#8a7e6e;--accent:#e0b888;--accent-hover:#ecc89c;
+    --good:#8bc6a0;--warn:#d99a7e;--blue:#8fb8de;--glow:rgba(224,184,136,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.68;-webkit-font-smoothing:antialiased;min-height:100vh;background-image:radial-gradient(900px 500px at 50% -10%,var(--glow),transparent 70%);background-repeat:no-repeat}
+  .wrap{max-width:840px;margin:0 auto;padding:clamp(2rem,6vw,3rem) clamp(1.1rem,5vw,1.75rem) 5rem;padding-left:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-left));padding-right:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-right))}
+  .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-dim);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;margin-bottom:1.5rem;transition:color .15s}
+  .back-link:hover{color:var(--accent)}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--accent);font-size:clamp(.74rem,2.6vw,.82rem);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem}
+  h1{font-family:'Sora',sans-serif;font-weight:600;font-size:clamp(1.9rem,7vw,2.7rem);line-height:1.08;letter-spacing:-.03em;margin-bottom:.7rem}
+  .lede{color:var(--text-muted);font-size:clamp(.98rem,3.4vw,1.08rem);max-width:44em}
+  h2{font-family:'Sora',sans-serif;font-weight:600;font-size:clamp(1.35rem,4.5vw,1.65rem);letter-spacing:-.02em;margin:clamp(2.6rem,6vw,3.4rem) 0 1rem}
+  h3{font-family:'Sora',sans-serif;font-weight:600;font-size:1.05rem;margin:1.5rem 0 .5rem;color:var(--accent)}
+  p{margin:.6rem 0;color:var(--text-muted);font-size:.96rem}
+  b,strong{color:var(--text)}
+  ul,ol{margin:.4rem 0 .7rem;padding-left:1.35rem;color:var(--text-muted);font-size:.96rem}
+  li{margin:.35rem 0}
+  a{color:var(--accent)}
+  .toc{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.3rem;margin:1.4rem 0;font-size:.92rem}
+  .toc .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.5rem}
+  .toc a{text-decoration:none;white-space:nowrap} .toc a:hover{text-decoration:underline}
+  .def{background:#1c2119;border:1px solid rgba(139,198,160,.3);border-left:4px solid var(--good);border-radius:0 10px 10px 0;padding:.85rem 1.1rem;margin:.9rem 0;color:var(--text);font-size:.95rem}
+  .def .tag{display:block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--good);margin-bottom:.3rem}
+  .tip{background:var(--bg-card);border:1px solid rgba(217,154,126,.35);border-left:4px solid var(--warn);border-radius:0 10px 10px 0;padding:.7rem 1.05rem;margin:.8rem 0;font-size:.9rem;color:var(--text-muted)}
+  .tip .lbl{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--warn);margin-right:.4rem}
+  pre.code{font-family:'JetBrains Mono',monospace;font-size:.83rem;line-height:1.5;background:#14110d;border:1px solid var(--border-soft);border-radius:10px;padding:.85rem 1.05rem;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.7rem 0;color:var(--text)}
+  pre.code .kw{color:var(--blue)} pre.code .cm{color:var(--text-dim);font-style:italic}
+  pre.fig{font-family:'JetBrains Mono',monospace;font-size:.8rem;line-height:1.45;background:#181410;border:1px dashed var(--border);border-radius:10px;padding:.85rem 1.05rem;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.7rem 0;color:var(--text-muted)}
+  pre.fig .r{color:#e08a7a;font-weight:700} pre.fig .b{color:#9fc2e8;font-weight:700}
+  .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1rem 0}
+  table{border-collapse:collapse;width:100%;font-size:.85rem}
+  th,td{border:1px solid var(--border);padding:.42rem .55rem;text-align:left;vertical-align:top;white-space:nowrap}
+  th{background:#2a2218;color:var(--accent);font-weight:600}
+  td b{color:var(--accent)}
+  .exam1chip{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#221a10;background:var(--warn);border-radius:5px;padding:.14rem .5rem;vertical-align:middle;letter-spacing:.03em}
+  footer{margin-top:3.5rem;padding-top:1.3rem;border-top:1px solid var(--border-soft);color:var(--text-dim);font-size:.82rem}
+  footer a{color:var(--accent);text-decoration:none}
+  mjx-container{color:inherit !important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="index.html">← Algorithms &amp; Data Structures</a>
+  <div class="eyebrow">Universität Wien · Prof. Schichl · describe &amp; define</div>
+  <h1>Data-structure notes</h1>
+  <p class="lede">The "describe X and its algorithms" half of the exam — 35% of the first-date paper came from exactly this. Each section: definition → storage → pseudocode of the key operations → runtimes. Rehearse writing the pseudocode <em>from memory</em>.</p>
+
+  <div class="toc"><span class="lbl">Contents</span>
+    <a href="#heaps">Heaps &amp; priority queues</a> · <a href="#bst">Binary search trees</a> · <a href="#rbt">Red-black trees</a> · <a href="#hash">Hash tables</a> · <a href="#btree">B-trees</a> · <a href="#stacks">Stacks, queues &amp; linked lists</a> · <a href="#sorting">The sorting zoo</a> · <a href="#dp">Dynamic programming</a> · <a href="#greedy">Greedy algorithms</a>
+  </div>
+
+  <!-- ==================================================== HEAPS -->
+  <h2 id="heaps">Heaps &amp; priority queues <span class="exam1chip">EXAM 1 · 8 pts</span></h2>
+  <div class="def"><span class="tag">Definition</span> A <b>binary min-heap</b> is a <em>nearly complete</em> binary tree (all levels full except possibly the last, filled left-to-right) with the <b>min-heap property</b>: $A[\mathrm{parent}(i)]\le A[i]$ for every non-root $i$. The minimum is at the root. (Max-heap: reverse the inequality; used by heapsort.)</div>
+  <p><b>Array storage</b> — level by level, left to right, in $A[1..n]$: $\mathrm{parent}(i)=\lfloor i/2\rfloor$, $\mathrm{left}(i)=2i$, $\mathrm{right}(i)=2i+1$; height $\lfloor\lg n\rfloor$. No pointers needed.</p>
+  <p>The full pseudocode of <b>MIN-HEAPIFY</b> (float down, $O(\lg n)$), <b>BUILD-MIN-HEAP</b> (bottom-up from $\lfloor n/2\rfloor$, $O(n)$) and <b>MIN-HEAP-DECREASE-KEY</b> (float up, $O(\lg n)$) is written out in the <a href="mock-exam-1.html">mock-exam model solution Q3</a> — that answer is the exam-ready version. Summary of the priority-queue interface:</p>
+  <div class="scroll-x"><table>
+    <tr><th>Operation</th><th>Idea</th><th>Time</th></tr>
+    <tr><td>MIN-HEAP-MINIMUM</td><td>return $A[1]$</td><td>$\Theta(1)$</td></tr>
+    <tr><td>MIN-HEAP-EXTRACT-MIN</td><td>save $A[1]$; move $A[n]$ to root; shrink; MIN-HEAPIFY$(A,1)$</td><td>$O(\lg n)$</td></tr>
+    <tr><td>MIN-HEAP-DECREASE-KEY</td><td>lower key at $i$; swap upward while parent larger</td><td>$O(\lg n)$</td></tr>
+    <tr><td>MIN-HEAP-INSERT</td><td>append key at end; float it up (insert $+\infty$, then decrease-key)</td><td>$O(\lg n)$</td></tr>
+    <tr><td>BUILD-MIN-HEAP</td><td>MIN-HEAPIFY internal nodes $\lfloor n/2\rfloor$ downto $1$</td><td>$O(n)$</td></tr>
+  </table></div>
+  <p><b>Why BUILD-MIN-HEAP is $O(n)$, not $O(n\lg n)$:</b> a heapify call at height $h$ costs $O(h)$, and at most $\lceil n/2^{h+1}\rceil$ nodes sit at height $h$; so the total is $\sum_{h=0}^{\lfloor\lg n\rfloor}\lceil n/2^{h+1}\rceil\,O(h)=O\!\big(n\sum_{h\ge0}h/2^h\big)=O(n)$ since $\sum h/2^h=2$.</p>
+  <p><b>Heapsort</b> ($O(n\lg n)$, in place, not stable): BUILD-MAX-HEAP; then for $i=n$ downto $2$: swap $A[1]\leftrightarrow A[i]$, shrink the heap, MAX-HEAPIFY$(A,1)$.</p>
+  <div class="tip"><span class="lbl">Exam tip</span> The three index formulas + heap property + "leaves start at $\lfloor n/2\rfloor{+}1$" answer most heap sub-questions. Know DECREASE-KEY goes <em>up</em>, HEAPIFY goes <em>down</em>.</div>
+
+  <!-- ==================================================== BST -->
+  <h2 id="bst">Binary search trees <span class="exam1chip">EXAM 1 · with RBT</span></h2>
+  <div class="def"><span class="tag">Definition</span> A <b>binary search tree</b> is a binary tree of key-carrying nodes satisfying the <b>BST property</b>: for every node $x$, all keys in $x$'s left subtree are $\le x.key$ and all keys in $x$'s right subtree are $\ge x.key$.</div>
+  <p><b>Storage</b> — linked nodes with fields <code>key</code>, <code>left</code>, <code>right</code>, <code>p</code> (parent) and satellite data; missing children are NIL; the tree is reached via <code>T.root</code>. An <b>inorder walk</b> (left, node, right) prints the keys in sorted order in $\Theta(n)$.</p>
+<pre class="code">TREE-SEARCH(x, k)                     TREE-INSERT(T, z)
+  <span class="kw">while</span> x ≠ NIL <span class="kw">and</span> k ≠ x.key:          y = NIL;  x = T.root
+    <span class="kw">if</span> k &lt; x.key: x = x.left            <span class="kw">while</span> x ≠ NIL:            <span class="cm">// walk down</span>
+    <span class="kw">else</span>: x = x.right                     y = x
+  <span class="kw">return</span> x                              <span class="kw">if</span> z.key &lt; x.key: x = x.left
+                                        <span class="kw">else</span>: x = x.right
+TREE-MINIMUM(x)                       z.p = y
+  <span class="kw">while</span> x.left ≠ NIL: x = x.left      <span class="kw">if</span> y == NIL: T.root = z
+  <span class="kw">return</span> x                            <span class="kw">else if</span> z.key &lt; y.key: y.left = z
+                                      <span class="kw">else</span>: y.right = z</pre>
+  <ul>
+    <li><b>Successor</b> of $x$: if $x.right\ne$ NIL, it's TREE-MINIMUM$(x.right)$; else walk up until you arrive from a left child.</li>
+    <li><b>Delete</b> $z$: no children → remove; one child → splice it in; two children → replace $z$ by its successor (which has no left child), transplanting subtrees.</li>
+    <li><b>All operations run in $O(h)$</b>, $h$ = height. Randomly built: expected $h=O(\lg n)$; worst case (sorted insertions) $h=n-1$ — the whole point of balanced trees.</li>
+  </ul>
+
+  <!-- ==================================================== RBT -->
+  <h2 id="rbt">Red-black trees <span class="exam1chip">EXAM 1 · 6 pts</span></h2>
+  <div class="def"><span class="tag">Definition — the five red-black properties</span>
+  A red-black tree is a BST with a color bit per node such that: <b>(1)</b> every node is red or black; <b>(2)</b> the root is black; <b>(3)</b> every leaf (NIL sentinel) is black; <b>(4)</b> a red node has only black children; <b>(5)</b> for each node, all simple paths down to descendant leaves contain the same number of black nodes (the node's <b>black-height</b> $bh$).</div>
+  <div class="def"><span class="tag">Height lemma (CLRS 13.1)</span> A red-black tree with $n$ internal nodes has height $h\le 2\lg(n+1)$.
+  <em>Sketch:</em> induction shows the subtree at $x$ has $\ge 2^{bh(x)}-1$ internal nodes; property (4) forces $bh(\text{root})\ge h/2$ (at least half of any root-leaf path is black); so $n\ge 2^{h/2}-1$.</div>
+  <p>Hence SEARCH / MIN / MAX / SUCCESSOR / INSERT / DELETE all run in $O(\lg n)$ worst case.</p>
+  <p><b>Rotations</b> — the $O(1)$ rebalancing primitive, preserving the BST property:</p>
+<pre class="fig">        LEFT-ROTATE(T,x)                 RIGHT-ROTATE(T,y)
+      x                y                      y                x
+     / \              / \                    / \              / \
+    α   y    ⟶      x   γ                  x   γ    ⟶      α   y
+       / \          / \                    / \                  / \
+      β   γ        α   β                  α   β                β   γ</pre>
+  <p><b>Insertion</b> = BST-insert $z$ + color it <b>red</b> (so property 5 never breaks; only 4 — or 2 — can) + <b>RB-INSERT-FIXUP</b>. Full pseudocode: <a href="mock-exam-1.html">mock exam, model solution Q4</a>. The three fixup cases, with $z$'s <b>uncle</b> $y$ (shown for parent = left child; mirror otherwise; <span style="color:#e08a7a;font-weight:700">red</span>, <span style="color:#9fc2e8;font-weight:700">black</span>):</p>
+<pre class="fig"><b>Case 1 — uncle red: recolor, push up.</b>
+        <span class="b">C</span>                    <span class="r">C</span>  ← new z
+       / \                  / \
+      <span class="r">A</span>   <span class="r">y</span>      ⟶        <span class="b">A</span>   <span class="b">y</span>          (may loop again
+       \                    \              two levels up)
+        <span class="r">z</span>                    <span class="r">z</span>
+
+<b>Case 2 — uncle black, z inner ("triangle"): rotate parent → Case 3.</b>
+        <span class="b">C</span>                      <span class="b">C</span>
+       / \                    / \
+      <span class="r">A</span>   <span class="b">y</span>      ⟶          <span class="r">B</span>   <span class="b">y</span>        (LEFT-ROTATE at A;
+       \                    /              old parent becomes z)
+        <span class="r">B</span>=z                <span class="r">A</span>=z
+
+<b>Case 3 — uncle black, z outer ("line"): recolor + rotate grandparent. Done.</b>
+        <span class="b">C</span>                      <span class="b">B</span>
+       / \                    / \
+      <span class="r">B</span>   <span class="b">y</span>      ⟶          <span class="r">A</span>   <span class="r">C</span>        (RIGHT-ROTATE at C;
+     /                              \      loop terminates)
+    <span class="r">A</span>=z                              <span class="b">y</span></pre>
+  <p>Finally the root is recolored black. Cost: $O(\lg n)$, at most <b>2 rotations</b> per insertion (Case 1 only recolors). Deletion is analogous (four fixup cases, ≤ 3 rotations) — know it exists and its cost; insertion is what exam 1 asked in detail.</p>
+  <div class="tip"><span class="lbl">Exam tip</span> Recite the five properties in order — that alone was 1 pt. For fixup, the decision tree is: <em>uncle red? → recolor. Uncle black? triangle → rotate parent; line → recolor + rotate grandparent.</em></div>
+
+  <!-- ==================================================== HASH -->
+  <h2 id="hash">Hash tables</h2>
+  <div class="def"><span class="tag">Definition</span> A hash table stores $n$ keys from a large universe $U$ in an array $T[0..m-1]$ via a <b>hash function</b> $h:U\to\{0,\dots,m-1\}$; $k$ lives in slot $h(k)$. When $|U|&gt;m$, <b>collisions</b> ($h(k_1)=h(k_2)$) are unavoidable (pigeonhole) and must be resolved. <b>Load factor</b>: $\alpha=n/m$.</div>
+  <p><b>Direct addressing</b> (the special case $U$ small): $T[k]$ stores key $k$ directly — $O(1)$ everything, but needs $|U|$ slots.</p>
+  <h3>Collision resolution 1 — chaining</h3>
+  <p>Slot $j$ holds a linked list of all keys hashing to $j$. INSERT: prepend, $O(1)$. SEARCH/DELETE: walk the chain. Under <b>simple uniform hashing</b> (each key equally likely in each slot): unsuccessful search $\Theta(1+\alpha)$ (Thm 11.1), successful search $\Theta(1+\alpha)$ (Thm 11.2) — <a href="exam-proofs.html#hashing">both on the proofs page</a>. With $n=O(m)$, all dictionary ops are expected $O(1)$.</p>
+  <h3>Collision resolution 2 — open addressing</h3>
+  <p>All keys live in the table itself ($\alpha\le 1$); probing follows a per-key <b>probe sequence</b> $\langle h(k,0),h(k,1),\dots,h(k,m-1)\rangle$ until an empty slot (insert) or the key (search) is found. Deletion is awkward (use DELETED markers). The schemes:</p>
+  <ul>
+    <li><b>Linear probing</b>: $h(k,i)=(h'(k)+i)\bmod m$ — simple, cache-friendly, suffers <em>primary clustering</em> (long occupied runs grow).</li>
+    <li><b>Quadratic probing</b>: $h(k,i)=(h'(k)+c_1 i+c_2 i^2)\bmod m$ — avoids primary, has <em>secondary clustering</em> (equal $h'$ ⇒ identical sequences).</li>
+    <li><b>Double hashing</b>: $h(k,i)=(h_1(k)+i\,h_2(k))\bmod m$ with $h_2(k)$ relatively prime to $m$ — closest to uniform hashing in practice.</li>
+  </ul>
+  <p>Under uniform hashing: unsuccessful search $\le\frac{1}{1-\alpha}$ (Thm 11.6), successful search $\le\frac1\alpha\ln\frac{1}{1-\alpha}$ (Thm 11.8 — <a href="exam-proofs.html#hashing">proof</a>).</p>
+  <h3>Hash functions</h3>
+  <ul>
+    <li><b>Division method</b>: $h(k)=k\bmod m$; pick $m$ prime, away from powers of 2.</li>
+    <li><b>Multiplication method</b>: $h(k)=\lfloor m(kA\bmod 1)\rfloor$ for constant $0&lt;A&lt;1$; $m$ can be a power of 2.</li>
+    <li><b>Universal hashing</b>: choose $h$ at random from a family $\mathcal H$ with $\Pr_{h\in\mathcal H}[h(x)=h(y)]\le 1/m$ for all $x\ne y$ — defeats adversarial inputs; e.g. $h_{ab}(k)=((ak+b)\bmod p)\bmod m$.</li>
+  </ul>
+  <div class="tip"><span class="lbl">Exam tip</span> A hashing "describe" question wants: the collision problem, chaining + $\alpha$ + the $\Theta(1+\alpha)$ theorems, the three probing schemes with their clustering issues, and one hash-function construction. That's the full-marks checklist.</div>
+
+  <!-- ==================================================== BTREE -->
+  <h2 id="btree">B-trees</h2>
+  <div class="def"><span class="tag">Definition (minimum degree $t\ge 2$)</span> A <b>B-tree</b> is a balanced search tree whose nodes hold many keys: every node $x$ stores $x.n$ keys in sorted order and (if internal) $x.n+1$ children, with the search-tree property that the keys of child $c_i$ lie between $x$'s $(i{-}1)$-st and $i$-th key. Constraints: every non-root node has $t-1\le x.n\le 2t-1$ keys (root: $\ge 1$), and <b>all leaves have the same depth</b> $h$.</div>
+  <p><b>Height bound:</b> $n\ge 1$ keys force $h\le\log_t\frac{n+1}{2}$ — logarithmic with a huge base. That's the point: B-trees are built for <b>disk/secondary storage</b>, where reading a node = one expensive disk page access; a fat node ($t$ in the thousands) makes the tree 2–3 levels deep for billions of keys.</p>
+  <ul>
+    <li><b>SEARCH</b>: in each node, scan/binary-search the $\le 2t-1$ keys, descend into one child — $O(t\log_t n)$ CPU, $O(\log_t n)$ disk reads.</li>
+    <li><b>INSERT</b>: descend to a leaf, but <em>split every full node on the way down</em> (a full node's median key moves up into the parent, the rest splits into two $(t-1)$-key nodes); then insert into the non-full leaf. $O(t\log_t n)$.</li>
+    <li><b>DELETE</b>: symmetric — ensure every node visited has $\ge t$ keys by borrowing from or merging siblings. $O(t\log_t n)$.</li>
+  </ul>
+  <div class="tip"><span class="lbl">Exam tip</span> Lead with <em>why</em> (disk accesses dominate; minimize tree height by fattening nodes), then the definition with the $t-1\,/\,2t-1$ bounds and equal leaf depth, then splitting on the way down.</div>
+
+  <!-- ==================================================== STACKS -->
+  <h2 id="stacks">Stacks, queues &amp; linked lists</h2>
+  <ul>
+    <li><b>Stack</b> — LIFO. Array implementation with top index: PUSH$(S,x)$: <code>S.top++; S[S.top]=x</code>; POP$(S)$: return <code>S[S.top--]</code>; underflow/overflow checks. Both $O(1)$.</li>
+    <li><b>Queue</b> — FIFO. Circular array with <code>head</code>/<code>tail</code>: ENQUEUE writes at <code>tail</code> and advances it mod $m$; DEQUEUE reads at <code>head</code> and advances it. Both $O(1)$.</li>
+    <li><b>Linked list</b> — nodes with <code>prev</code>/<code>next</code>: SEARCH $\Theta(n)$; INSERT/DELETE $O(1)$ given a pointer to the position. A <b>sentinel</b> node removes boundary special-cases.</li>
+    <li>Stacks/queues are how DFS (stack/recursion) and BFS (queue) get their orders — a common side-question.</li>
+  </ul>
+
+  <!-- ==================================================== SORTING -->
+  <h2 id="sorting">The sorting zoo</h2>
+  <div class="scroll-x"><table>
+    <tr><th>Algorithm</th><th>Best</th><th>Average</th><th>Worst</th><th>Extra space</th><th>Stable?</th><th>In place?</th></tr>
+    <tr><td><b>Insertion sort</b></td><td>$\Theta(n)$</td><td>$\Theta(n^2)$</td><td>$\Theta(n^2)$</td><td>$O(1)$</td><td>yes</td><td>yes</td></tr>
+    <tr><td><b>Selection sort</b></td><td>$\Theta(n^2)$</td><td>$\Theta(n^2)$</td><td>$\Theta(n^2)$</td><td>$O(1)$</td><td>no</td><td>yes</td></tr>
+    <tr><td><b>Bubblesort</b></td><td>$\Theta(n)^{*}$</td><td>$\Theta(n^2)$</td><td>$\Theta(n^2)$</td><td>$O(1)$</td><td>yes</td><td>yes</td></tr>
+    <tr><td><b>Merge sort</b></td><td>$\Theta(n\lg n)$</td><td>$\Theta(n\lg n)$</td><td>$\Theta(n\lg n)$</td><td>$\Theta(n)$</td><td>yes</td><td>no</td></tr>
+    <tr><td><b>Heapsort</b></td><td>$\Theta(n\lg n)$</td><td>$\Theta(n\lg n)$</td><td>$\Theta(n\lg n)$</td><td>$O(1)$</td><td>no</td><td>yes</td></tr>
+    <tr><td><b>Quicksort</b></td><td>$\Theta(n\lg n)$</td><td>$\Theta(n\lg n)$ expected</td><td>$\Theta(n^2)$</td><td>$O(\lg n)$ stack</td><td>no</td><td>yes</td></tr>
+    <tr><td><b>Counting sort</b></td><td colspan="3" style="text-align:center">$\Theta(n+k)$, keys in $\{0..k\}$</td><td>$\Theta(n+k)$</td><td>yes</td><td>no</td></tr>
+    <tr><td><b>Radix sort</b></td><td colspan="3" style="text-align:center">$\Theta(d(n+k))$, $d$ digits base $k$</td><td>$\Theta(n+k)$</td><td>yes</td><td>no</td></tr>
+    <tr><td><b>Bucket sort</b></td><td colspan="3" style="text-align:center">$\Theta(n)$ expected, uniform input</td><td>$\Theta(n)$</td><td>yes</td><td>no</td></tr>
+  </table></div>
+  <p style="font-size:.85rem">$^{*}$with the early-exit flag; the plain double-loop version (exam 1) is always $\Theta(n^2)$. <b>Stable</b> = equal keys keep their input order. Counting/radix/bucket beat $\Omega(n\lg n)$ because they are <em>not comparison sorts</em> (<a href="exam-proofs.html#lowerbound">Thm 8.1</a>) — they inspect key values.</p>
+  <p><b>One-liners to have ready:</b> merge sort = divide, recurse, merge ($T(n)=2T(n/2)+\Theta(n)$); quicksort = partition around a pivot, recurse on both sides (<a href="exam-proofs.html#quicksort">expected $O(n\lg n)$</a>); counting sort = histogram + prefix sums + stable write-back; radix = counting-sort each digit, least significant first.</p>
+
+  <!-- ==================================================== DP -->
+  <h2 id="dp">Dynamic programming</h2>
+  <div class="def"><span class="tag">The two hallmarks</span> <b>Optimal substructure</b> — an optimal solution contains optimal solutions to subproblems. <b>Overlapping subproblems</b> — the naive recursion solves the <em>same</em> subproblems repeatedly, so caching pays. DP = recursion + a table.</div>
+  <ul>
+    <li><b>Top-down with memoization</b>: write the recursion, cache each result on first computation.</li>
+    <li><b>Bottom-up</b>: order subproblems by size and fill the table iteratively.</li>
+    <li>Runtime $=$ (number of subproblems) $\times$ (choices per subproblem).</li>
+  </ul>
+  <p><b>Rod cutting</b> (sheets 9–10): price $p_i$ for a rod of length $i$; maximize revenue for length $n$:
+  $$r_0=0,\qquad r_n=\max_{1\le i\le n}\big(p_i+r_{n-i}\big)$$
+  — $n$ subproblems × $O(n)$ choices $=O(n^2)$; reconstruct the cuts by also storing the argmax. <b>Optimal BST</b>: expected-cost-minimal search tree over keys with access probabilities; interval subproblems $e[i,j]=\min_{i\le r\le j}\big(e[i,r-1]+e[r+1,j]+w(i,j)\big)$, $O(n^3)$. Same interval pattern as matrix-chain multiplication.</p>
+
+  <!-- ==================================================== GREEDY -->
+  <h2 id="greedy">Greedy algorithms</h2>
+  <div class="def"><span class="tag">The two ingredients</span> <b>Greedy-choice property</b> — some globally optimal solution is consistent with the locally best first choice (proved by an <em>exchange argument</em>). <b>Optimal substructure</b> — after the greedy choice, what remains is the same kind of problem. Greedy = DP where one choice is provably safe without solving subproblems first.</div>
+  <ul>
+    <li><b>Activity selection</b> — always take the earliest-finishing compatible activity: <a href="exam-proofs.html#greedy">Theorem 15.1</a>.</li>
+    <li><b>Huffman codes</b> — always merge the two rarest symbols: <a href="exam-proofs.html#huffman">Lemmas 15.2/15.3 + Theorem 15.4</a>, fully worked on the <a href="mock-exam-1.html">mock exam (Q5)</a>. <span class="exam1chip">EXAM 1 · 10 pts</span></li>
+    <li>Contrast with DP in one sentence: DP tries <em>all</em> choices and takes the best; greedy commits to one choice and must <em>prove</em> it safe.</li>
+  </ul>
+
+  <footer>
+    Definitions and pseudocode follow CLRS, <em>Introduction to Algorithms</em>, 4th ed. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+</body>
+</html>

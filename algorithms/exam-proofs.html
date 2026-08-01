@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a1612">
+<meta name="description" content="Every exam-priority proof for Algorithms & Data Structures, written out in full: loop invariants, Master theorem & Akra–Bazzi, quicksort, lower bounds, selection, hashing, greedy/Huffman, augmentation.">
+<title>Exam proofs — Algorithms &amp; Data Structures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#1a1612;--bg-elevated:#221d18;--bg-card:#1f1a15;--border:#3a342c;--border-soft:#2a251f;
+    --text:#f5efe4;--text-muted:#b8aa97;--text-dim:#8a7e6e;--accent:#e0b888;--accent-hover:#ecc89c;
+    --good:#8bc6a0;--warn:#d99a7e;--blue:#8fb8de;--glow:rgba(224,184,136,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.68;-webkit-font-smoothing:antialiased;min-height:100vh;background-image:radial-gradient(900px 500px at 50% -10%,var(--glow),transparent 70%);background-repeat:no-repeat}
+  .wrap{max-width:820px;margin:0 auto;padding:clamp(2rem,6vw,3rem) clamp(1.1rem,5vw,1.75rem) 5rem;padding-left:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-left));padding-right:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-right))}
+  .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-dim);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;margin-bottom:1.5rem;transition:color .15s}
+  .back-link:hover{color:var(--accent)}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--accent);font-size:clamp(.74rem,2.6vw,.82rem);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem}
+  h1{font-family:'Sora',sans-serif;font-weight:600;font-size:clamp(1.9rem,7vw,2.7rem);line-height:1.08;letter-spacing:-.03em;margin-bottom:.7rem}
+  .lede{color:var(--text-muted);font-size:clamp(.98rem,3.4vw,1.08rem);max-width:44em}
+  h2{font-family:'Sora',sans-serif;font-weight:600;font-size:clamp(1.35rem,4.5vw,1.65rem);letter-spacing:-.02em;margin:clamp(2.6rem,6vw,3.4rem) 0 1rem;padding-top:.5rem}
+  h3{font-family:'Sora',sans-serif;font-weight:600;font-size:1.08rem;margin:1.6rem 0 .6rem;color:var(--accent)}
+  p{margin:.6rem 0;color:var(--text-muted);font-size:.97rem}
+  b,strong{color:var(--text)}
+  ul,ol{margin:.4rem 0 .7rem;padding-left:1.35rem;color:var(--text-muted);font-size:.97rem}
+  li{margin:.35rem 0}
+  a{color:var(--accent)}
+  .toc{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.35rem;margin:1.4rem 0;font-size:.92rem}
+  .toc .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.5rem}
+  .toc a{text-decoration:none} .toc a:hover{text-decoration:underline}
+  .toc .exam1{font-size:.75rem;color:var(--warn);font-family:'JetBrains Mono',monospace}
+  .stmt{background:#1c2119;border:1px solid rgba(139,198,160,.3);border-left:4px solid var(--good);border-radius:0 10px 10px 0;padding:.9rem 1.15rem;margin:.9rem 0;color:var(--text);font-size:.96rem}
+  .stmt .tag{display:block;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--good);margin-bottom:.35rem}
+  .idea{background:var(--bg-card);border:1px solid rgba(143,184,222,.35);border-left:4px solid var(--blue);border-radius:0 10px 10px 0;padding:.7rem 1.1rem;margin:.8rem 0;font-size:.92rem;color:var(--text-muted)}
+  .idea .lbl{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-right:.4rem}
+  .tip{background:var(--bg-card);border:1px solid rgba(217,154,126,.35);border-left:4px solid var(--warn);border-radius:0 10px 10px 0;padding:.7rem 1.1rem;margin:.8rem 0;font-size:.9rem;color:var(--text-muted)}
+  .tip .lbl{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--warn);margin-right:.4rem}
+  .step{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--good)}
+  pre.code{font-family:'JetBrains Mono',monospace;font-size:.84rem;line-height:1.55;background:#14110d;border:1px solid var(--border-soft);border-radius:10px;padding:.9rem 1.1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.8rem 0;color:var(--text)}
+  pre.code .kw{color:var(--blue)} pre.code .cm{color:var(--text-dim);font-style:italic}
+  .qed{float:right;color:var(--good)}
+  .exam1chip{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#221a10;background:var(--warn);border-radius:5px;padding:.14rem .5rem;vertical-align:middle;letter-spacing:.03em}
+  footer{margin-top:3.5rem;padding-top:1.3rem;border-top:1px solid var(--border-soft);color:var(--text-dim);font-size:.82rem}
+  footer a{color:var(--accent);text-decoration:none}
+  mjx-container{color:inherit !important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="index.html">← Algorithms &amp; Data Structures</a>
+  <div class="eyebrow">Universität Wien · Prof. Schichl · the flagged proofs, in full</div>
+  <h1>Exam proofs</h1>
+  <p class="lede">Every proof the professor flagged as exam-relevant, written out end-to-end with the <em>main idea</em> up front. Numbering follows CLRS 4th&nbsp;ed. Items marked <span class="exam1chip">EXAM&nbsp;1</span> appeared on the first-date paper — assume anything here can appear on yours.</p>
+
+  <div class="toc"><span class="lbl">Contents</span>
+    <ul style="margin:0;list-style:none;padding-left:0">
+      <li>① <a href="#loopinv">Loop invariants — the template + insertion sort worked</a> <span class="exam1">EXAM 1 (bubblesort)</span></li>
+      <li>② <a href="#master">Master Theorem — statement, Lemmas 4.2 &amp; 4.3, Theorem 4.4</a> <span class="exam1">EXAM 1 (applied)</span></li>
+      <li>③ <a href="#akra">Akra–Bazzi — statement &amp; how to apply it</a> <span class="exam1">EXAM 1 (applied)</span></li>
+      <li>④ <a href="#l54">Lemma 5.4 — R<small>ANDOMIZE</small>-I<small>N</small>-P<small>LACE</small> is uniform</a></li>
+      <li>⑤ <a href="#quicksort">Theorem 7.4 (+ Lemmas 7.1–7.3) — expected time of randomized quicksort</a></li>
+      <li>⑥ <a href="#lowerbound">Theorem 8.1 — the $\Omega(n\lg n)$ comparison-sort lower bound</a></li>
+      <li>⑦ <a href="#select">Theorem 9.2 — expected linear-time selection</a></li>
+      <li>⑧ <a href="#hashing">Theorems 11.2 &amp; 11.8 — hashing: chaining &amp; open addressing</a></li>
+      <li>⑨ <a href="#greedy">Theorem 15.1 — greedy choice for activity selection</a></li>
+      <li>⑩ <a href="#huffman">Lemmas 15.2, 15.3 + Theorem 15.4 — Huffman optimality</a> <span class="exam1">EXAM 1 (8 pts!)</span></li>
+      <li>⑪ <a href="#augment">Theorem 17.2 — augmenting red-black trees</a></li>
+    </ul>
+  </div>
+
+  <!-- ==================================================== 1 LOOP INVARIANTS -->
+  <h2 id="loopinv">① Loop invariants — the universal template <span class="exam1chip">EXAM 1</span></h2>
+  <div class="idea"><span class="lbl">Main idea</span> A loop invariant is an induction proof wearing work clothes: <em>Initialization</em> = base case, <em>Maintenance</em> = induction step, <em>Termination</em> = "now cash it in".</div>
+  <p>To prove a loop correct, state a property $P(\text{loop variable})$ of the program state and show:</p>
+  <ol>
+    <li><span class="step">Initialization</span> — $P$ holds just before the first iteration.</li>
+    <li><span class="step">Maintenance</span> — if $P$ holds at the start of an iteration, it holds at the start of the next one.</li>
+    <li><span class="step">Termination</span> — the loop terminates and, combined with the exit condition, $P$ yields the property you actually wanted.</li>
+  </ol>
+  <p>For a <em>sorting</em> algorithm, full correctness always needs <b>three</b> facts: the algorithm <b>terminates</b>; the output is <b>sorted</b>; the output is a <b>permutation</b> of the input. Forgetting the permutation clause is the classic dropped point — it was literally question 1(a) on exam&nbsp;1.</p>
+  <p>The bubblesort version (exam 1, question 1) is fully worked on the <a href="mock-exam-1.html">mock-exam page</a>. Here is the other canonical exemplar, the most likely rotation:</p>
+
+  <h3>Worked: correctness of I<small>NSERTION</small>-S<small>ORT</small></h3>
+<pre class="code">INSERTION-SORT(A, n)
+  <span class="kw">for</span> i = 2 <span class="kw">to</span> n:
+    key = A[i]
+    j = i − 1
+    <span class="kw">while</span> j &gt; 0 <span class="kw">and</span> A[j] &gt; key:
+      A[j+1] = A[j]                <span class="cm">// shift right</span>
+      j = j − 1
+    A[j+1] = key</pre>
+  <div class="stmt"><span class="tag">Outer invariant</span> At the start of each iteration of the <b>for</b> loop, the subarray $A[1..i-1]$ consists of the elements originally in $A[1..i-1]$, in sorted order.</div>
+  <p><span class="step">Initialization</span> — $i=2$: $A[1..1]$ is a single element, trivially sorted, and untouched so far.</p>
+  <p><span class="step">Maintenance</span> — Fix an iteration; the <b>while</b> loop shifts $A[j]$ one place right as long as $A[j]&gt;key$. Its own invariant: <em>at the start of each test, $A[j{+}2..i]$ holds, shifted one place right, the values formerly in $A[j{+}1..i-1]$, and every one of them is $&gt;key$; $A[1..j]$ is unchanged.</em> (Initialization: $j=i-1$, the range $A[i{+}1..i]$ is empty. Maintenance: one shift extends it. Termination: the loop stops when $j=0$ or $A[j]\le key$.) Writing $key$ into $A[j{+}1]$ then places it directly after the last element $\le key$ and directly before the shifted block of elements $&gt;key$ — so $A[1..i]$ is the old $A[1..i]$, sorted, and the outer invariant holds for $i+1$.</p>
+  <p><span class="step">Termination</span> — The <b>for</b> loop ends with $i=n+1$; the invariant says $A[1..n]$ contains the original elements in sorted order. Both loops are bounded ($i$ increases, $j$ strictly decreases), so the algorithm terminates. Only shifts of existing values + reinsertion of the saved $key$ occur, so the multiset of values is preserved. $\blacksquare$</p>
+  <div class="tip"><span class="lbl">Exam tip</span> Always <em>quantify indices exactly</em> ("$A[1..i-1]$ consists of…"), never "the array is partially sorted". State the inner invariant separately when the exam asks for it — the outer maintenance step should <em>invoke the inner loop's termination</em>, exactly as in exam 1 Q1(c).</div>
+
+  <!-- ==================================================== 2 MASTER -->
+  <h2 id="master">② The Master Theorem and its proof machinery <span class="exam1chip">EXAM 1</span></h2>
+  <div class="idea"><span class="lbl">Main idea</span> Unroll $T(n)=aT(n/b)+f(n)$ into a recursion tree: level $j$ costs $a^j f(n/b^j)$ and the leaves cost $\Theta(n^{\log_b a})$. Whether the level costs <em>grow</em>, <em>stay flat</em>, or <em>shrink</em> geometrically toward the leaves gives the three cases.</div>
+
+  <div class="stmt"><span class="tag">Theorem 4.1 — Master Theorem</span>
+  Let $a\ge 1$, $b&gt;1$, $f(n)\ge 0$, and $T(n)=a\,T(n/b)+f(n)$ (with $n/b$ meaning $\lfloor n/b\rfloor$ or $\lceil n/b\rceil$). Compare $f$ with the <b>watershed</b> $n^{\log_b a}$:
+  <ol>
+    <li>If $f(n)=O(n^{\log_b a-\varepsilon})$ for some $\varepsilon&gt;0$, then $T(n)=\Theta(n^{\log_b a})$.</li>
+    <li>If $f(n)=\Theta(n^{\log_b a}\lg^k n)$ with $k\ge 0$, then $T(n)=\Theta(n^{\log_b a}\lg^{k+1} n)$.</li>
+    <li>If $f(n)=\Omega(n^{\log_b a+\varepsilon})$ for some $\varepsilon&gt;0$, and $f$ satisfies the <b>regularity condition</b> $a f(n/b)\le c f(n)$ for some constant $c&lt;1$ and large $n$, then $T(n)=\Theta(f(n))$.</li>
+  </ol></div>
+
+  <div class="stmt"><span class="tag">Lemma 4.2 — recursion-tree decomposition</span>
+  For $n$ an exact power of $b$,
+  $$T(n)=\Theta\big(n^{\log_b a}\big)+\sum_{j=0}^{\log_b n-1}a^j\,f\!\big(n/b^j\big).$$</div>
+  <p><em>Proof.</em> Unroll the recurrence into its recursion tree. The root costs $f(n)$ and has $a$ children, each a subproblem of size $n/b$; at depth $j$ there are $a^j$ nodes, each costing $f(n/b^j)$, so level $j$ contributes $a^j f(n/b^j)$. The tree has depth $\log_b n$ (subproblem size reaches 1). The bottom level consists of $a^{\log_b n}=n^{\log_b a}$ leaves, each solved in constant time — total $\Theta(n^{\log_b a})$. Summing leaf cost plus the internal levels $j=0,\dots,\log_b n-1$ gives the claim. $\blacksquare$</p>
+
+  <div class="stmt"><span class="tag">Lemma 4.3 — evaluating the level sum</span>
+  Let $g(n)=\displaystyle\sum_{j=0}^{\log_b n-1}a^j f(n/b^j)$. Then:
+  (1) if $f(n)=O(n^{\log_b a-\varepsilon})$ then $g(n)=O(n^{\log_b a})$;
+  (2) if $f(n)=\Theta(n^{\log_b a})$ then $g(n)=\Theta(n^{\log_b a}\lg n)$;
+  (3) if $f$ satisfies the regularity condition then $g(n)=\Theta(f(n))$.</div>
+  <p><em>Proof.</em></p>
+  <ul>
+    <li><b>(1) Costs grow toward the leaves.</b> Substituting the bound on $f$: $a^j f(n/b^j)=O\!\big(a^j (n/b^j)^{\log_b a-\varepsilon}\big)=O\!\big(n^{\log_b a-\varepsilon}\,(b^{\varepsilon})^{j}\big)$, using $a^j/(b^{\log_b a})^j=1$. The sum is geometric with ratio $b^\varepsilon&gt;1$, hence dominated by its last term $j=\log_b n-1$: $g(n)=O\!\big(n^{\log_b a-\varepsilon}\cdot b^{\varepsilon\log_b n}\big)=O\!\big(n^{\log_b a-\varepsilon}\cdot n^{\varepsilon}\big)=O(n^{\log_b a})$.</li>
+    <li><b>(2) Every level costs the same.</b> $a^j f(n/b^j)=\Theta\!\big(a^j (n/b^j)^{\log_b a}\big)=\Theta(n^{\log_b a})$ — the $a^j$ cancels exactly. There are $\log_b n=\Theta(\lg n)$ levels, so $g(n)=\Theta(n^{\log_b a}\lg n)$.</li>
+    <li><b>(3) Costs shrink toward the leaves.</b> Iterating the regularity condition, $a^j f(n/b^j)\le c^j f(n)$. Hence $g(n)\le f(n)\sum_{j\ge 0}c^j=\frac{1}{1-c}f(n)=O(f(n))$; and trivially $g(n)\ge f(n)$ (the $j=0$ term). So $g(n)=\Theta(f(n))$.</li>
+  </ul>
+
+  <div class="stmt"><span class="tag">Theorem 4.4 — assembling the Master Theorem (powers of $b$)</span>
+  For $n$ an exact power of $b$, the three cases of Theorem 4.1 hold.</div>
+  <p><em>Proof.</em> By Lemma 4.2, $T(n)=\Theta(n^{\log_b a})+g(n)$. Insert Lemma 4.3: <b>case 1</b>: $g=O(n^{\log_b a})$, so the leaves dominate and $T=\Theta(n^{\log_b a})$. <b>Case 2</b> ($k=0$): $g=\Theta(n^{\log_b a}\lg n)$ dominates the leaf term, $T=\Theta(n^{\log_b a}\lg n)$; the general $k\ge 0$ variant follows the same computation with $f(n/b^j)=\Theta\big((n/b^j)^{\log_b a}\lg^k(n/b^j)\big)$, whose level costs still sum to $\Theta(n^{\log_b a}\lg^{k+1}n)$. <b>Case 3</b>: $g=\Theta(f(n))$ and $f(n)=\Omega(n^{\log_b a+\varepsilon})$ dominates the leaves, so $T=\Theta(f(n))$. Extending from exact powers of $b$ to all $n$ (floors/ceilings) is a technical sandwich argument and doesn't change the answers. $\blacksquare$</p>
+  <div class="tip"><span class="lbl">Exam tip</span> The examinable skeleton is: recursion tree → level cost $a^jf(n/b^j)$ → leaves $n^{\log_b a}$ → geometric growth / flat / geometric decay. If asked to <em>prove</em> the Master Theorem, that's Lemma 4.2 + Lemma 4.3 + two lines of assembly. For <em>applying</em> it fast (incl. the extended case 2 with $k=-1\Rightarrow\lg\lg n$), drill with the <a href="recurrence-drills.html">recurrence bank</a>.</div>
+
+  <!-- ==================================================== 3 AKRA-BAZZI -->
+  <h2 id="akra">③ The Akra–Bazzi theorem <span class="exam1chip">EXAM 1</span></h2>
+  <div class="idea"><span class="lbl">Main idea</span> The Master Theorem generalized: unequal subproblem sizes are fine. Find the exponent $p$ that balances the recursion ($\sum a_ib_i^p=1$), then a single integral measures how much the driving function adds on top of $x^p$.</div>
+  <div class="stmt"><span class="tag">Theorem (Akra–Bazzi)</span>
+  Consider $T(x)=g(x)+\displaystyle\sum_{i=1}^{k}a_i\,T(b_i x)$ for $x\ge x_0$, where each $a_i&gt;0$, each $b_i\in(0,1)$, and $g$ is nonnegative with polynomial growth (small perturbations $T(b_ix+h_i(x))$ with $|h_i(x)|=O(x/\lg^2 x)$ are allowed). Let $p$ be the unique real solving
+  $$\sum_{i=1}^{k}a_i\,b_i^{\,p}=1.$$
+  Then
+  $$T(x)=\Theta\!\left(x^{p}\left(1+\int_{1}^{x}\frac{g(u)}{u^{\,p+1}}\,du\right)\right).$$</div>
+  <p><b>Recipe.</b> (i) Solve $\sum a_ib_i^p=1$ for $p$ — with a single term $aT(n/b)$ this gives $p=\log_b a$, recovering the Master watershed. (ii) Compute $\int^x g(u)/u^{p+1}\,du$. (iii) Multiply by $x^p$. (If $g$ vanishes or misbehaves near the lower limit — e.g. $g(u)=u/\lg u$ at $u=1$ — start the integral at 2; it changes the value only by a constant.)</p>
+  <p><b>Worked examples.</b></p>
+  <ul>
+    <li>$T(n)=T(n/3)+T(2n/3)+n$: solve $(1/3)^p+(2/3)^p=1\Rightarrow p=1$. Integral $\int_1^n u/u^2\,du=\ln n$. So $T(n)=\Theta(n\lg n)$.</li>
+    <li>$T(n)=3T(n/3)+n/\lg n$ (exam 1!): $p=1$; $\int_2^n \frac{u/\lg u}{u^2}du=\int_2^n\frac{du}{u\lg u}=\Theta(\lg\lg n)$. So $T(n)=\Theta(n\lg\lg n)$.</li>
+    <li>$T(n)=T(n/5)+T(7n/10)+n$ (the S<small>ELECT</small> recurrence): $(1/5)^p+(7/10)^p=1$ has its solution at some $p&lt;1$ (at $p=1$ the left side is $0.2+0.7=0.9&lt;1$). Then $\int_1^n u^{-p}\,du=\Theta(n^{1-p})$ and $T(n)=\Theta(n^p\cdot n^{1-p})=\Theta(n)$ — linear-time selection.</li>
+  </ul>
+  <div class="tip"><span class="lbl">Exam tip</span> On exam 1 Akra–Bazzi was the intended tool for $T(n)=3T(n/3)+n/\lg n$. Know the statement by heart (the balance equation and the integral), and remember the two standard integrals: $\int\!\frac{du}{u}=\ln u$ and $\int\!\frac{du}{u\ln u}=\ln\ln u$.</div>
+
+  <!-- ==================================================== 4 LEMMA 5.4 -->
+  <h2 id="l54">④ Lemma 5.4 — R<small>ANDOMIZE</small>-I<small>N</small>-P<small>LACE</small> computes a uniform random permutation</h2>
+  <div class="idea"><span class="lbl">Main idea</span> A loop-invariant proof about <em>probabilities</em>: just before iteration $i$, every possible $(i-1)$-permutation sits in $A[1..i-1]$ with exactly the probability it should — $(n-i+1)!/n!$.</div>
+<pre class="code">RANDOMIZE-IN-PLACE(A, n)
+  <span class="kw">for</span> i = 1 <span class="kw">to</span> n:
+    swap A[i] with A[RANDOM(i, n)]   <span class="cm">// RANDOM(i,n): uniform on {i,…,n}</span></pre>
+  <div class="stmt"><span class="tag">Lemma 5.4</span> R<small>ANDOMIZE</small>-I<small>N</small>-P<small>LACE</small> computes a uniform random permutation: each of the $n!$ permutations is produced with probability $1/n!$.</div>
+  <p><em>Proof.</em> Call an ordered choice of $k$ distinct elements out of the $n$ a <b>$k$-permutation</b>; there are $n!/(n-k)!$ of them.</p>
+  <div class="stmt"><span class="tag">Invariant</span> Just before the $i$-th iteration, for each $(i-1)$-permutation $\langle x_1,\dots,x_{i-1}\rangle$, the probability that $A[1..i-1]$ contains exactly it, in this order, is $\dfrac{(n-i+1)!}{n!}$.</div>
+  <p><span class="step">Initialization</span> — $i=1$: $A[1..0]$ holds the empty $0$-permutation with probability $\frac{(n-0)!}{n!}=1$. True.</p>
+  <p><span class="step">Maintenance</span> — Fix an $i$-permutation $\langle x_1,\dots,x_i\rangle$. The event "$A[1..i]$ holds it after iteration $i$" is the intersection of $E_1$ = "$A[1..i-1]$ held $\langle x_1,\dots,x_{i-1}\rangle$ before" and $E_2$ = "iteration $i$ swaps $x_i$ into position $i$". By the invariant, $\Pr[E_1]=\frac{(n-i+1)!}{n!}$. Given $E_1$, the element $x_i$ sits somewhere in $A[i..n]$, and $\mathrm{RANDOM}(i,n)$ picks its position with probability $\frac{1}{n-i+1}$. Hence
+  $$\Pr[E_1\cap E_2]=\frac{(n-i+1)!}{n!}\cdot\frac{1}{n-i+1}=\frac{(n-i)!}{n!},$$
+  which is exactly the invariant for $i+1$.</p>
+  <p><span class="step">Termination</span> — The loop ends with $i=n+1$: each $n$-permutation appears in $A[1..n]$ with probability $\frac{(n-n)!}{n!}=\frac{1}{n!}$ — a uniform random permutation. $\blacksquare$</p>
+  <div class="tip"><span class="lbl">Exam tip</span> This proof doubles as the professor's two favourite themes in one — a loop invariant <em>and</em> probability. Practice writing the conditional-probability product line cleanly.</div>
+
+  <!-- ==================================================== 5 QUICKSORT -->
+  <h2 id="quicksort">⑤ Theorem 7.4 — expected running time of randomized quicksort</h2>
+  <div class="idea"><span class="lbl">Main idea</span> Count <em>comparisons</em>, not time. $z_i$ and $z_j$ (the $i$-th and $j$-th smallest) are compared iff the <em>first</em> pivot drawn from $\{z_i,\dots,z_j\}$ is one of the two endpoints — probability $\frac{2}{j-i+1}$. Summing gives a harmonic series → $O(n\lg n)$.</div>
+  <p>Setting: R<small>ANDOMIZED</small>-Q<small>UICKSORT</small> on $n$ <em>distinct</em> elements; rename them $z_1&lt;z_2&lt;\cdots&lt;z_n$ and write $Z_{ij}=\{z_i,z_{i+1},\dots,z_j\}$. Let $X$ be the total number of element comparisons performed inside all P<small>ARTITION</small> calls.</p>
+  <div class="stmt"><span class="tag">Lemma 7.1 (formulation)</span> The running time of Q<small>UICKSORT</small> is $O(n+X)$: P<small>ARTITION</small> is invoked at most $n$ times (each call removes one element — the pivot — from further consideration), and each call does $O(1)$ work plus a number of comparisons that it contributes to $X$.</div>
+  <div class="stmt"><span class="tag">Lemma 7.2 (formulation)</span> Distinct elements $z_i$ and $z_j$, $i&lt;j$, are compared at most once, and
+  $$\Pr[\,z_i\text{ is compared with }z_j\,]=\frac{2}{j-i+1}.$$</div>
+  <p><em>Why:</em> elements are only ever compared to a <em>pivot</em>. Consider the first moment some element of $Z_{ij}$ is chosen as pivot. If that pivot is strictly between $z_i$ and $z_j$, the two are separated into different sides and never compared. If it is $z_i$ or $z_j$, they are compared (once — the pivot then leaves all future calls). Each of the $j-i+1$ elements of $Z_{ij}$ is equally likely to be that first pivot, so the probability is $2/(j-i+1)$.</p>
+  <div class="stmt"><span class="tag">Lemma 7.3 (formulation)</span> $\;\mathbb{E}[X]=O(n\lg n)$.</div>
+  <p><em>Why:</em> with indicator variables $X_{ij}=\mathbf{1}\{z_i \text{ compared with } z_j\}$, linearity of expectation and Lemma 7.2 give
+  $$\mathbb{E}[X]=\sum_{i=1}^{n-1}\sum_{j=i+1}^{n}\frac{2}{j-i+1}
+  =\sum_{i=1}^{n-1}\sum_{k=1}^{n-i}\frac{2}{k+1}
+  \;&lt;\;\sum_{i=1}^{n-1}2H_n=O(n\lg n),$$
+  where $H_n=\sum_{m=1}^n 1/m=\ln n+O(1)$ is the harmonic number.</p>
+  <div class="stmt"><span class="tag">Theorem 7.4</span> The expected running time of R<small>ANDOMIZED</small>-Q<small>UICKSORT</small> on $n$ distinct elements is $O(n\lg n)$.</div>
+  <p><em>Proof.</em> By Lemma 7.1 the running time is $O(n+X)$; taking expectations and applying Lemma 7.3, $\mathbb{E}[\text{time}]=O(n+\mathbb{E}[X])=O(n+n\lg n)=O(n\lg n)$. $\blacksquare$</p>
+  <div class="tip"><span class="lbl">Exam tip</span> The exam phrasing ("including the formulation of Lemmas 7.1–7.3") means: state all three lemmas precisely, prove 7.2 and 7.3 (the two-endpoints argument and the harmonic double sum), then Theorem 7.4 is one line. Practice the change of summation variable $k=j-i$.</div>
+
+  <!-- ==================================================== 6 LOWER BOUND -->
+  <h2 id="lowerbound">⑥ Theorem 8.1 — the comparison-sort lower bound</h2>
+  <div class="idea"><span class="lbl">Main idea</span> Any comparison sort is a binary decision tree that must distinguish all $n!$ input orders. A binary tree with $n!$ leaves has height $\ge\lg(n!)=\Omega(n\lg n)$.</div>
+  <p><b>The decision-tree model</b> (the "preceding discussion" the professor flags): a comparison sort gathers information about the input <em>only</em> by comparing pairs of elements. Its execution on inputs of size $n$ is modelled by a binary <b>decision tree</b>: each internal node is a comparison $a_i\le a_j$ (left subtree = yes, right = no), each leaf is the permutation the algorithm outputs. One run of the algorithm = one root-to-leaf path; worst-case number of comparisons = the tree's height $h$.</p>
+  <div class="stmt"><span class="tag">Theorem 8.1</span> Any comparison sort algorithm requires $\Omega(n\lg n)$ comparisons in the worst case.</div>
+  <p><em>Proof.</em> A correct algorithm must be able to output every one of the $n!$ orderings of $n$ (distinct) elements — each permutation must appear as a <em>reachable</em> leaf, else there is an input the algorithm sorts wrongly. A binary tree of height $h$ has at most $2^h$ leaves, so
+  $$2^h\;\ge\;n!\quad\Longrightarrow\quad h\;\ge\;\lg(n!).$$
+  Finally $\lg(n!)=\sum_{k=1}^{n}\lg k\ \ge\ \sum_{k=\lceil n/2\rceil}^{n}\lg k\ \ge\ \frac n2\lg\frac n2=\Omega(n\lg n)$ (equivalently, Stirling gives $\lg(n!)=n\lg n-n\lg e+O(\lg n)$). Hence $h=\Omega(n\lg n)$. $\blacksquare$</p>
+  <p><b>Corollary 8.2.</b> Heapsort and merge sort, at $O(n\lg n)$, are asymptotically optimal comparison sorts. (And counting sort, radix sort, bucket sort beat the bound only because they are <em>not</em> comparison sorts.)</p>
+  <div class="tip"><span class="lbl">Exam tip</span> Three marks live here: (1) define the model — the algorithm learns only via pairwise comparisons; (2) the counting step $2^h\ge n!$ <em>with the correctness justification</em> (every permutation must be a reachable leaf); (3) the estimate $\lg(n!)=\Omega(n\lg n)$ — know one of the two derivations cold.</div>
+
+  <!-- ==================================================== 7 SELECT -->
+  <h2 id="select">⑦ Theorem 9.2 — R<small>ANDOMIZED</small>-S<small>ELECT</small> runs in expected linear time</h2>
+  <div class="idea"><span class="lbl">Main idea</span> Unlike quicksort, selection recurses into only <em>one</em> side. The random pivot's rank is uniform, so the recursive subproblem has expected size $\approx 3n/4$ — and $n+\frac34 n+\left(\frac34\right)^2 n+\cdots$ is geometric $=O(n)$. Formalized by substitution.</div>
+  <p>R<small>ANDOMIZED</small>-S<small>ELECT</small>$(A,p,r,i)$ finds the $i$-th smallest of $A[p..r]$: pick a random pivot, P<small>ARTITION</small> (cost $\Theta(m)$ on an $m$-element subarray), then recurse into the single side containing the answer.</p>
+  <div class="stmt"><span class="tag">Theorem 9.2</span> On $n$ distinct elements, R<small>ANDOMIZED</small>-S<small>ELECT</small> has expected running time $\Theta(n)$ (regardless of which order statistic $i$ is requested).</div>
+  <p><em>Proof.</em> The pivot is equally likely to have each rank $k\in\{1,\dots,n\}$. If the pivot has rank $k$, the recursion continues in a subarray of size at most $\max(k-1,\,n-k)$ — in the worst case the answer is always in the larger side. Writing $T(n)$ for the expected time,
+  $$T(n)\;\le\;\frac1n\sum_{k=1}^{n}T\big(\max(k-1,n-k)\big)+O(n)\;\le\;\frac2n\sum_{k=\lfloor n/2\rfloor}^{n-1}T(k)+O(n),$$
+  since each size $k\ge\lfloor n/2\rfloor$ appears at most twice among the values $\max(k-1,n-k)$.</p>
+  <p>Now the <b>substitution method</b>: guess $T(k)\le ck$ for all $k&lt;n$ (some constant $c&gt;0$ to be fixed), and let $an$ bound the $O(n)$ term. Then
+  $$T(n)\;\le\;\frac{2c}{n}\sum_{k=\lfloor n/2\rfloor}^{n-1}k+an
+  \;\le\;\frac{2c}{n}\cdot\frac{3n^2}{8}+an
+  \;=\;\frac{3c}{4}\,n+an,$$
+  using $\sum_{k=\lfloor n/2\rfloor}^{n-1}k\le\frac12\big((n-1)n-(\tfrac n2-1)\tfrac n2\big)\le\frac{3}{8}n^2$. Choosing $c\ge 4a$ makes $\frac{3c}{4}n+an\le cn$, completing the induction, so $T(n)=O(n)$. The bound is tight: just reading the input costs $\Omega(n)$. $\blacksquare$</p>
+  <div class="tip"><span class="lbl">Exam tip</span> The two things graders look for: the <em>recurrence with the $\max(k-1,n-k)$ term and the factor $2/n$</em>, and a clean substitution step ending in "choose $c\ge 4a$". Contrast in one sentence with quicksort (recursing into <em>both</em> sides costs the extra $\lg n$).</div>
+
+  <!-- ==================================================== 8 HASHING -->
+  <h2 id="hashing">⑧ Theorems 11.2 &amp; 11.8 — the hashing bounds</h2>
+  <div class="idea"><span class="lbl">Main idea</span> Chaining: the expected chain length is the load factor $\alpha=n/m$, so search costs $\Theta(1+\alpha)$. Open addressing: each extra probe succeeds with probability $\ge 1-\alpha$, giving the geometric bound $\frac{1}{1-\alpha}$; averaging it over insertion history gives the $\frac1\alpha\ln\frac{1}{1-\alpha}$ successful-search bound.</div>
+
+  <h3>Chaining</h3>
+  <p>Hash table with $m$ slots, $n$ stored keys, collisions resolved by (doubly linked) chains; <b>load factor</b> $\alpha=n/m$. Assume <b>simple uniform hashing</b>: each key is equally likely to hash into each slot, independently.</p>
+  <div class="stmt"><span class="tag">Theorem 11.1 (formulation)</span> An unsuccessful search takes expected time $\Theta(1+\alpha)$: computing $h(k)$ is $O(1)$ and the searched slot's chain has expected length $\alpha$.</div>
+  <div class="stmt"><span class="tag">Theorem 11.2</span> With chaining and simple uniform hashing, a <b>successful</b> search also takes average-case time $\Theta(1+\alpha)$, averaged over the $n$ stored keys being sought with equal probability.</div>
+  <p><em>Proof.</em> New keys are inserted at the <em>head</em> of their chain. So when we later search (successfully) for a key $x$, the elements we examine are: $x$ itself, plus exactly those keys that collided with $x$ and were inserted <em>after</em> $x$. Let $x_1,\dots,x_n$ be the keys in insertion order and $X_{ij}=\mathbf{1}\{h(x_i)=h(x_j)\}$; simple uniform hashing gives $\mathbb{E}[X_{ij}]=1/m$ for $i\ne j$. The expected number of elements examined, for a uniformly random target $x_i$, is
+  $$\frac1n\sum_{i=1}^{n}\Big(1+\sum_{j=i+1}^{n}\mathbb{E}[X_{ij}]\Big)
+  =1+\frac{1}{nm}\sum_{i=1}^{n}(n-i)
+  =1+\frac{1}{nm}\cdot\frac{n(n-1)}{2}
+  =1+\frac{\alpha}{2}-\frac{\alpha}{2n}.$$
+  Adding $O(1)$ for computing the hash, the total is $\Theta(1+\alpha)$. $\blacksquare$</p>
+
+  <h3>Open addressing</h3>
+  <p>All elements live in the table itself ($\alpha=n/m\le 1$); a search follows the key's <b>probe sequence</b> $h(k,0),h(k,1),\dots$ until it finds the key or an empty slot. Assume <b>uniform hashing</b> — the probe sequence is equally likely to be any permutation of the slots — and no deletions.</p>
+  <div class="stmt"><span class="tag">Theorem 11.6 (formulation)</span> With $\alpha&lt;1$, the expected number of probes in an <b>unsuccessful</b> search is at most $\dfrac{1}{1-\alpha}$. (Each successive probe hits an occupied slot with probability $\le\alpha$, so the number of probes is dominated by a geometric distribution: $\sum_{i\ge0}\alpha^i=\frac{1}{1-\alpha}$.) Consequently (Cor. 11.7) an insertion also takes $\le\frac{1}{1-\alpha}$ expected probes.</div>
+  <div class="stmt"><span class="tag">Theorem 11.8</span> With uniform hashing, $\alpha&lt;1$ and no deletions, the expected number of probes in a <b>successful</b> search is at most
+  $$\frac{1}{\alpha}\,\ln\frac{1}{1-\alpha}.$$</div>
+  <p><em>Proof.</em> Searching for a stored key $k$ retraces exactly the probe sequence followed when $k$ was <em>inserted</em>. If $k$ was the $(i+1)$-st key inserted ($i=0,\dots,n-1$), the table held $i$ keys at that moment, so by Theorem 11.6/Cor. 11.7 the insertion — and hence the later search — takes at most $\frac{1}{1-i/m}=\frac{m}{m-i}$ expected probes. Averaging over the $n$ stored keys, each equally likely to be the target:
+  $$\frac1n\sum_{i=0}^{n-1}\frac{m}{m-i}
+  =\frac{m}{n}\sum_{i=0}^{n-1}\frac{1}{m-i}
+  =\frac1\alpha\sum_{k=m-n+1}^{m}\frac1k
+  \;\le\;\frac1\alpha\int_{m-n}^{m}\frac{dx}{x}
+  =\frac1\alpha\ln\frac{m}{m-n}
+  =\frac1\alpha\ln\frac{1}{1-\alpha}. \;\blacksquare$$</p>
+  <div class="tip"><span class="lbl">Exam tip</span> Sanity-check the formulas at $\alpha=0.5$: chaining $\approx 1.25$ probes; open addressing unsuccessful $=2$, successful $=2\ln 2\approx 1.39$. Quoting these shows the grader you own the result. Know the harmonic-sum-to-integral bound — it recurs across the course.</div>
+
+  <!-- ==================================================== 9 ACTIVITY -->
+  <h2 id="greedy">⑨ Theorem 15.1 — the greedy choice for activity selection</h2>
+  <div class="idea"><span class="lbl">Main idea</span> An exchange argument: any optimal solution can be modified — swap its earliest-finishing activity for the globally earliest-finishing one — without shrinking it. So "grab the earliest finisher" is always safe.</div>
+  <p>Setting: activities $a_1,\dots,a_n$ with start/finish times $s_i&lt;f_i$; two activities are <b>compatible</b> if their intervals $[s_i,f_i)$ don't overlap. Sought: a maximum-size subset of mutually compatible activities. Let $S_k$ denote the subproblem "activities that start after $a_k$ finishes".</p>
+  <div class="stmt"><span class="tag">Theorem 15.1</span> Consider any nonempty subproblem $S_k$, and let $a_m$ be an activity in $S_k$ with the <em>earliest finish time</em>. Then $a_m$ is included in some maximum-size subset of mutually compatible activities of $S_k$.</div>
+  <p><em>Proof.</em> Let $A_k$ be a maximum-size subset of mutually compatible activities of $S_k$, and let $a_j$ be the activity of $A_k$ with the earliest finish time. If $a_j=a_m$, we are done. Otherwise form
+  $$A_k'=\big(A_k\setminus\{a_j\}\big)\cup\{a_m\}.$$
+  The activities of $A_k\setminus\{a_j\}$ are mutually compatible and each starts no earlier than $f_j$ (they are compatible with $a_j$ and finish after it). Since $a_m$ has the earliest finish time in $S_k$ and $a_j\in S_k$, we have $f_m\le f_j$ — so every activity of $A_k\setminus\{a_j\}$ starts at or after $f_j\ge f_m$, i.e. is compatible with $a_m$. Hence $A_k'$ is a set of mutually compatible activities with $|A_k'|=|A_k|$, so it is also maximum-size, and it contains $a_m$. $\blacksquare$</p>
+  <div class="tip"><span class="lbl">Exam tip</span> This is the model "greedy-choice" exchange argument — the same skeleton as Huffman's Lemma 15.2. If asked about the <em>elements of the greedy method</em>: greedy-choice property (a locally optimal choice is consistent with some global optimum) + optimal substructure.</div>
+
+  <!-- ==================================================== 10 HUFFMAN -->
+  <h2 id="huffman">⑩ Huffman optimality — Lemmas 15.2, 15.3 &amp; Theorem 15.4 <span class="exam1chip">EXAM 1 · 8 pts</span></h2>
+  <div class="idea"><span class="lbl">Main idea</span> (15.2) Exchange: sinking the two rarest characters to the deepest level never increases cost. (15.3) Substitution: merging them into one pseudo-character changes total cost by exactly $x.freq+y.freq$, so optimal for the merged alphabet ⟺ optimal for the original. Induction does the rest.</div>
+  <p>Prefix-free code ⟷ full binary tree $T$, characters at leaves, codeword length $=$ depth $d_T(c)$, cost $B(T)=\sum_{c\in C}c.freq\cdot d_T(c)$.</p>
+  <div class="stmt"><span class="tag">Lemma 15.2 — greedy choice</span> If $x,y$ are two characters of lowest frequency, some optimal tree has $x$ and $y$ as sibling leaves at maximum depth.</div>
+  <p><em>Proof core:</em> in any optimal $T$, take deepest siblings $a,b$; exchanging $x\leftrightarrow a$ changes the cost by $-(a.freq-x.freq)(d_T(a)-d_T(x))\le 0$ — a product of two nonnegative factors — and likewise for $y\leftrightarrow b$. The result is still optimal and has the desired shape.</p>
+  <div class="stmt"><span class="tag">Lemma 15.3 — optimal substructure</span> With $z$ a new character, $z.freq=x.freq+y.freq$, and $C'=(C\setminus\{x,y\})\cup\{z\}$: if $T'$ is optimal for $C'$, then $T$ — obtained by expanding leaf $z$ into an internal node with children $x,y$ — is optimal for $C$.</div>
+  <p><em>Proof core:</em> the cost bookkeeping $B(T)=B(T')+x.freq+y.freq$ (both $x$ and $y$ sit one level below where $z$ was). If some $S$ beat $T$, normalize $S$ by Lemma 15.2 to have $x,y$ as siblings, contract them into $z$, and get a tree for $C'$ cheaper than $T'$ — contradiction.</p>
+  <div class="stmt"><span class="tag">Theorem 15.4</span> H<small>UFFMAN</small> produces an optimal prefix-free code.</div>
+  <p><em>Proof:</em> induction on $|C|$; the first merge is safe by Lemma 15.2, the recursive solution is optimal by induction, and expanding it back is optimal by Lemma 15.3. $\blacksquare$</p>
+  <p>➜ The <b>fully expanded version</b> — every inequality written out, with the grader's point budget — is on the <a href="mock-exam-1.html">mock-exam page (Q5)</a>. It appeared on exam 1 worth 8 points; treat it as the default "big proof" and overlearn it.</p>
+
+  <!-- ==================================================== 11 AUGMENT -->
+  <h2 id="augment">⑪ Theorem 17.2 — augmenting red-black trees</h2>
+  <div class="idea"><span class="lbl">Main idea</span> If an extra per-node attribute is computable from the node and its two children alone, then insertions and deletions can maintain it for free (asymptotically): changes only propagate <em>upward</em> along one $O(\lg n)$ path, and each rotation is repaired locally in $O(1)$.</div>
+  <div class="stmt"><span class="tag">Theorem 17.2 — augmentation theorem</span> Let $f$ be an attribute that augments each node $x$ of a red-black tree of $n$ nodes, and suppose $f(x)$ can be computed in $O(1)$ time using only the information in $x$, $x.left$ and $x.right$ — including $f(x.left)$ and $f(x.right)$. Then we can maintain the values of $f$ in all nodes during insertion and deletion without asymptotically affecting the $O(\lg n)$ performance of these operations.</div>
+  <p><em>Proof.</em> The key observation: changing $f$ at a node $x$ can invalidate $f$ only at <em>ancestors</em> of $x$ — nothing outside the root-to-$x$ path depends on it. So after any structural change we walk upward from the lowest modified node, recomputing $f$ in $O(1)$ per node; the path has length $O(\lg n)$.</p>
+  <ul>
+    <li><b>Insertion.</b> Phase 1 (BST descent) attaches a new leaf $z$: recompute $f$ on the path from $z$ to the root, $O(\lg n)$. Phase 2 (fixup) performs recolorings — which don't affect $f$ — and at most <b>2 rotations</b>. A rotation is a local rearrangement of two nodes and three subtrees; only those two nodes' $f$-values can change, and they are recomputed bottom-up in $O(1)$ from their (unchanged) subtrees, plus the $O(\lg n)$ upward path already being updated. Total: $O(\lg n)$.</li>
+    <li><b>Deletion.</b> Same structure: the splice-out modifies the tree along one path (update $O(\lg n)$), and the delete-fixup performs recolorings plus at most <b>3 rotations</b>, each repaired in $O(1)$. Total: $O(\lg n)$. $\blacksquare$</li>
+  </ul>
+  <p><b>Canonical application — order-statistic trees:</b> augment each node with $x.size=x.left.size+x.right.size+1$ (which satisfies the theorem's hypothesis). Then OS-S<small>ELECT</small> (find the $i$-th smallest) and OS-R<small>ANK</small> run in $O(\lg n)$, and inserts/deletes stay $O(\lg n)$.</p>
+  <div class="tip"><span class="lbl">Exam tip</span> The professor's list says "Theorem 17.2"; in CLRS 4e, Chapter 17 is <em>Augmenting Data Structures</em> and this augmentation theorem is its centerpiece — but do cross-check the exact numbered statement against your lecture notes. The two facts to cite in the proof: only ancestors are affected, and rotations are $O(1)$-local.</div>
+
+  <footer>
+    Statements follow CLRS, <em>Introduction to Algorithms</em>, 4th ed. (Cormen, Leiserson, Rivest, Stein); proofs restated for exam prep. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+</body>
+</html>

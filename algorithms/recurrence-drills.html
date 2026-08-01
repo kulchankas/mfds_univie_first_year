@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a1612">
+<meta name="description" content="Recurrence drill bank for the AlgoDat exam: the Master-theorem decision procedure incl. the extended case 2 and Akra–Bazzi, plus 21 drills with worked solutions.">
+<title>Recurrence drills — Master Theorem &amp; Akra–Bazzi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#1a1612;--bg-elevated:#221d18;--bg-card:#1f1a15;--border:#3a342c;--border-soft:#2a251f;
+    --text:#f5efe4;--text-muted:#b8aa97;--text-dim:#8a7e6e;--accent:#e0b888;--accent-hover:#ecc89c;
+    --good:#8bc6a0;--warn:#d99a7e;--blue:#8fb8de;--glow:rgba(224,184,136,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.66;-webkit-font-smoothing:antialiased;min-height:100vh;background-image:radial-gradient(900px 500px at 50% -10%,var(--glow),transparent 70%);background-repeat:no-repeat}
+  .wrap{max-width:800px;margin:0 auto;padding:clamp(2rem,6vw,3rem) clamp(1.1rem,5vw,1.75rem) 5rem;padding-left:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-left));padding-right:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-right))}
+  .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-dim);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;margin-bottom:1.5rem;transition:color .15s}
+  .back-link:hover{color:var(--accent)}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--accent);font-size:clamp(.74rem,2.6vw,.82rem);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem}
+  h1{font-family:'Sora',sans-serif;font-weight:600;font-size:clamp(1.9rem,7vw,2.7rem);line-height:1.08;letter-spacing:-.03em;margin-bottom:.7rem}
+  .lede{color:var(--text-muted);font-size:clamp(.98rem,3.4vw,1.08rem);max-width:44em}
+  h2{font-family:'Sora',sans-serif;font-weight:600;font-size:clamp(1.3rem,4.5vw,1.6rem);letter-spacing:-.02em;margin:clamp(2.4rem,6vw,3rem) 0 1rem}
+  h3{font-family:'Sora',sans-serif;font-weight:600;font-size:1.05rem;margin:1.5rem 0 .5rem;color:var(--accent)}
+  p{margin:.6rem 0;color:var(--text-muted);font-size:.96rem}
+  b,strong{color:var(--text)}
+  ul,ol{margin:.4rem 0 .7rem;padding-left:1.35rem;color:var(--text-muted);font-size:.96rem}
+  li{margin:.35rem 0}
+  a{color:var(--accent)}
+  .def{background:#1c2119;border:1px solid rgba(139,198,160,.3);border-left:4px solid var(--good);border-radius:0 10px 10px 0;padding:.85rem 1.1rem;margin:.9rem 0;color:var(--text);font-size:.95rem}
+  .def .tag{display:block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--good);margin-bottom:.3rem}
+  .tip{background:var(--bg-card);border:1px solid rgba(217,154,126,.35);border-left:4px solid var(--warn);border-radius:0 10px 10px 0;padding:.7rem 1.05rem;margin:.8rem 0;font-size:.9rem;color:var(--text-muted)}
+  .tip .lbl{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--warn);margin-right:.4rem}
+  .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1rem 0}
+  table{border-collapse:collapse;width:100%;font-size:.88rem}
+  th,td{border:1px solid var(--border);padding:.45rem .6rem;text-align:left;vertical-align:top}
+  th{background:#2a2218;color:var(--accent);font-weight:600;white-space:nowrap}
+  details.drill{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;margin:.55rem 0;overflow:hidden}
+  details.drill>summary{cursor:pointer;list-style:none;padding:.7rem 1.05rem;font-size:.95rem;color:var(--text);display:flex;gap:.6rem;align-items:baseline;flex-wrap:wrap}
+  details.drill>summary::-webkit-details-marker{display:none}
+  details.drill>summary::before{content:'▸';color:var(--accent);font-size:.8em}
+  details.drill[open]>summary::before{content:'▾'}
+  details.drill[open]>summary{border-bottom:1px solid var(--border-soft)}
+  details.drill .num{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:.8rem;font-weight:700}
+  details.drill .sol{padding:.8rem 1.05rem 1rem;color:var(--text-muted);font-size:.93rem}
+  details.drill .sol b{color:var(--text)}
+  details.drill .ans{color:var(--good);font-weight:600}
+  .exam1chip{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:#221a10;background:var(--warn);border-radius:5px;padding:.1rem .45rem;letter-spacing:.03em}
+  footer{margin-top:3.5rem;padding-top:1.3rem;border-top:1px solid var(--border-soft);color:var(--text-dim);font-size:.82rem}
+  footer a{color:var(--accent);text-decoration:none}
+  mjx-container{color:inherit !important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="index.html">← Algorithms &amp; Data Structures</a>
+  <div class="eyebrow">Universität Wien · Prof. Schichl · runtime analysis</div>
+  <h1>Recurrence drills</h1>
+  <p class="lede">Exam question 2 is always: <em>"give asymptotically tight upper and lower bounds"</em> — i.e. a justified $\Theta$. All four recurrences on the first-date paper were the <b>case-2 / log-factor family</b>, including one the vanilla Master Theorem can't solve. This page: the decision procedure, then 21 drills.</p>
+
+  <h2>The decision procedure</h2>
+  <p>For $T(n)=a\,T(n/b)+f(n)$ with $a\ge1$, $b&gt;1$: compute the <b>watershed</b> $W(n)=n^{\log_b a}$ and compare $f$ against it.</p>
+  <div class="scroll-x"><table>
+    <tr><th>Situation</th><th>Case</th><th>Answer</th></tr>
+    <tr><td>$f(n)=O\big(n^{\log_b a-\varepsilon}\big)$ — polynomially <b>smaller</b></td><td>1</td><td>$T=\Theta\big(n^{\log_b a}\big)$ (leaves dominate)</td></tr>
+    <tr><td>$f(n)=\Theta\big(n^{\log_b a}\lg^k n\big)$, $k&gt;-1$</td><td>2 (extended)</td><td>$T=\Theta\big(n^{\log_b a}\lg^{k+1} n\big)$ (all levels equal)</td></tr>
+    <tr><td>$f(n)=\Theta\big(n^{\log_b a}\lg^{-1} n\big)$ &nbsp;($k=-1$)</td><td>2*</td><td>$T=\Theta\big(n^{\log_b a}\lg\lg n\big)$</td></tr>
+    <tr><td>$f(n)=\Theta\big(n^{\log_b a}\lg^{k} n\big)$, $k&lt;-1$</td><td>2*</td><td>$T=\Theta\big(n^{\log_b a}\big)$ (the level sum converges)</td></tr>
+    <tr><td>$f(n)=\Omega\big(n^{\log_b a+\varepsilon}\big)$ — polynomially <b>larger</b>, and <b>regularity</b> $a f(n/b)\le c f(n)$, $c&lt;1$</td><td>3</td><td>$T=\Theta\big(f(n)\big)$ (root dominates)</td></tr>
+  </table></div>
+  <ul>
+    <li><b>Polynomially</b> smaller/larger means by a factor $n^{\varepsilon}$ — a $\lg$ factor is <em>not</em> enough for cases 1/3. That's exactly when the $k$-rows apply.</li>
+    <li>Claiming <b>case 3</b>? Check regularity explicitly: for $f(n)=n^s\lg^t n$ with $s&gt;\log_b a$ it always holds ($af(n/b)\approx (a/b^s)f(n)$, $a/b^s&lt;1$) — but write the one line.</li>
+    <li>Nothing fits (unequal splits, $T(n-1)$, $T(\sqrt n)$)? → Akra–Bazzi, direct expansion, or substitution — see below.</li>
+  </ul>
+
+  <div class="def"><span class="tag">Akra–Bazzi in one box (full statement → <a href="exam-proofs.html#akra" style="color:var(--good)">proofs page</a>)</span>
+  For $T(x)=g(x)+\sum_i a_iT(b_ix)$: solve $\;\sum_i a_ib_i^{\,p}=1\;$ for $p$, then
+  $T(x)=\Theta\!\Big(x^p\big(1+\int_{1}^{x} g(u)\,u^{-p-1}\,du\big)\Big)$.
+  Standard integrals: $\int\!\frac{du}{u}=\ln u$, $\;\int\!\frac{du}{u\ln u}=\ln\ln u$, $\;\int u^{s}\,du=\frac{u^{s+1}}{s+1}$ ($s\neq-1$).</div>
+
+  <div class="def"><span class="tag">The other two tools</span>
+  <b>Recursion tree</b> — draw levels, sum level costs; how the Master Theorem is proved (<a href="exam-proofs.html#master" style="color:var(--good)">Lemmas 4.2/4.3</a>) and the honest fallback for anything odd.
+  <b>Substitution</b> — guess the bound, prove it by induction with explicit constants; the rigorous way to <em>verify</em> a tight bound (used in <a href="exam-proofs.html#select" style="color:var(--good)">Thm 9.2</a>).</div>
+
+  <div class="tip"><span class="lbl">Exam habit</span> Every answer = three visible steps: ① $a$, $b$, $W(n)=n^{\log_b a}$ computed; ② the comparison ("exact match with $k=1$", "polynomially smaller"); ③ the case named + the $\Theta$ answer. For case 3 add the regularity line. Two points each on the real paper — don't donate them to speed.</div>
+
+  <h2>Drill bank</h2>
+  <p>Groups A→D get harder. Do them cold, then check. <span class="exam1chip">EXAM 1</span> marks the actual first-date recurrences.</p>
+
+  <h3>A — the three cases, warm-up</h3>
+  <details class="drill"><summary><span class="num">A1</span> $T(n)=2T(n/2)+n$</summary><div class="sol">$W=n^{\log_2 2}=n$; $f=n=\Theta(n\lg^0 n)$ — exact match, case 2 ($k=0$). <span class="ans">$\Theta(n\lg n)$</span> — merge sort.</div></details>
+  <details class="drill"><summary><span class="num">A2</span> $T(n)=8T(n/2)+n^2$</summary><div class="sol">$W=n^{\log_2 8}=n^3$; $f=n^2=O(n^{3-\varepsilon})$ — polynomially smaller, case 1. <span class="ans">$\Theta(n^3)$</span>.</div></details>
+  <details class="drill"><summary><span class="num">A3</span> $T(n)=2T(n/2)+n^3$</summary><div class="sol">$W=n$; $f=n^3=\Omega(n^{1+\varepsilon})$ — case 3. Regularity: $2f(n/2)=2\cdot n^3/8=n^3/4\le\frac14 f(n)$ ✓. <span class="ans">$\Theta(n^3)$</span>.</div></details>
+  <details class="drill"><summary><span class="num">A4</span> $T(n)=T(n/2)+\Theta(1)$</summary><div class="sol">$W=n^{\log_2 1}=n^0=1$; $f=\Theta(1)$ — exact match, case 2 ($k=0$). <span class="ans">$\Theta(\lg n)$</span> — binary search.</div></details>
+  <details class="drill"><summary><span class="num">A5</span> $T(n)=7T(n/2)+n^2$</summary><div class="sol">$W=n^{\log_2 7}\approx n^{2.807}$; $f=n^2$ polynomially smaller — case 1. <span class="ans">$\Theta(n^{\log_2 7})$</span> — Strassen's matrix multiplication.</div></details>
+  <details class="drill"><summary><span class="num">A6</span> $T(n)=3T(n/2)+n$</summary><div class="sol">$W=n^{\log_2 3}\approx n^{1.585}$; $f=n$ polynomially smaller — case 1. <span class="ans">$\Theta(n^{\log_2 3})$</span> — Karatsuba multiplication.</div></details>
+  <details class="drill"><summary><span class="num">A7</span> $T(n)=3T(n/4)+n\lg n$</summary><div class="sol">$W=n^{\log_4 3}\approx n^{0.793}$; $f=n\lg n=\Omega(n^{0.793+\varepsilon})$ — case 3. Regularity: $3f(n/4)=\frac34 n(\lg n-2)\le\frac34 f(n)$ ✓. <span class="ans">$\Theta(n\lg n)$</span>.</div></details>
+
+  <h3>B — the case-2 family (what exam 1 actually was)</h3>
+  <details class="drill"><summary><span class="num">B1</span> $T(n)=16T(n/4)+n^2$ <span class="exam1chip">EXAM 1</span></summary><div class="sol">$W=n^{\log_4 16}=n^2$ — exact match ($k=0$), case 2. <span class="ans">$\Theta(n^2\lg n)$</span>.</div></details>
+  <details class="drill"><summary><span class="num">B2</span> $T(n)=4T(n/2)+n^2\lg n$ <span class="exam1chip">EXAM 1</span></summary><div class="sol">$W=n^{\log_2 4}=n^2$; $f=\Theta(n^2\lg^1 n)$ — extended case 2, $k=1$. <span class="ans">$\Theta(n^2\lg^2 n)$</span>.</div></details>
+  <details class="drill"><summary><span class="num">B3</span> $T(n)=2T(n/4)+\sqrt n$ <span class="exam1chip">EXAM 1</span></summary><div class="sol">$W=n^{\log_4 2}=n^{1/2}$ — exact match ($k=0$), case 2. <span class="ans">$\Theta(\sqrt n\,\lg n)$</span>.</div></details>
+  <details class="drill"><summary><span class="num">B4</span> $T(n)=2T(n/2)+n\lg n$</summary><div class="sol">$W=n$; $f=\Theta(n\lg^1 n)$ — $k=1$. <span class="ans">$\Theta(n\lg^2 n)$</span>.</div></details>
+  <details class="drill"><summary><span class="num">B5</span> $T(n)=9T(n/3)+n^2\lg^2 n$</summary><div class="sol">$W=n^{\log_3 9}=n^2$; $k=2$. <span class="ans">$\Theta(n^2\lg^3 n)$</span>.</div></details>
+  <details class="drill"><summary><span class="num">B6</span> $T(n)=4T(n/2)+\dfrac{n^2}{\lg n}$</summary><div class="sol">$W=n^2$; $f=\Theta(n^2\lg^{-1}n)$ — the $k=-1$ row. <span class="ans">$\Theta(n^2\lg\lg n)$</span>.</div></details>
+
+  <h3>C — beyond the vanilla theorem</h3>
+  <details class="drill"><summary><span class="num">C1</span> $T(n)=3T(n/3)+\dfrac{n}{\lg n}$ <span class="exam1chip">EXAM 1</span></summary><div class="sol">$W=n$; $f=\Theta(n\lg^{-1}n)$: cases 1–3 all fail ($f$ is smaller than $W$ but not polynomially). The $k=-1$ row gives <span class="ans">$\Theta(n\lg\lg n)$</span>. Akra–Bazzi check: $p=1$, $\int_2^n\frac{du}{u\lg u}=\Theta(\lg\lg n)$ ✓.</div></details>
+  <details class="drill"><summary><span class="num">C2</span> $T(n)=2T(n/2)+\dfrac{n}{\lg^2 n}$</summary><div class="sol">$W=n$; $k=-2&lt;-1$ — the level sum $\sum_j 1/j^2$ <em>converges</em>, so the driving costs add only $O(n)$. <span class="ans">$\Theta(n)$</span>.</div></details>
+  <details class="drill"><summary><span class="num">C3</span> $T(n)=T(n/3)+T(2n/3)+n$</summary><div class="sol">Unequal split — Akra–Bazzi. $(1/3)^p+(2/3)^p=1\Rightarrow p=1$; $\int_1^n u\cdot u^{-2}du=\ln n$. <span class="ans">$\Theta(n\lg n)$</span>. (Recursion-tree view: every level costs $n$, depth $\Theta(\lg n)$.)</div></details>
+  <details class="drill"><summary><span class="num">C4</span> $T(n)=T(n/5)+T(7n/10)+n$</summary><div class="sol">The S<small>ELECT</small> recurrence. At $p=1$: $\frac15+\frac{7}{10}=0.9&lt;1$, so the balancing $p&lt;1$. Then $\int_1^n u^{-p}du=\Theta(n^{1-p})$ and $T=\Theta(n^p\cdot n^{1-p})$. <span class="ans">$\Theta(n)$</span> — the sum of subproblem sizes is $&lt;n$, so the top level dominates.</div></details>
+  <details class="drill"><summary><span class="num">C5</span> $T(n)=2T(n/2)+\dfrac{n^2}{\lg n}$</summary><div class="sol">$W=n$; $f=n^2/\lg n=\Omega(n^{1+\varepsilon})$ (e.g. $\ge n^{1.5}$ eventually) — case 3. Regularity: $2f(n/2)=\frac{n^2/2}{\lg n-1}\le c\,\frac{n^2}{\lg n}$ with $c\to\frac12$ ✓. <span class="ans">$\Theta\!\big(n^2/\lg n\big)$</span> — case 3 answers $\Theta(f)$, log factor and all.</div></details>
+
+  <h3>D — not Master-shaped at all</h3>
+  <details class="drill"><summary><span class="num">D1</span> $T(n)=T(n-1)+n$</summary><div class="sol">Subtractive, not divide-and-conquer: expand. $T(n)=\sum_{k=1}^n k+O(1)$. <span class="ans">$\Theta(n^2)$</span> — worst-case quicksort.</div></details>
+  <details class="drill"><summary><span class="num">D2</span> $T(n)=2T(n-1)+1$</summary><div class="sol">Expand: $T(n)=2^n T(0)+2^{n-1}+\cdots+1$. <span class="ans">$\Theta(2^n)$</span> — Tower of Hanoi.</div></details>
+  <details class="drill"><summary><span class="num">D3</span> $T(n)=T(\sqrt n)+1$</summary><div class="sol">Substitute $m=\lg n$, $S(m)=T(2^m)$: then $S(m)=S(m/2)+1=\Theta(\lg m)$. <span class="ans">$\Theta(\lg\lg n)$</span>.</div></details>
+
+  <div class="tip"><span class="lbl">Self-test</span> Redo B1–C1 in under 8 minutes total — that's the exam pace (2 pts each, four parts in one question). If any group-C item needs more than 3 minutes, reread the decision table and try again tomorrow; they're also in the <a href="flashcards.html">flashcards</a>.</div>
+
+  <footer>
+    Master Theorem &amp; Akra–Bazzi as in CLRS 4th ed., Ch. 4. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+</body>
+</html>
