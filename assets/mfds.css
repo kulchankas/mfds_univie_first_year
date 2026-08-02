@@ -1,0 +1,226 @@
+@import url("mfds-nav.css");
+
+/* ============================================================
+   MFDS — shared design system
+   Loaded AFTER each page's own <style>, so it overrides the
+   dark-theme tokens those pages already declare. The pages keep
+   their own layout rules; this sheet re-skins them.
+   ============================================================ */
+
+/* Scoped with :not([data-theme="dark"]) so the Analysis study guide —
+   the one page with its own dark toggle — keeps working. Specificity
+   (0,1,1) also beats each page's own :root (0,1,0). */
+html:not([data-theme="dark"]) {
+  /* surfaces */
+  --bg: #F7F7F9;
+  --bg-elevated: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --border: #EFEFF2;
+  --border-soft: #F0F0F2;
+  --line: #EFEFF2;
+  --paper: #FFFFFF;
+  --soft: #F3F3F5;
+  --code-bg: #F5F5F7;
+
+  /* ink */
+  --text: #1B1B1F;
+  --ink: #1B1B1F;
+  --text-muted: #55555C;
+  --muted: #55555C;
+  --text-dim: #8A8A90;
+
+  /* subject accent — overridden per page by the ps-* body classes */
+  --accent: #9A6207;
+  --accent-hover: #7C4E05;
+  --accent-solid: #F0A93A;
+  --accent-tint: #FFF1DC;
+  --accent-deep: #8A5A0E;
+
+  /* semantic */
+  --good: #14794E;
+  --good-solid: #2FAE72;
+  --good-tint: #E1F5EA;
+  --warn: #A65A22;
+  --warn-solid: #F0A93A;
+  --warn-tint: #FFF1DC;
+  --blue: #2F6FB0;
+  --easy: #2F6FB0;
+  --danger: #C0392B;
+  --again: #C0392B;
+  --hard: #A65A22;
+  --gold: #9A6207;
+  --highlight: #FFF1DC;
+  --glow: rgba(240, 169, 58, .10);
+
+  /* Page-local accent names. The subpages were authored for the old dark
+     theme, where pastels like #8bc6a0 read fine on near-black; on white
+     they fall to ~1.9:1. Remap every one to a tone that passes AA. */
+  --ok: #14794E;  --success: #14794E;  --prac: #14794E;
+  --ana: #14794E;  --algo: #2F6FB0;  --la: #6B3FA0;
+  --read: #2F6FB0;  --review: #2F6FB0;  --general: #2F6FB0;
+  --ds: #6B3FA0;  --future: #6B3FA0;  --stretch: #6B3FA0;
+  --watch: #A65A22;  --today: #9A6207;  --specific: #9A6207;
+  --ml: #1F7A7A;    --recall: #9A4F6B;
+}
+
+/* per-subject accent, set via <body class="ps ps-algo"> etc. */
+body.mfds-algo { --accent:#9A6207; --accent-hover:#7C4E05; --accent-solid:#F0A93A; --accent-tint:#FFF1DC; --accent-deep:#8A5A0E; --glow:rgba(240,169,58,.10); }
+body.mfds-ana  { --accent:#14794E; --accent-hover:#0F6B41; --accent-solid:#2FAE72; --accent-tint:#E1F5EA; --accent-deep:#0F6B41; --glow:rgba(47,174,114,.10); }
+body.mfds-la   { --accent:#B22C6A; --accent-hover:#95245A; --accent-solid:#EF5DA0; --accent-tint:#FDE4EC; --accent-deep:#B22C6A; --glow:rgba(239,93,160,.10); }
+body.mfds-lads { --accent:#5B33B0; --accent-hover:#4A2894; --accent-solid:#8B5CF6; --accent-tint:#EFE6FE; --accent-deep:#5B33B0; --glow:rgba(139,92,246,.10); }
+
+/* ---------- base ---------- */
+body.mfds {
+  font-family: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  letter-spacing: 0;
+}
+body.mfds h1, body.mfds h2, body.mfds h3, body.mfds h4,
+body.mfds .card-title, body.mfds .feature-title, body.mfds .h1 {
+  font-family: 'Figtree', system-ui, sans-serif;
+  letter-spacing: -.02em;
+}
+body.mfds h1 { font-weight: 800; }
+body.mfds h2, body.mfds h3 { font-weight: 800; }
+body.mfds .eyebrow, body.mfds .kicker {
+  font-family: 'Figtree', system-ui, sans-serif;
+  letter-spacing: .04em;
+  color: var(--text-dim);
+  font-weight: 700;
+}
+body.mfds a { color: var(--accent); }
+body.mfds a:hover { color: var(--accent-hover); }
+
+/* the pages' own back-links are redundant once the topbar exists */
+body.mfds .back-link { display: none; }
+
+/* ---------- surfaces the pages already define ---------- */
+body.mfds .wrap { padding-top: clamp(1.6rem, 4vw, 2.4rem); }
+
+body.mfds .card,
+body.mfds .feature,
+body.mfds .box,
+body.mfds .doc,
+body.mfds details.ch,
+body.mfds details.sol,
+body.mfds details.drill,
+body.mfds .dashboard,
+body.mfds section,
+body.mfds .soon {
+  box-shadow: none;
+}
+body.mfds .feature,
+body.mfds details.ch,
+body.mfds details.sol,
+body.mfds details.drill {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+body.mfds .feature:hover { transform: translateY(-2px); border-color: var(--accent-solid); box-shadow: 0 10px 26px rgba(0,0,0,.06); }
+body.mfds .doc {
+  background: #fff; border: 1px solid var(--border); border-radius: 14px;
+}
+body.mfds .doc:hover { border-color: var(--accent-solid); box-shadow: 0 8px 20px rgba(0,0,0,.05); }
+body.mfds .doc .ext { border-color: var(--border); color: var(--accent); }
+
+/* tinted call-out boxes */
+body.mfds .box {
+  background: var(--accent-tint);
+  border: 1px solid transparent;
+  border-left: 4px solid var(--accent-solid);
+  border-radius: 0 14px 14px 0;
+  color: #3B3B42;
+}
+body.mfds .box .lbl { color: var(--accent-deep); }
+body.mfds .box.general { background: #EAF2FB; border-left-color: #5B92CE; }
+body.mfds .box.general .lbl { color: #2F6FB0; }
+
+/* proof/definition statement blocks (were dark green tints) */
+body.mfds .stmt, body.mfds .def, body.mfds .inv, body.mfds .mile {
+  background: var(--good-tint);
+  border: 1px solid rgba(47,174,114,.25);
+  border-left: 4px solid var(--good-solid);
+  border-radius: 0 14px 14px 0;
+  color: #1B1B1F;
+}
+body.mfds .stmt .tag, body.mfds .def .tag, body.mfds .mile b { color: var(--good); }
+body.mfds .idea {
+  background: #EAF2FB;
+  border: 1px solid rgba(91,146,206,.25);
+  border-left: 4px solid #5B92CE;
+  border-radius: 0 14px 14px 0;
+  color: #33333A;
+}
+body.mfds .idea .lbl { color: #2F6FB0; }
+body.mfds .tip, body.mfds .grader {
+  background: var(--warn-tint);
+  border: 1px solid rgba(240,169,58,.3);
+  border-left: 4px solid var(--warn-solid);
+  border-radius: 0 14px 14px 0;
+  color: #4A3A22;
+}
+body.mfds .tip .lbl, body.mfds .grader .lbl { color: #8A5A0E; }
+body.mfds .step { color: var(--good); }
+body.mfds .exam { background: #fff; border: 1px solid var(--border); border-radius: 16px; color: #3B3B42; }
+
+/* code + tables (these were hardcoded near-black) */
+body.mfds pre.code, body.mfds pre.fig {
+  background: #F5F5F7 !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px;
+  color: #26262B !important;
+}
+body.mfds pre.code .kw { color: #2F6FB0; }
+body.mfds pre.code .cm { color: #7A7A82; }
+body.mfds pre.fig .r { color: #C0392B; }
+body.mfds pre.fig .b { color: #2F6FB0; }
+body.mfds code {
+  background: #F0F0F3 !important;
+  color: var(--accent-deep) !important;
+  border-radius: 5px;
+}
+body.mfds th { background: #F5F5F7 !important; color: var(--text) !important; }
+body.mfds td, body.mfds th { border-color: var(--border) !important; }
+body.mfds tr:nth-child(even) td { background: #FCFCFD; }
+
+/* chips / pills that used dark-on-accent text */
+body.mfds .exam1chip, body.mfds .x1 {
+  background: var(--warn-solid) !important;
+  color: #4A3208 !important;
+}
+body.mfds .pts { border-color: var(--border); color: var(--accent-deep); }
+body.mfds .ref { color: var(--accent-deep); }
+body.mfds .topic { color: var(--text-dim); }
+
+/* buttons */
+body.mfds .btn { background: #fff; border: 1px solid var(--border); color: var(--text); border-radius: 12px; }
+body.mfds .btn:hover { border-color: var(--accent-solid); }
+body.mfds .btn.primary { background: #222 !important; color: #fff !important; border-color: #222 !important; }
+body.mfds .btn.primary:hover { background: #000 !important; }
+body.mfds .btn-dark { background: #222; color: #fff; }
+
+/* flashcards: grade buttons keep semantic colour, on white */
+body.mfds .g-again { color: #C0392B; border-color: rgba(192,57,43,.35); }
+body.mfds .g-hard  { color: #A65A22; border-color: rgba(166,90,34,.35); }
+body.mfds .g-good  { color: #14794E; border-color: rgba(20,121,78,.35); }
+body.mfds .g-easy  { color: #2F6FB0; border-color: rgba(47,111,176,.35); }
+body.mfds .chip { background: var(--soft); border-color: var(--border); }
+body.mfds .bar { background: var(--soft); border-color: var(--border); }
+body.mfds .bar > i { background: var(--accent-solid); }
+body.mfds .reset { color: var(--text-dim); }
+body.mfds .reset:hover { color: #C0392B; }
+body.mfds mjx-container { color: inherit !important; }
+
+/* misc */
+body.mfds footer { border-top: 1px solid var(--border); color: var(--text-dim); }
+body.mfds hr, body.mfds .divider { border-color: var(--border); }
+body.mfds .soon {
+  border: 1px dashed var(--border);
+  background: repeating-linear-gradient(135deg, transparent, transparent 10px, rgba(240,169,58,.05) 10px, rgba(240,169,58,.05) 20px);
+}
+body.mfds .scroll-x { border-radius: 12px; }
+
+/* the hub itself already ships the full MFDS look — don't double-skin it */
+body.mfds-hub .back-link { display: inline-flex; }

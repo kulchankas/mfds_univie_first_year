@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#1a1612">
+<meta name="theme-color" content="#F7F7F9">
 <meta name="description" content="Analysis — self-paced study guide, flashcards, daily practice, lecture notes, and problem-set archive with progress tracking.">
 <title>Analysis — Self-study Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #1a1612;
@@ -216,8 +216,9 @@
     .doc:active { transform: translateY(-1px); border-color: var(--accent); }
   }
 </style>
+<link rel="stylesheet" href="../assets/mfds.css">
 </head>
-<body>
+<body class="mfds mfds-ana" data-page="ana">
 <div class="wrap">
 
   <a class="back-link" href="../index.html">← All subjects</a>
@@ -273,7 +274,7 @@
   </div>
 
   <h2>Problem sets</h2>
-  <p style="color:var(--text-muted);font-size:.9rem;margin:-.3rem 0 1rem">Tagged by your professor's coding — <b style="color:#8bc6a0">✅ priority</b> · <b style="color:#e0b888">⚠️ maybe</b> · <b style="color:#c87060">❌ later</b>. Full breakdown in the <a href="study-guide/#exam-focus" style="color:var(--accent)">study guide</a>.</p>
+  <p style="color:var(--text-muted);font-size:.9rem;margin:-.3rem 0 1rem">Tagged by your professor's coding — <b style="color:#14794E">✅ priority</b> · <b style="color:#9A6207">⚠️ maybe</b> · <b style="color:#C0392B">❌ later</b>. Full breakdown in the <a href="study-guide/#exam-focus" style="color:var(--accent)">study guide</a>.</p>
   <div class="doc-list grid-sets">
     <a class="doc" href="problem-sets/Questions_1.pdf"><span class="num">01</span><span class="label">Sheet 1</span></a>
     <a class="doc" href="problem-sets/Questions_2.pdf"><span class="num">02</span><span class="label">Sheet 2 <span class="sub">✅1,4 ⚠️2</span></span></a>
@@ -296,5 +297,6 @@
   </footer>
 
 </div>
+<script src="../assets/mfds.js" data-root="../"></script>
 </body>
 </html>

@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#1a1612">
+<meta name="theme-color" content="#F7F7F9">
 <meta name="description" content="Describe-and-define notes for the AlgoDat exam: heaps, BSTs, red-black trees, hash tables, B-trees, stacks & queues, the sorting zoo, dynamic programming, and greedy — definitions, pseudocode, runtimes.">
 <title>Data structures &amp; algorithms — describe/define notes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>
 MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
 </script>
@@ -56,8 +56,9 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   footer a{color:var(--accent);text-decoration:none}
   mjx-container{color:inherit !important}
 </style>
+<link rel="stylesheet" href="../assets/mfds.css">
 </head>
-<body>
+<body class="mfds mfds-algo" data-page="algo" data-up="index.html" data-up-label="Algorithms">
 <div class="wrap">
   <a class="back-link" href="index.html">← Algorithms &amp; Data Structures</a>
   <div class="eyebrow">Universität Wien · Prof. Schichl · describe &amp; define</div>
@@ -119,7 +120,7 @@ TREE-MINIMUM(x)                       z.p = y
     α   y    ⟶      x   γ                  x   γ    ⟶      α   y
        / \          / \                    / \                  / \
       β   γ        α   β                  α   β                β   γ</pre>
-  <p><b>Insertion</b> = BST-insert $z$ + color it <b>red</b> (so property 5 never breaks; only 4 — or 2 — can) + <b>RB-INSERT-FIXUP</b>. Full pseudocode: <a href="mock-exam-1.html">mock exam, model solution Q4</a>. The three fixup cases, with $z$'s <b>uncle</b> $y$ (shown for parent = left child; mirror otherwise; <span style="color:#e08a7a;font-weight:700">red</span>, <span style="color:#9fc2e8;font-weight:700">black</span>):</p>
+  <p><b>Insertion</b> = BST-insert $z$ + color it <b>red</b> (so property 5 never breaks; only 4 — or 2 — can) + <b>RB-INSERT-FIXUP</b>. Full pseudocode: <a href="mock-exam-1.html">mock exam, model solution Q4</a>. The three fixup cases, with $z$'s <b>uncle</b> $y$ (shown for parent = left child; mirror otherwise; <span style="color:#C0392B;font-weight:700">red</span>, <span style="color:#2F6FB0;font-weight:700">black</span>):</p>
 <pre class="fig"><b>Case 1 — uncle red: recolor, push up.</b>
         <span class="b">C</span>                    <span class="r">C</span>  ← new z
        / \                  / \
@@ -227,5 +228,6 @@ TREE-MINIMUM(x)                       z.p = y
     Definitions and pseudocode follow CLRS, <em>Introduction to Algorithms</em>, 4th ed. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
   </footer>
 </div>
+<script src="../assets/mfds.js" data-root="../"></script>
 </body>
 </html>
