@@ -4,137 +4,125 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#F7F7F9">
-<meta name="description" content="A 6-week (1.5-month) exam-preparation plan covering Algorithms & Data Structures, Analysis, and Linear Algebra — three parallel tracks built on this site's materials.">
+<meta name="description" content="A 6-week exam-preparation plan covering Algorithms & Data Structures, Analysis, and Linear Algebra — three parallel tracks built on this site's materials.">
 <title>6-week study plan — Algorithms · Analysis · Linear Algebra</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#1a1612;--bg-elevated:#221d18;--bg-card:#1f1a15;--border:#3a342c;--border-soft:#2a251f;
-    --text:#f5efe4;--text-muted:#b8aa97;--text-dim:#8a7e6e;--accent:#e0b888;--accent-hover:#ecc89c;
-    --algo:#8fb8de;--ana:#8bc6a0;--la:#c4a6df;--warn:#d99a7e;--glow:rgba(224,184,136,.14);
+    --bg:#F7F7F9;--card:#fff;--border:#EFEFF2;--ink:#1B1B1F;--muted:#55555C;--faint:#8A8A90;
+    --algo:#F0A93A;--algo-bg:#FFF1DC;--algo-dark:#8A5A0E;
+    --ana:#2FAE72;--ana-bg:#E1F5EA;--ana-dark:#0F6B41;
+    --lads:#8B5CF6;--lads-bg:#EFE6FE;--lads-dark:#5B33B0;
+    --la:#EF5DA0;--la-bg:#FDE4EC;--la-dark:#B22C6A;
+    --off:#B9B9BE;--off-bg:#F3F3F5;--off-dark:#6E6E76;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.66;-webkit-font-smoothing:antialiased;min-height:100vh;background-image:radial-gradient(900px 500px at 50% -10%,var(--glow),transparent 70%);background-repeat:no-repeat}
-  .wrap{max-width:820px;margin:0 auto;padding:clamp(2rem,6vw,3rem) clamp(1.1rem,5vw,1.75rem) 5rem;padding-left:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-left));padding-right:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-right))}
-  .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-dim);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;margin-bottom:1.5rem;transition:color .15s}
-  .back-link:hover{color:var(--accent)}
-  .eyebrow{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--accent);font-size:clamp(.74rem,2.6vw,.82rem);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem}
-  h1{font-family:'Sora',sans-serif;font-weight:600;font-size:clamp(1.9rem,7vw,2.7rem);line-height:1.08;letter-spacing:-.03em;margin-bottom:.7rem}
-  .lede{color:var(--text-muted);font-size:clamp(.98rem,3.4vw,1.08rem);max-width:44em}
-  h2{font-family:'Sora',sans-serif;font-weight:600;font-size:clamp(1.3rem,4.5vw,1.6rem);letter-spacing:-.02em;margin:clamp(2.4rem,6vw,3rem) 0 1rem}
-  p{margin:.6rem 0;color:var(--text-muted);font-size:.96rem}
-  b,strong{color:var(--text)}
-  ul{margin:.4rem 0 .7rem;padding-left:1.35rem;color:var(--text-muted);font-size:.96rem}
-  li{margin:.35rem 0}
-  a{color:var(--accent)}
-  .box{background:var(--bg-card);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:0 10px 10px 0;padding:1rem 1.25rem;margin:1.1rem 0;color:var(--text-muted);font-size:.95rem}
-  .box .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.5rem}
-  .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1rem 0}
-  table{border-collapse:collapse;width:100%;font-size:.87rem}
-  th,td{border:1px solid var(--border);padding:.45rem .6rem;text-align:left;vertical-align:top}
-  th{background:#2a2218;color:var(--accent);font-weight:600;white-space:nowrap}
-  .week{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:clamp(1.1rem,4vw,1.5rem);margin:1.2rem 0}
-  .week h3{font-family:'Sora',sans-serif;font-weight:600;font-size:1.15rem;margin-bottom:.25rem}
-  .week .theme{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.8rem}
-  .track{margin:.7rem 0;padding-left:.95rem;border-left:3px solid var(--border)}
-  .track.algo{border-left-color:var(--algo)} .track.ana{border-left-color:var(--ana)} .track.la{border-left-color:var(--la)}
-  .track .tl{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:.2rem}
-  .track.algo .tl{color:var(--algo)} .track.ana .tl{color:var(--ana)} .track.la .tl{color:var(--la)}
-  .track p{font-size:.93rem;margin:.2rem 0}
-  .mile{background:#1c2119;border:1px solid rgba(139,198,160,.3);border-radius:8px;padding:.55rem .9rem;margin-top:.8rem;font-size:.88rem;color:var(--text-muted)}
-  .mile b{color:#8bc6a0}
-  footer{margin-top:3rem;padding-top:1.3rem;border-top:1px solid var(--border-soft);color:var(--text-dim);font-size:.82rem}
-  footer a{color:var(--accent);text-decoration:none}
+  body{font-family:'Figtree',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+  .wrap{max-width:840px;margin:0 auto;padding:clamp(1.6rem,4vw,2.4rem) clamp(1rem,5vw,1.75rem) 5rem;
+        padding-left:max(clamp(1rem,5vw,1.75rem),env(safe-area-inset-left));
+        padding-right:max(clamp(1rem,5vw,1.75rem),env(safe-area-inset-right))}
+  .eyebrow{font-weight:700;color:var(--faint);font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.7rem}
+  h1{font-weight:800;font-size:clamp(1.8rem,6vw,2.5rem);line-height:1.08;letter-spacing:-.025em;margin-bottom:.6rem}
+  .lede{color:var(--muted);font-size:clamp(.96rem,3.2vw,1.05rem);max-width:44em}
+  h2{font-weight:800;font-size:clamp(1.25rem,4.2vw,1.5rem);letter-spacing:-.02em;margin:clamp(2.2rem,5vw,2.8rem) 0 .9rem}
+  p{margin:.55rem 0;color:var(--muted);font-size:.95rem}
+  b,strong{color:var(--ink)}
+  ul{margin:.4rem 0 .7rem;padding-left:1.3rem;color:var(--muted);font-size:.95rem}
+  li{margin:.3rem 0}
+  a{color:var(--lads-dark)}
+  code{font-size:.86em;background:#F0F0F3;color:var(--algo-dark);padding:.06rem .32rem;border-radius:5px}
+  .box{background:var(--algo-bg);border-left:4px solid var(--algo);border-radius:0 14px 14px 0;padding:1rem 1.2rem;margin:1.1rem 0;color:#3B3B42;font-size:.94rem}
+  .box .lbl{display:block;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--algo-dark);margin-bottom:.45rem}
+  .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1rem 0;border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:.87rem;min-width:520px}
+  th,td{border:1px solid var(--border);padding:.5rem .6rem;text-align:left;vertical-align:top}
+  th{background:#F5F5F7;font-weight:700;white-space:nowrap}
+  .week{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:clamp(1.05rem,3.5vw,1.4rem);margin:1.1rem 0}
+  .week h3{font-weight:800;font-size:1.1rem;margin-bottom:.2rem}
+  .week .theme{font-size:.74rem;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:.85rem}
+  .track{margin:.7rem 0;padding-left:.9rem;border-left:3px solid var(--border)}
+  .track.algo{border-left-color:var(--algo)} .track.ana{border-left-color:var(--ana)} .track.la{border-left-color:var(--lads)}
+  .track .tl{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:.15rem}
+  .track.algo .tl{color:var(--algo-dark)} .track.ana .tl{color:var(--ana-dark)} .track.la .tl{color:var(--lads-dark)}
+  .track p{font-size:.92rem;margin:.15rem 0}
+  .mile{background:var(--ana-bg);border:1px solid rgba(47,174,114,.25);border-radius:10px;padding:.55rem .9rem;margin-top:.8rem;font-size:.88rem;color:#2C4A3C}
+  .mile b{color:var(--ana-dark)}
+  footer{margin-top:3rem;padding-top:1.3rem;border-top:1px solid var(--border);color:var(--faint);font-size:.82rem}
+  footer a{color:var(--lads-dark)}
+  @media (max-width:560px){ .wrap{padding-top:1.2rem} }
 </style>
-<link rel="stylesheet" href="assets/mfds.css">
+<link rel="stylesheet" href="assets/mfds-nav.css">
 </head>
-<body class="mfds mfds-algo" data-page="plan">
+<body data-page="plan">
 <div class="wrap">
-  <a class="back-link" href="index.html">← All subjects</a>
   <div class="eyebrow">Universität Wien · exam season</div>
   <h1>The 6-week plan</h1>
-  <p class="lede">One-and-a-half months, three exams — <b style="color:var(--algo)">Algorithms &amp; Data Structures</b>, <b style="color:var(--ana)">Analysis</b>, <b style="color:var(--la)">Linear Algebra</b> — run as parallel tracks on this site's materials. Two content passes, then proofs from memory, then timed mocks, then a taper.</p>
+  <p class="lede">Three exams — <b style="color:var(--algo-dark)">Algorithms &amp; Data Structures</b>, <b style="color:var(--ana-dark)">Analysis</b>, <b style="color:var(--lads-dark)">Linear Algebra</b> — run as parallel tracks on this site's materials. Two content passes, then proofs from memory, then timed mocks, then a taper.</p>
 
   <h2>The weekly rhythm</h2>
   <p>Rotate one <em>primary</em> subject per day (~2.5–3.5 h deep work), six days a week, plus a daily 20–30 min flashcard block that is <b>never skipped</b> — spaced repetition only works if the reviews happen on schedule.</p>
-  <div class="scroll-x"><table>
-    <tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr>
-    <tr>
-      <td style="color:var(--algo)"><b>Algorithms</b></td>
-      <td style="color:var(--ana)"><b>Analysis</b></td>
-      <td style="color:var(--la)"><b>Linear Algebra</b></td>
-      <td style="color:var(--algo)"><b>Algorithms</b></td>
-      <td style="color:var(--ana)"><b>Analysis</b></td>
-      <td style="color:var(--la)"><b>Linear Algebra</b></td>
-      <td>off / catch-up</td>
-    </tr>
-    <tr><td colspan="7">every day: <a href="algorithms/flashcards.html">AlgoDat deck</a> + <a href="analysis/flashcards.html">Analysis deck</a> (20–30 min total, whatever is due)</td></tr>
-  </table></div>
+  <div class="scroll-x"><table id="rhythm"></table></div>
+
   <div class="box"><span class="lbl">Ground rules</span>
   <ul>
     <li><b>Active &gt; passive.</b> "Read the proof" always means: read it once, close the page, reproduce it on paper, compare.</li>
-    <li><b>Match the exam format.</b> AlgoDat is a written theory exam (the <a href="algorithms/mock-exam-1.html">real first-date paper</a> shows the format exactly); prepare by <em>writing</em>, not recognizing.</li>
+    <li><b>Match the exam format.</b> AlgoDat is a written theory exam (the <a href="algorithms/mock-exam-1.html">real first-date paper</a> shows the format exactly); prepare by <em>writing</em>, not recognising.</li>
     <li><b>If a week slips</b>, cut breadth, not the mock weeks — weeks 5–6 are the highest-value part of the plan.</li>
-    <li><b>Linear algebra track</b> below follows the current course (Mula &amp; Wu, <a href="linear-algebra-ds/index.html">LA for Data Science</a>). If your LA exam is the intro course instead, swap the readings for the <a href="linear-algebra/exam_notes.html">exam notes</a> and use the <a href="linear-algebra/mock_exams.html">five mock exams</a> in weeks 5–6.</li>
+    <li><b>Linear algebra</b> below follows the current course (Mula &amp; Wu, <a href="linear-algebra-ds/index.html">LA for Data Science</a>). If your LA exam is the intro course instead, swap in the <a href="linear-algebra/exam_notes.html">exam notes</a> and the <a href="linear-algebra/mock_exams.html">five mock exams</a>.</li>
   </ul></div>
 
   <h2>Week by week</h2>
-
-  <div class="week"><h3>Week 1 — Foundations, pass I</h3><div class="theme">re-open every subject; find your gaps early</div>
-    <div class="track algo"><span class="tl">Algorithms</span><p>Read the <a href="algorithms/data-structures.html">data-structure notes</a> end to end (heaps → BST/RBT → hashing). Do <a href="algorithms/recurrence-drills.html">drill groups A–B</a>. Skim the <a href="algorithms/mock-exam-1.html">real exam paper</a> <em>without</em> solutions — just to calibrate what's coming.</p></div>
-    <div class="track ana"><span class="tl">Analysis</span><p>Re-read <a href="analysis/study-guide/">study guide</a> Blocks 1–2 (metric spaces, completeness/compactness, continuity). Start <a href="analysis/daily-practice.html">daily-practice</a> sheets 1–3.</p></div>
-    <div class="track la"><span class="tl">Linear Algebra</span><p>Chapters 1–2 of the <a href="linear-algebra-ds/index.html">self-study plan</a> (vector spaces, inner products): watch the 3B1B clips, redo the flagged course exercises for Ch 1.</p></div>
-    <div class="mile"><b>Milestone:</b> both flashcard decks started; a written list of your 5 weakest topics per subject.</div>
-  </div>
-
-  <div class="week"><h3>Week 2 — Foundations, pass II</h3><div class="theme">finish the content sweep</div>
-    <div class="track algo"><span class="tl">Algorithms</span><p>Read the <a href="algorithms/exam-proofs.html">proofs page</a> ①–③ (loop invariants, Master machinery, Akra–Bazzi) actively. Finish <a href="algorithms/recurrence-drills.html">drill groups C–D</a>; redo any miss the next day.</p></div>
-    <div class="track ana"><span class="tl">Analysis</span><p>Blocks 3–6 of the study guide (incl. convexity). Daily-practice sheets 4–7. Check the exam-focus table and mark every ✅ topic you can't yet prove.</p></div>
-    <div class="track la"><span class="tl">Linear Algebra</span><p>Chapters 3–4 (bilinear forms, determinants): course exercises for Ch 2–3, plus the Ch 4 determinant drills from the weekly-homework table.</p></div>
-    <div class="mile"><b>Milestone:</b> every drill in the recurrence bank solved at least once; Analysis ✅-list complete.</div>
-  </div>
-
-  <div class="week"><h3>Week 3 — Proofs from memory, I</h3><div class="theme">closed book: write, compare, repeat</div>
-    <div class="track algo"><span class="tl">Algorithms</span><p>From memory, on paper: <b>Huffman optimality</b> (the 8-pointer — <a href="algorithms/exam-proofs.html#huffman">⑩</a>), bubblesort <em>and</em> insertion-sort invariant proofs (<a href="algorithms/exam-proofs.html#loopinv">①</a>). Compare against the model solutions; repeat failures two days later.</p></div>
-    <div class="track ana"><span class="tl">Analysis</span><p>The ✅ exam-priority proofs from memory, one block per session (Banach FPT and friends). Daily-practice sheets 8–10.</p></div>
-    <div class="track la"><span class="tl">Linear Algebra</span><p>Chapter 5 (eigenvalues): diagonalization workflow + Cayley–Hamilton; do the flagged Ch 5 course exercises (they were the bulk of the homework schedule).</p></div>
-    <div class="mile"><b>Milestone:</b> Huffman proof reproduced twice without peeking; eigen-workflow (char. poly → eigenspaces → diagonalizable?) automatic.</div>
-  </div>
-
-  <div class="week"><h3>Week 4 — Proofs from memory, II</h3><div class="theme">the rotation candidates</div>
-    <div class="track algo"><span class="tl">Algorithms</span><p>From memory: <b>quicksort</b> Thm 7.4 (<a href="algorithms/exam-proofs.html#quicksort">⑤</a>), <b>lower bound</b> Thm 8.1 (<a href="algorithms/exam-proofs.html#lowerbound">⑥</a>), <b>selection</b> Thm 9.2 (<a href="algorithms/exam-proofs.html#select">⑦</a>), <b>hashing</b> Thms 11.2/11.8 (<a href="algorithms/exam-proofs.html#hashing">⑧</a>). Rehearse writing MIN-HEAPIFY / DECREASE-KEY / RB-INSERT-FIXUP pseudocode cold.</p></div>
-    <div class="track ana"><span class="tl">Analysis</span><p>⚠️ proofs (the "maybe" tier) + redo the highest-priority problem-set questions (✅ tags on the <a href="analysis/index.html">Analysis page</a>). Daily-practice sheets 11–13.</p></div>
-    <div class="track la"><span class="tl">Linear Algebra</span><p>Chapter 6 (spectral theorems, <b>SVD</b> — new in the textbook): compute one full SVD by hand on a $2\times2$, verify with <code>numpy.linalg.svd</code>; Gram–Schmidt and orthogonal-projection drills.</p></div>
-    <div class="mile"><b>Milestone:</b> all four AlgoDat "big proofs" written once from memory; SVD by hand once without notes.</div>
-  </div>
-
-  <div class="week"><h3>Week 5 — Mock week</h3><div class="theme">timed, closed book, graded honestly</div>
-    <div class="track algo"><span class="tl">Algorithms</span><p>Sit the <a href="algorithms/mock-exam-1.html">real first-date paper</a> under exam conditions; grade with the grader notes; write down every dropped point. Two days later: the <a href="algorithms/mock-exam-1.html">predicted second-date paper</a>, same protocol.</p></div>
-    <div class="track ana"><span class="tl">Analysis</span><p>Self-test: pick one ✅ problem from each problem sheet (2, 3, 5, 8, 11, 14) and solve under time; redo the study-guide recipes for anything that failed.</p></div>
-    <div class="track la"><span class="tl">Linear Algebra</span><p>Simulated exam from the course exercises: one exercise per chapter, 90 minutes, closed book. (Intro-LA takers: this is the week for <a href="linear-algebra/mock_exams.html">mock exams 1–3</a>.)</p></div>
-    <div class="mile"><b>Milestone:</b> a one-page "dropped points" list per subject — this is your week-6 curriculum.</div>
-  </div>
-
-  <div class="week"><h3>Week 6 — Close the gaps, then taper</h3><div class="theme">only what the mocks exposed</div>
-    <div class="track algo"><span class="tl">Algorithms</span><p>Re-do exactly the failed sub-questions from week 5, from scratch. Re-write the two weakest proofs from memory one final time. Skim the <a href="algorithms/data-structures.html">notes</a> tables (runtimes, RB properties, Master cases) the day before.</p></div>
-    <div class="track ana"><span class="tl">Analysis</span><p>Dropped-points list only; then one final pass over the exam-focus table. No new material after mid-week.</p></div>
-    <div class="track la"><span class="tl">Linear Algebra</span><p>Dropped-points list; final pass over definitions (norms, inner products, diagonalizability criteria, SVD statement). (Intro-LA: mocks 4–5 early in the week.)</p></div>
-    <div class="mile"><b>Milestone:</b> last 2 days = flashcards + skim only. Sleep. An exam is a performance, not a cram.</div>
-  </div>
+  <div id="weeks"></div>
 
   <h2>If you have less than 6 weeks left</h2>
   <ul>
     <li><b>4 weeks:</b> merge weeks 1–2 into one (skip what you already know cold), keep weeks 3–6 intact.</li>
-    <li><b>2 weeks:</b> per subject, do only: the mock (AlgoDat: real paper), the top-priority proofs (AlgoDat: Huffman + loop invariants + recurrences; Analysis: the ✅ list; LA: eigen/SVD workflow), and daily flashcards.</li>
+    <li><b>2 weeks:</b> per subject, do only: the mock, the top-priority proofs (AlgoDat: Huffman + loop invariants + recurrences; Analysis: the ✅ list; LA: SVD + spectral + eigen workflow), and daily flashcards.</li>
   </ul>
 
   <footer>
-    Tracks link to: <a href="algorithms/index.html">Algorithms</a> · <a href="analysis/index.html">Analysis</a> · <a href="linear-algebra-ds/index.html">LA for Data Science</a> · <a href="linear-algebra/index.html">Intro Linear Algebra</a>. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+    Set your exam dates on the <a href="index.html">dashboard</a> and this plan positions itself automatically.
+    Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
   </footer>
 </div>
+
+<script src="assets/plan.js"></script>
+<script>
+(function(){
+  var P = window.MFDS_PLAN;
+
+  /* ---- weekly rhythm table ---- */
+  var t = document.getElementById('rhythm');
+  var head = '<tr>' + P.days.map(function(d){ return '<th>'+d+'</th>'; }).join('') + '</tr>';
+  var row  = '<tr>' + P.rhythm.map(function(k){
+      if (!k) return '<td>off / catch-up</td>';
+      var m = P.subjects[k];
+      return '<td style="color:'+m.dark+'"><b>'+m.name+'</b></td>';
+    }).join('') + '</tr>';
+  var foot = '<tr><td colspan="7">every day: <a href="algorithms/flashcards.html">AlgoDat</a> · ' +
+             '<a href="analysis/flashcards.html">Analysis</a> · ' +
+             '<a href="linear-algebra-ds/flashcards.html">Linear Algebra</a> decks ' +
+             '(20–30 min total, whatever is due)</td></tr>';
+  t.innerHTML = head + row + foot;
+
+  /* ---- the six week cards ---- */
+  var out = '';
+  Object.keys(P.weeks).forEach(function(n){
+    var w = P.weeks[n];
+    out += '<div class="week"><h3>Week '+n+' — '+w.theme+'</h3>'+
+           '<div class="theme">'+w.sub+'</div>';
+    ['algo','ana','la'].forEach(function(k){
+      out += '<div class="track '+k+'"><span class="tl">'+P.subjects[k].full+'</span>'+
+             '<p>'+w.tracks[k]+'</p></div>';
+    });
+    out += '<div class="mile"><b>Milestone:</b> '+w.milestone+'</div></div>';
+  });
+  document.getElementById('weeks').innerHTML = out;
+})();
+</script>
 <script src="assets/mfds.js" data-root=""></script>
 </body>
 </html>

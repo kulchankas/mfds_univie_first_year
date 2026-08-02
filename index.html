@@ -11,12 +11,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F7F7F9;--card:#fff;--border:#EFEFF2;--ink:#1B1B1F;--muted:#8A8A90;--faint:#B9B9BE;
+    --bg:#F7F7F9;--card:#fff;--border:#EFEFF2;--ink:#1B1B1F;--muted:#55555C;--faint:#8A8A90;
     --algo:#F0A93A;--algo-bg:#FFF1DC;--algo-dark:#8A5A0E;
     --ana:#2FAE72;--ana-bg:#E1F5EA;--ana-dark:#0F6B41;
     --la:#EF5DA0;--la-bg:#FDE4EC;--la-dark:#B22C6A;
     --lads:#8B5CF6;--lads-bg:#EFE6FE;--lads-dark:#5B33B0;
-    --off:#B9B9BE;--off-bg:#F3F3F5;--off-dark:#8A8A90;
+    --off:#B9B9BE;--off-bg:#F3F3F5;--off-dark:#6E6E76;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
@@ -29,7 +29,7 @@
   aside{width:220px;flex:none;background:var(--card);border-right:1px solid var(--border);padding:28px 18px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh}
   .logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:18px;padding:0 10px;margin-bottom:26px}
   .logo .dot{width:24px;height:24px;border-radius:50%;background:var(--algo);display:inline-block;flex:none}
-  .nav-link{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;color:var(--muted);font-weight:700;font-size:14px;transition:background .15s,color .15s}
+  .nav-link{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;color:var(--faint);font-weight:700;font-size:14px;transition:background .15s,color .15s}
   .nav-link:hover{background:var(--off-bg);color:var(--ink)}
   .nav-link.active{background:#222;color:#fff}
   .streak-card{margin-top:auto;background:var(--algo-bg);border-radius:16px;padding:16px}
@@ -40,99 +40,129 @@
   .src-line a{color:var(--muted);text-decoration:underline}
 
   /* ---------- main ---------- */
-  main{flex:1;padding:36px 44px;max-width:1300px}
-  .head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;gap:14px;flex-wrap:wrap}
-  .kicker{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
-  .kicker button{background:none;border:none;color:inherit;font:inherit;cursor:pointer;text-transform:inherit;letter-spacing:inherit;border-bottom:1px dashed var(--faint);padding:0}
-  .h1{font-size:30px;font-weight:800;letter-spacing:-.01em}
-  .pills{display:flex;gap:10px;flex-wrap:wrap}
-  .pill{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:999px;padding:8px 16px;font-weight:800;font-size:14px}
+  main{flex:1;min-width:0;padding:36px 44px;max-width:1300px}
+  .head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;gap:14px;flex-wrap:wrap}
+  .kicker{font-size:13px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+  .h1{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.015em}
+  .pills{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--border);border-radius:999px;padding:7px 14px;font-weight:800;font-size:13.5px}
   .pill.lv{background:#F3F1FF;border-color:transparent;color:var(--lads-dark)}
+  .pill.streak-m{display:none;background:var(--algo-bg);border-color:transparent;color:var(--algo-dark)}
 
-  .grid{display:grid;grid-template-columns:1.6fr 1fr;gap:22px}
-  .col{display:flex;flex-direction:column;gap:20px}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px 22px}
+  .grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:20px}
+  .col{display:flex;flex-direction:column;gap:18px;min-width:0}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px 22px;min-width:0}
   .card-h{font-size:16px;font-weight:800}
+
+  /* countdown strip */
+  .countdown{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+  .cd{flex:1 1 150px;min-width:0;border-radius:16px;padding:12px 14px}
+  .cd .cd-n{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;opacity:.85}
+  .cd .cd-d{font-size:22px;font-weight:800;line-height:1.15;margin-top:2px}
+  .cd .cd-s{font-size:11px;font-weight:600;opacity:.8}
+  .cd.unset{background:var(--off-bg);color:var(--off-dark)}
+  .cd button{background:none;border:none;font:inherit;color:inherit;cursor:pointer;text-align:left;width:100%;padding:0}
 
   /* up next */
   .upnext{border-radius:20px;padding:20px 24px;border:none}
   .upnext-row{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
   .upnext .k{font-size:12px;font-weight:700;margin-bottom:4px}
-  .upnext .t{font-size:19px;font-weight:800}
-  .upnext .t span{font-weight:500;font-size:16px}
+  .upnext .t{font-size:clamp(16px,4vw,19px);font-weight:800}
+  .upnext .t span{font-weight:500;font-size:clamp(14px,3.4vw,16px)}
   .btn-dark{background:#222;color:#fff;border:none;border-radius:999px;padding:11px 22px;font-weight:700;font-size:14px;cursor:pointer;display:inline-block}
   .btn-dark:hover{background:#000}
 
   /* tasks */
-  .chips{display:flex;gap:6px}
-  .chips span{font-size:11.5px;font-weight:700;border-radius:6px;padding:2px 6px;color:var(--muted)}
+  .tasks-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .chips{display:flex;gap:5px;flex-wrap:wrap}
+  .chips span{font-size:11px;font-weight:700;border-radius:6px;padding:2px 5px;color:var(--faint)}
   .chips span.on{color:#222;background:var(--off-bg)}
-  .sect-lbl{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 8px}
+  .sect-lbl{font-size:11.5px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.04em;margin:0 0 8px}
   .tasks{display:flex;flex-direction:column;gap:10px}
-  .task{display:flex;align-items:center;gap:12px;border-radius:14px;padding:12px 16px;cursor:pointer;-webkit-tap-highlight-color:transparent}
-  .task .tick{width:18px;height:18px;border-radius:50%;border:2px solid rgba(0,0,0,.25);flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;background:transparent}
-  .task.done .tick{border-color:transparent;background:#222}
-  .task.done .d{text-decoration:line-through;opacity:.6}
+  .task{display:flex;align-items:center;gap:11px;border-radius:14px;padding:12px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;min-width:0}
+  .task .tick{width:19px;height:19px;border-radius:50%;border:2px solid rgba(0,0,0,.28);flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;background:transparent}
+  .task.done .tick{border-color:transparent;background:#222;color:#fff}
+  .task.done .d{text-decoration:line-through;opacity:.55}
   .task .body{flex:1;min-width:0}
-  .task .d{font-size:14px;font-weight:700}
+  .task .d{font-size:13.5px;font-weight:700}
   .task .s{font-size:11.5px;font-weight:600}
-  .task .time{font-size:12.5px;font-weight:700;color:#666}
-  .task.ghost{opacity:.75;cursor:default}
+  .task .time{font-size:12px;font-weight:700;color:#6E6E76;flex:none}
+  .task.ghost{opacity:.7;cursor:default}
   .task.ghost .tick{visibility:hidden}
 
   /* subjects */
-  .subj-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .subj{border-radius:18px;padding:18px;display:flex;flex-direction:column}
+  .subj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px}
+  .subj{border-radius:18px;padding:18px;display:flex;flex-direction:column;min-width:0}
   .subj-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-  .subj-name{font-weight:800;font-size:15px;max-width:65%}
+  .subj-name{font-weight:800;font-size:15px}
   .ring{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
   .ring i{width:30px;height:30px;border-radius:50%;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;font-style:normal}
   .subj p{font-size:12.5px;font-weight:600;margin:8px 0 12px;flex:1}
   .subj .go{color:#fff;border:none;font-weight:700;font-size:13px;padding:8px 16px;border-radius:999px;cursor:pointer;align-self:flex-start}
-  .badge-new{font-size:10.5px;font-weight:700;background:#fff;color:var(--la-dark);padding:4px 10px;border-radius:999px}
 
   /* right column */
-  .stat-row{display:flex;align-items:baseline;gap:8px}
+  .stat-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
   .stat-row .big{font-size:26px;font-weight:800}
-  .stat-row .lbl{font-size:11.5px;font-weight:700;color:var(--muted)}
-  .stat-row .delta{margin-left:auto;font-size:12px;font-weight:700;color:var(--ana)}
-  .axis{display:flex;justify-content:space-between;font-size:10.5px;color:var(--faint);font-weight:600;margin-top:2px}
+  .stat-row .lbl{font-size:11.5px;font-weight:700;color:var(--faint)}
+  .stat-row .delta{margin-left:auto;font-size:12px;font-weight:700;color:var(--ana-dark)}
+  .axis{display:flex;justify-content:space-between;font-size:10.5px;color:#6E6E76;font-weight:600;margin-top:2px}
 
-  .hw{border-radius:14px;padding:12px 14px;display:block}
+  .hw{border-radius:14px;padding:12px 14px;display:block;min-width:0}
   .hw-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-  .hw-t{font-size:13.5px;font-weight:800;max-width:70%}
+  .hw-t{font-size:13.5px;font-weight:800}
   .hw-chip{font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;color:#fff;flex:none}
   .hw-s{font-size:11.5px;font-weight:600;margin-top:3px}
   .hw:hover{filter:brightness(.98)}
 
-  .scores{display:flex;gap:14px;flex-wrap:wrap}
-  .score{display:flex;flex-direction:column;align-items:center;gap:6px;width:60px;background:none;border:none;cursor:pointer;padding:0}
-  .score .c{width:48px;height:48px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
-  .score .n{font-size:10px;font-weight:700;color:#666;text-align:center}
+  .scores{display:flex;gap:12px;flex-wrap:wrap}
+  .score{display:flex;flex-direction:column;align-items:center;gap:6px;width:58px;background:none;border:none;cursor:pointer;padding:0}
+  .score .c{width:46px;height:46px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+  .score .n{font-size:10px;font-weight:700;color:#6E6E76;text-align:center}
   .score .c.empty{background:var(--off-bg) !important;color:#8A8A90}
   .hint-line{font-size:10.5px;color:#6E6E76;font-weight:600;margin-top:10px}
+
+  .mini-btn{background:#fff;border:1px solid var(--border);border-radius:999px;padding:6px 13px;font-size:12px;font-weight:700;color:var(--ink);cursor:pointer}
+  .mini-btn:hover{border-color:var(--algo)}
+  .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 
   /* tree */
   .tree-box{position:relative;width:150px;height:172px;margin:6px auto 0}
   .tree-bar{height:6px;background:#F0F0F2;border-radius:99px;overflow:hidden;margin:8px 0 6px}
   .tree-bar i{display:block;height:100%;background:var(--algo);width:0;transition:width .4s ease}
   .tree-stage{text-align:center;margin-top:4px;font-weight:800;font-size:14px}
-  .tree-xp{text-align:center;font-size:11.5px;color:var(--muted);font-weight:600}
+  .tree-xp{text-align:center;font-size:11.5px;color:var(--faint);font-weight:600}
+
+  /* dialog */
+  dialog{border:none;border-radius:20px;padding:0;max-width:min(420px,92vw);box-shadow:0 24px 60px rgba(0,0,0,.22)}
+  dialog::backdrop{background:rgba(20,20,25,.45)}
+  .dlg{padding:22px 24px}
+  .dlg h3{font-size:17px;font-weight:800;margin-bottom:4px}
+  .dlg p{font-size:12.5px;color:var(--muted);margin-bottom:14px}
+  .dlg label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin:10px 0 4px}
+  .dlg input[type=date]{width:100%;font:inherit;font-size:14px;padding:9px 11px;border:1px solid var(--border);border-radius:11px;background:#fff;color:var(--ink)}
 
   /* ---------- responsive ---------- */
   @media (max-width:980px){
     .shell{flex-direction:column}
-    aside{width:100%;height:auto;position:static;flex-direction:row;align-items:center;padding:14px 16px;gap:4px;overflow-x:auto}
-    .logo{margin-bottom:0;margin-right:10px}
-    .nav-link{padding:9px 11px;white-space:nowrap}
+    aside{width:100%;height:auto;position:static;flex-direction:row;align-items:center;
+          padding:10px 12px;gap:4px;overflow-x:auto;border-right:none;border-bottom:1px solid var(--border)}
+    aside::-webkit-scrollbar{display:none}
+    .logo{margin-bottom:0;margin-right:8px;font-size:16px;padding:0 4px}
+    .logo .dot{width:20px;height:20px}
+    .nav-link{padding:8px 11px;white-space:nowrap;font-size:13px}
     .nav-link svg{display:none}
-    .streak-card{margin-top:0;margin-left:auto;padding:8px 12px;border-radius:12px;display:flex;align-items:center;gap:8px;flex:none}
-    .streak-sub{display:none}
-    .src-line{display:none}
-    main{padding:22px 16px}
+    .streak-card,.src-line{display:none}      /* streak moves into the header */
+    .pill.streak-m{display:flex}
+    main{padding:20px 14px}
     .grid{grid-template-columns:1fr}
-    .subj-grid{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
-    .h1{font-size:24px}
+    .card{padding:16px 15px;border-radius:16px}
+    .upnext{padding:16px 17px}
+    .task{padding:11px 12px}
+    .task .time{display:none}                 /* the date is already in the section label */
+  }
+  @media (max-width:420px){
+    .chips span{padding:2px 4px;font-size:10px}
+    .cd{flex:1 1 100%}
   }
 </style>
 </head>
@@ -158,7 +188,7 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F0A93A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 2 7a4 4 0 0 1-8 0c0-1.153.433-2.294 1-3z"/></svg>
         <b id="streak-n">0</b>
       </div>
-      <div class="streak-sub" id="streak-sub">day streak — don't break it</div>
+      <div class="streak-sub" id="streak-sub">days with work done</div>
     </div>
     <div class="src-line">Universität Wien · first-year maths · <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a></div>
   </aside>
@@ -166,20 +196,27 @@
   <main>
     <div class="head">
       <div>
-        <div class="kicker"><span id="day-label">Today</span> · <button id="week-btn" title="Click to change the plan week">Week 1 of 6</button></div>
-        <div class="h1">Keep the streak alive</div>
+        <div class="kicker" id="kicker">…</div>
+        <div class="h1" id="headline">Keep the streak alive</div>
       </div>
       <div class="pills">
+        <div class="pill streak-m">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F0A93A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 2 7a4 4 0 0 1-8 0c0-1.153.433-2.294 1-3z"/></svg>
+          <span id="streak-m">0</span>
+        </div>
         <div class="pill">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#8B5CF6" stroke="none"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="#8B5CF6" stroke="none"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
           <span id="xp-label">0 XP</span>
         </div>
         <div class="pill lv"><span id="lv-label">Lv. 1</span></div>
       </div>
     </div>
 
+    <!-- exam countdown -->
+    <div class="countdown" id="countdown"></div>
+
     <div class="grid">
-      <!-- ============ left column ============ -->
+      <!-- ============ left ============ -->
       <div class="col">
 
         <div class="upnext card" id="upnext">
@@ -193,11 +230,11 @@
         </div>
 
         <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div class="tasks-head">
             <div class="card-h">Today &amp; tomorrow</div>
             <div class="chips" id="day-chips"></div>
           </div>
-          <div class="sect-lbl">Today</div>
+          <div class="sect-lbl" id="today-lbl">Today</div>
           <div class="tasks" id="today-tasks" style="margin-bottom:16px"></div>
           <div class="sect-lbl" id="tomorrow-lbl">Tomorrow</div>
           <div class="tasks" id="tomorrow-tasks"></div>
@@ -206,47 +243,43 @@
         <div>
           <div class="card-h" style="margin-bottom:12px">Your subjects</div>
           <div class="subj-grid">
-
             <div class="subj" style="background:var(--algo-bg)">
               <div class="subj-top">
                 <div class="subj-name">Algorithms &amp; Data Structures</div>
-                <div class="ring" id="ring-algo" style="background:conic-gradient(var(--algo) 0%, #ffffff88 0)"><i style="background:var(--algo-bg)">0%</i></div>
+                <div class="ring" id="ring-algo"><i style="background:var(--algo-bg)">0%</i></div>
               </div>
-              <p style="color:var(--algo-dark)" id="sub-algo">47-card deck · mock exam · proofs</p>
+              <p style="color:var(--algo-dark)" id="sub-algo">—</p>
               <a class="go" style="background:var(--algo)" href="algorithms/index.html">Continue</a>
             </div>
-
             <div class="subj" style="background:var(--ana-bg)">
               <div class="subj-top">
                 <div class="subj-name">Analysis</div>
-                <div class="ring" id="ring-ana" style="background:conic-gradient(var(--ana) 0%, #ffffff88 0)"><i style="background:var(--ana-bg)">0%</i></div>
+                <div class="ring" id="ring-ana"><i style="background:var(--ana-bg)">0%</i></div>
               </div>
-              <p style="color:var(--ana-dark)" id="sub-ana">Study guide · 10 blocks · flashcards</p>
+              <p style="color:var(--ana-dark)" id="sub-ana">—</p>
               <a class="go" style="background:var(--ana)" href="analysis/index.html">Continue</a>
             </div>
-
             <div class="subj" style="background:var(--lads-bg)">
               <div class="subj-top">
                 <div class="subj-name">Linear Algebra for DS</div>
-                <div class="ring" id="ring-lads" style="background:conic-gradient(var(--lads) 0%, #ffffff88 0)"><i style="background:var(--lads-bg)">0%</i></div>
+                <div class="ring" id="ring-lads"><i style="background:var(--lads-bg)">0%</i></div>
               </div>
-              <p style="color:var(--lads-dark)" id="sub-lads">SVD chapter just added</p>
+              <p style="color:var(--lads-dark)" id="sub-lads">—</p>
               <a class="go" style="background:var(--lads)" href="linear-algebra-ds/index.html">Continue</a>
             </div>
-
             <div class="subj" style="background:var(--la-bg)">
               <div class="subj-top">
                 <div class="subj-name">Linear Algebra (Intro)</div>
-                <span class="badge-new">exam notes</span>
+                <div class="ring" id="ring-la"><i style="background:var(--la-bg)">0%</i></div>
               </div>
-              <p style="color:var(--la-dark)">Five mock exams waiting</p>
-              <a class="go" style="background:#fff;color:var(--la-dark)" href="linear-algebra/index.html">Start</a>
+              <p style="color:var(--la-dark)" id="sub-la">—</p>
+              <a class="go" style="background:var(--la)" href="linear-algebra/index.html">Open</a>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ============ right column ============ -->
+      <!-- ============ right ============ -->
       <div class="col">
 
         <div class="card" id="performance">
@@ -272,10 +305,10 @@
           <div class="scores">
             <button class="score" data-score="algo"><span class="c" style="background:var(--algo)">—</span><span class="n">Algo</span></button>
             <button class="score" data-score="ana"><span class="c" style="background:var(--ana)">—</span><span class="n">Analysis</span></button>
-            <button class="score" data-score="la"><span class="c" style="background:var(--la)">—</span><span class="n">LA</span></button>
             <button class="score" data-score="lads"><span class="c" style="background:var(--lads)">—</span><span class="n">LA-DS</span></button>
+            <button class="score" data-score="la"><span class="c" style="background:var(--la)">—</span><span class="n">LA intro</span></button>
           </div>
-          <div class="hint-line">Tap a circle to record a mock-exam score (0–100). Stored only in your browser.</div>
+          <div class="hint-line">Tap a circle to record a mock score (0–100). Stored only in your browser.</div>
         </div>
 
         <div class="card">
@@ -284,120 +317,171 @@
           <div class="tree-stage" id="tree-stage">Seed</div>
           <div class="tree-bar"><i id="tree-bar"></i></div>
           <div class="tree-xp" id="tree-xp"></div>
-          <div class="hint-line" style="text-align:center">XP grows from checked-off tasks, flashcards learned, blocks, chapters &amp; practice sheets.</div>
+          <div class="hint-line" style="text-align:center">XP comes from checked-off tasks, cards learned, blocks, chapters &amp; practice sheets.</div>
+        </div>
+
+        <div class="card">
+          <div class="card-h" style="font-size:15px;margin-bottom:4px">Backup</div>
+          <div class="hint-line" style="margin-top:2px">Everything lives in this browser only. Export before clearing site data or switching device — one file covers every page's progress.</div>
+          <div class="btn-row">
+            <button class="mini-btn" id="btn-export">⭳ Export all progress</button>
+            <button class="mini-btn" id="btn-import">⭱ Import</button>
+            <button class="mini-btn" id="btn-dates">📅 Exam dates</button>
+          </div>
+          <input type="file" id="file-import" accept="application/json" hidden>
         </div>
       </div>
     </div>
   </main>
 </div>
 
+<dialog id="dlg-dates"><form method="dialog" class="dlg">
+  <h3>Exam dates</h3>
+  <p>Set these once. The plan week, the countdown and "up next" all position themselves from the <b>earliest</b> date — no more clicking the week forward.</p>
+  <label for="d-algo">Algorithms &amp; Data Structures</label>
+  <input type="date" id="d-algo">
+  <label for="d-ana">Analysis</label>
+  <input type="date" id="d-ana">
+  <label for="d-lads">Linear Algebra for Data Science</label>
+  <input type="date" id="d-lads">
+  <label for="d-la">Linear Algebra (Intro)</label>
+  <input type="date" id="d-la">
+  <div class="btn-row" style="margin-top:18px">
+    <button class="btn-dark" style="padding:9px 18px;font-size:13px" value="save">Save</button>
+    <button class="mini-btn" value="cancel" formnovalidate>Cancel</button>
+  </div>
+</form></dialog>
+
+<script src="assets/plan.js"></script>
 <script>
 (function(){
   'use strict';
-  /* ================= the 6-week plan (mirrors study-plan.html) ================= */
-  var DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  var DAY_FULL = { Mon:'Monday', Tue:'Tuesday', Wed:'Wednesday', Thu:'Thursday', Fri:'Friday', Sat:'Saturday', Sun:'Sunday' };
-  var RHYTHM = ['algo','ana','la','algo','ana','la', null]; // Mon..Sun
-  var META = {
-    algo:{ name:'Algorithms', bg:'var(--algo-bg)', accent:'var(--algo)', dark:'var(--algo-dark)', href:'algorithms/index.html' },
-    ana:{ name:'Analysis', bg:'var(--ana-bg)', accent:'var(--ana)', dark:'var(--ana-dark)', href:'analysis/index.html' },
-    la:{ name:'Linear Algebra', bg:'var(--la-bg)', accent:'var(--la)', dark:'var(--la-dark)', href:'linear-algebra-ds/index.html' }
-  };
-  var OFF = { name:'Off / catch-up', bg:'var(--off-bg)', accent:'var(--off)', dark:'var(--off-dark)', href:'study-plan.html' };
-  var WEEK_PLAN = {
-    1:{ algo:'Data-structure notes end to end; drill groups A–B', ana:'Study guide blocks 1–2; daily-practice sheets 1–3', la:'Chapters 1–2 — vector spaces, inner products' },
-    2:{ algo:'Exam-proofs ①–③ actively; drill groups C–D', ana:'Blocks 3–6 incl. convexity; daily-practice sheets 4–7', la:'Chapters 3–4 — bilinear forms, determinants' },
-    3:{ algo:'Huffman & loop-invariant proofs from memory', ana:'Exam-priority proofs, one block per session', la:'Chapter 5 — eigenvalues, diagonalization workflow' },
-    4:{ algo:'Quicksort, lower-bound, selection & hashing proofs', ana:'Maybe-tier proofs + highest-priority problem sets', la:'Chapter 6 — spectral theorems, SVD by hand' },
-    5:{ algo:'Real first-date exam paper, timed & graded', ana:'Self-test: one priority problem per sheet, under time', la:'Simulated exam — one exercise per chapter, 90 min' },
-    6:{ algo:'Redo failed sub-questions from week 5, from scratch', ana:'Dropped-points list only; final exam-focus pass', la:'Dropped-points list; final definitions pass' }
-  };
-  var HOMEWORK = {
-    1:[ {t:'Data-structure notes', s:'Heaps → RBT → hashing, end to end', k:'algo', href:'algorithms/data-structures.html'},
-        {t:'Daily practice 1–3', s:'Analysis warm-up sheets', k:'ana', href:'analysis/daily-practice.html'},
-        {t:'LA chapters 1–2', s:'Vector spaces & inner products', k:'la', href:'linear-algebra-ds/index.html'} ],
-    2:[ {t:'Exam-proofs ①–③', s:'Loop invariants, Master, Akra–Bazzi', k:'algo', href:'algorithms/exam-proofs.html'},
-        {t:'Daily practice 4–7', s:'Cumulative review + fresh tasks', k:'ana', href:'analysis/daily-practice.html'},
-        {t:'LA chapters 3–4', s:'Bilinear forms & determinants', k:'la', href:'linear-algebra-ds/index.html'} ],
-    3:[ {t:'Huffman from memory', s:'The 8-point proof, closed book', k:'algo', href:'algorithms/exam-proofs.html#huffman'},
-        {t:'Priority proofs', s:'One study-guide block per session', k:'ana', href:'analysis/study-guide/index.html'},
-        {t:'Eigenvalue workflow', s:'Char. poly → eigenspaces → diagonalize', k:'la', href:'linear-algebra-ds/index.html'} ],
-    4:[ {t:'Rotation-risk proofs', s:'Quicksort, lower bound, selection, hashing', k:'algo', href:'algorithms/exam-proofs.html'},
-        {t:'Problem-set priorities', s:'✅-tagged questions under time', k:'ana', href:'analysis/index.html'},
-        {t:'SVD mini-lab', s:'One 2×2 by hand, verify with numpy', k:'la', href:'linear-algebra-ds/index.html'} ],
-    5:[ {t:'Mock exam (real paper)', s:'Timed, closed book, graded honestly', k:'algo', href:'algorithms/mock-exam-1.html'},
-        {t:'Sheet self-test', s:'One priority problem per sheet', k:'ana', href:'analysis/index.html'},
-        {t:'Simulated LA exam', s:'One exercise per chapter, 90 min', k:'la', href:'linear-algebra-ds/index.html'} ],
-    6:[ {t:'Redo dropped points', s:'Only what the mocks exposed', k:'algo', href:'algorithms/mock-exam-1.html'},
-        {t:'Final exam-focus pass', s:'Then flashcards only', k:'ana', href:'analysis/study-guide/index.html'},
-        {t:'Definitions pass', s:'Norms, diagonalizability, SVD statement', k:'la', href:'linear-algebra-ds/index.html'} ]
-  };
+  var P = window.MFDS_PLAN;
+  var DAYS = P.days, DAY_FULL = P.dayFull;
 
-  /* ================= local state ================= */
+  /* ================= state ================= */
   var KEY = 'hub-state-v1';
-  var state = { v:1, week:1, visits:{}, tasks:{}, scores:{} };
+  var state = { v:2, examDates:{}, worked:{}, tasks:{}, scores:{} };
   try {
     var raw = JSON.parse(localStorage.getItem(KEY) || 'null');
-    if (raw && raw.v === 1) state = Object.assign(state, raw);
+    if (raw) {
+      state = Object.assign(state, raw);
+      state.examDates = state.examDates || {};
+      state.worked    = state.worked    || {};   // days with real work done
+      state.tasks     = state.tasks     || {};
+      state.scores    = state.scores    || {};
+      state.v = 2;
+    }
   } catch(e){}
   function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
   function iso(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function fromIso(s){ return new Date(s+'T12:00:00'); }
 
-  var today = new Date();
+  var today = new Date(); today.setHours(12,0,0,0);
   var todayIso = iso(today);
-  var dayIdx = (today.getDay()+6)%7;           // Mon=0 … Sun=6
+  var dayIdx = (today.getDay()+6)%7;                 // Mon=0 … Sun=6
   var tomorrowIdx = (dayIdx+1)%7;
 
-  /* visit + streak */
-  state.visits[todayIso] = true; save();
-  var streak = 0, cur = new Date(today);
-  while (state.visits[iso(cur)]) { streak++; cur.setDate(cur.getDate()-1); }
+  /* ================= exam dates → week + countdown ================= */
+  var SUBJ = [
+    {k:'algo', label:'Algorithms',        bg:'var(--algo-bg)', fg:'var(--algo-dark)'},
+    {k:'ana',  label:'Analysis',          bg:'var(--ana-bg)',  fg:'var(--ana-dark)'},
+    {k:'lads', label:'LA for DS',         bg:'var(--lads-bg)', fg:'var(--lads-dark)'},
+    {k:'la',   label:'LA (Intro)',        bg:'var(--la-bg)',   fg:'var(--la-dark)'}
+  ];
+  function daysUntil(isoStr){
+    return Math.round((fromIso(isoStr) - today) / 86400000);
+  }
+  function upcoming(){
+    return SUBJ.map(function(s){
+      var d = state.examDates[s.k];
+      return d ? Object.assign({}, s, {date:d, days:daysUntil(d)}) : null;
+    }).filter(Boolean).filter(function(x){ return x.days >= 0; })
+      .sort(function(a,b){ return a.days - b.days; });
+  }
+  /* week 1..6 counting backwards from the nearest exam (6 weeks of plan) */
+  function currentWeek(){
+    var up = upcoming();
+    if (!up.length) return null;
+    var d = up[0].days;
+    var w = 6 - Math.floor(d / 7);
+    return Math.max(1, Math.min(6, w));
+  }
+  var week = currentWeek() || 1;
 
-  /* ================= read progress from the site's own stores ================= */
+  function renderCountdown(){
+    var el = document.getElementById('countdown');
+    var up = upcoming();
+    if (!up.length){
+      el.innerHTML = '<div class="cd unset"><button id="cd-set">'+
+        '<div class="cd-n">No exam dates set</div>'+
+        '<div class="cd-d" style="font-size:15px">Set them →</div>'+
+        '<div class="cd-s">the plan week and countdown follow from them</div></button></div>';
+      document.getElementById('cd-set').onclick = openDates;
+      return;
+    }
+    el.innerHTML = up.map(function(x){
+      var lbl = x.days === 0 ? 'today' : (x.days === 1 ? '1 day' : x.days+' days');
+      return '<div class="cd" style="background:'+x.bg+';color:'+x.fg+'">'+
+             '<div class="cd-n">'+x.label+'</div>'+
+             '<div class="cd-d">'+lbl+'</div>'+
+             '<div class="cd-s">'+fromIso(x.date).toLocaleDateString(undefined,{day:'numeric',month:'short'})+'</div></div>';
+    }).join('');
+  }
+
+  /* ================= progress read from every page's own store ================= */
   function readJSON(k){ try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch(e){ return null; } }
   function deckLearned(key){
-    var s = readJSON(key) || {}; var n = 0;
+    var s = readJSON(key) || {}, n = 0;
     for (var id in s) if (s[id] && s[id].box >= 3) n++;
     return n;
   }
-  var algoLearned = deckLearned('fc_algodat_v1');           // of 47
-  var anaLearned  = deckLearned('fc_analysis_day1_v1');     // of 36
-  var asg = readJSON('asg-progress-v1');                    // {blocks:{'1'..'10':bool}}
-  var blocksDone = 0; if (asg && asg.blocks) for (var b in asg.blocks) if (asg.blocks[b]) blocksDone++;
-  var lads = readJSON('lads-progress-v1');                  // {chapters:{'1'..'6':{done}}}
-  var chaptersDone = 0; if (lads && lads.chapters) for (var c in lads.chapters) if (lads.chapters[c] && lads.chapters[c].done) chaptersDone++;
-  var daily = readJSON('analysis-daily-v1');                // {days:{..:bool}}
-  var sheetsDone = 0; if (daily && daily.days) for (var d in daily.days) if (daily.days[d]) sheetsDone++;
-  /* XP: deterministic, recomputed from real progress — never a stored counter */
-  function computeXp(){
-    var done = 0; for (var t in state.tasks) if (state.tasks[t]) done++;
-    return done*25 + (algoLearned+anaLearned)*20 + blocksDone*80 + chaptersDone*100 + sheetsDone*40;
+  var algoLearned = deckLearned('fc_algodat_v1');        // /47
+  var anaLearned  = deckLearned('fc_analysis_day1_v1');  // /36
+  var ladsLearned = deckLearned('fc_lads_v1');           // /45
+  var asg = readJSON('asg-progress-v1'); var blocksDone = 0;
+  if (asg && asg.blocks) for (var b in asg.blocks) if (asg.blocks[b]) blocksDone++;
+  var lads = readJSON('lads-progress-v1'); var chaptersDone = 0;
+  if (lads && lads.chapters) for (var c in lads.chapters) if (lads.chapters[c] && lads.chapters[c].done) chaptersDone++;
+  var daily = readJSON('analysis-daily-v1'); var sheetsDone = 0;
+  if (daily && daily.days) for (var d in daily.days) if (daily.days[d]) sheetsDone++;
+  var tasksDone = 0; for (var t in state.tasks) if (state.tasks[t]) tasksDone++;
+
+  var xp = tasksDone*25 + (algoLearned+anaLearned+ladsLearned)*20 + blocksDone*80 + chaptersDone*100 + sheetsDone*40;
+  var THRESH = [0,500,1500,3000,5000], STAGES = ['Seed','Sprout','Sapling','Budding','Flourishing'];
+
+  /* ================= streak: days with work, not page-opens ================= */
+  var streak = 0, cur = new Date(today);
+  while (state.worked[iso(cur)]) { streak++; cur.setDate(cur.getDate()-1); }
+  function markWorked(){
+    if (!state.worked[todayIso]) { state.worked[todayIso] = true; save(); }
   }
-  var THRESH = [0,500,1500,3000,5000];
-  var STAGES = ['Seed','Sprout','Sapling','Budding','Flourishing'];
 
   /* ================= header ================= */
-  document.getElementById('day-label').textContent = DAY_FULL[DAYS[dayIdx]];
-  var weekBtn = document.getElementById('week-btn');
-  function renderWeekBtn(){ weekBtn.textContent = 'Week '+state.week+' of 6'; }
-  weekBtn.onclick = function(){ state.week = state.week % 6 + 1; save(); renderWeekBtn(); renderSchedule(); renderHomework(); };
-  renderWeekBtn();
-  document.getElementById('streak-n').textContent = streak;
-  document.getElementById('streak-sub').textContent = streak >= 2 ? 'day streak — don’t break it' : 'come back tomorrow to start a streak';
+  function renderHeader(){
+    var up = upcoming();
+    var wk = currentWeek();
+    var parts = [DAY_FULL[DAYS[dayIdx]]];
+    parts.push(wk ? 'Week '+wk+' of 6' : 'plan not started');
+    document.getElementById('kicker').textContent = parts.join(' · ');
+    document.getElementById('headline').textContent =
+      up.length ? (up[0].days <= 7 ? up[0].label+' exam is close' : 'Keep the streak alive')
+                : 'Keep the streak alive';
+    document.getElementById('xp-label').textContent = xp.toLocaleString()+' XP';
+    document.getElementById('lv-label').textContent = 'Lv. '+(Math.floor(xp/500)+1);
+    document.getElementById('streak-n').textContent = streak;
+    document.getElementById('streak-m').textContent = streak;
+    document.getElementById('streak-sub').textContent =
+      streak === 0 ? 'check a task off to start'
+                   : (streak === 1 ? 'day with work done' : 'days with work done');
+  }
 
   /* ================= schedule ================= */
-  function buildTask(idx, week){
-    var k = RHYTHM[idx];
-    if (!k) return Object.assign({ detail:'Rest, or use the daily flashcard block.', slug:'off' }, OFF);
-    var m = META[k];
-    return { name:m.name, detail:WEEK_PLAN[week][k], bg:m.bg, accent:m.accent, dark:m.dark, href:m.href, slug:k };
-  }
-  var CARDS_TASK = { name:'Flashcards — AlgoDat + Analysis', detail:'20–30 min, whatever is due', bg:'var(--lads-bg)', accent:'var(--lads)', dark:'var(--lads-dark)', href:'algorithms/flashcards.html', slug:'cards' };
-
+  var CARDS = Object.assign({}, P.daily);
   function taskEl(task, dateIso, ghost){
     var id = dateIso+':'+task.slug;
     var done = !!state.tasks[id];
-    var el = document.createElement(ghost ? 'div' : 'div');
+    var el = document.createElement('div');
     el.className = 'task'+(ghost?' ghost':'')+(done&&!ghost?' done':'');
     el.style.background = task.bg;
     el.innerHTML = '<span class="tick">✓</span>'+
@@ -405,63 +489,73 @@
       '<span class="s" style="color:'+task.dark+'">'+task.name+'</span></span>'+
       '<span class="time">'+(ghost?DAYS[tomorrowIdx]:'today')+'</span>';
     if (!ghost){
-      el.title = 'Click to mark done (earns XP)';
+      el.title = 'Mark done (earns XP and keeps the streak)';
       el.onclick = function(){
-        state.tasks[id] = !state.tasks[id]; save();
+        state.tasks[id] = !state.tasks[id];
+        if (state.tasks[id]) markWorked();
+        save();
         el.classList.toggle('done', !!state.tasks[id]);
-        renderProgress();
+        recomputeStats();
       };
     }
     return el;
   }
   function renderSchedule(){
-    var wk = state.week;
-    var t1 = buildTask(dayIdx, wk), t2 = buildTask(tomorrowIdx, wk);
+    var t1 = P.taskFor(dayIdx, week), t2 = P.taskFor(tomorrowIdx, week);
     document.getElementById('upnext-k').textContent = 'UP NEXT · '+DAY_FULL[DAYS[dayIdx]];
     document.getElementById('upnext-t').innerHTML = t1.name+' <span>— '+t1.detail+'</span>';
-    var un = document.getElementById('upnext'); un.style.background = t1.bg; un.style.border='none';
+    var un = document.getElementById('upnext');
+    un.style.background = t1.bg;
     document.getElementById('upnext-k').style.color = t1.dark;
     document.getElementById('upnext-btn').href = t1.href;
+
     var chips = document.getElementById('day-chips'); chips.innerHTML='';
-    DAYS.forEach(function(d,i){ var s=document.createElement('span'); s.textContent=d.toUpperCase(); if(i===dayIdx)s.className='on'; chips.appendChild(s); });
+    DAYS.forEach(function(d,i){
+      var s=document.createElement('span'); s.textContent=d.toUpperCase();
+      if(i===dayIdx) s.className='on'; chips.appendChild(s);
+    });
+
     var tt = document.getElementById('today-tasks'); tt.innerHTML='';
     tt.appendChild(taskEl(t1, todayIso, false));
-    tt.appendChild(taskEl(CARDS_TASK, todayIso, false));
+    tt.appendChild(taskEl(CARDS, todayIso, false));
     document.getElementById('tomorrow-lbl').textContent = 'Tomorrow — '+DAY_FULL[DAYS[tomorrowIdx]];
     var tm = document.getElementById('tomorrow-tasks'); tm.innerHTML='';
     tm.appendChild(taskEl(t2, 'x', true));
-    tm.appendChild(taskEl(CARDS_TASK, 'x', true));
+    tm.appendChild(taskEl(CARDS, 'x', true));
   }
-  renderSchedule();
 
-  /* ================= subjects (real progress) ================= */
-  function ring(id, pct, bgVar, accentVar){
+  /* ================= subjects ================= */
+  function ring(id, pct, accent){
     var r = document.getElementById(id);
-    r.style.background = 'conic-gradient('+accentVar+' '+pct+'%, #ffffff88 0)';
+    r.style.background = 'conic-gradient('+accent+' '+pct+'%, #ffffff88 0)';
     r.querySelector('i').textContent = pct+'%';
   }
-  var algoPct = Math.round(100*algoLearned/47);
-  var anaPct = Math.round(100*blocksDone/10);
-  var ladsPct = Math.round(100*chaptersDone/6);
-  ring('ring-algo', algoPct, 'var(--algo-bg)', 'var(--algo)');
-  ring('ring-ana', anaPct, 'var(--ana-bg)', 'var(--ana)');
-  ring('ring-lads', ladsPct, 'var(--lads-bg)', 'var(--lads)');
-  document.getElementById('sub-algo').textContent = algoLearned+' of 47 flashcards mastered';
-  document.getElementById('sub-ana').textContent = blocksDone+' of 10 study-guide blocks complete';
-  document.getElementById('sub-lads').textContent = chaptersDone ? chaptersDone+' of 6 chapters complete' : 'SVD chapter just added';
+  function renderSubjects(){
+    var a = Math.round(100*algoLearned/47),
+        n = Math.round(100*blocksDone/10),
+        l = Math.round(100*chaptersDone/6),
+        i = Math.round(100*ladsLearned/45);
+    ring('ring-algo', a, 'var(--algo)');
+    ring('ring-ana',  n, 'var(--ana)');
+    ring('ring-lads', Math.round((l + i)/2), 'var(--lads)');
+    ring('ring-la',   state.scores.la != null ? state.scores.la : 0, 'var(--la)');
+    document.getElementById('sub-algo').textContent = algoLearned+' of 47 cards mastered';
+    document.getElementById('sub-ana').textContent  = blocksDone+' of 10 guide blocks complete';
+    document.getElementById('sub-lads').textContent = chaptersDone+' of 6 chapters · '+ladsLearned+' of 45 cards';
+    document.getElementById('sub-la').textContent   = 'Exam notes + five mock exams';
+  }
 
-  /* ================= performance sparkline (tasks per ISO week) ================= */
+  /* ================= sparkline ================= */
   function weekStart(d){ var x=new Date(d); x.setDate(x.getDate()-((x.getDay()+6)%7)); x.setHours(0,0,0,0); return x; }
   function renderSpark(){
-    var buckets = [], labels = [];
+    var buckets=[], labels=[];
     for (var w=6; w>=0; w--){
       var ws = weekStart(today); ws.setDate(ws.getDate()-7*w);
       var count = 0;
       for (var key in state.tasks){
         if (!state.tasks[key]) continue;
         var ds = key.split(':')[0]; if (ds==='x') continue;
-        var dt = new Date(ds+'T12:00:00');
-        if (weekStart(dt).getTime() === ws.getTime()) count++;
+        if (weekStart(fromIso(ds)).getTime() === ws.getTime()) count++;
       }
       buckets.push(count); labels.push(w===0 ? 'now' : 'W−'+w);
     }
@@ -479,25 +573,23 @@
 
   /* ================= homework ================= */
   function renderHomework(){
-    document.getElementById('hw-week').textContent = '· week '+state.week;
+    document.getElementById('hw-week').textContent = '· week '+week;
     var list = document.getElementById('hw-list'); list.innerHTML='';
-    HOMEWORK[state.week].forEach(function(h){
-      var m = META[h.k];
+    P.homework[week].forEach(function(h){
+      var m = P.subjects[h.k];
       var a = document.createElement('a');
       a.className='hw'; a.href=h.href; a.style.background=m.bg;
       a.innerHTML = '<span class="hw-top"><span class="hw-t">'+h.t+'</span>'+
-        '<span class="hw-chip" style="background:'+m.accent+'">Assigned</span></span>'+
+        '<span class="hw-chip" style="background:'+m.accent+'">Week '+week+'</span></span>'+
         '<span class="hw-s" style="color:'+m.dark+'">'+h.s+'</span>';
       list.appendChild(a);
     });
   }
-  renderHomework();
 
-  /* ================= mock scores (tap to record) ================= */
+  /* ================= scores ================= */
   function renderScores(){
     document.querySelectorAll('.score').forEach(function(btn){
-      var k = btn.dataset.score, c = btn.querySelector('.c');
-      var v = state.scores[k];
+      var k = btn.dataset.score, c = btn.querySelector('.c'), v = state.scores[k];
       if (v == null){ c.textContent='—'; c.classList.add('empty'); }
       else { c.textContent=v; c.classList.remove('empty'); }
     });
@@ -505,26 +597,26 @@
   document.querySelectorAll('.score').forEach(function(btn){
     btn.onclick = function(){
       var k = btn.dataset.score;
-      var cur = state.scores[k];
-      var v = prompt('Mock score for '+btn.querySelector('.n').textContent+' (0–100, empty to clear):', cur==null?'':cur);
+      var v = prompt('Mock score for '+btn.querySelector('.n').textContent+' (0–100, empty to clear):',
+                     state.scores[k]==null?'':state.scores[k]);
       if (v === null) return;
       v = v.trim();
-      if (v === ''){ delete state.scores[k]; }
-      else { var n = Math.max(0, Math.min(100, parseInt(v,10))); if (!isNaN(n)) state.scores[k] = n; }
-      save(); renderScores();
+      if (v === '') delete state.scores[k];
+      else { var num = Math.max(0, Math.min(100, parseInt(v,10))); if (!isNaN(num)) state.scores[k] = num; }
+      save(); renderScores(); renderSubjects();
     };
   });
-  renderScores();
 
-  /* ================= mandarin tree ================= */
+  /* ================= tree ================= */
   var TREE = [
-    { trunk:0, canopy:[], fruits:[] },
+    { trunk:0,  canopy:[], fruits:[] },
     { trunk:26, canopy:[[58,26,34]], fruits:[] },
     { trunk:44, canopy:[[50,40,34],[70,50,30],[44,58,28]], fruits:[] },
     { trunk:56, canopy:[[44,50,36],[68,56,34],[38,68,30],[78,74,28],[56,80,32]], fruits:[[52,60,11],[74,66,11],[60,82,10]] },
-    { trunk:60, canopy:[[40,52,38],[70,58,36],[32,70,32],[82,76,30],[52,82,34],[66,88,28],[44,92,26]], fruits:[[46,60,13],[78,64,12],[56,74,13],[34,78,12],[70,86,12],[48,92,11],[62,96,12]] }
+    { trunk:60, canopy:[[40,52,38],[70,58,36],[32,70,32],[82,76,30],[52,82,34],[66,88,28],[44,92,26]],
+                fruits:[[46,60,13],[78,64,12],[56,74,13],[34,78,12],[70,86,12],[48,92,11],[62,96,12]] }
   ];
-  function renderTree(xp){
+  function renderTree(){
     var stage = 0;
     for (var i=0;i<THRESH.length;i++) if (xp >= THRESH[i]) stage = i;
     var maxStage = THRESH.length-1;
@@ -544,15 +636,78 @@
     document.getElementById('tree-xp').textContent = stage>=maxStage ? 'Fully grown 🍊' : (next-xp)+' XP to '+STAGES[stage+1];
   }
 
-  /* everything that depends on XP / completed tasks — re-runnable */
-  function renderProgress(){
-    var xp = computeXp();
-    document.getElementById('xp-label').textContent = xp.toLocaleString()+' XP';
-    document.getElementById('lv-label').textContent = 'Lv. '+(Math.floor(xp/500)+1);
-    renderSpark();
-    renderTree(xp);
+  /* recompute the derived numbers after a task toggle, without a reload */
+  function recomputeStats(){
+    tasksDone = 0; for (var t in state.tasks) if (state.tasks[t]) tasksDone++;
+    xp = tasksDone*25 + (algoLearned+anaLearned+ladsLearned)*20 + blocksDone*80 + chaptersDone*100 + sheetsDone*40;
+    streak = 0; var c = new Date(today);
+    while (state.worked[iso(c)]) { streak++; c.setDate(c.getDate()-1); }
+    renderHeader(); renderSpark(); renderTree();
   }
-  renderProgress();
+
+  /* ================= backup: one file for every key ================= */
+  document.getElementById('btn-export').onclick = function(){
+    var bundle = { app:'mfds', v:1, exportedAt:new Date().toISOString(), data:{} };
+    P.storageKeys.forEach(function(k){
+      var raw = localStorage.getItem(k);
+      if (raw !== null) bundle.data[k] = raw;
+    });
+    var blob = new Blob([JSON.stringify(bundle, null, 2)], {type:'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'mfds-progress-'+todayIso+'.json';
+    a.click(); URL.revokeObjectURL(a.href);
+  };
+  document.getElementById('btn-import').onclick = function(){ document.getElementById('file-import').click(); };
+  document.getElementById('file-import').onchange = function(e){
+    var f = e.target.files[0]; if (!f) return;
+    var r = new FileReader();
+    r.onload = function(){
+      try {
+        var b = JSON.parse(r.result);
+        if (!b || b.app !== 'mfds' || !b.data) throw new Error('not an MFDS backup');
+        var n = 0;
+        Object.keys(b.data).forEach(function(k){
+          if (P.storageKeys.indexOf(k) === -1) return;   // ignore unknown keys
+          localStorage.setItem(k, b.data[k]); n++;
+        });
+        alert('Restored '+n+' of '+P.storageKeys.length+' progress stores. Reloading.');
+        location.reload();
+      } catch(err){ alert('Could not read that file: '+err.message); }
+    };
+    r.readAsText(f);
+    e.target.value = '';
+  };
+
+  /* ================= exam-date dialog ================= */
+  var dlg = document.getElementById('dlg-dates');
+  function openDates(){
+    ['algo','ana','lads','la'].forEach(function(k){
+      document.getElementById('d-'+k).value = state.examDates[k] || '';
+    });
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open','');
+  }
+  document.getElementById('btn-dates').onclick = openDates;
+  dlg.addEventListener('close', function(){
+    if (dlg.returnValue !== 'save') return;
+    ['algo','ana','lads','la'].forEach(function(k){
+      var v = document.getElementById('d-'+k).value;
+      if (v) state.examDates[k] = v; else delete state.examDates[k];
+    });
+    save();
+    week = currentWeek() || 1;
+    renderCountdown(); renderHeader(); renderSchedule(); renderHomework();
+  });
+
+  /* ================= go ================= */
+  renderCountdown();
+  renderHeader();
+  renderSchedule();
+  renderSubjects();
+  renderSpark();
+  renderHomework();
+  renderScores();
+  renderTree();
 })();
 </script>
 </body>
