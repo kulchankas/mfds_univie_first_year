@@ -65,7 +65,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   <a class="back-link" href="index.html">← Algorithms &amp; Data Structures</a>
   <div class="eyebrow">Universität Wien · Prof. Schichl · runtime analysis</div>
   <h1>Recurrence drills</h1>
-  <p class="lede">Exam question 2 is always: <em>"give asymptotically tight upper and lower bounds"</em> — i.e. a justified $\Theta$. All four recurrences on the first-date paper were the <b>case-2 / log-factor family</b>, including one the vanilla Master Theorem can't solve. This page: the decision procedure, then 21 drills.</p>
+  <p class="lede">Exam question 2 is always: <em>"give asymptotically tight upper and lower bounds"</em> — i.e. a justified $\Theta$. All four recurrences on the first-date paper were the <b>case-2 / log-factor family</b>, including one the vanilla Master Theorem can't solve. This page: the decision procedure, the <a href="#pgc">polynomial growth condition</a> Akra–Bazzi depends on, then <b>29 drills</b> — the professor's own sheet-2 problems among them.</p>
 
   <h2>The decision procedure</h2>
   <p>For $T(n)=a\,T(n/b)+f(n)$ with $a\ge1$, $b&gt;1$: compute the <b>watershed</b> $W(n)=n^{\log_b a}$ and compare $f$ against it.</p>
@@ -87,6 +87,38 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   For $T(x)=g(x)+\sum_i a_iT(b_ix)$: solve $\;\sum_i a_ib_i^{\,p}=1\;$ for $p$, then
   $T(x)=\Theta\!\Big(x^p\big(1+\int_{1}^{x} g(u)\,u^{-p-1}\,du\big)\Big)$.
   Standard integrals: $\int\!\frac{du}{u}=\ln u$, $\;\int\!\frac{du}{u\ln u}=\ln\ln u$, $\;\int u^{s}\,du=\frac{u^{s+1}}{s+1}$ ($s\neq-1$).</div>
+
+  <h2 id="pgc">The polynomial growth condition</h2>
+  <p>Akra–Bazzi does not apply to an arbitrary driving function $g$ — it needs $g$ to satisfy the <b>polynomial growth condition</b>. Sheet&nbsp;2 devotes four problems (22–25) to it, and opens with an erratum: <em>the lecture book states it with the quantifiers in the wrong order.</em> Use this form.</p>
+
+  <div class="def"><span class="tag">Definition — polynomial growth (corrected order)</span>
+  $f:\mathbb{R}\to\mathbb{R}$ satisfies the <b>polynomial growth condition</b> if
+  $$\forall \varphi>1\ \ \exists d>1\ \ \exists N>0\ \ \forall n\ge N\ \ \forall 1\le\psi\le\varphi:\qquad \tfrac{1}{d}\,f(n)\ \le\ f(\psi n)\ \le\ d\,f(n).$$
+  <b>The $\exists N$ comes after the $\forall\varphi$</b> — i.e. $d$ and $N$ may both depend on $\varphi$. In words: rescaling the argument by any bounded factor changes the value by at most a constant factor.</div>
+
+  <p><b>Equivalent formulation</b> (problem 23): for all $0&lt;\varphi&lt;1$ there are $N>0$ and $c_1,c_2>0$ with
+  $c_1 f(n)\le f(u)\le c_2 f(n)$ for all $n\ge N$ and all $u\in[\varphi n,\,n]$. Same idea, stated on an interval instead of a scaling factor.</p>
+
+  <details class="drill"><summary><span class="num">P1</span> Show $f(n)=n^2$ satisfies it, but $g(n)=2^n$ does not. <em>(problem 22)</em></summary><div class="sol">
+    <p><b>$n^2$ does.</b> Given $\varphi>1$, take $d=\varphi^2$ and any $N>0$. For $1\le\psi\le\varphi$: $f(\psi n)=\psi^2n^2$, and $1\le\psi^2\le\varphi^2=d$, so $\frac1d f(n)\le f(\psi n)\le d f(n)$. ✓</p>
+    <p><b>$2^n$ does not.</b> Fix $\varphi=2$ and take $\psi=2$. Then $g(\psi n)/g(n)=2^{2n}/2^{n}=2^{n}\to\infty$, so no constant $d$ can bound it for all $n\ge N$. ✗</p>
+    <p><span class="ans">The moral:</span> polynomial and polylog functions pass; genuine exponentials fail. That is exactly why Akra–Bazzi is stated for the former.</p>
+  </div></details>
+
+  <details class="drill"><summary><span class="num">P2</span> Show $f(n)=n\lg n$ and $f(n)=n\lg\lg n$ satisfy it. <em>(problem 24)</em></summary><div class="sol">
+    <p><b>$n\lg n$:</b> for $1\le\psi\le\varphi$ and large $n$,
+    $$\frac{f(\psi n)}{f(n)}=\psi\cdot\frac{\lg n+\lg\psi}{\lg n}=\psi\Big(1+\frac{\lg\psi}{\lg n}\Big).$$
+    This lies between $1$ and $\varphi(1+\lg\varphi)$ once $\lg n\ge 1$, so $d=\varphi(1+\lg\varphi)$ and $N=2$ work.</p>
+    <p><b>$n\lg\lg n$:</b> identical, with $\lg\lg(\psi n)=\lg(\lg n+\lg\psi)\le\lg(2\lg n)=1+\lg\lg n$ for $n$ large. The ratio is again bounded by a constant depending only on $\varphi$.</p>
+    <p><span class="ans">Pattern:</span> a $\lg$ inside shifts by an additive constant under scaling, which becomes a <em>multiplicative</em> factor $\to1$. Any $n^a\lg^b n$ passes.</p>
+  </div></details>
+
+  <details class="drill"><summary><span class="num">P3</span> If $f$ has polynomial growth and $g(n)=\Theta(n)$, show $f(g(n))=\Theta(f(n))$ — and why "$f(\Theta(n))=\Theta(f(n))$" is legitimate notation. <em>(problem 25)</em></summary><div class="sol">
+    <p>$g(n)=\Theta(n)$ means $c_1n\le g(n)\le c_2n$ for $n\ge N_0$. Put $\varphi=\max(c_2,1/c_1)$ and let $d,N$ be as supplied by the polynomial growth condition for that $\varphi$. Writing $g(n)=\psi_n n$ with $\psi_n\in[c_1,c_2]$, the condition gives $\frac1d f(n)\le f(\psi_n n)\le d f(n)$ for $n$ large — i.e. $f(g(n))=\Theta(f(n))$.</p>
+    <p><span class="ans">Why the notation is fine:</span> the conclusion depends only on $g$ lying <em>in</em> the class $\Theta(n)$, not on which member it is. So "$f(\Theta(n))$" names a well-defined $\Theta$-class, and the identity holds for every representative. This is what licenses the usual sloppiness of writing $T(n/2+O(1))=T(\Theta(n))$ inside recurrence manipulations — legitimate precisely when $f$ has polynomial growth.</p>
+  </div></details>
+
+  <div class="tip"><span class="lbl">Exam angle</span> Two things are worth having ready: the <em>corrected</em> quantifier order (the professor flagged it himself, so it is fair game), and a one-line reason why $2^n$ fails. If asked to apply Akra–Bazzi rigorously, state that the driving function has polynomial growth <em>before</em> you use the theorem.</div>
 
   <div class="def"><span class="tag">The other two tools</span>
   <b>Recursion tree</b> — draw levels, sum level costs; how the Master Theorem is proved (<a href="exam-proofs.html#master" style="color:var(--good)">Lemmas 4.2/4.3</a>) and the honest fallback for anything odd.
@@ -121,10 +153,28 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   <details class="drill"><summary><span class="num">C4</span> $T(n)=T(n/5)+T(7n/10)+n$</summary><div class="sol">The S<small>ELECT</small> recurrence. At $p=1$: $\frac15+\frac{7}{10}=0.9&lt;1$, so the balancing $p&lt;1$. Then $\int_1^n u^{-p}du=\Theta(n^{1-p})$ and $T=\Theta(n^p\cdot n^{1-p})$. <span class="ans">$\Theta(n)$</span> — the sum of subproblem sizes is $&lt;n$, so the top level dominates.</div></details>
   <details class="drill"><summary><span class="num">C5</span> $T(n)=2T(n/2)+\dfrac{n^2}{\lg n}$</summary><div class="sol">$W=n$; $f=n^2/\lg n=\Omega(n^{1+\varepsilon})$ (e.g. $\ge n^{1.5}$ eventually) — case 3. Regularity: $2f(n/2)=\frac{n^2/2}{\lg n-1}\le c\,\frac{n^2}{\lg n}$ with $c\to\frac12$ ✓. <span class="ans">$\Theta\!\big(n^2/\lg n\big)$</span> — case 3 answers $\Theta(f)$, log factor and all.</div></details>
 
-  <h3>D — not Master-shaped at all</h3>
+  <details class="drill"><summary><span class="num">C6</span> $T(n)=T(n/2)+T(n/3)+T(n/6)+\Theta(n\lg n)$ <span class="exam1chip">SHEET 2 · 26a</span></summary><div class="sol">
+    The fractions are chosen so the balance equation is trivial: $\tfrac12+\tfrac13+\tfrac16=1$, so $p=1$.
+    Then $\int_2^n \frac{u\lg u}{u^{2}}\,du=\int_2^n\frac{\lg u}{u}\,du=\Theta(\lg^2 n)$.
+    <span class="ans">$T(n)=\Theta(n\lg^2 n)$</span>. Recognise the "fractions summing to 1" giveaway — it means every level costs the same and $p=1$.</div></details>
+  <details class="drill"><summary><span class="num">C7</span> $T(n)=3T(n/3)+8T(n/4)+\Theta\!\big(n^2/\lg n\big)$ <span class="exam1chip">SHEET 2 · 26b</span></summary><div class="sol">
+    Balance: $3\cdot3^{-p}+8\cdot4^{-p}=1$. At $p=1$ the left side is $1+2=3>1$; at $p=2$ it is $\tfrac13+\tfrac12=\tfrac56<1$; so $p\approx1.85$ — no closed form, and none is expected.
+    Since the driving function $n^{s}/\lg n$ has $s=2>p$, the integral $\int^n u^{\,s-p-1}/\lg u\,du$ is dominated by its upper limit and evaluates to $\Theta\!\big(n^{s-p}/\lg n\big)$. Multiplying by $n^p$:
+    <span class="ans">$T(n)=\Theta\!\big(n^2/\lg n\big)$</span> — the root term dominates, the Akra–Bazzi analogue of Master case 3.</div></details>
+
+  <h3 id="cov">D — not Master-shaped at all (incl. change of variables)</h3>
+  <div class="def"><span class="tag">Technique — change of variables (problems 28–29)</span>
+  When the recursion shrinks $n$ by a <em>root</em> rather than a factor, substitute $m=\lg n$ (so $n=2^m$) and set $S(m)=T(2^m)$. A $\sqrt n$ becomes $2^{m/2}$, i.e. $m\mapsto m/2$ — and the recurrence turns into an ordinary Master-Theorem one in $m$. Solve for $S$, then substitute back $m=\lg n$.
+  <br><br>Worked, the professor's own example: $T(n)=2T(\sqrt n)+\Theta(\lg n)$.
+  With $n=2^m$: $S(m)=T(2^m)=2T(2^{m/2})+\Theta(m)=2S(m/2)+\Theta(m)$.
+  Master case 2 gives $S(m)=\Theta(m\lg m)$, hence
+  $$T(n)=S(\lg n)=\Theta(\lg n\cdot \lg\lg n).$$</div>
   <details class="drill"><summary><span class="num">D1</span> $T(n)=T(n-1)+n$</summary><div class="sol">Subtractive, not divide-and-conquer: expand. $T(n)=\sum_{k=1}^n k+O(1)$. <span class="ans">$\Theta(n^2)$</span> — worst-case quicksort.</div></details>
   <details class="drill"><summary><span class="num">D2</span> $T(n)=2T(n-1)+1$</summary><div class="sol">Expand: $T(n)=2^n T(0)+2^{n-1}+\cdots+1$. <span class="ans">$\Theta(2^n)$</span> — Tower of Hanoi.</div></details>
   <details class="drill"><summary><span class="num">D3</span> $T(n)=T(\sqrt n)+1$</summary><div class="sol">Substitute $m=\lg n$, $S(m)=T(2^m)$: then $S(m)=S(m/2)+1=\Theta(\lg m)$. <span class="ans">$\Theta(\lg\lg n)$</span>.</div></details>
+  <details class="drill"><summary><span class="num">D4</span> $T(n)=2T(\sqrt n)+\Theta(1)$ <span class="exam1chip">SHEET 2 · 29a</span></summary><div class="sol">$m=\lg n$: $S(m)=2S(m/2)+\Theta(1)$. Watershed $m^{\log_2 2}=m$, driving $\Theta(1)$ is polynomially smaller → case 1, $S(m)=\Theta(m)$. <span class="ans">$T(n)=\Theta(\lg n)$</span>.</div></details>
+  <details class="drill"><summary><span class="num">D5</span> $T(n)=3T(\sqrt[3]{n})+\Theta(n)$ <span class="exam1chip">SHEET 2 · 29b</span></summary><div class="sol">Here $\sqrt[3]{n}=2^{m/3}$, so $S(m)=3S(m/3)+\Theta(2^m)$. The driving term $2^m$ is exponential in $m$ and dwarfs the watershed $m^{\log_3 3}=m$: case 3 (regularity holds since $3\cdot2^{m/3}\le c\,2^m$ for large $m$). $S(m)=\Theta(2^m)$, so <span class="ans">$T(n)=\Theta(n)$</span> — the top-level work dominates completely.</div></details>
+  <details class="drill"><summary><span class="num">D6</span> $T(n)=3T(\sqrt n)+3T(\sqrt[3]{n})+\Theta((\lg\lg n)^2)$ <span class="exam1chip">SHEET 2 · 29c</span></summary><div class="sol">$m=\lg n$ turns it into $S(m)=3S(m/2)+3S(m/3)+\Theta((\lg m)^2)$ — unequal splits, so <b>Akra–Bazzi</b> on $S$. Solve $3(1/2)^p+3(1/3)^p=1$; at $p=2$ the left side is $3/4+1/3=13/12>1$ and at $p=3$ it is $3/8+1/9\approx0.49<1$, so $p\in(2,3)$. Since $g(m)=\Theta(\lg^2 m)$ is negligible against $m^p$, the integral converges and $S(m)=\Theta(m^p)$. <span class="ans">$T(n)=\Theta\big((\lg n)^p\big)$ with $3\cdot2^{-p}+3\cdot3^{-p}=1$</span>. Leaving $p$ implicit is the expected answer.</div></details>
 
   <div class="tip"><span class="lbl">Self-test</span> Redo B1–C1 in under 8 minutes total — that's the exam pace (2 pts each, four parts in one question). If any group-C item needs more than 3 minutes, reread the decision table and try again tomorrow; they're also in the <a href="flashcards.html">flashcards</a>.</div>
 

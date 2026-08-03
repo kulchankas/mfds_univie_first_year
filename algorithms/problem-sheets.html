@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F9">
+<meta name="description" content="All 102 problems from Prof. Schichl's Algorithms & Data Structures sheets, topic-tagged, with what each one tests and where to revise it.">
+<title>Problem sheets 1–11 — the complete map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[['$','$']]},svg:{fontCache:'global'}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#F7F7F9;--card:#fff;--border:#EFEFF2;--ink:#1B1B1F;--muted:#55555C;--faint:#8A8A90;
+    --algo:#F0A93A;--algo-bg:#FFF1DC;--algo-dark:#8A5A0E;
+    --ana:#2FAE72;--ana-bg:#E1F5EA;--ana-dark:#0F6B41;
+    --blue:#2F6FB0;--blue-bg:#EAF2FB;
+    --purple:#6B3FA0;--purple-bg:#EFE6FE;
+    --rose:#B22C6A;--rose-bg:#FDE4EC;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Figtree',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:900px;margin:0 auto;padding:clamp(1.5rem,4vw,2.3rem) clamp(1rem,4vw,1.7rem) 5rem;
+        padding-left:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-left));
+        padding-right:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-right))}
+  .eyebrow{font-weight:700;color:var(--faint);font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.6rem}
+  h1{font-weight:800;font-size:clamp(1.75rem,5.5vw,2.4rem);line-height:1.1;letter-spacing:-.025em;margin-bottom:.55rem}
+  .lede{color:var(--muted);font-size:clamp(.95rem,3vw,1.04rem);max-width:46em}
+  h2{font-weight:800;font-size:clamp(1.15rem,3.8vw,1.4rem);letter-spacing:-.02em;margin:2.2rem 0 .3rem;scroll-margin-top:70px}
+  .sheet-sub{font-size:.8rem;color:var(--faint);font-weight:600;margin-bottom:.9rem}
+  p{margin:.5rem 0;color:var(--muted);font-size:.94rem}
+  b,strong{color:var(--ink)}
+  a{color:var(--purple)}
+  code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:#F0F0F3;color:var(--algo-dark);padding:.05rem .3rem;border-radius:5px}
+
+  .legend{display:flex;flex-wrap:wrap;gap:.4rem;margin:1.1rem 0}
+  .tag{font-size:.7rem;font-weight:800;letter-spacing:.03em;padding:.15rem .5rem;border-radius:6px;white-space:nowrap}
+  .t-rec{background:var(--blue-bg);color:var(--blue)}
+  .t-inv{background:var(--ana-bg);color:var(--ana-dark)}
+  .t-prob{background:var(--purple-bg);color:var(--purple)}
+  .t-ds{background:var(--algo-bg);color:var(--algo-dark)}
+  .t-dp{background:var(--rose-bg);color:var(--rose)}
+  .t-graph{background:#E4F3F3;color:#17706E}
+  .t-code{background:#F3F3F5;color:#55555C}
+
+  .box{background:var(--algo-bg);border-left:4px solid var(--algo);border-radius:0 14px 14px 0;padding:.95rem 1.15rem;margin:1.1rem 0;color:#3B3B42;font-size:.93rem}
+  .box .lbl{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--algo-dark);margin-bottom:.4rem}
+  .box.blue{background:var(--blue-bg);border-left-color:var(--blue)} .box.blue .lbl{color:var(--blue)}
+  .box ul{margin:.3rem 0 0;padding-left:1.2rem} .box li{margin:.28rem 0}
+
+  table{border-collapse:collapse;width:100%;font-size:.9rem;background:var(--card);border-radius:12px;overflow:hidden}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.6rem 0 1.4rem;border:1px solid var(--border);border-radius:12px}
+  th,td{border-bottom:1px solid var(--border);padding:.5rem .65rem;text-align:left;vertical-align:top}
+  th{background:#F5F5F7;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  td.n{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--algo-dark);white-space:nowrap;width:1%}
+  td.tg{width:1%;white-space:nowrap}
+  .star{color:var(--algo);font-weight:800}
+
+  .toc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:.9rem 1.2rem;margin:1.3rem 0;font-size:.9rem;line-height:1.9}
+  .toc a{text-decoration:none;white-space:nowrap;font-weight:600}
+  .toc a:hover{text-decoration:underline}
+  footer{margin-top:3rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--faint);font-size:.82rem}
+</style>
+<link rel="stylesheet" href="../assets/mfds.css">
+</head>
+<body class="mfds mfds-algo" data-page="algo" data-up="index.html" data-up-label="Algorithms">
+<div class="wrap">
+  <div class="eyebrow">Universität Wien · Prof. Schichl · SS 2026</div>
+  <h1>The problem sheets, mapped</h1>
+  <p class="lede">All <b>102 problems</b> across the eleven sheets, in one place — each tagged by topic, with what it actually tests and where to revise it. These are the professor's own problems, so the exam is drawn from this world: the first-date paper's bubblesort invariant is problem&nbsp;6's technique, its recurrences are sheet&nbsp;2, its heap question is problems&nbsp;41–43.</p>
+
+  <div class="box"><span class="lbl">Read this first — the file names lie</span>
+  The PDFs are numbered by upload order, and three of them carry the wrong sheet number in their own header (the file <code>…-3</code> says "Sheet 2", <code>…-5</code> says "Sheet 4", <code>…-11</code> says "Sheet 9"). <b>The problem numbers are continuous from 1 to 102 and are the reliable guide.</b> The table below uses those. Note also that <code>ss26_algodat-12.pdf</code> is actually <b>Sheet 1</b>.
+  </div>
+
+  <div class="legend">
+    <span class="tag t-rec">recurrences</span>
+    <span class="tag t-inv">correctness / invariants</span>
+    <span class="tag t-prob">probability</span>
+    <span class="tag t-ds">data structures</span>
+    <span class="tag t-dp">DP / greedy</span>
+    <span class="tag t-graph">graphs</span>
+    <span class="tag t-code">implement in Julia</span>
+    <span class="tag" style="background:#fff;border:1px solid var(--algo);color:var(--algo-dark)">★ = exam-shaped</span>
+  </div>
+
+  <div class="toc"><b>Jump to:</b>
+    <a href="#s1">1 · asymptotics &amp; invariants</a> ·
+    <a href="#s2">2 · Master &amp; Akra–Bazzi</a> ·
+    <a href="#s3">3 · probability</a> ·
+    <a href="#s4">4 · randomisation &amp; heaps</a> ·
+    <a href="#s5">5 · search analysis &amp; scheduler</a> ·
+    <a href="#s6">6 · lists, trees, hashing</a> ·
+    <a href="#s7">7 · BST &amp; red-black</a> ·
+    <a href="#s8">8 · red-black &amp; AVL</a> ·
+    <a href="#s9">9 · dynamic programming</a> ·
+    <a href="#s10">10 · optimal BST &amp; greedy</a> ·
+    <a href="#s11">11 · B-trees &amp; graphs</a>
+  </div>
+
+  <!-- ============================ SHEET 1 ============================ -->
+  <h2 id="s1">Sheet 1 — asymptotics &amp; loop invariants</h2>
+  <div class="sheet-sub">problems 1–17 · file <code>ss26_algodat-12.pdf</code> · <a href="problem-sheets/ss26_algodat-12.pdf">open PDF</a></div>
+  <div class="tw"><table>
+    <tr><th>#</th><th>Topic</th><th>What it tests</th></tr>
+    <tr><td class="n">1</td><td class="tg"><span class="tag t-rec">growth</span></td><td>The "how big can $n$ be" table — $\lg\lg n$ … $n!$ against 1&nbsp;µs … 1000&nbsp;years at $10^9$ ops/s. Builds intuition for <em>why</em> $\Theta$ matters.</td></tr>
+    <tr><td class="n">2 <span class="star">★</span></td><td class="tg"><span class="tag t-inv">invariant</span></td><td>Prove <code>SUM-ARRAY</code> correct with a loop invariant. The gentlest possible warm-up for exam Q1.</td></tr>
+    <tr><td class="n">3–4 <span class="star">★</span></td><td class="tg"><span class="tag t-inv">invariant</span> <span class="tag t-code">Julia</span></td><td>Linear search on a sorted array: pseudocode, then a <em>three-property</em> invariant proof + worst-case $O$. The sheet explicitly says "make sure your loop invariant fulfills the three necessary properties".</td></tr>
+    <tr><td class="n">5–7 <span class="star">★</span></td><td class="tg"><span class="tag t-inv">invariant</span> <span class="tag t-code">Julia</span></td><td><b>Selection sort</b>: pseudocode, invariant + proof, best/worst-case. This is the closest sibling to the bubblesort question that appeared on the exam — the likeliest rotation.</td></tr>
+    <tr><td class="n">8</td><td class="tg"><span class="tag t-rec">induction</span></td><td>Induction on $n=2^k$ for $T(n)=2T(n/2)+n \Rightarrow T(n)=n\lg n$.</td></tr>
+    <tr><td class="n">9–12</td><td class="tg"><span class="tag t-rec">Landau</span></td><td>$\Theta$ of a polynomial; $2^{n+1}=O(2^n)$ but $2^{2n}\neq O(2^n)$; transitivity of $\Theta$; $\Omega$/$\omega$ sum rule; $O\circ o\Rightarrow o$. Pure symbol manipulation — easy marks if drilled.</td></tr>
+    <tr><td class="n">13</td><td class="tg"><span class="tag t-rec">Stirling</span></td><td>From Stirling: $n!=o(n^n)$, $n!=\omega(2^n)$, $\lg(n!)=\Theta(n\lg n)$. The last one is what powers the <a href="exam-proofs.html#lowerbound">$\Omega(n\lg n)$ sorting bound</a>.</td></tr>
+    <tr><td class="n">14–15 <span class="star">★</span></td><td class="tg"><span class="tag t-rec">ordering</span></td><td>Order ~30 functions incl. $\lg^*n$, $2^{\lg^*n}$, $n^{1/\lg n}$, $(\lg n)^{\lg n}$, $2^{2^n}$ by growth. <b>A full worked solution is bundled</b> — <a href="problem-sheets/Problem_14_Sheet_1_Algo_and_Data_Structures.pdf">open it</a>. Key simplifications: $(\sqrt2)^{\lg n}=n^{1/2}$, $n^{1/\lg n}=2$, $2^{\lg n}=n$.</td></tr>
+    <tr><td class="n">16</td><td class="tg"><span class="tag t-rec">tree+subst</span></td><td>$T(n)=4T(n/3)+n$: sketch the recursion tree, guess, then prove by induction.</td></tr>
+    <tr><td class="n">15b</td><td class="tg"><span class="tag t-rec">substitution</span></td><td>$T(n)=4T(n/2)+n \Rightarrow \Theta(n^2)$ by substitution. <b>Hint from the sheet: subtract a lower-order term</b> — the standard trick when the naive guess fails to tighten.</td></tr>
+    <tr><td class="n">17</td><td class="tg"><span class="tag t-rec">Master</span></td><td>Strassen: $T(n)=7T(n/2)+\Theta(n^2)\Rightarrow O(n^{\lg 7})$. → <a href="recurrence-drills.html">drill A5</a>.</td></tr>
+  </table></div>
+
+  <!-- ============================ SHEET 2 ============================ -->
+  <h2 id="s2">Sheet 2 — Master Theorem, polynomial growth &amp; Akra–Bazzi</h2>
+  <div class="sheet-sub">problems 18–29 · file <code>ss26_algodat-2.pdf</code> · <a href="problem-sheets/ss26_algodat-2.pdf">open PDF</a></div>
+
+  <div class="box blue"><span class="lbl">The correction that matters</span>
+  The sheet opens with an erratum: the lecture book states the <b>polynomial growth condition</b> with the quantifiers in the wrong order. The correct form is
+  $$\forall \varphi>1\ \exists d>1\ \exists N>0\ \forall n\ge N\ \forall 1\le\psi\le\varphi:\ \tfrac1d f(n)\le f(\psi n)\le d\,f(n).$$
+  Note $\exists N$ comes <em>after</em> $\forall\varphi$. This condition is the hypothesis Akra–Bazzi needs, and four problems (22–25) are about it — see the <a href="recurrence-drills.html#pgc">drills page</a> for the worked treatment.
+  </div>
+
+  <div class="tw"><table>
+    <tr><th>#</th><th>Topic</th><th>What it tests</th></tr>
+    <tr><td class="n">18 <span class="star">★</span></td><td class="tg"><span class="tag t-rec">Master</span></td><td>Five recurrences $T(n)=2T(n/4)+f$ with $f=\Theta(1),\Theta(\sqrt n),\Theta(\sqrt n\lg^2 n),\Theta(n),\Theta(n^2)$ — one per Master case, including the $\lg^k$ variants. <b>Exam Q2 is exactly this.</b> → <a href="recurrence-drills.html">drills B</a></td></tr>
+    <tr><td class="n">19</td><td class="tg"><span class="tag t-rec">Master</span></td><td>Prof. Caesar's matrix multiplication: largest $a$ with $aT(n/4)+\Theta(n^2)$ beating Strassen; then for $n/3$, $n/5$. Inverting the Master Theorem.</td></tr>
+    <tr><td class="n">20–21 <span class="star">★</span></td><td class="tg"><span class="tag t-rec">regularity</span></td><td>Two counterexamples showing the <b>regularity condition</b> is not automatic: $f(n)=\lg n$ with $a=1,b=2$; and $f(n)=2^{\lceil\lg n\rceil}$ meeting every case-3 condition <em>except</em> regularity. If you ever claim case 3 without checking regularity, these are why.</td></tr>
+    <tr><td class="n">22–25 <span class="star">★</span></td><td class="tg"><span class="tag t-rec">poly growth</span></td><td>The polynomial growth condition: $n^2$ satisfies it, $2^n$ doesn't (22); an equivalent formulation with $u\in[\varphi n,n]$ (23); $n\lg n$ and $n\lg\lg n$ satisfy it (24); $f(\Theta(n))=\Theta(f(n))$ and why that notation is legitimate (25).</td></tr>
+    <tr><td class="n">26 <span class="star">★</span></td><td class="tg"><span class="tag t-rec">Akra–Bazzi</span></td><td>Five Akra–Bazzi computations incl. $T(n/2)+T(n/3)+T(n/6)+\Theta(n\lg n)$ and $3T(n/3)+8T(n/4)+\Theta(n^2/\lg n)$. → <a href="recurrence-drills.html">drills C</a></td></tr>
+    <tr><td class="n">27</td><td class="tg"><span class="tag t-rec">Akra–Bazzi</span></td><td>Use Akra–Bazzi to <em>re-prove</em> the continuous Master Theorem. A proof question, and a good one to have seen.</td></tr>
+    <tr><td class="n">28–29 <span class="star">★</span></td><td class="tg"><span class="tag t-rec">change of vars</span></td><td>$T(n)=2T(\sqrt n)+\Theta(\lg n)$ via $m=\lg n$, $S(m)=T(2^m)$; then three more of the same shape. <b>A technique with its own dedicated problems — expect it.</b> → <a href="recurrence-drills.html#cov">drills D</a></td></tr>
+  </table></div>
+
+  <!-- ============================ SHEET 3 ============================ -->
+  <h2 id="s3">Sheet 3 — probability toolkit</h2>
+  <div class="sheet-sub">problems 30–35 · file <code>ss26_algodat-3.pdf</code> (header says "Sheet 2") · <a href="problem-sheets/ss26_algodat-3.pdf">open PDF</a></div>
+  <div class="tw"><table>
+    <tr><th>#</th><th>Topic</th><th>What it tests</th></tr>
+    <tr><td class="n">30</td><td class="tg"><span class="tag t-prob">binomials</span></td><td>$\binom{2n}{n}=\frac{2^{2n}}{\sqrt{\pi n}}(1+O(1/n))$ and $\binom nk\ge \frac{n^k}{4k!}$ for $k\le\sqrt n$. Estimation practice feeding the randomised analyses later.</td></tr>
+    <tr><td class="n">31</td><td class="tg"><span class="tag t-prob">counting</span></td><td>Three cards drawn from ten arrive sorted — probability $1/3!=1/6$. One line if you see it.</td></tr>
+    <tr><td class="n">32</td><td class="tg"><span class="tag t-prob">independence</span></td><td>Construct $A,B$ dependent but <b>conditionally independent given $C$</b>. Tests that you know the definitions are genuinely different.</td></tr>
+    <tr><td class="n">33</td><td class="tg"><span class="tag t-prob">expectation</span></td><td>40d6 fireball: $E=140$; then bound $\Pr[|X-E|>1]$. Linearity of expectation + a concentration argument.</td></tr>
+    <tr><td class="n">34 <span class="star">★</span></td><td class="tg"><span class="tag t-prob">Markov</span></td><td>Prove <b>Markov's inequality</b> $\Pr[X\ge t]\le E[X]/t$ for $X\ge0$. Short, provable, and the gateway to Chebyshev — a very exam-able proof.</td></tr>
+    <tr><td class="n">35 <span class="star">★</span></td><td class="tg"><span class="tag t-prob">variance</span></td><td>Variance of the geometric distribution $=q/p^2$. Needs $E[X]=1/p$ and $E[X^2]$ — the standard generating-function or telescoping computation.</td></tr>
+  </table></div>
+
+  <!-- ============================ SHEET 4 ============================ -->
+  <h2 id="s4">Sheet 4 — randomised permutation &amp; heap basics</h2>
+  <div class="sheet-sub">problems 36–43 · file <code>ss26_algodat-4.pdf</code> · <a href="problem-sheets/ss26_algodat-4.pdf">open PDF</a></div>
+  <div class="tw"><table>
+    <tr><th>#</th><th>Topic</th><th>What it tests</th></tr>
+    <tr><td class="n">36–37</td><td class="tg"><span class="tag t-prob">sampling</span></td><td>Two ways to draw a uniform $m$-subset — permute-then-truncate, and the clever $O(m)$ <code>RANDOM-SAMPLE</code>. Prove each is uniform.</td></tr>
+    <tr><td class="n">38–40 <span class="star">★</span></td><td class="tg"><span class="tag t-prob">uniformity</span></td><td>Three <em>broken</em> shufflers: <code>PERMUTE-BY-CYCLE</code> (each element uniform in position, yet only $n$ permutations reachable), <code>PERMUTE-WITHOUT-IDENTITY</code>, <code>PERMUTE-WITH-ALL</code> ($n^n$ outcomes ∤ $n!$). The counting argument here is the same one behind <a href="exam-proofs.html#l54">Lemma 5.4</a>.</td></tr>
+    <tr><td class="n">41 <span class="star">★</span></td><td class="tg"><span class="tag t-ds">heaps</span></td><td>Min/max elements in a heap of height $h$; prove an $n$-element heap has height $\lfloor\lg n\rfloor$. <b>Appeared as exam Q3(a) territory.</b> → <a href="data-structures.html#heaps">notes</a></td></tr>
+    <tr><td class="n">42–43 <span class="star">★</span></td><td class="tg"><span class="tag t-ds">heaps</span></td><td>Where can the smallest element of a max-heap live; at which levels the $k$-th largest; is a sorted array a min-heap; verify a given array. Quick sanity checks the exam loves.</td></tr>
+  </table></div>
+
+  <!-- ============================ SHEET 5 ============================ -->
+  <h2 id="s5">Sheet 5 — expected running times &amp; a real scheduler</h2>
+  <div class="sheet-sub">problems 44–51 · file <code>ss26_algodat-5.pdf</code> (header says "Sheet 4") · <a href="problem-sheets/ss26_algodat-5.pdf">open PDF</a></div>
+  <div class="tw"><table>
+    <tr><th>#</th><th>Topic</th><th>What it tests</th></tr>
+    <tr><td class="n">44–46 <span class="star">★</span></td><td class="tg"><span class="tag t-prob">expected time</span> <span class="tag t-code">Julia</span></td><td>Three searches of an unsorted array — <b>random</b> (sampling with replacement), <b>deterministic</b> (linear scan), <b>scramble</b> (shuffle then scan) — each analysed for 1 match, $k$ matches, 0 matches. The random-search answers are geometric: $n$, $n/k$, and the coupon-collector-flavoured $n H_n$ for the exhaustive case. Then: which would you actually use? A superb expected-value workout.</td></tr>
+    <tr><td class="n">47–49</td><td class="tg"><span class="tag t-ds">priority queue</span> <span class="tag t-code">Julia</span></td><td>Build a heap, then a priority queue <b>with handles</b>, then a Linux-style process scheduler running 1000 iterations. The handles requirement is the interesting part — that's what makes <code>DECREASE-KEY</code> usable in practice.</td></tr>
+    <tr><td class="n">50</td><td class="tg"><span class="tag t-prob">quicksort</span></td><td>Calls to <code>RANDOM</code> in randomised quicksort: $\Theta(n)$ both best and worst case (one per partition).</td></tr>
+    <tr><td class="n">51 <span class="star">★</span></td><td class="tg"><span class="tag t-inv">correctness</span> <span class="tag t-rec">recurrence</span></td><td><b>Stooge sort</b> — argue correctness, then $T(n)=3T(2n/3)+\Theta(1)=\Theta(n^{\log_{1.5}3})\approx\Theta(n^{2.71})$. A correctness proof <em>and</em> a Master-Theorem application in one problem; very exam-shaped.</td></tr>
+  </table></div>
+
+  <!-- ============================ SHEET 6 ============================ -->
+  <h2 id="s6">Sheet 6 — lists, tree walks &amp; hashing</h2>
+  <div class="sheet-sub">problems 52–61 · file <code>ss26_algodat-6.pdf</code> · <a href="problem-sheets/ss26_algodat-6.pdf">open PDF</a></div>
+  <div class="tw"><table>
+    <tr><th>#</th><th>Topic</th><th>What it tests</th></tr>
+    <tr><td class="n">52–53</td><td class="tg"><span class="tag t-ds">stacks/queues</span></td><td>Queue from two stacks (amortised $O(1)$ per op) and stack from two queues. The amortised argument in 52 is the one piece of amortised analysis the sheets ask for directly.</td></tr>
+    <tr><td class="n">54–55</td><td class="tg"><span class="tag t-ds">linked lists</span></td><td>Why singly-linked <code>INSERT</code> is $\Theta(1)$ but <code>DELETE</code> is $\Theta(n)$; then reverse a list in $\Theta(n)$ with $O(1)$ extra space.</td></tr>
+    <tr><td class="n">56–58 <span class="star">★</span></td><td class="tg"><span class="tag t-ds">tree walks</span></td><td>Print an $n$-node binary tree three ways: recursive post-order, non-recursive <b>with an explicit stack</b>, and non-recursive in <b>$O(1)$ extra space without modifying the tree</b>. The third is genuinely hard (Morris-style / parent-pointer walk) and a great "describe an algorithm" candidate.</td></tr>
+    <tr><td class="n">59</td><td class="tg"><span class="tag t-ds">hashing</span></td><td>Any $\varepsilon$-universal family has $\varepsilon\ge\frac1{|Q|}-\frac1{|U|}$. A counting lower bound.</td></tr>
+    <tr><td class="n">60 <span class="star">★</span></td><td class="tg"><span class="tag t-ds">hashing</span></td><td>Double hashing with $\gcd(m,h_2(k))=d>1$ probes only $1/d$ of the table — <b>why $h_2(k)$ must be coprime to $m$</b>. Exactly the detail a "describe hashing" question rewards.</td></tr>
+    <tr><td class="n">61 <span class="star">★</span></td><td class="tg"><span class="tag t-ds">hashing</span></td><td>Probe bounds at $\alpha=3/4$ and $7/8$: unsuccessful $\frac1{1-\alpha}=4$ and $8$; successful $\frac1\alpha\ln\frac1{1-\alpha}\approx1.85$ and $2.38$. → <a href="exam-proofs.html#hashing">Thms 11.6/11.8</a></td></tr>
+  </table></div>
+
+  <!-- ============================ SHEET 7 ============================ -->
+  <h2 id="s7">Sheet 7 — binary search trees &amp; red-black structure</h2>
+  <div class="sheet-sub">problems 62–72 · file <code>ss26_algodat-7.pdf</code> · <a href="problem-sheets/ss26_algodat-7.pdf">open PDF</a></div>
+  <div class="tw"><table>
+    <tr><th>#</th><th>Topic</th><th>What it tests</th></tr>
+    <tr><td class="n">62</td><td class="tg"><span class="tag t-ds">lower bound</span></td><td>Building a BST from an arbitrary list is $\Omega(n\lg n)$ — because an in-order walk would otherwise sort in $o(n\lg n)$. A neat reduction, and it reuses <a href="exam-proofs.html#lowerbound">Thm 8.1</a>.</td></tr>
+    <tr><td class="n">63</td><td class="tg"><span class="tag t-ds">BST</span></td><td>Write <code>TREE-PREDECESSOR</code> (mirror of successor). → <a href="data-structures.html#bst">notes</a></td></tr>
+    <tr><td class="n">64–67</td><td class="tg"><span class="tag t-ds">BST</span></td><td>Prof. Kilmer's false claim $a\le b\le c$ across a search path (find the smallest counterexample); leaf/parent key relation; when <code>TRANSPLANT</code>'s $v$ is NIL; whether deletion is commutative (it is <em>not</em> — a classic).</td></tr>
+    <tr><td class="n">68–69 <span class="star">★</span></td><td class="tg"><span class="tag t-ds">red-black</span></td><td>Largest/smallest number of internal nodes at black-height $k$ ($2^{2k}-1$ and $2^k-1$); the extremal red:black ratios. <b>Directly supports exam Q4(b).</b></td></tr>
+    <tr><td class="n">70</td><td class="tg"><span class="tag t-ds">red-black</span></td><td>Pseudocode for <code>RIGHT-ROTATE</code> — the mirror image you must be able to write. → <a href="data-structures.html#rbt">notes</a></td></tr>
+    <tr><td class="n">71</td><td class="tg"><span class="tag t-ds">rotations</span></td><td>Any $n$-node binary tree → any other in $O(n)$ rotations, via a right-going chain.</td></tr>
+    <tr><td class="n">72 <span class="star">★</span></td><td class="tg"><span class="tag t-ds">red-black</span></td><td><b>Why colour the new node red rather than black?</b> Because black would break property 5 everywhere on that path, which is unfixable locally; red breaks only property 4. The exam asked you to <em>provide</em> RB-insert; this is the "why" behind it.</td></tr>
+  </table></div>
+
+  <!-- ============================ SHEET 8 ============================ -->
+  <h2 id="s8">Sheet 8 — red-black operations &amp; AVL trees</h2>
+  <div class="sheet-sub">problems 73–80 · file <code>ss26_algodat-8.pdf</code> · <a href="problem-sheets/ss26_algodat-8.pdf">open PDF</a></div>
+  <div class="tw"><table>
+    <tr><th>#</th><th>Topic</th><th>What it tests</th></tr>
+    <tr><td class="n">73 <span class="star">★</span></td><td class="tg"><span class="tag t-ds">red-black</span></td><td>Insert 41, 38, 31, 12, 19, 8 into an empty RB tree, drawing each step. <b>Do this one by hand — it is the fastest way to make the three fixup cases stick.</b></td></tr>
+    <tr><td class="n">74–78</td><td class="tg"><span class="tag t-ds">red-black</span></td><td>At least one red node when $n>1$; root black after delete-fixup; property 4 restoration; why $x.p$ must be black at the start of delete case 1; whether insert-then-delete returns the original tree (no).</td></tr>
+    <tr><td class="n">79 <span class="star">★</span></td><td class="tg"><span class="tag t-ds">red-black</span></td><td><code>RB-ENUMERATE(T,r,a,b)</code> in $\Theta(m+\lg n)$ — output-sensitive range query. Pruned in-order walk; a strong "describe an algorithm and justify the bound" question.</td></tr>
+    <tr><td class="n">80 <span class="star">★</span></td><td class="tg"><span class="tag t-ds">AVL</span></td><td><b>AVL trees, four parts</b>: height $O(\lg n)$ via $F_h$ Fibonacci bound; <code>BALANCE(x)</code> by rotations; recursive <code>AVL-INSERT</code>; $O(\lg n)$ time and rotations. An entire balanced-tree family the site did not cover — and a plausible substitute for the red-black question on a second-date paper.</td></tr>
+  </table></div>
+
+  <!-- ============================ SHEET 9 ============================ -->
+  <h2 id="s9">Sheet 9 — dynamic programming</h2>
+  <div class="sheet-sub">problems 81–89 · file <code>ss26_algodat-9.pdf</code> · <a href="problem-sheets/ss26_algodat-9.pdf">open PDF</a></div>
+  <div class="tw"><table>
+    <tr><th>#</th><th>Topic</th><th>What it tests</th></tr>
+    <tr><td class="n">81 <span class="star">★</span></td><td class="tg"><span class="tag t-dp">rod cutting</span></td><td>Counterexample: greedy by <em>density</em> $p_i/i$ is not optimal. The standard "why DP, not greedy" question.</td></tr>
+    <tr><td class="n">82</td><td class="tg"><span class="tag t-dp">rod cutting</span></td><td>Rod cutting with a fixed cost $c$ per cut — modify the recurrence to $r_n=\max(p_n,\max_{i&lt;n}(p_i+r_{n-i}-c))$.</td></tr>
+    <tr><td class="n">83</td><td class="tg"><span class="tag t-dp">matrix chain</span></td><td>Total table references $\sum\sum R(i,j)=\frac{n^3-n}{3}$. A counting identity.</td></tr>
+    <tr><td class="n">84</td><td class="tg"><span class="tag t-dp">matrix chain</span></td><td>Prof. Capulet's greedy split (minimise $p_{i-1}p_kp_j$ first) is suboptimal — find an instance.</td></tr>
+    <tr><td class="n">85 <span class="star">★</span></td><td class="tg"><span class="tag t-dp">substructure</span></td><td>With a limit $l_i$ on pieces of each length, <b>optimal substructure fails</b>. Tests whether you understand the property rather than reciting it.</td></tr>
+    <tr><td class="n">86 <span class="star">★</span></td><td class="tg"><span class="tag t-dp">graphs</span> <span class="tag t-graph">DAG</span></td><td>Longest weighted simple path in a DAG by DP over a topological order — $O(V+E)$. (Note: "longest simple path" is only tractable <em>because</em> the graph is acyclic.)</td></tr>
+    <tr><td class="n">87 <span class="star">★</span></td><td class="tg"><span class="tag t-dp">strings</span></td><td>Longest palindromic subsequence, $O(n^2)$ — the interval-DP pattern (same shape as matrix chain and optimal BST).</td></tr>
+    <tr><td class="n">88</td><td class="tg"><span class="tag t-dp">planning</span></td><td>Rinky Dink inventory/production planning, polynomial in $n$ and $D$ — a two-dimensional DP over month × stock.</td></tr>
+    <tr><td class="n">89 <span class="star">★</span></td><td class="tg"><span class="tag t-dp">intervals</span></td><td>Optimal string-breaking order — <em>literally</em> matrix-chain multiplication in disguise. If you recognise the pattern this is free.</td></tr>
+  </table></div>
+
+  <!-- ============================ SHEET 10 ============================ -->
+  <h2 id="s10">Sheet 10 — optimal BST &amp; greedy algorithms</h2>
+  <div class="sheet-sub">problems 90–99 · file <code>ss26_algodat-10.pdf</code> · <a href="problem-sheets/ss26_algodat-10.pdf">open PDF</a></div>
+  <div class="tw"><table>
+    <tr><th>#</th><th>Topic</th><th>What it tests</th></tr>
+    <tr><td class="n">90–91 <span class="star">★</span></td><td class="tg"><span class="tag t-dp">optimal BST</span></td><td><code>CONSTRUCT-OPTIMAL-BST</code> from the <code>root</code> table, then a full numeric instance with 7 keys and 8 dummy keys. The interval DP $e[i,j]=\min_r(e[i,r-1]+e[r+1,j]+w(i,j))$.</td></tr>
+    <tr><td class="n">92</td><td class="tg"><span class="tag t-dp">bitonic TSP</span></td><td>Optimal bitonic tour in $O(n^2)$ (CLRS 4e Fig. 14.11, p. 408 — the sheet cites the page, confirming the course follows the <b>4th edition</b>).</td></tr>
+    <tr><td class="n">93 <span class="star">★</span></td><td class="tg"><span class="tag t-dp">tree DP</span></td><td>Company party — maximum-weight independent set on a tree, via left-child/right-sibling. The canonical tree DP.</td></tr>
+    <tr><td class="n">94 <span class="star">★</span></td><td class="tg"><span class="tag t-dp">greedy</span></td><td>Activity selection by <em>last to start</em> instead of first to finish — show it is greedy and prove optimality. A mirrored version of <a href="exam-proofs.html#greedy">Theorem 15.1</a>; if the exam rotates that proof, this is the likely form.</td></tr>
+    <tr><td class="n">95 <span class="star">★</span></td><td class="tg"><span class="tag t-dp">greedy</span></td><td>Three <em>failing</em> greedy rules for activity selection (shortest duration, fewest conflicts, earliest start) — give a counterexample for each. Shows why the exchange argument is needed.</td></tr>
+    <tr><td class="n">96</td><td class="tg"><span class="tag t-dp">greedy</span></td><td>Fewest lecture halls = interval-graph colouring; sweep by start time with a min-heap of room end-times.</td></tr>
+    <tr><td class="n">97</td><td class="tg"><span class="tag t-dp">weighted</span></td><td>Weighted activity selection — greedy <em>fails</em>, so DP with binary search: $O(n\lg n)$.</td></tr>
+    <tr><td class="n">98 <span class="star">★</span></td><td class="tg"><span class="tag t-dp">knapsack</span></td><td><b>Fractional knapsack has the greedy-choice property</b> — prove it, then solve in $O(n)$ (median-of-medians selection on density, not sorting). The proof is an exchange argument of the same family as Huffman's Lemma 15.2.</td></tr>
+    <tr><td class="n">99 <span class="star">★</span></td><td class="tg"><span class="tag t-dp">knapsack</span></td><td>0–1 knapsack in $O(nW)$ — and why that is <em>pseudo</em>-polynomial, unlike the fractional version.</td></tr>
+  </table></div>
+
+  <!-- ============================ SHEET 11 ============================ -->
+  <h2 id="s11">Sheet 11 — B-trees &amp; graph traversal</h2>
+  <div class="sheet-sub">problems 100–102 · file <code>ss26_algodat-11.pdf</code> (header says "Sheet 9") · <a href="problem-sheets/ss26_algodat-11.pdf">open PDF</a></div>
+  <div class="tw"><table>
+    <tr><th>#</th><th>Topic</th><th>What it tests</th></tr>
+    <tr><td class="n">100 <span class="star">★</span></td><td class="tg"><span class="tag t-ds">B-trees</span></td><td>Pseudocode for B-tree <b>deletion</b> — the messiest of the three operations (borrow from a sibling, or merge, ensuring every visited node has $\ge t$ keys on the way down). → <a href="data-structures.html#btree">notes</a></td></tr>
+    <tr><td class="n">101 <span class="star">★</span></td><td class="tg"><span class="tag t-graph">graphs</span></td><td><b>Diameter of a tree</b> — the two-BFS trick, or one DFS returning (height, best-path) per node. $O(V)$.</td></tr>
+    <tr><td class="n">102 <span class="star">★</span></td><td class="tg"><span class="tag t-graph">DFS</span></td><td>Classify edges by discovery/finish times: tree/forward iff $u.d&lt;v.d&lt;v.f&lt;u.f$; back iff $v.d\le u.d&lt;u.f\le v.f$; cross iff $v.d&lt;v.f&lt;u.d&lt;u.f$. <b>The parenthesis theorem in disguise</b>, and the only graph theory the sheets test directly.</td></tr>
+  </table></div>
+
+  <div class="box"><span class="lbl">What the sheets tell you about the exam</span>
+  <ul>
+    <li><b>Loop invariants are drilled from day one</b> (problems 2, 4, 6) — and duly appeared as Q1. Selection sort (5–7) is the most likely rotation.</li>
+    <li><b>Recurrences get a whole sheet plus half of sheet 1</b> — 20-odd problems. Q2 will keep appearing.</li>
+    <li><b>Two topics are heavily examined on the sheets but were absent from the first paper</b>: dynamic programming (sheets 9–10, nineteen problems) and probability (sheet 3 + sheets 4–5). If the second-date paper rotates, these are where it will rotate <em>to</em>.</li>
+    <li><b>AVL trees (80) and graph traversal (101–102) are the two topics with no coverage on this site yet</b> — see the plan on the <a href="index.html">Algorithms hub</a>.</li>
+    <li>Problems marked <span class="tag t-code">Julia</span> want an implementation; the exam is written, so treat them as pseudocode practice unless your lecturer says otherwise.</li>
+  </ul>
+  </div>
+
+  <footer>
+    Problem sheets © Prof. Hermann Schichl, Universität Wien. Summaries and topic tags written for revision;
+    the PDFs above are the authoritative statements. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+<script src="../assets/mfds.js" data-root="../"></script>
+</body>
+</html>
