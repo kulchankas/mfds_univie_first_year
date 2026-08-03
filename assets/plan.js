@@ -141,6 +141,7 @@ window.MFDS_PLAN = {
     'fc_lads_v1',
     'asg-progress-v1',
     'lads-progress-v1',
+    'algo-progress-v1',
     'analysis-daily-v1'
   ],
 

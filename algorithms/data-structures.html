@@ -66,7 +66,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   <p class="lede">The "describe X and its algorithms" half of the exam — 35% of the first-date paper came from exactly this. Each section: definition → storage → pseudocode of the key operations → runtimes. Rehearse writing the pseudocode <em>from memory</em>.</p>
 
   <div class="toc"><span class="lbl">Contents</span>
-    <a href="#heaps">Heaps &amp; priority queues</a> · <a href="#bst">Binary search trees</a> · <a href="#rbt">Red-black trees</a> · <a href="#hash">Hash tables</a> · <a href="#btree">B-trees</a> · <a href="#stacks">Stacks, queues &amp; linked lists</a> · <a href="#sorting">The sorting zoo</a> · <a href="#dp">Dynamic programming</a> · <a href="#greedy">Greedy algorithms</a>
+    <a href="#heaps">Heaps &amp; priority queues</a> · <a href="#bst">Binary search trees</a> · <a href="#rbt">Red-black trees</a> · <a href="#avl">AVL trees</a> · <a href="#hash">Hash tables</a> · <a href="#btree">B-trees</a> · <a href="#stacks">Stacks, queues &amp; linked lists</a> · <a href="#sorting">The sorting zoo</a> · <a href="#dp">Dynamic programming</a> · <a href="#greedy">Greedy algorithms</a> · <a href="#graphs">Graphs &amp; traversal</a>
   </div>
 
   <!-- ==================================================== HEAPS -->
@@ -143,6 +143,78 @@ TREE-MINIMUM(x)                       z.p = y
     <span class="r">A</span>=z                              <span class="b">y</span></pre>
   <p>Finally the root is recolored black. Cost: $O(\lg n)$, at most <b>2 rotations</b> per insertion (Case 1 only recolors). Deletion is analogous (four fixup cases, ≤ 3 rotations) — know it exists and its cost; insertion is what exam 1 asked in detail.</p>
   <div class="tip"><span class="lbl">Exam tip</span> Recite the five properties in order — that alone was 1 pt. For fixup, the decision tree is: <em>uncle red? → recolor. Uncle black? triangle → rotate parent; line → recolor + rotate grandparent.</em></div>
+
+  <!-- ==================================================== AVL -->
+  <h2 id="avl">AVL trees <span class="exam1chip">SHEET 8 · PROB 80</span></h2>
+  <div class="def"><span class="tag">Definition</span> An <b>AVL tree</b> is a binary search tree that is <b>height balanced</b>: for every node $x$, the heights of its two subtrees differ by at most 1. Each node stores an extra attribute $x.h$ = the height of the subtree rooted at $x$ (a leaf has $h=0$; by convention $\mathrm{NIL}.h=-1$).</div>
+  <p>Red-black trees and AVL trees solve the same problem — keeping a BST at $O(\lg n)$ height — with different bookkeeping. AVL keeps a tighter balance (so lookups are slightly faster) at the cost of more rotations on update. Problem 80 walks through the whole construction in four parts; here they are.</p>
+
+  <h3>(a) Why the height is $O(\lg n)$</h3>
+  <p>Turn the question around: <em>what is the fewest nodes an AVL tree of height $h$ can have?</em> Call it $N(h)$. To be as sparse as possible at height $h$, the root has one subtree of height $h-1$ and — by the balance rule, the smallest it may legally be — one of height $h-2$:
+  $$N(0)=1,\qquad N(1)=2,\qquad N(h)=1+N(h-1)+N(h-2).$$
+  This is the Fibonacci recurrence with an offset. Indeed $N(h)=F_{h+3}-1$, where $F_1=F_2=1$ — check: $N(0)=F_3-1=1$, $N(1)=F_4-1=2$, $N(2)=1+2+1=4=F_5-1$. ✓ (The sheet's hint asks only for the weaker $N(h)\ge F_h$, which is enough.)</p>
+  <p>Now use $F_k=\Theta(\varphi^k)$ with $\varphi=\frac{1+\sqrt5}{2}$, precisely $F_k=\varphi^k/\sqrt5$ rounded. A tree with $n$ nodes and height $h$ has $n\ge N(h)=F_{h+3}-1$, so
+  $$n+1\ \ge\ \frac{\varphi^{\,h+3}}{\sqrt5}\quad\Longrightarrow\quad h\ \le\ \log_\varphi\!\big(\sqrt5\,(n+1)\big)-3\ \approx\ 1.44\lg n .$$
+  Hence $h=O(\lg n)$. $\blacksquare$</p>
+  <div class="tip"><span class="lbl">Compare</span> AVL guarantees $h\lesssim1.44\lg n$; a red-black tree only guarantees $h\le2\lg(n+1)$. That is the precise sense in which AVL is "more balanced" — and the same style of argument (minimum nodes at a given height) proves both.</div>
+
+  <h3>(b) B<small>ALANCE</small> — the four rotation cases</h3>
+  <p>$\mathrm{BALANCE}(x)$ assumes both children of $x$ are already height-balanced and their heights differ by at most 2, and returns the root of the repaired subtree. Everything is decided by <em>which side is heavy</em> and then <em>which grandchild is heavy</em> — exactly the "line vs triangle" distinction from red-black insertion:</p>
+<pre class="code">BALANCE(x)
+  <span class="kw">if</span> x.left.h &gt; x.right.h + 1:              <span class="cm">// left-heavy</span>
+    <span class="kw">if</span> x.left.left.h ≥ x.left.right.h:      <span class="cm">// Left-Left  ("line")</span>
+      x = RIGHT-ROTATE(x)
+    <span class="kw">else</span>:                                   <span class="cm">// Left-Right ("triangle")</span>
+      x.left = LEFT-ROTATE(x.left)
+      x = RIGHT-ROTATE(x)
+  <span class="kw">else if</span> x.right.h &gt; x.left.h + 1:         <span class="cm">// right-heavy (mirror)</span>
+    <span class="kw">if</span> x.right.right.h ≥ x.right.left.h:    <span class="cm">// Right-Right</span>
+      x = LEFT-ROTATE(x)
+    <span class="kw">else</span>:                                   <span class="cm">// Right-Left</span>
+      x.right = RIGHT-ROTATE(x.right)
+      x = LEFT-ROTATE(x)
+  UPDATE-HEIGHT(x)
+  <span class="kw">return</span> x
+
+UPDATE-HEIGHT(x)                            <span class="cm">// call after any rotation</span>
+  x.h = 1 + max(x.left.h, x.right.h)</pre>
+<pre class="fig"><b>Left-Left — one rotation</b>            <b>Left-Right — two rotations</b>
+
+      x  (h+2)                              x                      z
+     / \                                   / \                    / \
+   y     D   ── RIGHT-ROTATE(x) ─→       y     D   ──→  first   y     x
+  / \                  y                / \            rotate  / \   / \
+ z   C                / \              A   z           at y   A  C  D  …
+/ \                  z   x                / \                        then
+A  B                /|   |\              B   C                    RIGHT-ROTATE(x)
+                   A B   C D</pre>
+  <p>Left-Left is the "line" case: a single right rotation at $x$ lifts $y$ and fixes it. Left-Right is the "triangle": first left-rotate at $y$ to straighten it into a line, then right-rotate at $x$. The right-heavy cases are mirror images. <b>At most 2 rotations per BALANCE call.</b></p>
+
+  <h3>(c) AVL-I<small>NSERT</small></h3>
+  <p>Insert as in a plain BST, then rebalance <em>on the way back up</em> the recursion — the recursive formulation makes this natural, because the return value re-attaches the (possibly rotated) subtree root to its parent:</p>
+<pre class="code">AVL-INSERT(x, z)                            <span class="cm">// returns the new subtree root</span>
+  <span class="kw">if</span> x == NIL:  <span class="kw">return</span> z                   <span class="cm">// z.h = 0, z.left = z.right = NIL</span>
+  <span class="kw">if</span> z.key &lt; x.key:
+    x.left  = AVL-INSERT(x.left,  z);  x.left.p  = x
+  <span class="kw">else</span>:
+    x.right = AVL-INSERT(x.right, z);  x.right.p = x
+  UPDATE-HEIGHT(x)
+  <span class="kw">return</span> BALANCE(x)                         <span class="cm">// repairs this level if it went off by 2</span>
+
+<span class="cm">// top level:</span>  T.root = AVL-INSERT(T.root, z);  T.root.p = NIL</pre>
+
+  <h3>(d) Why it is $O(\lg n)$ time and $O(\lg n)$ rotations</h3>
+  <p>The descent visits one node per level, and by part (a) there are $O(\lg n)$ levels. On the way back up, each level costs $O(1)$: an <code>UPDATE-HEIGHT</code> plus a <code>BALANCE</code> that performs at most 2 rotations, each $O(1)$. So the total is $O(\lg n)$ time and $O(\lg n)$ rotations. $\blacksquare$</p>
+  <div class="tip"><span class="lbl">Sharper, and worth knowing</span> For <b>insertion</b> the bound is actually $O(1)$ rotations, not $O(\lg n)$: the first rebalance restores the subtree to the height it had <em>before</em> the insert, so no ancestor can still be unbalanced and the loop stops. Deletion is the case that genuinely needs $O(\lg n)$ rotations, because a delete can shorten a subtree and cascade all the way to the root. The problem only asks for $O(\lg n)$, so proving the weaker bound is fine — but saying this earns credit.</div>
+
+  <div class="scroll-x"><table>
+    <tr><th></th><th>AVL</th><th>Red-black</th></tr>
+    <tr><td>Height guarantee</td><td>$\le1.44\lg n$</td><td>$\le2\lg(n+1)$</td></tr>
+    <tr><td>Rotations per insert</td><td>$\le2$</td><td>$\le2$</td></tr>
+    <tr><td>Rotations per delete</td><td>$O(\lg n)$</td><td>$\le3$</td></tr>
+    <tr><td>Extra data per node</td><td>height (or 2-bit balance factor)</td><td>1 colour bit</td></tr>
+    <tr><td>Better for</td><td>lookup-heavy workloads</td><td>update-heavy workloads</td></tr>
+  </table></div>
 
   <!-- ==================================================== HASH -->
   <h2 id="hash">Hash tables</h2>
@@ -222,6 +294,81 @@ TREE-MINIMUM(x)                       z.p = y
     <li><b>Activity selection</b> — always take the earliest-finishing compatible activity: <a href="exam-proofs.html#greedy">Theorem 15.1</a>.</li>
     <li><b>Huffman codes</b> — always merge the two rarest symbols: <a href="exam-proofs.html#huffman">Lemmas 15.2/15.3 + Theorem 15.4</a>, fully worked on the <a href="mock-exam-1.html">mock exam (Q5)</a>. <span class="exam1chip">EXAM 1 · 10 pts</span></li>
     <li>Contrast with DP in one sentence: DP tries <em>all</em> choices and takes the best; greedy commits to one choice and must <em>prove</em> it safe.</li>
+  </ul>
+
+  <!-- ==================================================== GRAPHS -->
+  <h2 id="graphs">Graphs &amp; traversal <span class="exam1chip">SHEET 11 · PROB 101–102</span></h2>
+  <div class="def"><span class="tag">Definition</span> A <b>directed graph</b> is $\Gamma=(V,E)$ with $E\subseteq V\times V$; edges are <em>ordered</em> pairs, so $(i,j)\neq(j,i)$. A <b>path</b> of length $k$ is a vertex sequence $v_0v_1\dots v_k$ with $(v_{i-1},v_i)\in E$; it is a <b>cycle</b> if $v_0=v_k$. A directed graph with no cycles is a <b>DAG</b>.</div>
+
+  <h3>Representation</h3>
+  <div class="scroll-x"><table>
+    <tr><th></th><th>Adjacency list</th><th>Adjacency matrix</th></tr>
+    <tr><td>Space</td><td>$\Theta(V+E)$</td><td>$\Theta(V^2)$</td></tr>
+    <tr><td>"Is $(u,v)$ an edge?"</td><td>$O(\deg u)$</td><td>$\Theta(1)$</td></tr>
+    <tr><td>Enumerate $u$'s neighbours</td><td>$\Theta(\deg u)$</td><td>$\Theta(V)$</td></tr>
+    <tr><td>Best for</td><td>sparse graphs (the usual case)</td><td>dense graphs, or fast edge queries</td></tr>
+  </table></div>
+
+  <h3>BFS and DFS</h3>
+  <p>Both visit every vertex and edge once, so both run in $\Theta(V+E)$ on adjacency lists. The <em>only</em> real difference is the container holding the frontier — and that choice is what makes them behave completely differently.</p>
+<pre class="code">BFS(G, s)                                   <span class="cm">// queue → shortest paths by edge count</span>
+  <span class="kw">for</span> each u ∈ V − {s}: u.d = ∞; u.π = NIL
+  s.d = 0;  s.π = NIL;  Q = {s}
+  <span class="kw">while</span> Q ≠ ∅:
+    u = DEQUEUE(Q)
+    <span class="kw">for</span> each v ∈ Adj[u]:
+      <span class="kw">if</span> v.d == ∞:                          <span class="cm">// undiscovered</span>
+        v.d = u.d + 1;  v.π = u;  ENQUEUE(Q, v)
+
+DFS(G)                                      <span class="cm">// stack/recursion → timestamps</span>
+  time = 0
+  <span class="kw">for</span> each u ∈ V: u.colour = WHITE; u.π = NIL
+  <span class="kw">for</span> each u ∈ V: <span class="kw">if</span> u.colour == WHITE: DFS-VISIT(G, u)
+
+DFS-VISIT(G, u)
+  time = time + 1;  u.d = time;  u.colour = GRAY      <span class="cm">// discovered</span>
+  <span class="kw">for</span> each v ∈ Adj[u]:
+    <span class="kw">if</span> v.colour == WHITE: v.π = u; DFS-VISIT(G, v)
+  u.colour = BLACK
+  time = time + 1;  u.f = time                        <span class="cm">// finished</span></pre>
+  <p>BFS computes <b>shortest-path distances in unweighted graphs</b> ($u.d$ = fewest edges from $s$). DFS computes two timestamps per vertex: $u.d$ when it is discovered (goes grey) and $u.f$ when its whole subtree is done (goes black). Every vertex satisfies $u.d&lt;u.f$, and the $2|V|$ timestamps are all distinct.</p>
+
+  <div class="def"><span class="tag">Parenthesis theorem</span>
+  For any two vertices $u,v$, exactly one of these holds:
+  <ul style="margin-top:.4rem">
+    <li>the intervals $[u.d,u.f]$ and $[v.d,v.f]$ are <b>disjoint</b>, and neither is a descendant of the other;</li>
+    <li>$[u.d,u.f]\subset[v.d,v.f]$, and $u$ is a <b>descendant</b> of $v$ in the DFS forest;</li>
+    <li>$[v.d,v.f]\subset[u.d,u.f]$, and $v$ is a descendant of $u$.</li>
+  </ul>
+  Think of writing "$($" at discovery and "$)$" at finish: the result is a <b>well-formed parenthesis string</b>. Intervals never partially overlap.</div>
+
+  <h3>Edge classification <span class="exam1chip">PROB 102</span></h3>
+  <p>DFS sorts every edge $(u,v)$ into exactly one of four classes, and the class is readable straight off the timestamps — which is exactly what problem 102 asks you to prove:</p>
+  <div class="scroll-x"><table>
+    <tr><th>Class</th><th>Meaning</th><th>Timestamp test</th><th>Colour of $v$ when explored</th></tr>
+    <tr><td><b>Tree</b></td><td>$v$ first discovered <em>via</em> this edge</td><td rowspan="2">$u.d&lt;v.d&lt;v.f&lt;u.f$</td><td>WHITE</td></tr>
+    <tr><td><b>Forward</b></td><td>$v$ a non-child descendant of $u$</td><td>BLACK</td></tr>
+    <tr><td><b>Back</b></td><td>$v$ an ancestor of $u$ (or $u$ itself)</td><td>$v.d\le u.d&lt;u.f\le v.f$</td><td>GRAY</td></tr>
+    <tr><td><b>Cross</b></td><td>everything else — across subtrees or trees</td><td>$v.d&lt;v.f&lt;u.d&lt;u.f$</td><td>BLACK</td></tr>
+  </table></div>
+  <p><em>Why the tests work.</em> If $(u,v)$ is a tree or forward edge then $v$ is a proper descendant of $u$, so by the parenthesis theorem $v$'s interval is strictly inside $u$'s: $u.d&lt;v.d&lt;v.f&lt;u.f$. If it is a back edge then $u$ is a descendant of $v$ (or $u=v$ on a self-loop), giving the reverse containment $v.d\le u.d&lt;u.f\le v.f$. Otherwise neither is a descendant, so the intervals are disjoint — and since we explore $(u,v)$ while $u$ is grey, $v$ must already have finished, so $v$'s interval lies entirely to the left: $v.d&lt;v.f&lt;u.d&lt;u.f$. The three cases are mutually exclusive and exhaustive. $\blacksquare$</p>
+  <div class="tip"><span class="lbl">Two facts worth memorising</span>
+  <b>(1)</b> A directed graph is <b>acyclic iff DFS finds no back edge</b> — that is how you test for a DAG in $O(V+E)$.
+  <b>(2)</b> In an <b>undirected</b> graph only tree and back edges occur; forward and cross edges are impossible (whichever endpoint is reached first becomes the ancestor).</div>
+
+  <h3>Topological sort</h3>
+  <p>Run DFS and output vertices in <b>decreasing finish time</b> (i.e. push each onto a stack as it finishes). $\Theta(V+E)$. Correctness: for any edge $(u,v)$ in a DAG, $v$ finishes before $u$ — if $v$ were unfinished when we explored $(u,v)$ it would be grey, making $(u,v)$ a back edge and the graph cyclic. So decreasing $f$ respects every edge.</p>
+
+  <h3>Longest path in a DAG <span class="exam1chip">PROB 86</span></h3>
+  <p>Longest <em>simple</em> path is NP-hard in general — but on a DAG every path is automatically simple, and DP works. Let $L(v)$ be the weight of the heaviest path from $v$ to $t$:
+  $$L(t)=0,\qquad L(v)=\max_{(v,w)\in E}\big(w_{(v,w)}+L(w)\big),$$
+  evaluated in <b>reverse topological order</b> so each $L(w)$ is ready when needed. Read the path off by following the argmax from $s$. Each edge is relaxed once: $\Theta(V+E)$.</p>
+
+  <h3>Diameter of a tree <span class="exam1chip">PROB 101</span></h3>
+  <p>The diameter is $\max_{u,v}\delta(u,v)$. Two clean $O(V)$ methods:</p>
+  <ul>
+    <li><b>Double BFS.</b> BFS from any vertex $r$; let $a$ be a farthest vertex found. BFS again from $a$; the greatest distance found is the diameter. <em>Why:</em> the farthest vertex from <em>any</em> start is always an endpoint of some longest path — if it were not, one could splice a longer path, contradiction. (This needs the graph to be a tree; it is false on general graphs.)</li>
+    <li><b>One DFS.</b> For each node return its height; the longest path <em>through</em> a node $v$ is $1+h(\text{tallest child})+1+h(\text{2nd tallest child})$. Track the running maximum over all $v$. One post-order pass, $O(V)$.</li>
   </ul>
 
   <footer>

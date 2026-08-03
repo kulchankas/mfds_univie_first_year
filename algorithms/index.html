@@ -48,6 +48,40 @@
   .doc .t{flex:1;font-weight:500} .doc .t .s{color:var(--text-dim);font-weight:400;font-size:.9em}
   .doc .ext{font-family:'JetBrains Mono',monospace;font-size:.68rem;text-transform:uppercase;color:var(--accent);border:1px solid var(--border);border-radius:5px;padding:.12rem .4rem}
   .x1{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:#221a10;background:#d99a7e;border-radius:5px;padding:.1rem .45rem;vertical-align:middle;letter-spacing:.03em;white-space:nowrap}
+
+  /* ---------- study plan / progress ---------- */
+  .dash{display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap;background:#fff;border:1px solid #EFEFF2;border-radius:18px;padding:1.1rem 1.3rem;margin:1.2rem 0}
+  .dash-ring{position:relative;width:74px;height:74px;flex:none}
+  .dash-ring svg{transform:rotate(-90deg)}
+  .dash-ring .pc{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
+  .dash-nums{flex:1;min-width:180px;display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:.5rem 1rem}
+  .dash-nums div{font-size:.8rem;color:#8A8A90;font-weight:600}
+  .dash-nums b{display:block;font-size:1.15rem;color:#1B1B1F;font-weight:800}
+  .dash-acts{display:flex;gap:.45rem;flex-wrap:wrap}
+  .mini{background:#fff;border:1px solid #EFEFF2;border-radius:999px;padding:.4rem .8rem;font-size:.76rem;font-weight:700;color:#1B1B1F;cursor:pointer;font-family:inherit}
+  .mini:hover{border-color:#F0A93A}
+
+  .unit{background:#fff;border:1px solid #EFEFF2;border-radius:14px;margin:.55rem 0;overflow:hidden;transition:border-color .15s}
+  .unit.done{border-color:rgba(47,174,114,.5);background:#FCFEFD}
+  .unit-h{display:flex;align-items:center;gap:.7rem;padding:.75rem .95rem;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .unit-h:hover{background:#FAFAFB}
+  .ubox{width:20px;height:20px;border-radius:6px;border:2px solid #C9C9D0;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;background:#fff;font-weight:800}
+  .unit.done .ubox{background:#2FAE72;border-color:#2FAE72}
+  .unit-t{flex:1;min-width:0;font-weight:700;font-size:.95rem}
+  .unit.done .unit-t{color:#0F6B41}
+  .unit-t small{display:block;font-weight:600;font-size:.76rem;color:#8A8A90;margin-top:1px}
+  .unit-q{font-size:.64rem;font-weight:800;background:#FFF1DC;color:#8A5A0E;border-radius:5px;padding:.12rem .4rem;white-space:nowrap;flex:none}
+  .unit-b{padding:0 .95rem .85rem 2.6rem;display:none}
+  .unit.open .unit-b{display:block}
+  .lanes{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.5rem}
+  .lane{display:inline-flex;align-items:center;gap:.32rem;border:1px solid #EFEFF2;background:#fff;border-radius:999px;padding:.24rem .6rem;font-size:.74rem;font-weight:700;color:#8A8A90;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .lane:hover{border-color:#C9C9D0}
+  .lane .lt{width:13px;height:13px;border-radius:4px;border:1.5px solid #C9C9D0;display:inline-block;flex:none}
+  .lane.on{color:#0F6B41;border-color:rgba(47,174,114,.45);background:rgba(47,174,114,.07)}
+  .lane.on .lt{background:#2FAE72;border-color:#2FAE72}
+  .unit-links{font-size:.82rem;color:#55555C}
+  .unit-links a{font-weight:600}
+  .unit-sheet{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#8A8A90}
   footer{margin-top:3rem;padding-top:1.3rem;border-top:1px solid var(--border-soft);color:var(--text-dim);font-size:.82rem}
   footer a{color:var(--accent);text-decoration:none}
 </style>
@@ -66,6 +100,33 @@
     <p class="feature-desc">The actual first-date paper (2 July 2026) transcribed question by question — bubblesort invariants, four recurrences, heaps, red-black trees, Huffman — with grader-style model solutions and a predicted second-date paper for self-testing.</p>
     <span class="feature-cta">Open the exam →</span>
   </a>
+
+  <h2>Study plan &amp; progress</h2>
+  <p class="lede" style="font-size:1rem">Fourteen units covering the whole exam surface. Tick a unit when you can do it <em>closed-book</em>; the four lanes track how far you've taken it. Saved in this browser.</p>
+
+  <div class="dash">
+    <div class="dash-ring">
+      <svg width="74" height="74" viewBox="0 0 74 74">
+        <circle cx="37" cy="37" r="30" fill="none" stroke="#EFEFF2" stroke-width="7"/>
+        <circle id="ring" cx="37" cy="37" r="30" fill="none" stroke="#F0A93A" stroke-width="7"
+                stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+      </svg>
+      <div class="pc" id="ring-pc">0%</div>
+    </div>
+    <div class="dash-nums">
+      <div><b id="n-units">0 / 14</b>units mastered</div>
+      <div><b id="n-lanes">0 / 41</b>lane items</div>
+      <div><b id="n-exam">0 / 6</b>exam-question units</div>
+    </div>
+    <div class="dash-acts">
+      <button class="mini" id="p-export">⭳ Export</button>
+      <button class="mini" id="p-import">⭱ Import</button>
+      <button class="mini" id="p-reset">Reset</button>
+      <input type="file" id="p-file" accept="application/json" hidden>
+    </div>
+  </div>
+
+  <div id="units"></div>
 
   <h2>Study kit</h2>
   <a class="doc" href="exam-proofs.html"><span class="ic">🧾</span><span class="t">Exam proofs — all 11 flagged items, written out <span class="s">· loop invariants · Master/Akra–Bazzi · quicksort · lower bound · selection · hashing · Huffman · augmentation</span></span><span class="ext">HTML</span></a>
@@ -141,6 +202,175 @@
   <footer>
     Problem sheets © Prof. Schichl; CLRS © its authors (linked, not hosted). Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
   </footer>
+
+<script>
+(function(){
+  'use strict';
+  var KEY = 'algo-progress-v1';
+
+  /* lanes: R = read the notes · P = reproduce the proof closed-book
+     · D = do the sheet problems · C = flashcards for it are in rotation  */
+  var UNITS = [
+    { id:'asym', t:'Asymptotics &amp; growth', s:'Landau symbols, Stirling, the lg* ordering',
+      sheet:'Sheet 1 · 1, 9–14, 17', lanes:'RD',
+      links:'<a href="problem-sheets.html#s1">problem map</a> · <a href="problem-sheets/Problem_14_Sheet_1_Algo_and_Data_Structures.pdf">worked solution 14–15</a>' },
+    { id:'inv', t:'Correctness &amp; loop invariants', s:'Initialization / maintenance / termination; the permutation clause',
+      sheet:'Sheet 1 · 2–7 · Sheet 5 · 51', lanes:'RPD', q:'EXAM Q1',
+      links:'<a href="exam-proofs.html#loopinv">proofs ①</a> · <a href="mock-exam-1.html">mock Q1</a>' },
+    { id:'master', t:'Recurrences — Master Theorem', s:'Watershed, the three cases, extended case 2, regularity',
+      sheet:'Sheet 1 · 8, 15, 16 · Sheet 2 · 18–21', lanes:'RPDC', q:'EXAM Q2',
+      links:'<a href="recurrence-drills.html">drills A–B</a> · <a href="exam-proofs.html#master">proofs ②</a>' },
+    { id:'akra', t:'Polynomial growth &amp; Akra–Bazzi', s:'The corrected quantifier order; unequal splits; change of variables',
+      sheet:'Sheet 2 · 22–29', lanes:'RPDC', q:'EXAM Q2',
+      links:'<a href="recurrence-drills.html#pgc">polynomial growth</a> · <a href="recurrence-drills.html#cov">change of vars</a> · <a href="exam-proofs.html#akra">proofs ③</a>' },
+    { id:'prob', t:'Probability toolkit', s:'Markov, geometric variance, conditional independence, binomial estimates',
+      sheet:'Sheet 3 · 30–35', lanes:'RD',
+      links:'<a href="problem-sheets.html#s3">problem map</a> <span style="color:#B22C6A">· notes not written yet</span>' },
+    { id:'rand', t:'Randomised analysis', s:'Uniform permutation, expected search times, indicator variables',
+      sheet:'Sheet 4 · 36–40 · Sheet 5 · 44–46, 50', lanes:'RPD',
+      links:'<a href="exam-proofs.html#l54">Lemma 5.4</a> · <a href="exam-proofs.html#quicksort">quicksort ⑤</a> · <a href="exam-proofs.html#select">selection ⑦</a>' },
+    { id:'heap', t:'Heaps &amp; priority queues', s:'MIN-HEAPIFY, BUILD-MIN-HEAP, DECREASE-KEY from memory',
+      sheet:'Sheet 4 · 41–43 · Sheet 5 · 47–49', lanes:'RDC', q:'EXAM Q3',
+      links:'<a href="data-structures.html#heaps">notes</a> · <a href="mock-exam-1.html">mock Q3</a>' },
+    { id:'trees', t:'BST, red-black &amp; AVL', s:'RB properties, the three fixup cases, AVL height &amp; BALANCE',
+      sheet:'Sheet 7 · 62–72 · Sheet 8 · 73–80', lanes:'RDC', q:'EXAM Q4',
+      links:'<a href="data-structures.html#rbt">red-black</a> · <a href="data-structures.html#avl">AVL</a> · <a href="mock-exam-1.html">mock Q4</a>' },
+    { id:'hash', t:'Hashing', s:'Chaining vs open addressing, load factor, universal families',
+      sheet:'Sheet 6 · 59–61', lanes:'RPDC',
+      links:'<a href="data-structures.html#hash">notes</a> · <a href="exam-proofs.html#hashing">Thms 11.2 / 11.8</a>' },
+    { id:'sort', t:'Sorting &amp; lower bounds', s:'The zoo, stability, and the &Omega;(n lg n) decision-tree bound',
+      sheet:'—', lanes:'RPC',
+      links:'<a href="data-structures.html#sorting">notes</a> · <a href="exam-proofs.html#lowerbound">Thm 8.1</a>' },
+    { id:'dp', t:'Dynamic programming', s:'Rod cutting, interval DP, tree DP, knapsack',
+      sheet:'Sheet 9 · 81–89 · Sheet 10 · 90–93', lanes:'RD',
+      links:'<a href="data-structures.html#dp">notes</a> · <a href="problem-sheets.html#s9">problem map</a> <span style="color:#B22C6A">· notes are thin</span>' },
+    { id:'greedy', t:'Greedy &amp; Huffman', s:'Exchange arguments; Huffman optimality end-to-end',
+      sheet:'Sheet 10 · 94–99', lanes:'RPDC', q:'EXAM Q5',
+      links:'<a href="exam-proofs.html#huffman">Huffman ⑩</a> · <a href="exam-proofs.html#greedy">activity selection ⑨</a> · <a href="mock-exam-1.html">mock Q5</a>' },
+    { id:'graphs', t:'B-trees, lists &amp; graphs', s:'B-tree ops, tree walks, DFS edge classification, tree diameter',
+      sheet:'Sheet 6 · 52–58 · Sheet 11 · 100–102', lanes:'RD',
+      links:'<a href="data-structures.html#btree">B-trees</a> · <a href="data-structures.html#graphs">graphs</a>' },
+    { id:'mock', t:'Mock exams under timed conditions', s:'The real paper, then the predicted second-date paper',
+      sheet:'—', lanes:'PD', q:'DO TWICE',
+      links:'<a href="mock-exam-1.html">mock exam + solutions</a>' }
+  ];
+  var LANE_NAME = { R:'Read', P:'Prove', D:'Drill', C:'Cards' };
+
+  var state = { v:1, u:{} };
+  try { var raw = JSON.parse(localStorage.getItem(KEY)||'null'); if (raw && raw.v===1 && raw.u) state = raw; } catch(e){}
+  UNITS.forEach(function(u){
+    if (!state.u[u.id]) state.u[u.id] = { done:false, lanes:{} };
+    u.lanes.split('').forEach(function(L){
+      if (typeof state.u[u.id].lanes[L] !== 'boolean') state.u[u.id].lanes[L] = false;
+    });
+  });
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
+
+  var totalLanes = UNITS.reduce(function(a,u){ return a + u.lanes.length; }, 0);
+
+  function render(){
+    var box = document.getElementById('units');
+    box.innerHTML = UNITS.map(function(u,i){
+      var st = state.u[u.id];
+      var lanes = u.lanes.split('').map(function(L){
+        return '<span class="lane'+(st.lanes[L]?' on':'')+'" data-u="'+u.id+'" data-l="'+L+'">'+
+               '<i class="lt"></i>'+LANE_NAME[L]+'</span>';
+      }).join('');
+      return '<div class="unit'+(st.done?' done':'')+'" data-u="'+u.id+'">'+
+        '<div class="unit-h" data-toggle="'+u.id+'">'+
+          '<span class="ubox" data-check="'+u.id+'">✓</span>'+
+          '<span class="unit-t">'+(i+1)+'. '+u.t+'<small>'+u.s+'</small></span>'+
+          (u.q?'<span class="unit-q">'+u.q+'</span>':'')+
+        '</div>'+
+        '<div class="unit-b">'+
+          '<div class="lanes">'+lanes+'</div>'+
+          '<div class="unit-links">'+u.links+'</div>'+
+          '<div class="unit-sheet">'+u.sheet+'</div>'+
+        '</div></div>';
+    }).join('');
+    wire();
+    stats();
+    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([box]).catch(function(){});
+  }
+
+  function wire(){
+    document.querySelectorAll('[data-toggle]').forEach(function(h){
+      h.onclick = function(e){
+        if (e.target.closest('[data-check]')) return;         // the box handles itself
+        h.parentElement.classList.toggle('open');
+      };
+    });
+    document.querySelectorAll('[data-check]').forEach(function(b){
+      b.onclick = function(e){
+        e.stopPropagation();
+        var id = b.dataset.check, st = state.u[id];
+        st.done = !st.done;
+        if (st.done) Object.keys(st.lanes).forEach(function(L){ st.lanes[L] = true; });
+        save(); render();
+      };
+    });
+    document.querySelectorAll('.lane').forEach(function(l){
+      l.onclick = function(e){
+        e.stopPropagation();
+        var st = state.u[l.dataset.u];
+        st.lanes[l.dataset.l] = !st.lanes[l.dataset.l];
+        st.done = Object.keys(st.lanes).every(function(L){ return st.lanes[L]; });
+        save(); render();
+        // keep the panel the user was working in open
+        var el = document.querySelector('.unit[data-u="'+l.dataset.u+'"]');
+        if (el) el.classList.add('open');
+      };
+    });
+  }
+
+  function stats(){
+    var done = UNITS.filter(function(u){ return state.u[u.id].done; }).length;
+    var lanesOn = UNITS.reduce(function(a,u){
+      return a + Object.keys(state.u[u.id].lanes).filter(function(L){ return state.u[u.id].lanes[L]; }).length;
+    }, 0);
+    var examUnits = UNITS.filter(function(u){ return u.q && u.q.indexOf('EXAM')===0; });
+    var examDone = examUnits.filter(function(u){ return state.u[u.id].done; }).length;
+    var pct = Math.round(100*lanesOn/totalLanes);
+    document.getElementById('n-units').textContent = done+' / '+UNITS.length;
+    document.getElementById('n-lanes').textContent = lanesOn+' / '+totalLanes;
+    document.getElementById('n-exam').textContent = examDone+' / '+examUnits.length;
+    document.getElementById('ring-pc').textContent = pct+'%';
+    document.getElementById('ring').setAttribute('stroke-dashoffset', 188.5*(1-pct/100));
+  }
+
+  document.getElementById('p-export').onclick = function(){
+    var blob = new Blob([JSON.stringify({app:'mfds-algo',v:1,data:state},null,2)],{type:'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'algo-progress.json'; a.click(); URL.revokeObjectURL(a.href);
+  };
+  document.getElementById('p-import').onclick = function(){ document.getElementById('p-file').click(); };
+  document.getElementById('p-file').onchange = function(e){
+    var f = e.target.files[0]; if (!f) return;
+    var r = new FileReader();
+    r.onload = function(){
+      try {
+        var b = JSON.parse(r.result);
+        var d = (b && b.app === 'mfds-algo') ? b.data : b;
+        if (!d || !d.u) throw new Error('unrecognised file');
+        state = d; save(); render();
+      } catch(err){ alert('Could not read that file: '+err.message); }
+    };
+    r.readAsText(f); e.target.value = '';
+  };
+  document.getElementById('p-reset').onclick = function(){
+    if (!confirm('Reset all Algorithms plan progress?')) return;
+    state = { v:1, u:{} };
+    UNITS.forEach(function(u){
+      state.u[u.id] = { done:false, lanes:{} };
+      u.lanes.split('').forEach(function(L){ state.u[u.id].lanes[L] = false; });
+    });
+    save(); render();
+  };
+
+  render();
+})();
+</script>
 </div>
 <script src="../assets/mfds.js" data-root="../"></script>
 </body>

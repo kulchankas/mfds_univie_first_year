@@ -445,6 +445,17 @@
   if (lads && lads.chapters) for (var c in lads.chapters) if (lads.chapters[c] && lads.chapters[c].done) chaptersDone++;
   var daily = readJSON('analysis-daily-v1'); var sheetsDone = 0;
   if (daily && daily.days) for (var d in daily.days) if (daily.days[d]) sheetsDone++;
+  var algoPlan = readJSON('algo-progress-v1');            // {u:{id:{done,lanes}}}
+  var algoUnits = 0, algoUnitsTotal = 14, algoLanes = 0, algoLanesTotal = 0;
+  if (algoPlan && algoPlan.u) {
+    var ids = Object.keys(algoPlan.u);
+    algoUnitsTotal = ids.length || 14;
+    ids.forEach(function(id){
+      if (algoPlan.u[id].done) algoUnits++;
+      var L = algoPlan.u[id].lanes || {};
+      Object.keys(L).forEach(function(k){ algoLanesTotal++; if (L[k]) algoLanes++; });
+    });
+  }
   var tasksDone = 0; for (var t in state.tasks) if (state.tasks[t]) tasksDone++;
 
   var xp = tasksDone*25 + (algoLearned+anaLearned+ladsLearned)*20 + blocksDone*80 + chaptersDone*100 + sheetsDone*40;
@@ -531,15 +542,20 @@
     r.querySelector('i').textContent = pct+'%';
   }
   function renderSubjects(){
-    var a = Math.round(100*algoLearned/47),
-        n = Math.round(100*blocksDone/10),
+    /* Algorithms: the 14-unit plan is the real measure of "done";
+       blend it with the deck so the ring moves for either kind of work. */
+    var a = algoLanesTotal
+          ? Math.round(100*(0.7*algoLanes/algoLanesTotal + 0.3*algoLearned/47))
+          : Math.round(100*algoLearned/47);
+    var n = Math.round(100*blocksDone/10),
         l = Math.round(100*chaptersDone/6),
         i = Math.round(100*ladsLearned/45);
     ring('ring-algo', a, 'var(--algo)');
     ring('ring-ana',  n, 'var(--ana)');
     ring('ring-lads', Math.round((l + i)/2), 'var(--lads)');
     ring('ring-la',   state.scores.la != null ? state.scores.la : 0, 'var(--la)');
-    document.getElementById('sub-algo').textContent = algoLearned+' of 47 cards mastered';
+    document.getElementById('sub-algo').textContent =
+      algoUnits+' of '+algoUnitsTotal+' units · '+algoLearned+' of 47 cards';
     document.getElementById('sub-ana').textContent  = blocksDone+' of 10 guide blocks complete';
     document.getElementById('sub-lads').textContent = chaptersDone+' of 6 chapters · '+ladsLearned+' of 45 cards';
     document.getElementById('sub-la').textContent   = 'Exam notes + five mock exams';
