@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F9">
+<meta name="description" content="The probability toolkit for the AlgoDat exam: indicator variables, linearity of expectation, Markov and Chebyshev, the geometric distribution, binomial estimates, and the randomised-search analyses.">
+<title>Probability toolkit — Algorithms &amp; Data Structures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[['$','$']]},svg:{fontCache:'global'}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#F7F7F9;--card:#fff;--border:#EFEFF2;--ink:#1B1B1F;--muted:#55555C;--faint:#8A8A90;
+    --algo:#F0A93A;--algo-bg:#FFF1DC;--algo-dark:#8A5A0E;
+    --good:#2FAE72;--good-bg:#E1F5EA;--good-dark:#0F6B41;
+    --blue:#2F6FB0;--blue-bg:#EAF2FB;
+    --purple:#6B3FA0;--purple-bg:#EFE6FE;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Figtree',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.66;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:840px;margin:0 auto;padding:clamp(1.5rem,4vw,2.3rem) clamp(1rem,4vw,1.7rem) 5rem;
+        padding-left:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-left));
+        padding-right:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-right))}
+  .eyebrow{font-weight:700;color:var(--faint);font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.6rem}
+  h1{font-weight:800;font-size:clamp(1.75rem,5.5vw,2.4rem);line-height:1.1;letter-spacing:-.025em;margin-bottom:.55rem}
+  .lede{color:var(--muted);font-size:clamp(.95rem,3vw,1.04rem);max-width:46em}
+  h2{font-weight:800;font-size:clamp(1.2rem,4vw,1.5rem);letter-spacing:-.02em;margin:2.4rem 0 .7rem;scroll-margin-top:70px}
+  h3{font-weight:700;font-size:1.03rem;margin:1.5rem 0 .45rem;color:var(--algo-dark)}
+  p{margin:.55rem 0;color:var(--muted);font-size:.96rem}
+  b,strong{color:var(--ink)}
+  ul,ol{margin:.4rem 0 .7rem;padding-left:1.35rem;color:var(--muted);font-size:.96rem}
+  li{margin:.32rem 0}
+  a{color:var(--purple)}
+  code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:#F0F0F3;color:var(--algo-dark);padding:.05rem .3rem;border-radius:5px}
+  .def{background:var(--good-bg);border:1px solid rgba(47,174,114,.25);border-left:4px solid var(--good);border-radius:0 14px 14px 0;padding:.85rem 1.1rem;margin:.9rem 0;color:var(--ink);font-size:.95rem}
+  .def .tag{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--good-dark);margin-bottom:.3rem}
+  .idea{background:var(--blue-bg);border:1px solid rgba(47,111,176,.25);border-left:4px solid var(--blue);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.93rem;color:#33333A}
+  .idea .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-right:.4rem}
+  .tip{background:var(--algo-bg);border:1px solid rgba(240,169,58,.3);border-left:4px solid var(--algo);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.92rem;color:#4A3A22}
+  .tip .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--algo-dark);margin-right:.4rem}
+  pre.code{font-family:'JetBrains Mono',monospace;font-size:.83rem;line-height:1.5;background:#F5F5F7;border:1px solid var(--border);border-radius:12px;padding:.85rem 1.05rem;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.7rem 0;color:#26262B}
+  pre.code .kw{color:var(--blue)} pre.code .cm{color:#7A7A82;font-style:italic}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.8rem 0;border:1px solid var(--border);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:.89rem;background:#fff}
+  th,td{border-bottom:1px solid var(--border);padding:.5rem .65rem;text-align:left;vertical-align:top}
+  th{background:#F5F5F7;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.03em;color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  .toc{background:#fff;border:1px solid var(--border);border-radius:14px;padding:.9rem 1.2rem;margin:1.3rem 0;font-size:.9rem;line-height:1.9}
+  .toc a{text-decoration:none;font-weight:600;white-space:nowrap}
+  .pchip{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:#4A3208;background:var(--algo);border-radius:5px;padding:.1rem .45rem;vertical-align:middle;letter-spacing:.03em;white-space:nowrap}
+  footer{margin-top:3rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--faint);font-size:.82rem}
+</style>
+<link rel="stylesheet" href="../assets/mfds.css">
+</head>
+<body class="mfds mfds-algo" data-page="algo" data-up="index.html" data-up-label="Algorithms">
+<div class="wrap">
+  <div class="eyebrow">Universität Wien · Prof. Schichl · sheets 3–5</div>
+  <h1>Probability toolkit</h1>
+  <p class="lede">Sheet 3 is pure probability and sheets 4–5 apply it. None of it appeared on the first-date paper — which is precisely why it is a live candidate for the second. Everything here is small, provable, and drillable.</p>
+
+  <div class="toc"><b>Jump to:</b>
+    <a href="#indicators">indicator method</a> ·
+    <a href="#markov">Markov &amp; Chebyshev</a> ·
+    <a href="#geom">geometric distribution</a> ·
+    <a href="#binom">binomial estimates</a> ·
+    <a href="#indep">conditional independence</a> ·
+    <a href="#search">the three searches</a> ·
+    <a href="#shuffle">three broken shufflers</a>
+  </div>
+
+  <!-- ================= INDICATORS ================= -->
+  <h2 id="indicators">Linearity and the indicator method</h2>
+  <div class="idea"><span class="lbl">The whole trick</span> Almost every expected-running-time proof in this course is the same move: <b>write the quantity you care about as a sum of indicator variables, then use linearity of expectation.</b> Linearity does <em>not</em> require independence — that is what makes it so powerful.</div>
+  <div class="def"><span class="tag">Indicator random variable</span>
+  For an event $A$, define $I\{A\}=1$ if $A$ occurs and $0$ otherwise. Then
+  $$\mathbb{E}[I\{A\}] = 1\cdot\Pr[A] + 0\cdot\Pr[\bar A] = \Pr[A].$$
+  <b>Expectation of an indicator is just the probability.</b> Combined with $\mathbb{E}\big[\sum_i X_i\big]=\sum_i\mathbb{E}[X_i]$, counting problems become probability problems.</div>
+  <p>Worked pattern — <em>expected number of comparisons in randomised quicksort</em>: let $X_{ij}=I\{z_i\text{ compared with }z_j\}$. Then $X=\sum_{i&lt;j}X_{ij}$ and
+  $\mathbb{E}[X]=\sum_{i&lt;j}\Pr[z_i\text{ vs }z_j]=\sum_{i&lt;j}\frac{2}{j-i+1}$. The individual $X_{ij}$ are wildly dependent — linearity does not care. Full proof: <a href="exam-proofs.html#quicksort">Theorem 7.4</a>.</p>
+
+  <!-- ================= MARKOV ================= -->
+  <h2 id="markov">Markov's inequality <span class="pchip">PROB 34</span></h2>
+  <div class="def"><span class="tag">Markov's inequality</span>
+  Let $X\ge0$ be a random variable with $\mathbb{E}[X]$ defined. Then for every $t>0$,
+  $$\Pr[X\ge t]\ \le\ \frac{\mathbb{E}[X]}{t}.$$</div>
+  <p><em>Proof (the one-line version — learn this one).</em> Put $I=I\{X\ge t\}$. I claim $t\,I\le X$ <b>always</b>:</p>
+  <ul>
+    <li>if $I=1$ then $X\ge t$, so $tI=t\le X$;</li>
+    <li>if $I=0$ then $tI=0\le X$, because $X\ge0$.</li>
+  </ul>
+  <p>Taking expectations of $tI\le X$ and using monotonicity plus $\mathbb{E}[I]=\Pr[X\ge t]$:
+  $$t\Pr[X\ge t]=\mathbb{E}[tI]\ \le\ \mathbb{E}[X].$$
+  Divide by $t>0$. $\blacksquare$</p>
+  <div class="tip"><span class="lbl">Where the hypotheses bite</span> <b>$X\ge0$ is essential</b> — without it the second bullet fails (take $X=-100$ with certainty and $t=1$: $\Pr[X\ge1]=0$ but $\mathbb{E}[X]/t=-100$, and the inequality is vacuous or wrong in the general form). Markov is <em>tight</em>: for $X$ equal to $t$ with probability $p$ and $0$ otherwise, $\Pr[X\ge t]=p=\mathbb{E}[X]/t$ exactly. So no better bound exists using only the mean.</div>
+
+  <h3>Chebyshev, in two lines from Markov</h3>
+  <p>Apply Markov to the nonnegative variable $(X-\mu)^2$, where $\mu=\mathbb{E}[X]$:
+  $$\Pr\big[|X-\mu|\ge t\big]=\Pr\big[(X-\mu)^2\ge t^2\big]\le\frac{\mathbb{E}[(X-\mu)^2]}{t^2}=\frac{\operatorname{Var}[X]}{t^2}.$$
+  That is <b>Chebyshev's inequality</b>. It is the standard tool for problem 33 (the 40d6 fireball): with $\mathbb{E}=140$ and $\operatorname{Var}=40\cdot\frac{35}{12}$, Chebyshev bounds the chance of landing far from 140.</p>
+
+  <!-- ================= GEOMETRIC ================= -->
+  <h2 id="geom">The geometric distribution <span class="pchip">PROB 35</span></h2>
+  <div class="def"><span class="tag">Definition</span>
+  Repeat independent trials, each succeeding with probability $p$; let $X$ be the <b>number of trials up to and including the first success</b>. With $q=1-p$,
+  $$\Pr[X=k]=q^{k-1}p\quad(k=1,2,\dots),\qquad \mathbb{E}[X]=\frac1p,\qquad \operatorname{Var}[X]=\frac{q}{p^2}.$$</div>
+  <p><em>Proof of the mean and variance by conditioning on the first trial.</em> This is much cleaner than summing series. The first trial either succeeds (probability $p$, and $X=1$) or fails (probability $q$, and the process restarts, so $X=1+X'$ with $X'$ an independent copy).</p>
+  <p><b>Mean.</b> $\mathbb{E}[X]=p\cdot1+q\cdot(1+\mathbb{E}[X])$, so $\mathbb{E}[X](1-q)=1$, giving $\mathbb{E}[X]=1/p$.</p>
+  <p><b>Second moment.</b> Same conditioning, squaring:
+  $$\mathbb{E}[X^2]=p\cdot1^2+q\cdot\mathbb{E}\big[(1+X)^2\big]=p+q\big(1+2\mathbb{E}[X]+\mathbb{E}[X^2]\big).$$
+  Using $\mathbb{E}[X]=1/p$ and collecting the $\mathbb{E}[X^2]$ terms:
+  $$\mathbb{E}[X^2](1-q)=p+q+\frac{2q}{p}=1+\frac{2q}{p}\ \Longrightarrow\ \mathbb{E}[X^2]=\frac1p+\frac{2q}{p^2}=\frac{p+2q}{p^2}=\frac{2-p}{p^2}.$$
+  <b>Variance.</b> $\operatorname{Var}[X]=\mathbb{E}[X^2]-\mathbb{E}[X]^2=\dfrac{2-p}{p^2}-\dfrac{1}{p^2}=\dfrac{1-p}{p^2}=\dfrac{q}{p^2}$. $\blacksquare$</p>
+  <div class="tip"><span class="lbl">Sanity check</span> At $p=1$ (always succeeds) the mean is 1 and the variance 0. ✓ As $p\to0$ the mean blows up like $1/p$ and the variance like $1/p^2$ — the standard deviation is comparable to the mean, so the geometric distribution is very spread out. That is why "expected $n$ probes" for random search does not mean "about $n$ probes".</div>
+
+  <h3>The harmonic number, and why $\lg$ keeps appearing</h3>
+  <p>$H_n=\sum_{k=1}^{n}\frac1k=\ln n+\gamma+O(1/n)=\Theta(\lg n)$. It shows up whenever you sum $1/k$ over a shrinking or growing set — the quicksort comparison sum, the coupon-collector count, and the successful-search bound for open addressing all reduce to it. Standard bound: $\ln(n+1)\le H_n\le 1+\ln n$, provable by comparing the sum with $\int\frac{dx}{x}$.</p>
+
+  <!-- ================= BINOMIAL ================= -->
+  <h2 id="binom">Binomial estimates <span class="pchip">PROB 30</span></h2>
+  <p>The three bounds worth carrying into the exam:</p>
+  <div class="tw"><table>
+    <tr><th>Bound</th><th>Use</th></tr>
+    <tr><td>$\left(\dfrac{n}{k}\right)^{k}\le\dbinom nk\le\left(\dfrac{en}{k}\right)^{k}$</td><td>the everyday two-sided estimate</td></tr>
+    <tr><td>$\dbinom{2n}{n}=\dfrac{2^{2n}}{\sqrt{\pi n}}\big(1+O(1/n)\big)$</td><td>central binomial — straight from Stirling</td></tr>
+    <tr><td>$\dbinom nk\ \ge\ \dfrac{n^k}{4\,k!}$ for $k\le\sqrt n$</td><td>problem 30(b): a clean lower bound in the small-$k$ regime</td></tr>
+  </table></div>
+  <p><em>Sketch for the central binomial.</em> Stirling gives $m!=\sqrt{2\pi m}\,(m/e)^m(1+\Theta(1/m))$. Then
+  $$\binom{2n}{n}=\frac{(2n)!}{(n!)^2}=\frac{\sqrt{4\pi n}\,(2n/e)^{2n}}{2\pi n\,(n/e)^{2n}}\big(1+O(1/n)\big)=\frac{4^{n}}{\sqrt{\pi n}}\big(1+O(1/n)\big).$$
+  <em>Sketch for 30(b).</em> $\binom nk=\frac{n(n-1)\cdots(n-k+1)}{k!}$; each of the $k$ factors is at least $n-k\ge n-\sqrt n$, and for $k\le\sqrt n$ the product $\prod_{i&lt;k}(1-i/n)$ stays above $1/4$, which gives the constant.</p>
+
+  <!-- ================= INDEPENDENCE ================= -->
+  <h2 id="indep">Conditional independence <span class="pchip">PROB 32</span></h2>
+  <div class="def"><span class="tag">Definition</span>
+  $A$ and $B$ are <b>conditionally independent given $C$</b> if
+  $\Pr[A\cap B\mid C]=\Pr[A\mid C]\Pr[B\mid C]$.
+  This is <b>neither implied by nor implies</b> ordinary independence.</div>
+  <p><b>An example where $A,B$ are dependent but conditionally independent given $C$</b> (this is what problem 32 asks for). Pick a coin at random: coin $C$ = "the fair coin was chosen" with probability $\tfrac12$, otherwise a two-headed coin. Flip the chosen coin twice; let $A$ = "first flip heads", $B$ = "second flip heads".</p>
+  <ul>
+    <li><b>Given $C$</b> (we know which coin), the flips are independent by construction: $\Pr[A\cap B\mid C]=\tfrac14=\Pr[A\mid C]\Pr[B\mid C]$. ✓</li>
+    <li><b>Unconditionally</b>, $\Pr[A]=\Pr[B]=\tfrac12\cdot\tfrac12+\tfrac12\cdot1=\tfrac34$, while $\Pr[A\cap B]=\tfrac12\cdot\tfrac14+\tfrac12\cdot1=\tfrac58$. Since $\tfrac58\neq\tfrac9{16}$, they are <b>dependent</b>. ✗</li>
+  </ul>
+  <p>The intuition: seeing the first flip come up heads is evidence that you are holding the two-headed coin, which then makes a second head more likely. Conditioning on $C$ removes exactly that channel of information.</p>
+
+  <!-- ================= SEARCHES ================= -->
+  <h2 id="search">The three searches <span class="pchip">PROB 44–46</span></h2>
+  <p>Three ways to find $x$ in an <em>unsorted</em> array of $n$ elements, each analysed for one match, $k$ matches, and no match. This is the single best expected-value workout on the sheets.</p>
+  <div class="tw"><table>
+    <tr><th></th><th>1 match</th><th>$k$ matches</th><th>no match</th></tr>
+    <tr><td><b>random search</b><br><span style="font-size:.85em">pick random indices, with repetition</span></td>
+        <td>$n$</td><td>$n/k$</td><td>$nH_n=\Theta(n\lg n)$</td></tr>
+    <tr><td><b>deterministic search</b><br><span style="font-size:.85em">scan left to right</span></td>
+        <td>$\frac{n+1}{2}$ avg, $n$ worst</td><td>$\frac{n+1}{k+1}$ avg</td><td>$n$ always</td></tr>
+    <tr><td><b>scramble search</b><br><span style="font-size:.85em">shuffle, then scan</span></td>
+        <td>$\frac{n+1}{2}$ + shuffle</td><td>$\frac{n+1}{k+1}$ + shuffle</td><td>$n$ + shuffle</td></tr>
+  </table></div>
+  <p><b>Random search, one match.</b> Each pick hits the target with probability $1/n$, independently — so the number of picks is <em>geometric</em> with $p=1/n$ and the expectation is $1/p=n$. With $k$ matches, $p=k/n$ and the answer is $n/k$.</p>
+  <p><b>Random search, no match.</b> Now you must touch <em>every</em> index, sampling with replacement — the <b>coupon collector</b> problem. Splitting by "how long to find the $i$-th new index once $i-1$ are known", each phase is geometric with $p=(n-i+1)/n$, so
+  $$\mathbb{E}=\sum_{i=1}^{n}\frac{n}{n-i+1}=n\sum_{j=1}^{n}\frac1j=nH_n=\Theta(n\lg n).$$</p>
+  <p><b>Deterministic search, $k$ matches.</b> With the $k$ matching positions uniformly placed among $n$ slots, the expected position of the <em>first</em> is $\frac{n+1}{k+1}$. (Check the ends: $k=1$ gives $\frac{n+1}{2}$ ✓; $k=n$ gives $1$ ✓.)</p>
+  <div class="tip"><span class="lbl">The question behind the question</span> The sheet asks <em>which would you use?</em> Answer: <b>deterministic search</b>. It matches scramble search's expectation without paying $\Theta(n)$ to shuffle, and it beats random search on every row — random search is worse because sampling <em>with replacement</em> wastes picks on indices it has already seen. Scramble search only earns its keep if an adversary chooses the input order, since shuffling destroys that advantage.</div>
+
+  <!-- ================= SHUFFLERS ================= -->
+  <h2 id="shuffle">Three broken shufflers <span class="pchip">PROB 38–40</span></h2>
+  <p>The correct algorithm is <a href="exam-proofs.html#l54">R<small>ANDOMIZE</small>-I<small>N</small>-P<small>LACE</small></a>: swap $A[i]$ with a random element of $A[i..n]$. Each of the three variants below breaks it, and the arguments are all <b>counting</b> arguments.</p>
+
+  <h3>P<small>ERMUTE</small>-<small>BY</small>-C<small>YCLE</small> — every element uniform, yet not a uniform permutation</h3>
+  <p>Rotate the array by a single random offset. Each element genuinely does land in each position with probability $1/n$ — so the naive test passes. But the procedure can only produce the $n$ <b>cyclic rotations</b>, while there are $n!$ permutations. For $n\ge3$, $n&lt;n!$, so most permutations occur with probability $0$.</p>
+  <div class="idea"><span class="lbl">The lesson</span> "Every element is equally likely to be in every position" is a <b>marginal</b> condition and is strictly weaker than uniformity of the whole permutation. Any correctness proof must reason about permutations, not positions — which is exactly why Lemma 5.4's invariant is stated over $k$-permutations.</div>
+
+  <h3>P<small>ERMUTE</small>-<small>WITHOUT</small>-I<small>DENTITY</small> — right idea, wrong sample space</h3>
+  <p>Swapping $A[i]$ with a random element of $A[i+1..n]$ for $i=1..n-1$ makes $\prod_{i=1}^{n-1}(n-i)=(n-1)!$ equally likely execution paths. It does avoid the identity — but there are $n!-1$ non-identity permutations, and $(n-1)!\ne n!-1$ for $n\ge3$. So it cannot be uniform on the set it claims to sample.</p>
+
+  <h3>P<small>ERMUTE</small>-<small>WITH</small>-A<small>LL</small> — the divisibility argument</h3>
+  <p>Swapping $A[i]$ with a random element of the <em>whole</em> array, for $i=1..n$, gives $n^n$ equally likely execution paths. If the output were uniform, each of the $n!$ permutations would arise from exactly $n^n/n!$ paths — so $n!$ would have to divide $n^n$. It does not: for $n=3$, $n^n=27$ is not divisible by $3!=6$. Hence non-uniform.</p>
+  <div class="tip"><span class="lbl">Exam-ready recipe</span> To show a randomised procedure is <b>not</b> uniform, count execution paths $N$ and compare with $n!$: if $n!\nmid N$, you are done immediately, with no case analysis. To show one <b>is</b> uniform, use a loop invariant over $k$-permutations as in <a href="exam-proofs.html#l54">Lemma 5.4</a>.</div>
+
+  <footer>
+    Statements follow CLRS, <em>Introduction to Algorithms</em>, 4th ed., chs. 5 and C; problems are Prof. Schichl's sheets 3–5.
+    Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+<script src="../assets/mfds.js" data-root="../"></script>
+</body>
+</html>

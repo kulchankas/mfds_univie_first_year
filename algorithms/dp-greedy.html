@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F9">
+<meta name="description" content="Dynamic programming and greedy algorithms for the AlgoDat exam: the four DP shapes, the exchange-argument template, and every problem from sheets 9 and 10 mapped onto them.">
+<title>Dynamic programming &amp; greedy — pattern guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[['$','$']]},svg:{fontCache:'global'}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#F7F7F9;--card:#fff;--border:#EFEFF2;--ink:#1B1B1F;--muted:#55555C;--faint:#8A8A90;
+    --algo:#F0A93A;--algo-bg:#FFF1DC;--algo-dark:#8A5A0E;
+    --good:#2FAE72;--good-bg:#E1F5EA;--good-dark:#0F6B41;
+    --blue:#2F6FB0;--blue-bg:#EAF2FB;
+    --purple:#6B3FA0;--purple-bg:#EFE6FE;
+    --rose:#B22C6A;--rose-bg:#FDE4EC;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Figtree',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.66;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:clamp(1.5rem,4vw,2.3rem) clamp(1rem,4vw,1.7rem) 5rem;
+        padding-left:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-left));
+        padding-right:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-right))}
+  .eyebrow{font-weight:700;color:var(--faint);font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.6rem}
+  h1{font-weight:800;font-size:clamp(1.75rem,5.5vw,2.4rem);line-height:1.1;letter-spacing:-.025em;margin-bottom:.55rem}
+  .lede{color:var(--muted);font-size:clamp(.95rem,3vw,1.04rem);max-width:46em}
+  h2{font-weight:800;font-size:clamp(1.2rem,4vw,1.5rem);letter-spacing:-.02em;margin:2.4rem 0 .7rem;scroll-margin-top:70px}
+  h3{font-weight:700;font-size:1.03rem;margin:1.5rem 0 .45rem;color:var(--algo-dark)}
+  p{margin:.55rem 0;color:var(--muted);font-size:.96rem}
+  b,strong{color:var(--ink)}
+  ul,ol{margin:.4rem 0 .7rem;padding-left:1.35rem;color:var(--muted);font-size:.96rem}
+  li{margin:.32rem 0}
+  a{color:var(--purple)}
+  code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:#F0F0F3;color:var(--algo-dark);padding:.05rem .3rem;border-radius:5px}
+  .def{background:var(--good-bg);border:1px solid rgba(47,174,114,.25);border-left:4px solid var(--good);border-radius:0 14px 14px 0;padding:.85rem 1.1rem;margin:.9rem 0;color:var(--ink);font-size:.95rem}
+  .def .tag{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--good-dark);margin-bottom:.3rem}
+  .idea{background:var(--blue-bg);border:1px solid rgba(47,111,176,.25);border-left:4px solid var(--blue);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.93rem;color:#33333A}
+  .idea .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-right:.4rem}
+  .tip{background:var(--algo-bg);border:1px solid rgba(240,169,58,.3);border-left:4px solid var(--algo);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.92rem;color:#4A3A22}
+  .tip .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--algo-dark);margin-right:.4rem}
+  .warn{background:var(--rose-bg);border:1px solid rgba(178,44,106,.25);border-left:4px solid var(--rose);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.92rem;color:#4A2233}
+  .warn .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--rose);margin-right:.4rem}
+  pre.code{font-family:'JetBrains Mono',monospace;font-size:.83rem;line-height:1.5;background:#F5F5F7;border:1px solid var(--border);border-radius:12px;padding:.85rem 1.05rem;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.7rem 0;color:#26262B}
+  pre.code .kw{color:var(--blue)} pre.code .cm{color:#7A7A82;font-style:italic}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.8rem 0;border:1px solid var(--border);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:.89rem;background:#fff}
+  th,td{border-bottom:1px solid var(--border);padding:.5rem .65rem;text-align:left;vertical-align:top}
+  th{background:#F5F5F7;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.03em;color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  .toc{background:#fff;border:1px solid var(--border);border-radius:14px;padding:.9rem 1.2rem;margin:1.3rem 0;font-size:.9rem;line-height:1.9}
+  .toc a{text-decoration:none;font-weight:600;white-space:nowrap}
+  .pchip{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:#4A3208;background:var(--algo);border-radius:5px;padding:.1rem .45rem;vertical-align:middle;letter-spacing:.03em;white-space:nowrap}
+  footer{margin-top:3rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--faint);font-size:.82rem}
+</style>
+<link rel="stylesheet" href="../assets/mfds.css">
+</head>
+<body class="mfds mfds-algo" data-page="algo" data-up="index.html" data-up-label="Algorithms">
+<div class="wrap">
+  <div class="eyebrow">Universität Wien · Prof. Schichl · sheets 9–10</div>
+  <h1>Dynamic programming &amp; greedy</h1>
+  <p class="lede">Nineteen problems across two sheets — the largest single block on the course, and entirely absent from the first-date paper. Almost all of them are one of <b>four DP shapes</b> or one <b>exchange argument</b> in disguise. Learn the shapes and the problems collapse.</p>
+
+  <div class="toc"><b>Jump to:</b>
+    <a href="#hallmarks">the two hallmarks</a> ·
+    <a href="#recognise">which shape is it?</a> ·
+    <a href="#linear">1 · linear</a> ·
+    <a href="#interval">2 · interval</a> ·
+    <a href="#tree">3 · tree</a> ·
+    <a href="#knapsack">4 · knapsack</a> ·
+    <a href="#fails">when substructure fails</a> ·
+    <a href="#greedy">greedy &amp; exchange arguments</a>
+  </div>
+
+  <!-- ================= HALLMARKS ================= -->
+  <h2 id="hallmarks">The two hallmarks</h2>
+  <div class="def"><span class="tag">Dynamic programming applies when</span>
+  <b>1 · Optimal substructure</b> — an optimal solution is built from optimal solutions to subproblems.<br>
+  <b>2 · Overlapping subproblems</b> — the naive recursion solves the <em>same</em> subproblem many times, so caching pays.
+  <br><br>Miss the first and DP is <em>wrong</em>; miss the second and DP is merely <em>pointless</em> (plain divide-and-conquer already suffices — merge sort has optimal substructure but no overlap).</div>
+  <p>Two implementations, same table: <b>top-down with memoisation</b> (write the recursion, cache on first computation) and <b>bottom-up</b> (order subproblems by size, fill iteratively). Bottom-up is usually faster by a constant; top-down only touches the subproblems it actually needs.</p>
+  <div class="idea"><span class="lbl">Runtime, at a glance</span> $\text{time} = (\text{number of subproblems})\times(\text{choices per subproblem})$. A 1-D table with $O(n)$ choices is $O(n^2)$; a 2-D interval table with $O(n)$ split points is $O(n^3)$. You can read the exponent off the shape before writing a line of code.</div>
+
+  <!-- ================= RECOGNISE ================= -->
+  <h2 id="recognise">Which shape is it?</h2>
+  <div class="tw"><table>
+    <tr><th>Shape</th><th>Subproblem</th><th>Time</th><th>Sheet problems</th></tr>
+    <tr><td><b>1 · Linear</b></td><td>a prefix / suffix: $r_n$</td><td>$O(n^2)$</td><td>81, 82, 85, 88</td></tr>
+    <tr><td><b>2 · Interval</b></td><td>a contiguous range: $m[i,j]$</td><td>$O(n^3)$</td><td>83, 84, 87, 89, 90, 91, 92</td></tr>
+    <tr><td><b>3 · Tree</b></td><td>a subtree, × a small state</td><td>$O(n)$</td><td>93</td></tr>
+    <tr><td><b>4 · Knapsack</b></td><td>items × capacity: $K[i,w]$</td><td>$O(nW)$</td><td>99 <span style="color:var(--faint)">(98 is greedy)</span></td></tr>
+    <tr><td><em>graph DP</em></td><td>vertex, in topological order</td><td>$O(V+E)$</td><td>86 → <a href="data-structures.html#graphs">graphs</a></td></tr>
+  </table></div>
+  <div class="tip"><span class="lbl">The recognition question</span> Ask: <em>"what does a solution look like at its last decision?"</em> If the last decision splits off a <b>piece from one end</b> → linear. If it picks a <b>split point inside a range</b> → interval. If it is <b>take this node or not</b> → tree. If it is <b>include this item or not, against a budget</b> → knapsack.</div>
+
+  <!-- ================= LINEAR ================= -->
+  <h2 id="linear">Shape 1 — linear DP <span class="pchip">PROB 81, 82, 85, 88</span></h2>
+  <h3>Rod cutting, the base case</h3>
+  <p>A rod of length $n$, prices $p_1..p_n$; maximise revenue. The last decision is "how long is the first piece?":
+  $$r_0=0,\qquad r_n=\max_{1\le i\le n}\big(p_i+r_{n-i}\big).$$
+  $n$ subproblems, $O(n)$ choices each: $O(n^2)$. Record the argmax in a second array <code>s[n]</code> to reconstruct the cuts.</p>
+<pre class="code">BOTTOM-UP-CUT-ROD(p, n)
+  r[0] = 0
+  <span class="kw">for</span> j = 1 <span class="kw">to</span> n:
+    q = −∞
+    <span class="kw">for</span> i = 1 <span class="kw">to</span> j:
+      <span class="kw">if</span> q &lt; p[i] + r[j−i]:
+        q = p[i] + r[j−i];  s[j] = i        <span class="cm">// first piece length</span>
+    r[j] = q
+  <span class="kw">return</span> r, s</pre>
+
+  <h3>Variant — a fixed cost per cut <span class="pchip">PROB 82</span></h3>
+  <p>Each cut costs $c$. Selling the rod whole involves no cut, so that case must be separated out:
+  $$r_n=\max\Big(p_n,\ \max_{1\le i&lt;n}\big(p_i+r_{n-i}-c\big)\Big).$$
+  <b>Getting the $p_n$ term right is the whole problem</b> — folding it into the general max would charge you for a cut you never made.</p>
+
+  <h3>Variant — production planning <span class="pchip">PROB 88</span></h3>
+  <p>The Rinky Dink problem is linear DP with a second dimension for carried stock: let $C[i,j]$ be the cheapest way to finish month $i$ holding $j$ machines. From $C[i-1,\cdot]$ you choose this month's production, paying overtime above $m$ units and holding cost $h(j)$. Subproblems $n\times D$, choices $O(D)$ ⇒ polynomial in $n$ and $D$, as required.</p>
+
+  <!-- ================= INTERVAL ================= -->
+  <h2 id="interval">Shape 2 — interval DP <span class="pchip">PROB 83, 84, 87, 89, 90–92</span></h2>
+  <div class="idea"><span class="lbl">One pattern, five problems</span> Subproblem = a contiguous range $[i,j]$; the last decision is <b>where to split it</b>. Every one of matrix-chain, optimal BST, longest palindromic subsequence, string breaking and bitonic TSP is this. Fill the table by <em>increasing interval length</em>, so both halves are ready.</div>
+
+  <h3>Matrix-chain multiplication — the archetype</h3>
+  $$m[i,i]=0,\qquad m[i,j]=\min_{i\le k&lt;j}\big(m[i,k]+m[k+1,j]+p_{i-1}p_kp_j\big).$$
+  <p>$\Theta(n^2)$ subproblems × $O(n)$ split points $=\Theta(n^3)$. Problem 83 asks for the total number of table references, which telescopes to $\sum_{i}\sum_{j}R(i,j)=\frac{n^3-n}{3}$ — a useful sanity check that the work really is cubic.</p>
+
+  <h3>Optimal binary search tree <span class="pchip">PROB 90, 91</span></h3>
+  <p>Same skeleton, but the "split point" is the <b>root</b> of the subtree, and every key in the range sinks one level deeper when you attach it:
+  $$e[i,j]=\min_{i\le r\le j}\Big(e[i,r-1]+e[r+1,j]+w(i,j)\Big),\qquad w(i,j)=\sum_{l=i}^{j}p_l+\sum_{l=i-1}^{j}q_l.$$
+  The $+w(i,j)$ term is the whole idea: it charges every key in the interval for the extra level. Problem 90 wants <code>CONSTRUCT-OPTIMAL-BST</code>, which just reads the <code>root</code> table recursively:</p>
+<pre class="code">CONSTRUCT-OPTIMAL-BST(root, n)
+  r = root[1, n]
+  print "k" r "is the root"
+  CONSTRUCT-SUBTREE(root, 1, r−1, r, "left")
+  CONSTRUCT-SUBTREE(root, r+1, n, r, "right")
+
+CONSTRUCT-SUBTREE(root, i, j, parent, side)
+  <span class="kw">if</span> i &gt; j:
+    print "d" j "is the" side "child of k" parent      <span class="cm">// dummy leaf</span>
+  <span class="kw">else</span>:
+    r = root[i, j]
+    print "k" r "is the" side "child of k" parent
+    CONSTRUCT-SUBTREE(root, i, r−1, r, "left")
+    CONSTRUCT-SUBTREE(root, r+1, j, r, "right")</pre>
+
+  <h3>Longest palindromic subsequence <span class="pchip">PROB 87</span></h3>
+  $$L[i,i]=1,\qquad L[i,j]=\begin{cases}L[i+1,j-1]+2 & s_i=s_j\\[2pt] \max\big(L[i+1,j],\,L[i,j-1]\big)&\text{otherwise.}\end{cases}$$
+  <p>$\Theta(n^2)$ subproblems, $O(1)$ choices ⇒ $\Theta(n^2)$. <b>Shortcut worth knowing:</b> the answer equals $\mathrm{LCS}(s,\operatorname{reverse}(s))$ — same complexity, and a one-line reduction if you have LCS to hand.</p>
+
+  <h3>String breaking <span class="pchip">PROB 89</span></h3>
+  <p>Breaking a string of $n$ characters at given points, each break costing the current substring's length. With sentinels $L_0=0$ and $L_{m+1}=n$:
+  $$C[i,j]=\big(L_j-L_i\big)+\min_{i&lt;k&lt;j}\big(C[i,k]+C[k,j]\big),\qquad C[i,i+1]=0.$$
+  <b>This is matrix-chain with different labels.</b> Recognising that is the entire exercise.</p>
+
+  <!-- ================= TREE ================= -->
+  <h2 id="tree">Shape 3 — tree DP <span class="pchip">PROB 93</span></h2>
+  <p>The company party: maximise total conviviality with the rule that no employee attends alongside their immediate supervisor — i.e. a <b>maximum-weight independent set on a tree</b>. Keep <em>two</em> values per node:</p>
+  $$\mathrm{in}(v)=c_v+\sum_{u\in\text{children}(v)}\mathrm{out}(u),\qquad
+    \mathrm{out}(v)=\sum_{u\in\text{children}(v)}\max\big(\mathrm{in}(u),\mathrm{out}(u)\big).$$
+  <p>Answer: $\max(\mathrm{in}(root),\mathrm{out}(root))$. One post-order pass, $O(1)$ work per child, so $O(n)$ overall — with the left-child/right-sibling representation you simply walk the sibling list. Reconstruct the guest list by re-descending and taking whichever branch achieved the max.</p>
+  <div class="tip"><span class="lbl">The general tree-DP move</span> When a node's choice constrains its children, carry <b>one value per state of the node</b> (here: in the set / out of it) and combine children independently. The same shape solves tree vertex cover, tree colouring, and tree matching.</div>
+
+  <!-- ================= KNAPSACK ================= -->
+  <h2 id="knapsack">Shape 4 — knapsack <span class="pchip">PROB 98, 99</span></h2>
+  <div class="tw"><table>
+    <tr><th></th><th>Fractional</th><th>0–1</th></tr>
+    <tr><td>May take part of an item?</td><td>yes</td><td>no</td></tr>
+    <tr><td>Correct method</td><td><b>greedy</b> by density $v_i/w_i$</td><td><b>DP</b> over capacity</td></tr>
+    <tr><td>Time</td><td>$O(n)$ with weighted-median selection ($O(n\lg n)$ if you sort)</td><td>$O(nW)$</td></tr>
+    <tr><td>Greedy by density?</td><td>optimal</td><td><b>fails</b></td></tr>
+  </table></div>
+  <p><b>0–1 knapsack</b> <span class="pchip">PROB 99</span>: with $K[i,w]$ the best value from the first $i$ items under capacity $w$,
+  $$K[i,w]=\begin{cases}K[i-1,w] & w_i>w\\[2pt]\max\big(K[i-1,w],\ v_i+K[i-1,\,w-w_i]\big)&\text{otherwise,}\end{cases}$$
+  with $K[0,w]=0$. Table $n\times W$, $O(1)$ per cell ⇒ $O(nW)$.</p>
+  <div class="warn"><span class="lbl">Why $O(nW)$ is not polynomial</span> The <em>input</em> encodes $W$ in $\Theta(\lg W)$ bits, so $O(nW)$ is exponential in the input length — this is <b>pseudo-polynomial</b>. It is why 0–1 knapsack is NP-hard while the fractional version is linear-time. Say this if asked to compare them; it is the point of setting the two problems together.</div>
+
+  <!-- ================= FAILURES ================= -->
+  <h2 id="fails">When optimal substructure fails <span class="pchip">PROB 85</span></h2>
+  <p>Add a limit $l_i$ on how many pieces of length $i$ may be produced. Now optimal substructure <b>breaks</b>: an optimal solution to the length-$n$ problem no longer decomposes into an optimal solution to the length-$(n-i)$ problem, because the sub-solution's choices consume quota that the outer problem also needs. The subproblem is no longer "a rod of length $n-i$" — it is "a rod of length $n-i$ <em>with these remaining quotas</em>", a different and much larger state space.</p>
+  <div class="idea"><span class="lbl">The general diagnosis</span> Optimal substructure fails whenever subproblems <b>compete for a shared resource</b>. The repair is always the same: enlarge the state to include the resource (here, the remaining quota vector) — at the cost of an exponentially bigger table. Problem 85 wants you to <em>notice the failure</em>, not repair it.</div>
+
+  <!-- ================= GREEDY ================= -->
+  <h2 id="greedy">Greedy algorithms <span class="pchip">PROB 94–98</span></h2>
+  <div class="def"><span class="tag">The two ingredients</span>
+  <b>1 · Greedy-choice property</b> — some optimal solution is consistent with the locally best choice. Proved by an <b>exchange argument</b>.<br>
+  <b>2 · Optimal substructure</b> — after the greedy choice, what remains is the same problem on a smaller instance.
+  <br><br>Greedy is DP where one choice is provably safe, so you never have to compare alternatives.</div>
+
+  <h3>The exchange-argument template</h3>
+  <p>Every greedy proof on this course — activity selection, Huffman, fractional knapsack — is this skeleton. Memorise it and fill in the middle:</p>
+  <ol>
+    <li>Let $A$ be <em>any</em> optimal solution, and $g$ the greedy first choice.</li>
+    <li>If $g\in A$, done. Otherwise let $a\in A$ be the element the greedy rule would have beaten.</li>
+    <li>Form $A'=(A\setminus\{a\})\cup\{g\}$. Show (i) $A'$ is <b>still feasible</b>, and (ii) $A'$ is <b>no worse</b> than $A$.</li>
+    <li>Then $A'$ is also optimal and contains $g$ — so <em>some</em> optimal solution makes the greedy choice.</li>
+    <li>Induct on the residual problem.</li>
+  </ol>
+  <p>Compare the three instances: <a href="exam-proofs.html#greedy">activity selection (Thm 15.1)</a> exchanges the earliest finisher; <a href="exam-proofs.html#huffman">Huffman (Lemma 15.2)</a> exchanges the two rarest symbols to the deepest level; fractional knapsack exchanges weight into the densest item. Same five steps every time.</p>
+
+  <h3>Activity selection, and its mirror <span class="pchip">PROB 94</span></h3>
+  <p>The standard rule takes the <b>earliest-finishing</b> compatible activity. Problem 94 asks about taking the <b>last-to-start</b> instead — and it is also optimal, because it is literally the same algorithm on time reversed: reverse the axis ($t\mapsto-t$), and "last to start" becomes "first to finish". The exchange argument transfers verbatim.</p>
+
+  <h3>Three greedy rules that fail <span class="pchip">PROB 95</span></h3>
+  <div class="tw"><table>
+    <tr><th>Rule</th><th>Counterexample</th><th>Result</th></tr>
+    <tr><td>shortest duration</td><td>$(0,10),\ (9,11),\ (10,20)$</td><td>picks $(9,11)$, blocking both others: 1 instead of 2</td></tr>
+    <tr><td>earliest start</td><td>$(0,20),\ (1,2),\ (3,4)$</td><td>picks $(0,20)$: 1 instead of 2</td></tr>
+    <tr><td>fewest conflicts</td><td>three parallel columns of 4 short activities, with a middle activity conflicting with only 2</td><td>the low-conflict middle choice splits the line and loses one activity</td></tr>
+  </table></div>
+  <p>The moral: a plausible-sounding local rule is worth nothing without an exchange argument. <em>Only</em> earliest-finish leaves the most room for what follows — which is exactly what step 3(i) of the template verifies.</p>
+
+  <h3>Fractional knapsack has the greedy-choice property <span class="pchip">PROB 98</span></h3>
+  <p><em>Claim.</em> Some optimal solution takes as much as possible of the item with maximum density $v_1/w_1$.</p>
+  <p><em>Proof.</em> Let $A$ be optimal and suppose it takes $x&lt;\min(w_1,W)$ of item 1. Then $A$ must carry weight elsewhere, in items of density $\le v_1/w_1$. Remove $\delta>0$ weight of some such item $j$ and add $\delta$ of item 1 (possible since $x&lt;w_1$). The value changes by
+  $$\delta\Big(\frac{v_1}{w_1}-\frac{v_j}{w_j}\Big)\ \ge\ 0,$$
+  and the total weight is unchanged, so the result is still feasible and no worse. Repeating drives item 1 to its maximum. $\blacksquare$</p>
+  <p><b>Linear time</b> without sorting: you need the <em>weighted median</em> by density, which median-of-medians selection finds in $O(n)$; recurse on the half that the capacity does not resolve — $T(n)=T(n/2)+O(n)=O(n)$.</p>
+
+  <h3>Two more from sheet 10</h3>
+  <ul>
+    <li><b>Fewest lecture halls</b> <span class="pchip">PROB 96</span> — interval-graph colouring. Sweep activities by start time, keeping a min-heap of rooms keyed by their current end time: reuse the earliest-freeing room if it is free, else open a new one. $O(n\lg n)$, and the number of rooms equals the maximum number of simultaneously active intervals.</li>
+    <li><b>Weighted activity selection</b> <span class="pchip">PROB 97</span> — greedy <b>fails</b> once activities carry values (a single high-value long activity can beat many cheap ones). Sort by finish time and do DP: $\mathrm{OPT}(j)=\max\big(v_j+\mathrm{OPT}(\mathrm{prev}(j)),\ \mathrm{OPT}(j-1)\big)$, where $\mathrm{prev}(j)$ is the last activity finishing before $j$ starts, found by binary search. $O(n\lg n)$.</li>
+  </ul>
+  <div class="tip"><span class="lbl">The exam-shaped summary</span> Sheet 10 is built to teach one lesson: <b>unweighted activity selection is greedy; add weights and it becomes DP; make the knapsack fractional and it is greedy again; make it 0–1 and it is DP.</b> If asked "greedy or DP?", the answer is decided by whether an exchange argument survives — and problems 95 and 97 are the two places it does not.</div>
+
+  <footer>
+    Follows CLRS, <em>Introduction to Algorithms</em>, 4th ed., chs. 14–15; problems are Prof. Schichl's sheets 9–10.
+    Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+<script src="../assets/mfds.js" data-root="../"></script>
+</body>
+</html>
