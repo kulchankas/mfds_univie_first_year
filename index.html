@@ -436,7 +436,7 @@
     for (var id in s) if (s[id] && s[id].box >= 3) n++;
     return n;
   }
-  var algoLearned = deckLearned('fc_algodat_v1');        // /47
+  var algoLearned = deckLearned('fc_algodat_v1');        // /72
   var anaLearned  = deckLearned('fc_analysis_day1_v1');  // /36
   var ladsLearned = deckLearned('fc_lads_v1');           // /45
   var asg = readJSON('asg-progress-v1'); var blocksDone = 0;
@@ -545,8 +545,8 @@
     /* Algorithms: the 14-unit plan is the real measure of "done";
        blend it with the deck so the ring moves for either kind of work. */
     var a = algoLanesTotal
-          ? Math.round(100*(0.7*algoLanes/algoLanesTotal + 0.3*algoLearned/47))
-          : Math.round(100*algoLearned/47);
+          ? Math.round(100*(0.7*algoLanes/algoLanesTotal + 0.3*algoLearned/72))
+          : Math.round(100*algoLearned/72);
     var n = Math.round(100*blocksDone/10),
         l = Math.round(100*chaptersDone/6),
         i = Math.round(100*ladsLearned/45);
@@ -555,7 +555,7 @@
     ring('ring-lads', Math.round((l + i)/2), 'var(--lads)');
     ring('ring-la',   state.scores.la != null ? state.scores.la : 0, 'var(--la)');
     document.getElementById('sub-algo').textContent =
-      algoUnits+' of '+algoUnitsTotal+' units · '+algoLearned+' of 47 cards';
+      algoUnits+' of '+algoUnitsTotal+' units · '+algoLearned+' of 72 cards';
     document.getElementById('sub-ana').textContent  = blocksDone+' of 10 guide blocks complete';
     document.getElementById('sub-lads').textContent = chaptersDone+' of 6 chapters · '+ladsLearned+' of 45 cards';
     document.getElementById('sub-la').textContent   = 'Exam notes + five mock exams';

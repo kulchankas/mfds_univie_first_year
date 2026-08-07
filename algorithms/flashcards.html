@@ -118,7 +118,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
   <a class="back-link" href="index.html">← Algorithms &amp; Data Structures</a>
   <div class="eyebrow">AlgoDat · Spaced repetition</div>
   <h1>Flashcards</h1>
-  <p class="sub">47 cards over the whole exam surface: heaps · BST/red-black · hashing · recurrences · loop invariants · sorting bounds · quicksort &amp; selection · greedy/Huffman · DP · B-trees. Cards tagged with their CLRS reference.</p>
+  <p class="sub">72 cards over the whole exam surface: heaps · BST/red-black · <b>AVL</b> · hashing · recurrences &amp; <b>polynomial growth</b> · loop invariants · sorting bounds · quicksort &amp; selection · <b>probability</b> · <b>DP &amp; greedy</b> · <b>graphs</b> · B-trees. Tagged with their CLRS or sheet reference.</p>
 
   <div class="stats" id="stats"></div>
   <div class="bar"><i id="prog"></i></div>
@@ -378,6 +378,136 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
   <article data-tag="Theorem" data-ref="Thm 17.2 · augmenting">
     <div class="q">The <b>augmentation theorem</b> for red-black trees — hypothesis and conclusion.</div>
     <div class="a">If attribute $f(x)$ is computable in $O(1)$ from $x$, $x.left$, $x.right$ alone (incl. their $f$-values), then insert/delete can maintain $f$ everywhere <b>without changing the $O(\lg n)$ cost</b>. Why: changes propagate only up one root path; rotations are repaired locally in $O(1)$. Example: subtree sizes ⇒ order-statistic trees.</div>
+  </article>
+
+  <!-- ================= RECURRENCES II (sheet 2) ================= -->
+  <article data-tag="Definition" data-ref="Polynomial growth · sheet 2">
+    <div class="q">State the <b>polynomial growth condition</b> — with the quantifiers in the order the professor's erratum insists on.</div>
+    <div class="a">$\forall \varphi&gt;1\ \exists d&gt;1\ \exists N&gt;0\ \forall n\ge N\ \forall 1\le\psi\le\varphi:\ \frac1d f(n)\le f(\psi n)\le d\,f(n)$. <b>The $\exists N$ comes <em>after</em> the $\forall\varphi$</b> — the lecture book has them the wrong way round. Meaning: rescaling the argument by any bounded factor changes the value by at most a constant. It is the hypothesis <b>Akra–Bazzi</b> needs.</div>
+  </article>
+
+  <article data-tag="Example" data-ref="Prob 22 · sheet 2">
+    <div class="q">Does $n^2$ satisfy the polynomial growth condition? Does $2^n$?</div>
+    <div class="a"><b>$n^2$ yes:</b> given $\varphi$, take $d=\varphi^2$ — then $f(\psi n)/f(n)=\psi^2\in[1,\varphi^2]$. <b>$2^n$ no:</b> with $\psi=2$, $g(2n)/g(n)=2^n\to\infty$, so no constant $d$ works. Rule of thumb: any $n^a\lg^b n$ passes, genuine exponentials fail.</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="Change of vars · prob 28">
+    <div class="q">$T(n)=2T(\sqrt n)+\Theta(\lg n)$ — the Master Theorem doesn't apply. What do you do?</div>
+    <div class="a"><b>Change of variables:</b> put $m=\lg n$ (so $n=2^m$) and $S(m)=T(2^m)$. Then $\sqrt n=2^{m/2}$, so $S(m)=2S(m/2)+\Theta(m)$ — ordinary Master case 2, giving $S(m)=\Theta(m\lg m)$. Substitute back: $T(n)=\Theta(\lg n\cdot\lg\lg n)$.</div>
+  </article>
+
+  <!-- ================= AVL ================= -->
+  <article data-tag="Definition" data-ref="AVL · prob 80">
+    <div class="q">Define an <b>AVL tree</b>. What extra field does each node store?</div>
+    <div class="a">A BST that is <b>height balanced</b>: for every node the heights of its two subtrees differ by at most 1. Each node stores $x.h$, the height of its subtree (leaf $=0$, $\mathrm{NIL}=-1$).</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="AVL height · prob 80(a)">
+    <div class="q">Prove an AVL tree with $n$ nodes has height $O(\lg n)$ — what is the recurrence, and the constant?</div>
+    <div class="a">Let $N(h)$ be the <b>fewest</b> nodes at height $h$: $N(0)=1$, $N(1)=2$, $N(h)=1+N(h-1)+N(h-2)$ — the Fibonacci recurrence, with $N(h)=F_{h+3}-1$. Since $F_k=\Theta(\varphi^k)$, $n\ge F_{h+3}-1$ gives $h\le\log_\varphi(\sqrt5(n+1))-3\approx\mathbf{1.44\lg n}$. (Red-black only guarantees $2\lg(n+1)$.)</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="BALANCE · prob 80(b)">
+    <div class="q">B<small>ALANCE</small>$(x)$ in an AVL tree: what are the four cases and the rotations?</div>
+    <div class="a">Decided by which side is heavy, then which grandchild: <b>Left-Left</b> ("line") → one <code>RIGHT-ROTATE(x)</code>. <b>Left-Right</b> ("triangle") → <code>LEFT-ROTATE(x.left)</code> then <code>RIGHT-ROTATE(x)</code>. <b>Right-Right</b> / <b>Right-Left</b> are the mirrors. At most <b>2 rotations</b>, then <code>UPDATE-HEIGHT</code>.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="AVL vs RB">
+    <div class="q">AVL vs red-black: rotations per insert and per delete?</div>
+    <div class="a">Insert: both $\le2$ rotations. <b>Delete: AVL needs $O(\lg n)$, red-black only $\le3$</b> — a delete can shorten a subtree and cascade to the root. So AVL is better for lookups (tighter height), red-black for update-heavy work.</div>
+  </article>
+
+  <!-- ================= GRAPHS ================= -->
+  <article data-tag="Theorem" data-ref="Parenthesis theorem · Ch 20">
+    <div class="q">State the <b>parenthesis theorem</b> for DFS discovery/finish times.</div>
+    <div class="a">For any $u,v$ exactly one holds: the intervals $[u.d,u.f]$ and $[v.d,v.f]$ are <b>disjoint</b> (neither is a descendant); or one is <b>strictly contained</b> in the other, and then the inner vertex is a <b>descendant</b> of the outer. Writing "(" at discovery and ")" at finish yields a well-formed parenthesis string — intervals never <em>partially</em> overlap.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Edge classification · prob 102">
+    <div class="q">Classify a DFS edge $(u,v)$ by timestamps: tree/forward, back, cross.</div>
+    <div class="a"><b>Tree or forward:</b> $u.d&lt;v.d&lt;v.f&lt;u.f$ ($v$ a descendant). <b>Back:</b> $v.d\le u.d&lt;u.f\le v.f$ ($u$ a descendant of $v$). <b>Cross:</b> $v.d&lt;v.f&lt;u.d&lt;u.f$ (disjoint; $v$ already finished). Exhaustive by the parenthesis theorem.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Back edges · Ch 20">
+    <div class="q">Two facts linking DFS edge classes to graph structure — cycles, and the undirected case?</div>
+    <div class="a"><b>(1)</b> A directed graph is <b>acyclic iff DFS finds no back edge</b> — an $O(V+E)$ cycle test. <b>(2)</b> In an <b>undirected</b> graph only tree and back edges occur; forward and cross edges are impossible, since whichever endpoint is discovered first becomes the ancestor.</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="Topological sort">
+    <div class="q">How does DFS produce a topological sort, and why is it correct?</div>
+    <div class="a">Output vertices in <b>decreasing finish time</b> (push each onto a stack as it finishes), $\Theta(V+E)$. Correct because for any edge $(u,v)$ in a DAG, $v$ finishes before $u$ — otherwise $v$ would still be grey when $(u,v)$ is explored, making it a back edge and the graph cyclic.</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="Tree diameter · prob 101">
+    <div class="q">Compute the <b>diameter of a tree</b> in $O(V)$ — two ways.</div>
+    <div class="a"><b>Double BFS:</b> BFS from any $r$, let $a$ be farthest; BFS from $a$ — the greatest distance is the diameter. (The farthest vertex from <em>any</em> start is an endpoint of some longest path.) <b>One DFS:</b> per node, the longest path through it is $2+h(\text{tallest child})+h(\text{2nd tallest})$; take the running max. The BFS trick needs a <em>tree</em> — it is false on general graphs.</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="DAG longest path · prob 86">
+    <div class="q">Longest path is NP-hard in general — why is it easy on a DAG, and what is the recurrence?</div>
+    <div class="a">On a DAG every path is automatically <b>simple</b>, so DP applies. With $L(v)$ the heaviest path from $v$ to $t$: $L(t)=0$, $L(v)=\max_{(v,w)\in E}\big(w_{(v,w)}+L(w)\big)$, evaluated in <b>reverse topological order</b>. Each edge relaxed once: $\Theta(V+E)$.</div>
+  </article>
+
+  <!-- ================= PROBABILITY ================= -->
+  <article data-tag="Definition" data-ref="Indicators · Ch 5">
+    <div class="q">What is an <b>indicator random variable</b>, and the one identity that makes it useful?</div>
+    <div class="a">$I\{A\}=1$ if event $A$ occurs, else $0$. Then $\mathbb{E}[I\{A\}]=\Pr[A]$ — <b>expectation of an indicator is the probability</b>. Combined with linearity $\mathbb{E}[\sum X_i]=\sum\mathbb{E}[X_i]$ (which needs <em>no independence</em>), counting problems become probability problems.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Markov · prob 34">
+    <div class="q">State and prove <b>Markov's inequality</b>.</div>
+    <div class="a">For $X\ge0$ and $t&gt;0$: $\Pr[X\ge t]\le\mathbb{E}[X]/t$. <b>Proof:</b> let $I=I\{X\ge t\}$; then $tI\le X$ always (if $I=1$ then $X\ge t$; if $I=0$ then $tI=0\le X$ since $X\ge0$). Take expectations: $t\Pr[X\ge t]\le\mathbb{E}[X]$. The hypothesis $X\ge0$ is what makes the second case work.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Chebyshev">
+    <div class="q">Derive <b>Chebyshev's inequality</b> from Markov in one step.</div>
+    <div class="a">Apply Markov to the nonnegative variable $(X-\mu)^2$: $\Pr[|X-\mu|\ge t]=\Pr[(X-\mu)^2\ge t^2]\le\mathbb{E}[(X-\mu)^2]/t^2=\operatorname{Var}[X]/t^2$.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Geometric · prob 35">
+    <div class="q">Geometric distribution: give $\mathbb{E}[X]$ and $\operatorname{Var}[X]$, and the trick that gets them.</div>
+    <div class="a">$\mathbb{E}[X]=1/p$, $\operatorname{Var}[X]=q/p^2$. <b>Condition on the first trial:</b> $\mathbb{E}[X]=p\cdot1+q(1+\mathbb{E}[X])$ gives the mean; squaring, $\mathbb{E}[X^2]=p+q\,\mathbb{E}[(1+X)^2]$ gives $\mathbb{E}[X^2]=(2-p)/p^2$, so $\operatorname{Var}=(2-p)/p^2-1/p^2=q/p^2$. Much cleaner than summing series.</div>
+  </article>
+
+  <article data-tag="Example" data-ref="Coupon collector · prob 44">
+    <div class="q">Random search with replacement must touch <em>every</em> one of $n$ indices. Expected number of picks?</div>
+    <div class="a">$nH_n=\Theta(n\lg n)$ — <b>coupon collector</b>. Split by phases: once $i-1$ indices are known, finding a new one is geometric with $p=(n-i+1)/n$, so the total is $\sum_{i=1}^{n}\frac{n}{n-i+1}=n\sum_j\frac1j=nH_n$.</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="Uniformity · prob 38–40">
+    <div class="q">Fastest way to prove a randomised shuffler is <b>not</b> uniform?</div>
+    <div class="a"><b>Count execution paths and check divisibility.</b> If the procedure has $N$ equally likely paths and the output were uniform over $n!$ permutations, then $n!$ must divide $N$. P<small>ERMUTE</small>-<small>WITH</small>-A<small>LL</small> has $N=n^n$, and $3!=6\nmid27=3^3$ — done, no case analysis. Beware: "each element is equally likely in each position" is a <em>marginal</em> condition and does <b>not</b> imply uniformity (see P<small>ERMUTE</small>-<small>BY</small>-C<small>YCLE</small>, which has only $n$ outputs).</div>
+  </article>
+
+  <!-- ================= DP & GREEDY ================= -->
+  <article data-tag="Definition" data-ref="DP hallmarks · Ch 14">
+    <div class="q">The two hallmarks of dynamic programming — and what happens if each is missing?</div>
+    <div class="a"><b>Optimal substructure</b> and <b>overlapping subproblems</b>. Miss the first and DP is <em>wrong</em>; miss the second and DP is merely <em>pointless</em> — plain divide-and-conquer already suffices (merge sort has substructure but no overlap).</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="DP shapes · sheets 9–10">
+    <div class="q">The four DP shapes on this course, with their subproblem and cost.</div>
+    <div class="a"><b>Linear</b> — a prefix, $O(n^2)$ (rod cutting). <b>Interval</b> — a range $[i,j]$ split at $k$, $O(n^3)$ (matrix chain, optimal BST, palindromes, string breaking). <b>Tree</b> — a subtree × a small state, $O(n)$ (company party). <b>Knapsack</b> — items × capacity, $O(nW)$. Recognise by asking <em>what the last decision looks like</em>.</div>
+  </article>
+
+  <article data-tag="Example" data-ref="Substructure fails · prob 85">
+    <div class="q">When does optimal substructure <b>fail</b> — and what is the general diagnosis?</div>
+    <div class="a">When subproblems <b>compete for a shared resource</b>. Rod cutting with a limit $l_i$ on pieces of each length: the sub-solution consumes quota the outer problem also needs, so "a rod of length $n-i$" is no longer the whole subproblem — the remaining quota is part of the state. Repair = enlarge the state, at exponential cost.</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="Exchange argument · Ch 15">
+    <div class="q">The five-step <b>exchange-argument</b> template for proving a greedy choice safe.</div>
+    <div class="a">(1) Let $A$ be any optimal solution, $g$ the greedy choice. (2) If $g\in A$ done; else pick the $a\in A$ that greedy beat. (3) Form $A'=(A\setminus\{a\})\cup\{g\}$ and show it is <b>still feasible</b> and <b>no worse</b>. (4) So some optimal solution contains $g$. (5) Induct on the rest. Activity selection, Huffman and fractional knapsack are all this.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Knapsack · prob 98–99">
+    <div class="q">Fractional vs 0–1 knapsack: which is greedy, which is DP, and why is $O(nW)$ not polynomial?</div>
+    <div class="a"><b>Fractional</b> — greedy by density $v_i/w_i$, $O(n)$ with weighted-median selection. <b>0–1</b> — DP, $K[i,w]=\max(K[i-1,w],\,v_i+K[i-1,w-w_i])$, $O(nW)$. The input encodes $W$ in $\Theta(\lg W)$ bits, so $O(nW)$ is exponential in the input <em>length</em> — <b>pseudo-polynomial</b>. That is why 0–1 is NP-hard and fractional is linear.</div>
+  </article>
+
+  <article data-tag="Example" data-ref="Greedy fails · prob 95, 97">
+    <div class="q">Name two places on sheet 10 where a plausible greedy rule <b>fails</b>.</div>
+    <div class="a"><b>(1)</b> Activity selection by <em>shortest duration</em>: $(0,10),(9,11),(10,20)$ — greedy takes $(9,11)$ and blocks both others, 1 instead of 2. Also fails for earliest-start and fewest-conflicts. <b>(2)</b> <em>Weighted</em> activity selection: greedy fails once activities carry values; use DP with $\mathrm{OPT}(j)=\max(v_j+\mathrm{OPT}(\mathrm{prev}(j)),\mathrm{OPT}(j-1))$, $O(n\lg n)$.</div>
   </article>
 
 </div>

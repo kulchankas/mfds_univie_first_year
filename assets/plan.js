@@ -44,7 +44,7 @@ window.MFDS_PLAN = {
          tracks: {
            algo:'Read the <a href="algorithms/data-structures.html">data-structure notes</a> end to end (heaps → BST/RBT → hashing). Do <a href="algorithms/recurrence-drills.html">drill groups A–B</a>. Skim the <a href="algorithms/mock-exam-1.html">real exam paper</a> <em>without</em> solutions — just to calibrate what\'s coming.',
            ana:'Re-read <a href="analysis/study-guide/">study guide</a> Blocks 1–2 (metric spaces, completeness/compactness, continuity). Start <a href="analysis/daily-practice.html">daily-practice</a> sheets 1–3.',
-           la:'Chapters 1–2 of the <a href="linear-algebra-ds/index.html">self-study plan</a> (vector spaces, inner products): watch the 3B1B clips, redo the flagged Ch 1 exercises. Start the <a href="linear-algebra-ds/flashcards.html">LA deck</a>.'
+           la:'Chapters 1–2 of the <a href="linear-algebra-ds/index.html">self-study plan</a> (vector spaces, inner products): watch the 3B1B clips, redo the flagged Ch 1 exercises.'
          },
          short: { algo:'Data-structure notes end to end; drill groups A–B',
                   ana:'Study guide blocks 1–2; daily-practice sheets 1–3',
@@ -56,7 +56,7 @@ window.MFDS_PLAN = {
          tracks: {
            algo:'Read the <a href="algorithms/exam-proofs.html">proofs page</a> ①–③ (loop invariants, Master machinery, Akra–Bazzi) actively. Finish <a href="algorithms/recurrence-drills.html">drill groups C–D</a>; redo any miss the next day.',
            ana:'Blocks 3–6 of the study guide (incl. convexity). Daily-practice sheets 4–7. Check the exam-focus table and mark every ✅ topic you can\'t yet prove.',
-           la:'Chapters 3–4 (bilinear forms, determinants). Read the <a href="linear-algebra-ds/theorems.html">worked theorems</a> on Gram–Schmidt and orthogonal projection — they carry the whole least-squares story.'
+           la:'Chapters 3–4 (bilinear forms, determinants). Work Gram–Schmidt and orthogonal projection until they are automatic — they carry the whole least-squares story.'
          },
          short: { algo:'Exam-proofs ①–③ actively; drill groups C–D',
                   ana:'Blocks 3–6 incl. convexity; daily-practice sheets 4–7',
@@ -68,7 +68,7 @@ window.MFDS_PLAN = {
          tracks: {
            algo:'From memory, on paper: <b>Huffman optimality</b> (the 8-pointer — <a href="algorithms/exam-proofs.html#huffman">⑩</a>), bubblesort <em>and</em> insertion-sort invariant proofs (<a href="algorithms/exam-proofs.html#loopinv">①</a>). Compare against the model solutions; repeat failures two days later.',
            ana:'The ✅ exam-priority proofs from memory, one block per session (Banach FPT and friends). Daily-practice sheets 8–10.',
-           la:'Chapter 5 (eigenvalues): diagonalization workflow + Cayley–Hamilton. Reproduce <a href="linear-algebra-ds/theorems.html#riesz">Riesz</a> and the adjoint identities from memory.'
+           la:'Chapter 5 (eigenvalues): diagonalization workflow + Cayley–Hamilton. Reproduce the Riesz representation theorem and the adjoint identities from memory.'
          },
          short: { algo:'Huffman & loop-invariant proofs from memory',
                   ana:'Exam-priority proofs, one block per session',
@@ -80,7 +80,7 @@ window.MFDS_PLAN = {
          tracks: {
            algo:'From memory: <b>quicksort</b> <a href="algorithms/exam-proofs.html#quicksort">⑤</a>, the <b>lower bound</b> <a href="algorithms/exam-proofs.html#lowerbound">⑥</a>, <b>selection</b> <a href="algorithms/exam-proofs.html#select">⑦</a>, <b>hashing</b> <a href="algorithms/exam-proofs.html#hashing">⑧</a>. Rehearse MIN-HEAPIFY / DECREASE-KEY / RB-INSERT-FIXUP pseudocode cold.',
            ana:'⚠️ proofs (the "maybe" tier) + redo the highest-priority problem-set questions. Daily-practice sheets 11–13.',
-           la:'Chapter 6 — the <a href="linear-algebra-ds/theorems.html#spectral">spectral theorem</a> and <a href="linear-algebra-ds/theorems.html#svd">SVD</a>. Compute one full SVD by hand on a $2\\times2$, verify with <code>numpy.linalg.svd</code>.'
+           la:'Chapter 6 — the spectral theorem and SVD. Compute one full SVD by hand on a $2\\times2$, verify with <code>numpy.linalg.svd</code>.'
          },
          short: { algo:'Quicksort, lower-bound, selection & hashing proofs',
                   ana:'Maybe-tier proofs + highest-priority problem sets',
