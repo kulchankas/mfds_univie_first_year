@@ -104,7 +104,7 @@
   footer{margin-top:3rem;padding-top:1.3rem;border-top:1px solid var(--border-soft);color:var(--text-dim);font-size:.82rem}
   footer a{color:var(--accent);text-decoration:none}
 </style>
-<link rel="stylesheet" href="../assets/mfds.css">
+<link rel="stylesheet" href="../assets/mfds.css?v=2">
 </head>
 <body class="mfds mfds-algo" data-page="algo">
 <div class="wrap">
@@ -149,6 +149,7 @@
 
   <h2>Study kit</h2>
   <a class="doc" href="exam-proofs.html"><span class="ic">🧾</span><span class="t">Exam proofs — all 11 flagged items, written out <span class="s">· loop invariants · Master/Akra–Bazzi · quicksort · lower bound · selection · hashing · Huffman · augmentation</span></span><span class="ext">HTML</span></a>
+  <a class="doc" href="asymptotics.html"><span class="ic">📈</span><span class="t">Asymptotics &amp; growth — the concise note <span class="s">· the five symbols and their negations · growth ladder · Stirling · the limit test · the traps</span></span><span class="ext">HTML</span></a>
   <a class="doc" href="data-structures.html"><span class="ic">🗂️</span><span class="t">Data-structure notes — the "describe &amp; define" half <span class="s">· heaps · BST/RBT · hashing · B-trees · sorting zoo · DP · greedy</span></span><span class="ext">HTML</span></a>
   <a class="doc" href="recurrence-drills.html"><span class="ic">🧮</span><span class="t">Recurrence drills — decision procedure + 21 problems <span class="s">· incl. the extended case 2 and Akra–Bazzi the exam actually uses</span></span><span class="ext">HTML</span></a>
   <a class="doc" href="flashcards.html"><span class="ic">🃏</span><span class="t">Flashcards — 72 cards, spaced repetition <span class="s">· recurrences · AVL · graphs · probability · DP &amp; greedy · everything above</span></span><span class="ext">HTML</span></a>
@@ -215,6 +216,7 @@
   </div>
   <div class="box"><span class="lbl">Start here — external resources</span>
   <ul>
+    <li>📺 <a href="https://www.youtube.com/playlist?list=PLMDFPuH4ZxUFGC5ICUu8xstOxQIizMgX2">Algorithms Lab — Data Structures &amp; Algorithms</a> — <b>the closest match to this course</b>: 26 videos running from asymptotics and loop-invariant proofs through recurrences, heaps, hashing, red-black trees and graph traversal. Individual videos are linked from the matching study-plan units above.</li>
     <li>🎓 <a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/">MIT 6.006 — Introduction to Algorithms</a> (OCW video course, CLRS-aligned).</li>
     <li>📺 <a href="https://www.youtube.com/playlist?list=PLDN4rrl48XKpZkf03iYFl-O29szjTrs_O">Abdul Bari — Algorithms</a> (clear walkthroughs of sorting, DP, graphs).</li>
     <li>🔎 <a href="https://visualgo.net/">VisuAlgo</a> — interactive visualizations of data structures &amp; algorithms (BSTs, red–black, hashing, sorting).</li>
@@ -244,12 +246,14 @@
             'Recite the ladder $\\lg^\\ast n \\ll \\lg\\lg n \\ll \\lg n \\ll n^\\varepsilon \\ll n^c \\ll c^n \\ll n! \\ll n^n$.',
             'Apply Stirling to get $\\lg(n!)=\\Theta(n\\lg n)$ — this is the bridge to the sorting lower bound in unit 10.',
             'Avoid the three standard traps: $2^{2n}\\ne\\Theta(2^n)$; $O$ is <b>not</b> symmetric; $f+g=\\Theta(\\max(f,g))$ but $f-g$ is not $\\Theta$ of anything.'],
-      links:'<a href="problem-sheets.html#s1">problem map</a> · <a href="problem-sheets/Problem_14_Sheet_1_Algo_and_Data_Structures.pdf">worked solution 14–15</a>',
-      learn:[['CLRS ch. 3','','Characterizing running times — §3.1–3.2 definitions, §3.3 the standard function catalogue (Stirling, $\\lg^\\ast$).'],
+      links:'<a href="asymptotics.html">the asymptotics note</a> · <a href="problem-sheets.html#s1">problem map</a> · <a href="problem-sheets/Problem_14_Sheet_1_Algo_and_Data_Structures.pdf">worked solution 14–15</a>',
+      learn:[['The asymptotics note','asymptotics.html','<b>Start here</b> — definitions, negations, the growth ladder, standard estimates and the traps, all on one page.'],
+             ['CLRS ch. 3','','Characterizing running times — §3.1–3.2 definitions, §3.3 the standard function catalogue (Stirling, $\\lg^\\ast$).'],
              ['MIT 6.006 — lecture 3','https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-3-sets-and-sorting/','Asymptotic notation used in anger, on sorting.'],
              ['Big-O notation','https://en.wikipedia.org/wiki/Big_O_notation','Reference for the formal definitions and the algebra of the classes.'],
              ['Stirling&#39;s approximation','https://en.wikipedia.org/wiki/Stirling%27s_approximation','The one estimate you must be able to quote from memory.'],
-             ['Iterated logarithm','https://en.wikipedia.org/wiki/Iterated_logarithm','$\\lg^\\ast$ — appears in problem 17 and confuses everyone once.']] },
+             ['Iterated logarithm','https://en.wikipedia.org/wiki/Iterated_logarithm','$\\lg^\\ast$ — appears in problem 17 and confuses everyone once.'],
+             ['Algorithms Lab — Algorithm Efficiency','https://www.youtube.com/watch?v=gDyHDc2PJfM','Landau notation and growth rates, worked at the board.']] },
 
     { id:'inv', t:'Correctness &amp; loop invariants', s:'Initialization / maintenance / termination; the permutation clause',
       sheet:'Sheet 1 · 2–7 · Sheet 5 · 51', lanes:'RPD', q:'EXAM Q1',
@@ -263,7 +267,9 @@
       links:'<a href="exam-proofs.html#loopinv">proofs ①</a> · <a href="mock-exam-1.html#q1">mock Q1</a>',
       learn:[['CLRS §2.1','','Insertion sort — the canonical worked invariant, in the exact style the exam wants.'],
              ['Loop invariant','https://en.wikipedia.org/wiki/Loop_invariant','Background on partial vs total correctness.'],
-             ['Sorting visualiser','https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html','Watch bubble/insertion/selection step by step until the invariant is obvious.']] },
+             ['Sorting visualiser','https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html','Watch bubble/insertion/selection step by step until the invariant is obvious.'],
+             ['Algorithms Lab — Loop Invariant Proofs','https://www.youtube.com/watch?v=_maJ4Qy7Q0E','Initialization/maintenance/termination done live.'],
+             ['Algorithms Lab — Proof techniques','https://www.youtube.com/watch?v=1l32uiPNlPg','The follow-up: induction and contradiction in algorithm proofs.']] },
 
     { id:'master', t:'Recurrences — Master Theorem', s:'Watershed, the three cases, extended case 2, regularity',
       sheet:'Sheet 1 · 8, 15, 16 · Sheet 2 · 18–21', lanes:'RPDC', q:'EXAM Q2',
@@ -278,7 +284,8 @@
       links:'<a href="recurrence-drills.html#dA">drills A</a> · <a href="recurrence-drills.html#dB">drills B</a> · <a href="exam-proofs.html#master">proofs ②</a>',
       learn:[['CLRS §4.3–4.6','','Substitution, recursion trees, the master method, and the proof of the continuous version.'],
              ['Master theorem','https://en.wikipedia.org/wiki/Master_theorem_(analysis_of_algorithms)','Includes the extended $\\lg^k$ cases in table form.'],
-             ['MIT 6.046 — lecture 2','https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/lecture-2-divide-conquer-convex-hull-median-finding/','Divide-and-conquer with the master theorem applied throughout.']] },
+             ['MIT 6.046 — lecture 2','https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/lecture-2-divide-conquer-convex-hull-median-finding/','Divide-and-conquer with the master theorem applied throughout.'],
+             ['Algorithms Lab — Solving recurrences','https://www.youtube.com/watch?v=YjrcREdUD9g','Recursion trees, substitution and the master method in one sitting.']] },
 
     { id:'akra', t:'Polynomial growth &amp; Akra–Bazzi', s:'The corrected quantifier order; unequal splits; change of variables',
       sheet:'Sheet 2 · 22–29', lanes:'RPDC', q:'EXAM Q2',
@@ -292,7 +299,8 @@
       links:'<a href="recurrence-drills.html#pgc">polynomial growth</a> · <a href="recurrence-drills.html#cov">change of vars</a> · <a href="recurrence-drills.html#dC">drills C–D</a> · <a href="exam-proofs.html#akra">proofs ③</a>',
       learn:[['CLRS §4.7','','Akra–Bazzi recurrences — statement, the exponent, and the driving-function integral.'],
              ['Akra–Bazzi method','https://en.wikipedia.org/wiki/Akra%E2%80%93Bazzi_method','Worked examples with unequal splits.'],
-             ['Sheet 2 (PDF)','problem-sheets/ss26_algodat-2.pdf','The source problems 18–29 — this is the sheet carrying the erratum.']] },
+             ['Sheet 2 (PDF)','problem-sheets/ss26_algodat-2.pdf','The source problems 18–29 — this is the sheet carrying the erratum.'],
+             ['Algorithms Lab — Solving recurrences','https://www.youtube.com/watch?v=YjrcREdUD9g','Same video as unit 3 — the later part covers the awkward cases.']] },
 
     { id:'prob', t:'Probability toolkit', s:'Markov, geometric variance, conditional independence, binomial estimates',
       sheet:'Sheet 3 · 30–35', lanes:'RD',
@@ -324,7 +332,8 @@
       learn:[['CLRS §5.3, ch. 7, ch. 9','','Randomized algorithms; quicksort; medians and order statistics.'],
              ['MIT 6.046 — lecture 2','https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/lecture-2-divide-conquer-convex-hull-median-finding/','Median finding, the deterministic and randomized versions.'],
              ['Fisher–Yates shuffle','https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle','Has a section on exactly the off-by-one that breaks uniformity.'],
-             ['Quickselect','https://en.wikipedia.org/wiki/Quickselect','']] },
+             ['Quickselect','https://en.wikipedia.org/wiki/Quickselect',''],
+             ['Algorithms Lab — Quicksort','https://www.youtube.com/watch?v=j1c1xRug6nw','Partitioning and the randomised analysis.']] },
 
     { id:'heap', t:'Heaps &amp; priority queues', s:'MIN-HEAPIFY, BUILD-MIN-HEAP, DECREASE-KEY from memory',
       sheet:'Sheet 4 · 41–43 · Sheet 5 · 47–49', lanes:'RDC', q:'EXAM Q3',
@@ -339,7 +348,9 @@
       learn:[['CLRS ch. 6','','Heapsort — the source for every pseudocode above.'],
              ['MIT 6.006 — lecture 8','https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-8-binary-heaps/','Binary heaps, including the $O(n)$ build argument.'],
              ['Heap visualiser','https://www.cs.usfca.edu/~galles/visualization/Heap.html','Step through insert / extract-min until the float directions stick.'],
-             ['VisuAlgo — heap','https://visualgo.net/en/heap','']] },
+             ['VisuAlgo — heap','https://visualgo.net/en/heap',''],
+             ['Algorithms Lab — Heaps, part 1','https://www.youtube.com/watch?v=76EKZuHeHxs','Priority queues and the heap property.'],
+             ['Algorithms Lab — Heaps, part 2','https://www.youtube.com/watch?v=4-HelG_6t04','Heap operations, BUILD-HEAP and heapsort.']] },
 
     { id:'trees', t:'BST, red-black &amp; AVL', s:'RB properties, the three fixup cases, AVL height &amp; BALANCE',
       sheet:'Sheet 7 · 62–72 · Sheet 8 · 73–80', lanes:'RDC', q:'EXAM Q4',
@@ -356,7 +367,10 @@
              ['MIT 6.006 — lecture 7','https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-7-binary-trees-part-2-avl/','AVL trees: the height bound and rotations, done properly.'],
              ['Red-black visualiser','https://www.cs.usfca.edu/~galles/visualization/RedBlack.html','Insert 1..10 one at a time and name each fixup case before you press the button.'],
              ['AVL visualiser','https://www.cs.usfca.edu/~galles/visualization/AVLtree.html','Same drill for the four rotation cases.'],
-             ['Red–black tree','https://en.wikipedia.org/wiki/Red%E2%80%93black_tree','']] },
+             ['Red–black tree','https://en.wikipedia.org/wiki/Red%E2%80%93black_tree',''],
+             ['Algorithms Lab — Binary Search Trees','https://www.youtube.com/watch?v=qIJCoaTrHVI',''],
+             ['Algorithms Lab — Red-Black Trees','https://www.youtube.com/watch?v=aPqz3jyl8ak','The properties and the fixup cases.'],
+             ['Algorithms Lab — Types of Balanced BSTs','https://www.youtube.com/watch?v=cMqQqiMm0ag','Where AVL sits relative to red-black and the rest.']] },
 
     { id:'hash', t:'Hashing', s:'Chaining vs open addressing, load factor, universal families',
       sheet:'Sheet 6 · 59–61', lanes:'RPDC',
@@ -373,7 +387,9 @@
              ['MIT 6.046 — lecture 8','https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/lecture-8-randomization-universal-perfect-hashing/','Universal and perfect hashing — the proof-level treatment.'],
              ['Chaining visualiser','https://www.cs.usfca.edu/~galles/visualization/OpenHash.html','(Confusingly named: "open hash" = chaining.)'],
              ['Probing visualiser','https://www.cs.usfca.edu/~galles/visualization/ClosedHash.html','Watch clustering form under linear probing.'],
-             ['Universal hashing','https://en.wikipedia.org/wiki/Universal_hashing','']] },
+             ['Universal hashing','https://en.wikipedia.org/wiki/Universal_hashing',''],
+             ['Algorithms Lab — Hash Tables, part 1','https://www.youtube.com/watch?v=H42VOVW_zAs','Hash functions and direct addressing.'],
+             ['Algorithms Lab — Hash Tables, part 2','https://www.youtube.com/watch?v=S5cDddDeqZE','Resolving collisions: chaining vs open addressing.']] },
 
     { id:'sort', t:'Sorting &amp; lower bounds', s:'The zoo, stability, and the &Omega;(n lg n) decision-tree bound',
       sheet:'—', lanes:'RPC',
@@ -387,7 +403,10 @@
       learn:[['CLRS ch. 8','','Sorting in linear time — §8.1 is the lower bound, §8.2–8.4 the linear-time sorts.'],
              ['MIT 6.006 — lecture 5','https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-5-linear-sorting/','Linear sorting and why it escapes the bound.'],
              ['Comparison-sort visualiser','https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html',''],
-             ['Decision tree model','https://en.wikipedia.org/wiki/Decision_tree_model','The formal setting for the lower bound.']] },
+             ['Decision tree model','https://en.wikipedia.org/wiki/Decision_tree_model','The formal setting for the lower bound.'],
+             ['Algorithms Lab — Sorting Algorithms','https://www.youtube.com/watch?v=H-u1z0wj5sA','The comparison-sort zoo.'],
+             ['Algorithms Lab — Linear-time sorting, part 1','https://www.youtube.com/watch?v=GsJA23Sx0A4','The lower bound — exactly Theorem 8.1.'],
+             ['Algorithms Lab — Linear-time sorting, part 2','https://www.youtube.com/watch?v=CJzT3fMy0h4','Counting, radix and bucket sort.']] },
 
     { id:'dp', t:'Dynamic programming', s:'Rod cutting, interval DP, tree DP, knapsack',
       sheet:'Sheet 9 · 81–89 · Sheet 10 · 90–93', lanes:'RD',
@@ -439,7 +458,12 @@
              ['B-tree visualiser','https://www.cs.usfca.edu/~galles/visualization/BTree.html','Set the degree and watch splits propagate.'],
              ['DFS visualiser','https://www.cs.usfca.edu/~galles/visualization/DFS.html',''],
              ['Topological sort (DFS)','https://www.cs.usfca.edu/~galles/visualization/TopoSortDFS.html','Confirms the reverse-finishing-order rule.'],
-             ['VisuAlgo — graph traversal','https://visualgo.net/en/dfsbfs','Shows $u.d$/$u.f$ live.']] },
+             ['VisuAlgo — graph traversal','https://visualgo.net/en/dfsbfs','Shows $u.d$/$u.f$ live.'],
+             ['Algorithms Lab — Graphs and representation','https://www.youtube.com/watch?v=TLjpqYtRYR8','Adjacency lists vs matrices.'],
+             ['Algorithms Lab — Depth-First Search','https://www.youtube.com/watch?v=yJatdes-xLg','Timestamps and edge classification.'],
+             ['Algorithms Lab — Breadth-First Search','https://www.youtube.com/watch?v=CbV1sSSptS4',''],
+             ['Algorithms Lab — Elementary Data Structures, part 1','https://www.youtube.com/watch?v=ZlZoe37yWEc','Stacks and dynamic arrays.'],
+             ['Algorithms Lab — Elementary Data Structures, part 2','https://www.youtube.com/watch?v=BxWj5nRDQsI','Queues and linked lists.']] },
 
     { id:'mock', t:'Mock exams under timed conditions', s:'Five full papers: the real one, the prediction, and B/C/D',
       sheet:'—', lanes:'PD', q:'DO 5×',
@@ -593,6 +617,6 @@
 })();
 </script>
 </div>
-<script src="../assets/mfds.js" data-root="../"></script>
+<script src="../assets/mfds.js?v=2" data-root="../"></script>
 </body>
 </html>

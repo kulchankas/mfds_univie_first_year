@@ -58,7 +58,7 @@ def resolve(src_dir, href):
     """Return the on-disk path an href points at, or None if external."""
     if href.startswith(('http://', 'https://', 'mailto:', 'data:', '#')):
         return None
-    target = href.split('#')[0]
+    target = href.split('#')[0].split('?')[0]   # drop fragment and ?v= cache-buster
     if not target:
         return None
     path = os.path.normpath(os.path.join(ROOT, src_dir, target))

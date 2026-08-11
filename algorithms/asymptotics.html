@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F9">
+<meta name="description" content="Asymptotics and growth for the AlgoDat exam: the five Landau symbols and their negations, how to prove and disprove a bound, the growth ladder, Stirling and the standard estimates, and the traps that cost marks.">
+<title>Asymptotics &amp; growth — Algorithms &amp; Data Structures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[['$','$']]},svg:{fontCache:'global'}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#F7F7F9;--card:#fff;--border:#EFEFF2;--ink:#1B1B1F;--muted:#55555C;--faint:#8A8A90;
+    --algo:#F0A93A;--algo-bg:#FFF1DC;--algo-dark:#8A5A0E;
+    --good:#2FAE72;--good-bg:#E1F5EA;--good-dark:#0F6B41;
+    --blue:#2F6FB0;--blue-bg:#EAF2FB;
+    --purple:#6B3FA0;--purple-bg:#EFE6FE;
+    --rose:#B22C6A;--rose-bg:#FDE4EC;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Figtree',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.66;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:clamp(1.5rem,4vw,2.3rem) clamp(1rem,4vw,1.7rem) 5rem;
+        padding-left:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-left));
+        padding-right:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-right))}
+  .eyebrow{font-weight:700;color:var(--faint);font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.6rem}
+  h1{font-weight:800;font-size:clamp(1.75rem,5.5vw,2.4rem);line-height:1.1;letter-spacing:-.025em;margin-bottom:.55rem}
+  .lede{color:var(--muted);font-size:clamp(.95rem,3vw,1.04rem);max-width:46em}
+  h2{font-weight:800;font-size:clamp(1.2rem,4vw,1.5rem);letter-spacing:-.02em;margin:2.4rem 0 .7rem;scroll-margin-top:70px}
+  h3{font-weight:700;font-size:1.03rem;margin:1.5rem 0 .45rem;color:var(--algo-dark)}
+  p{margin:.55rem 0;color:var(--muted);font-size:.96rem}
+  b,strong{color:var(--ink)}
+  ul,ol{margin:.4rem 0 .7rem;padding-left:1.35rem;color:var(--muted);font-size:.96rem}
+  li{margin:.32rem 0}
+  a{color:var(--purple)}
+  code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:#F0F0F3;color:var(--algo-dark);padding:.05rem .3rem;border-radius:5px}
+  .def{background:var(--good-bg);border:1px solid rgba(47,174,114,.25);border-left:4px solid var(--good);border-radius:0 14px 14px 0;padding:.85rem 1.1rem;margin:.9rem 0;color:var(--ink);font-size:.95rem}
+  .def .tag{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--good-dark);margin-bottom:.3rem}
+  .idea{background:var(--blue-bg);border:1px solid rgba(47,111,176,.25);border-left:4px solid var(--blue);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.93rem;color:#33333A}
+  .idea .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-right:.4rem}
+  .tip{background:var(--algo-bg);border:1px solid rgba(240,169,58,.3);border-left:4px solid var(--algo);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.92rem;color:#4A3A22}
+  .tip .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--algo-dark);margin-right:.4rem}
+  .warn{background:var(--rose-bg);border:1px solid rgba(178,44,106,.25);border-left:4px solid var(--rose);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.92rem;color:#4A2233}
+  .warn .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--rose);margin-right:.4rem}
+  pre.code{font-family:'JetBrains Mono',monospace;font-size:.83rem;line-height:1.5;background:#F5F5F7;border:1px solid var(--border);border-radius:12px;padding:.85rem 1.05rem;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.7rem 0;color:#26262B}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.8rem 0;border:1px solid var(--border);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:.89rem;background:#fff}
+  th,td{border-bottom:1px solid var(--border);padding:.5rem .65rem;text-align:left;vertical-align:top}
+  th{background:#F5F5F7;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.03em;color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  .toc{background:#fff;border:1px solid var(--border);border-radius:14px;padding:.9rem 1.2rem;margin:1.3rem 0;font-size:.9rem;line-height:1.9}
+  .toc a{text-decoration:none;font-weight:600;white-space:nowrap}
+  .pchip{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:#4A3208;background:var(--algo);border-radius:5px;padding:.1rem .45rem;vertical-align:middle;letter-spacing:.03em;white-space:nowrap}
+  /* the five definitions: stacked, so they wrap on a phone instead of
+     forcing the page's most important content into a scrolling table */
+  dl.sym{margin:.5rem 0 0}
+  dl.sym dt{font-weight:700;color:var(--ink);font-size:.95rem;margin-top:.8rem}
+  dl.sym dt:first-child{margin-top:.2rem}
+  dl.sym dt em{font-style:normal;font-weight:600;color:var(--good-dark);font-size:.85rem}
+  dl.sym dd{margin:.15rem 0 0;padding-left:.9rem;border-left:2px solid rgba(47,174,114,.3);
+            overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .vid{display:flex;gap:.7rem;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:12px;padding:.7rem .9rem;margin:.5rem 0;text-decoration:none;color:inherit}
+  .vid:hover{border-color:var(--algo)}
+  .vid .ic{flex:none;font-size:1rem;line-height:1.5}
+  .vid .t{font-weight:700;font-size:.9rem;color:var(--ink)}
+  .vid .s{display:block;font-weight:600;font-size:.8rem;color:var(--faint)}
+  footer{margin-top:3rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--faint);font-size:.82rem}
+</style>
+<link rel="stylesheet" href="../assets/mfds.css?v=2">
+</head>
+<body class="mfds mfds-algo" data-page="algo" data-up="index.html" data-up-label="Algorithms">
+<div class="wrap">
+  <div class="eyebrow">Universität Wien · Prof. Schichl · unit 1 · sheet 1</div>
+  <h1>Asymptotics &amp; growth</h1>
+  <p class="lede">Everything unit 1 needs, in one place. This is the <b>most reusable</b> material on the syllabus — every recurrence, every runtime claim and the whole sorting lower bound are written in this language. Seventeen problems on sheet 1 are pure asymptotics.</p>
+
+  <div class="toc"><b>Jump to:</b>
+    <a href="#defs">the five symbols</a> ·
+    <a href="#prove">proving &amp; disproving</a> ·
+    <a href="#ladder">the growth ladder</a> ·
+    <a href="#algebra">what you may and may not do</a> ·
+    <a href="#estimates">standard estimates</a> ·
+    <a href="#limit">the limit test</a> ·
+    <a href="#traps">traps that cost marks</a> ·
+    <a href="#sheet">the sheet-1 problems</a>
+  </div>
+
+  <!-- ================= DEFINITIONS ================= -->
+  <h2 id="defs">The five symbols</h2>
+  <p>All five are statements about <b>eventual</b> behaviour, up to constant factors. Each is a set of functions; $f=O(g)$ is an abuse of notation for $f\in O(g)$.</p>
+
+  <div class="def"><span class="tag">The definitions — learn these verbatim</span>
+  <dl class="sym">
+    <dt>$f=O(g)$ <em>— at most, $\le$</em></dt>
+    <dd>$\exists c&gt;0\ \exists n_0&gt;0\ \forall n\ge n_0:\ 0\le f(n)\le c\,g(n)$</dd>
+
+    <dt>$f=\Omega(g)$ <em>— at least, $\ge$</em></dt>
+    <dd>$\exists c&gt;0\ \exists n_0&gt;0\ \forall n\ge n_0:\ 0\le c\,g(n)\le f(n)$</dd>
+
+    <dt>$f=\Theta(g)$ <em>— exactly, $=$</em></dt>
+    <dd>$\exists c_1,c_2&gt;0\ \exists n_0&gt;0\ \forall n\ge n_0:\ 0\le c_1g(n)\le f(n)\le c_2g(n)$</dd>
+
+    <dt>$f=o(g)$ <em>— strictly less, $\lt$</em></dt>
+    <dd><b>$\forall c&gt;0$</b> $\ \exists n_0&gt;0\ \forall n\ge n_0:\ 0\le f(n)\lt c\,g(n)$</dd>
+
+    <dt>$f=\omega(g)$ <em>— strictly greater, $\gt$</em></dt>
+    <dd><b>$\forall c&gt;0$</b> $\ \exists n_0&gt;0\ \forall n\ge n_0:\ 0\le c\,g(n)\lt f(n)$</dd>
+  </dl></div>
+
+  <div class="idea"><span class="lbl">The one structural fact</span> $O$ and $\Omega$ say "<b>there exists</b> a constant $c$"; $o$ and $\omega$ say "<b>for every</b> constant $c$". That single quantifier flip is the whole difference between "at most" and "strictly less" — and it is why $o$ is a <em>much</em> stronger claim than $O$.</div>
+
+  <p>The pair $(c,n_0)$ is called a <b>witness</b>. To prove a bound you must produce one; you never have to find the best one.</p>
+
+  <div class="def"><span class="tag">The relationships</span>
+  <ul>
+    <li>$f=\Theta(g)\iff f=O(g)\ \textbf{and}\ f=\Omega(g)$ — the standard way to prove a $\Theta$.</li>
+    <li>$f=o(g)\Rightarrow f=O(g)$, but not conversely. Likewise $\omega\Rightarrow\Omega$.</li>
+    <li>$f=o(g)\iff g=\omega(f)$, and $f=O(g)\iff g=\Omega(f)$ — <b>transpose symmetry</b>.</li>
+    <li>$f=o(g)\Rightarrow f\ne\Theta(g)$. The classes $o(g)$, $\Theta(g)$, $\omega(g)$ are pairwise disjoint.</li>
+  </ul></div>
+
+  <h3>The negations — you need these to <em>disprove</em></h3>
+  <div class="warn"><span class="lbl">Half of sheet 1 asks you to disprove something</span>
+  Negate by flipping every quantifier:
+  $$f\ne O(g)\iff \forall c&gt;0\ \forall n_0&gt;0\ \exists n\ge n_0:\ f(n)&gt;c\,g(n).$$
+  In words: <b>for every candidate constant, the bound fails infinitely often.</b> The proof shape is therefore "let $c$ be arbitrary; I exhibit arbitrarily large $n$ with $f(n)&gt;c\,g(n)$" — usually by solving that inequality for $n$.
+  <br><br>Similarly $f\ne o(g)$ means <b>there is some</b> $c&gt;0$ such that $f(n)\ge c\,g(n)$ infinitely often — to disprove a little-o you only need to defeat <em>one</em> constant.</div>
+
+  <!-- ================= PROVING ================= -->
+  <h2 id="prove">Proving and disproving, in practice</h2>
+
+  <h3>To prove $f=O(g)$ — produce witnesses</h3>
+  <p><em>Claim: $3n^2+10n+7=O(n^2)$.</em> For all $n\ge1$ we have $n\le n^2$ and $1\le n^2$, so
+  $$3n^2+10n+7\ \le\ 3n^2+10n^2+7n^2\ =\ 20n^2 .$$
+  Witnesses $c=20$, $n_0=1$. ∎ — Note the technique: <b>inflate every lower-order term up to the leading one</b>. It is crude, it is legal, and it is fast.</p>
+
+  <h3>To prove $f=\Omega(g)$ — discard, don't inflate</h3>
+  <p><em>Claim: $3n^2+10n+7=\Omega(n^2)$.</em> All terms are positive for $n\ge1$, so $3n^2+10n+7\ge 3n^2$. Witnesses $c=3$, $n_0=1$. ∎</p>
+  <p>With both directions, $3n^2+10n+7=\Theta(n^2)$.</p>
+
+  <h3>To disprove — negate, then solve for $n$</h3>
+  <p><em>Claim: $n^2\ne O(n)$.</em> Let $c&gt;0$ be arbitrary. Then $n^2&gt;c\,n\iff n&gt;c$. So for every $n_0$, taking $n=\max(n_0,\lceil c\rceil+1)$ gives $n\ge n_0$ and $n^2&gt;cn$. The bound fails for every constant. ∎</p>
+
+  <div class="tip"><span class="lbl">Exam habit</span> Write the definition you are using at the top of the answer <em>before</em> you start. It costs one line, it forces you to pick the right quantifier structure, and graders give partial credit for a correctly stated definition even when the algebra goes wrong.</div>
+
+  <!-- ================= LADDER ================= -->
+  <h2 id="ladder">The growth ladder</h2>
+  <p>Memorise this order. Problems 14–15 are exactly "sort these functions", and almost every comparison you will ever need is an instance of one of these steps.</p>
+
+  <div class="def"><span class="tag">Strictly increasing growth — each $\ll$ means little-o</span>
+  $$1\ \ll\ \lg^\ast n\ \ll\ \lg\lg n\ \ll\ \lg n\ \ll\ \lg^k n\ \ll\ n^\varepsilon\ \ll\ n\ \ll\ n\lg n\ \ll\ n^2\ \ll\ n^c\ \ll\ c^n\ \ll\ n!\ \ll\ n^n$$
+  for any constants $k&gt;0$, $\varepsilon&gt;0$, $c&gt;1$.</div>
+
+  <div class="idea"><span class="lbl">The three rules that generate the whole ladder</span>
+  <b>1.</b> Any polylog beats any polynomial: $\lg^k n=o(n^\varepsilon)$ for <em>every</em> $k$ and <em>every</em> $\varepsilon&gt;0$ — even $\lg^{100}n = o(n^{0.01})$.<br>
+  <b>2.</b> Any polynomial beats any exponential: $n^k=o(c^n)$ for every $k$ and every $c&gt;1$.<br>
+  <b>3.</b> Exponentials with different bases are <em>not</em> comparable by constants: $2^n=o(3^n)$, and even $2^n = o(2^{2n})$.</div>
+
+  <div class="tw"><table>
+    <tr><th>Function</th><th>Name</th><th>Where it shows up</th></tr>
+    <tr><td>$\lg^\ast n$</td><td>iterated logarithm</td><td>Number of times you apply $\lg$ before reaching $\le1$. Grows absurdly slowly: $\lg^\ast(2^{65536})=5$. Problem 17.</td></tr>
+    <tr><td>$\lg\lg n$</td><td>double log</td><td>The answer to the $k=-1$ Master case, e.g. $T(n)=2T(n/2)+n/\lg n$.</td></tr>
+    <tr><td>$\lg n$</td><td>binary log</td><td>Tree heights, binary search. In this course $\lg=\log_2$.</td></tr>
+    <tr><td>$n\lg n$</td><td>—</td><td>Merge sort, heapsort; the comparison-sort <em>lower bound</em>.</td></tr>
+    <tr><td>$n^{\lg 7}\approx n^{2.807}$</td><td>—</td><td>Strassen. A reminder that exponents need not be integers.</td></tr>
+    <tr><td>$n!$</td><td>factorial</td><td>Number of permutations — hence the $\lg(n!)$ in the sorting bound.</td></tr>
+  </table></div>
+
+  <!-- ================= ALGEBRA ================= -->
+  <h2 id="algebra">What you may and may not do</h2>
+
+  <div class="def"><span class="tag">Valid</span>
+  <ul>
+    <li><b>Transitivity</b> — all five symbols: $f=O(g)$ and $g=O(h)$ $\Rightarrow f=O(h)$.</li>
+    <li><b>Reflexivity</b> — $O$, $\Omega$, $\Theta$ only: $f=\Theta(f)$. (<b>Not</b> $o$: $f\ne o(f)$.)</li>
+    <li><b>Symmetry</b> — $\Theta$ only: $f=\Theta(g)\iff g=\Theta(f)$.</li>
+    <li><b>Sum rule</b> — $O(f)+O(g)=O(\max(f,g))$; in particular $f+g=\Theta(\max(f,g))$ for non-negative $f,g$.</li>
+    <li><b>Product rule</b> — $f_1=O(g_1)$ and $f_2=O(g_2)$ $\Rightarrow f_1f_2=O(g_1g_2)$.</li>
+    <li><b>Constants vanish</b> — $\Theta(cf)=\Theta(f)$ for any constant $c&gt;0$; and $\log_a n=\Theta(\log_b n)$, so <b>log bases are irrelevant inside $\Theta$</b>.</li>
+  </ul></div>
+
+  <div class="warn"><span class="lbl">Invalid — these are the marks people lose</span>
+  <ul>
+    <li>$O$ is <b>not symmetric</b>. $n=O(n^2)$ but $n^2\ne O(n)$.</li>
+    <li><b>No subtraction.</b> $f=O(h)$ and $g=O(h)$ tells you <em>nothing</em> about $f-g$.</li>
+    <li><b>No trichotomy.</b> Unlike real numbers, two functions need not be comparable at all — $f(n)=n^{1+\sin n}$ is neither $O(n)$ nor $\Omega(n)$.</li>
+    <li><b>Exponentiation does not respect $\Theta$.</b> $2n=\Theta(n)$ but $2^{2n}=4^n\ne\Theta(2^n)$. Constant factors in an <em>exponent</em> are not constant factors.</li>
+    <li><b>Logs do not either, in the other direction:</b> $\lg(n^2)=2\lg n=\Theta(\lg n)$ — here the constant <em>does</em> come out. Know which case you are in.</li>
+  </ul></div>
+
+  <!-- ================= ESTIMATES ================= -->
+  <h2 id="estimates">Standard estimates</h2>
+
+  <div class="def"><span class="tag">Stirling&#39;s approximation <span class="pchip">MUST KNOW</span></span>
+  $$n!=\sqrt{2\pi n}\left(\frac ne\right)^{n}\left(1+\Theta\!\left(\frac1n\right)\right)$$
+  and the consequence you actually use:
+  $$\lg(n!)=\Theta(n\lg n).$$
+  This is the step that turns "a decision tree needs $n!$ leaves" into the $\Omega(n\lg n)$ sorting lower bound.</div>
+
+  <div class="tip"><span class="lbl">If Stirling deserts you</span> You can get the same bound by hand. Upper: $n!\le n^n$, so $\lg(n!)\le n\lg n$. Lower: at least half the factors of $n!$ are $\ge n/2$, so $n!\ge (n/2)^{n/2}$ and $\lg(n!)\ge\frac n2\lg\frac n2=\Omega(n\lg n)$. Two lines, no memorisation.</div>
+
+  <div class="def"><span class="tag">The rest of the toolkit</span>
+  <div class="tw"><table>
+    <tr><th>Identity</th><th>Value</th><th>Used for</th></tr>
+    <tr><td>$H_n=\sum_{k=1}^n 1/k$</td><td>$\ln n+\gamma+O(1/n)=\Theta(\lg n)$</td><td>Quicksort&#39;s expected comparisons</td></tr>
+    <tr><td>$\sum_{k=1}^n k$</td><td>$\frac{n(n+1)}2=\Theta(n^2)$</td><td>Insertion/selection sort worst case</td></tr>
+    <tr><td>$\sum_{k=0}^{n} x^k$</td><td>$\frac{x^{n+1}-1}{x-1}$; $=\Theta(x^n)$ if $x&gt;1$, $=\Theta(1)$ if $0&lt;x&lt;1$</td><td>Recursion-tree level sums</td></tr>
+    <tr><td>$\sum_{h\ge0} h/2^h$</td><td>$2$ — a <b>constant</b></td><td>Why BUILD-HEAP is $O(n)$</td></tr>
+    <tr><td>$\binom nk$</td><td>$(n/k)^k\le\binom nk\le(en/k)^k$</td><td>Counting/probability estimates</td></tr>
+    <tr><td>$a^{\log_b c}$</td><td>$c^{\log_b a}$</td><td>Rewriting watershed functions</td></tr>
+    <tr><td>$\log_b a$</td><td>$\frac{\lg a}{\lg b}$</td><td>Computing the Master-theorem exponent</td></tr>
+  </table></div></div>
+
+  <!-- ================= LIMIT TEST ================= -->
+  <h2 id="limit">The limit test — the fastest tool you have</h2>
+  <p>When both functions are positive and the limit exists, everything collapses to one computation:</p>
+
+  <div class="def"><span class="tag">Ratio test</span>
+  $$L=\lim_{n\to\infty}\frac{f(n)}{g(n)}\quad\Longrightarrow\quad
+  \begin{cases}
+  L=0 & f=o(g)\ \ (\text{so also } O)\\
+  0&lt;L&lt;\infty & f=\Theta(g)\\
+  L=\infty & f=\omega(g)\ \ (\text{so also } \Omega)
+  \end{cases}$$
+  </div>
+
+  <div class="warn"><span class="lbl">Two cautions</span>
+  <b>1.</b> If the limit <b>does not exist</b> the test says nothing — and that is exactly the case in the oscillating counterexamples above. Then you must go back to the definition.<br>
+  <b>2.</b> The limit test is a <em>shortcut for finding</em> the answer. If a problem says "prove from the definition", a limit computation does not answer the question asked.</div>
+
+  <h3>Two techniques that make hard comparisons easy</h3>
+  <ul>
+    <li><b>Take logarithms.</b> $f\ll g\iff \lg f\ll \lg g$ when both grow. To compare $n^{\lg n}$ with $(\lg n)^n$: logs are $\lg^2 n$ and $n\lg\lg n$. The second is bigger, so $(\lg n)^n$ wins.</li>
+    <li><b>Substitute to kill the logs.</b> Put $n=2^m$. Then $\lg n=m$, and a comparison of $\lg^{\lg n} n$ against $n$ becomes $m^{\lg m}$ against $2^m$ — a form you already know.</li>
+  </ul>
+
+  <!-- ================= TRAPS ================= -->
+  <h2 id="traps">Traps that cost marks</h2>
+  <div class="tw"><table>
+    <tr><th>Trap</th><th>Reality</th></tr>
+    <tr><td>"$f=O(g)$, so $g=O(f)$"</td><td>$O$ is not symmetric. Only $\Theta$ is.</td></tr>
+    <tr><td>"$2^{2n}=\Theta(2^n)$, the 2 is a constant"</td><td>$2^{2n}=4^n$. A constant <em>in an exponent</em> is a base change, not a factor.</td></tr>
+    <tr><td>"$\lg(n!)=\Theta(\lg(n^n))$? Surely not"</td><td>Actually yes — both are $\Theta(n\lg n)$. Stirling, then $\lg(n^n)=n\lg n$.</td></tr>
+    <tr><td>"$n/\lg n$ is polynomially smaller than $n$"</td><td>No. There is no $\varepsilon&gt;0$ with $n/\lg n=O(n^{1-\varepsilon})$. This is <b>why Master case 1 fails</b> there — the single most expensive misconception in unit 3.</td></tr>
+    <tr><td>"$\sqrt n$ is basically $\lg n$"</td><td>$\lg n=o(\sqrt n)$, by a wide margin. $\sqrt n$ is $n^{1/2}$ — a polynomial.</td></tr>
+    <tr><td>"Which log base?"</td><td>Irrelevant inside $O/\Theta/\Omega$ (bases differ by a constant) — but <b>not</b> irrelevant in an exponent: $n^{\log_2 3}\ne n^{\log_3 2}$.</td></tr>
+    <tr><td>Forgetting $f$ must be eventually non-negative</td><td>The definitions all require $0\le f(n)$ for $n\ge n_0$. Worth one sentence when $f$ could be negative.</td></tr>
+  </table></div>
+
+  <!-- ================= SHEET ================= -->
+  <h2 id="sheet">Where this is examined</h2>
+  <p>Sheet 1 problems <b>1, 9–14, 17</b> are pure asymptotics; <b>15–16</b> connect to recurrences. Problem 14/15 has a <a href="problem-sheets/Problem_14_Sheet_1_Algo_and_Data_Structures.pdf">fully worked solution</a> — treat it as the model for how much justification an ordering answer needs.</p>
+  <p>On the exam this material rarely appears as its own question. It appears <em>inside</em> every other question: question 2 is four recurrences (unit 3), and the big proof is often the $\Omega(n\lg n)$ bound, which is Stirling plus counting. Getting fluent here pays across the whole paper.</p>
+
+  <div class="idea"><span class="lbl">Related pages</span>
+  <a href="recurrence-drills.html">Recurrence drills</a> — where these bounds get applied · <a href="recurrence-drills.html#pgc">the polynomial growth condition</a> — the formal version of "polynomially smaller" · <a href="exam-proofs.html#lowerbound">Theorem 8.1</a> — Stirling in action · <a href="problem-sheets.html#s1">the sheet-1 map</a> · <a href="flashcards.html">flashcards</a>.</div>
+
+  <h2>Watch it explained</h2>
+  <p>From the <a href="https://www.youtube.com/playlist?list=PLMDFPuH4ZxUFGC5ICUu8xstOxQIizMgX2">Algorithms Lab · Data Structures &amp; Algorithms</a> playlist (26 videos, tracking this syllabus closely):</p>
+  <a class="vid" href="https://www.youtube.com/watch?v=gDyHDc2PJfM"><span class="ic">▶</span><span><span class="t">Algorithm Efficiency</span><span class="s">Landau notation and growth rates — the video for this page</span></span></a>
+  <a class="vid" href="https://www.youtube.com/watch?v=YjrcREdUD9g"><span class="ic">▶</span><span><span class="t">Analyzing recursive algorithms: how to solve recurrences</span><span class="s">The natural sequel — unit 3</span></span></a>
+  <a class="vid" href="https://www.youtube.com/watch?v=GsJA23Sx0A4"><span class="ic">▶</span><span><span class="t">Linear-time sorting, part 1: Lower bound</span><span class="s">Where Stirling earns its keep — unit 10</span></span></a>
+
+  <footer>
+    Notation follows CLRS 4th ed. ch. 3. Problem sheets © Prof. Schichl. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+<script src="../assets/mfds.js?v=2" data-root="../"></script>
+</body>
+</html>
