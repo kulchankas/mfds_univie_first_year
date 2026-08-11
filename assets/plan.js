@@ -90,7 +90,7 @@ window.MFDS_PLAN = {
     5: { theme:'Mock week',
          sub:'timed, closed book, graded honestly',
          tracks: {
-           algo:'Sit the <a href="algorithms/mock-exam-1.html">real first-date paper</a> under exam conditions; grade with the grader notes; log every dropped point. Two days later: the predicted second-date paper, same protocol.',
+           algo:'Sit the <a href="algorithms/mock-exam-1.html">real first-date paper</a> under exam conditions; grade with the grader notes; log every dropped point. Then <a href="algorithms/mock-exams.html">paper B</a> two days later, same protocol — papers C and D are held back for week 6.',
            ana:'Self-test: pick one ✅ problem from each problem sheet (2, 3, 5, 8, 11, 14) and solve under time; redo the study-guide recipes for anything that failed.',
            la:'Simulated exam from the course exercises: one exercise per chapter, 90 minutes, closed book. (Intro-LA takers: <a href="linear-algebra/mock_exams.html">mock exams 1–3</a> this week.)'
          },
@@ -102,7 +102,7 @@ window.MFDS_PLAN = {
     6: { theme:'Close the gaps, then taper',
          sub:'only what the mocks exposed',
          tracks: {
-           algo:'Re-do exactly the failed sub-questions from week 5, from scratch. Re-write the two weakest proofs from memory one final time. Skim the <a href="algorithms/data-structures.html">notes</a> tables (runtimes, RB properties, Master cases) the day before.',
+           algo:'Re-do exactly the failed sub-questions from week 5, from scratch. Sit <a href="algorithms/mock-exams.html#paperC">paper C</a> early in the week and <a href="algorithms/mock-exams.html#paperD">paper D</a> mid-week. Re-write the two weakest proofs from memory one final time. Skim the <a href="algorithms/data-structures.html">notes</a> tables (runtimes, RB properties, Master cases) the day before.',
            ana:'Dropped-points list only; then one final pass over the exam-focus table. No new material after mid-week.',
            la:'Dropped-points list; final pass over definitions (norms, inner products, diagonalizability criteria, the SVD statement). (Intro-LA: mocks 4–5 early in the week.)'
          },

@@ -102,17 +102,44 @@ def main():
                 problems.append(f'{rel}: missing anchor {href}')
 
     # ---- hrefs hiding inside JavaScript ----
-    for rel in walk('.js'):
-        src = open(os.path.join(ROOT, rel), encoding='utf-8').read()
-        d = os.path.dirname(rel)
-        # plan.js paths are site-root relative; asset scripts sit in assets/
+    def js_hrefs(src):
+        """Yield literal hrefs from JS source, skipping runtime concatenation."""
         for href in sorted(set(re.findall(r'href="([^"]+)"', src))):
             # skip string concatenation like  href="' + root + s.href + '"
-            if any(c in href for c in "'+`"):
-                continue
+            if not any(c in href for c in "'+`"):
+                yield href
+
+    for rel in walk('.js'):
+        src = open(os.path.join(ROOT, rel), encoding='utf-8').read()
+        # plan.js paths are site-root relative; asset scripts sit in assets/
+        for href in js_hrefs(src):
             path = resolve('', href)
             if path and not os.path.exists(path):
                 problems.append(f'{rel}: broken link {href} (rendered at runtime)')
+
+    # ---- and hrefs inside INLINE <script> blocks in HTML ----
+    # html.parser treats script bodies as CDATA, so the crawl above never sees
+    # these. The study-plan units on algorithms/index.html are built this way.
+    for rel in walk('.html'):
+        src = open(os.path.join(ROOT, rel), encoding='utf-8').read()
+        d = os.path.dirname(rel)
+        for block in re.findall(r'<script\b[^>]*>(.*?)</script>', src, re.S):
+            for href in js_hrefs(block):
+                if href.startswith('#'):
+                    frag = href[1:]
+                    if frag and frag not in pages[rel].ids:
+                        problems.append(f'{rel}: missing anchor {href} (rendered at runtime)')
+                    continue
+                path = resolve(d, href)
+                if path is None:
+                    continue
+                if not os.path.exists(path):
+                    problems.append(f'{rel}: broken link {href} (rendered at runtime)')
+                    continue
+                frag = href.split('#')[1] if '#' in href else ''
+                target_rel = os.path.relpath(path, ROOT)
+                if frag and target_rel in pages and frag not in pages[target_rel].ids:
+                    problems.append(f'{rel}: missing anchor {href} (rendered at runtime)')
 
     # ---- "<" inside inline math that the HTML parser will eat ----
     # Only a "<" followed by a letter, "/", "!" or "?" opens a tag; "$a<\varepsilon$"

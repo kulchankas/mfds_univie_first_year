@@ -79,7 +79,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   </ul></div>
 
   <!-- ============================================================ Q1 -->
-  <h2>1 · Correctness of bubblesort <span class="pts">8 pts</span></h2>
+  <h2 id="q1">1 · Correctness of bubblesort <span class="pts">8 pts</span></h2>
   <div class="exam">
     <p>Bubblesort works by repeatedly swapping adjacent elements that are out of order. The procedure is</p>
 <pre class="code">1: <span class="kw">procedure</span> BUBBLESORT(A, n)
@@ -122,7 +122,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   </div></details>
 
   <!-- ============================================================ Q2 -->
-  <h2>2 · Runtime analysis <span class="pts">8 pts</span></h2>
+  <h2 id="q2">2 · Runtime analysis <span class="pts">8 pts</span></h2>
   <div class="exam">
     <p>For the following recursions, give asymptotically tight upper and lower bounds for $T(n)$.</p>
     <ol type="a">
@@ -162,7 +162,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   </div></details>
 
   <!-- ============================================================ Q3 -->
-  <h2>3 · Heaps <span class="pts">8 pts</span></h2>
+  <h2 id="q3">3 · Heaps <span class="pts">8 pts</span></h2>
   <div class="exam">
     <p>Describe what a heap is and what it is usually used for. Especially, talk about the following points:</p>
     <ol type="a">
@@ -212,7 +212,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   </div></details>
 
   <!-- ============================================================ Q4 -->
-  <h2>4 · Red-black trees <span class="pts">6 pts</span></h2>
+  <h2 id="q4">4 · Red-black trees <span class="pts">6 pts</span></h2>
   <div class="exam">
     <ol type="a">
       <li>Define what a binary search tree is, and describe how binary trees are stored. <span class="pts">1</span></li>
@@ -280,7 +280,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   </div></details>
 
   <!-- ============================================================ Q5 -->
-  <h2>5 · Huffman codes <span class="pts">10 pts</span></h2>
+  <h2 id="q5">5 · Huffman codes <span class="pts">10 pts</span></h2>
   <div class="exam">
     <ol type="a">
       <li>Provide the algorithm for constructing a Huffman code. <span class="pts">2</span></li>
@@ -329,7 +329,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   </div></details>
 
   <!-- ============================================================ predicted -->
-  <h2>Predicted second-date paper (self-test)</h2>
+  <h2 id="predicted">Predicted second-date paper (self-test)</h2>
   <p class="lede" style="font-size:.98rem">Same skeleton, rotated topics. The flagged proofs that <em>didn't</em> appear on the first date are the natural candidates. Attempt this closed-book; answers are on the linked pages.</p>
 
   <div class="exam">
@@ -349,6 +349,9 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
     <li><strong>Describe questions:</strong> pseudocode + one sentence of purpose + the runtime is the full-marks pattern. Rehearse writing MIN-HEAPIFY, DECREASE-KEY, RB-INSERT-FIXUP and HUFFMAN from memory.</li>
     <li><strong>Big proofs:</strong> statement first, then the main idea in one sentence, then the details — if time runs out, the skeleton still earns most of the credit.</li>
   </ul></div>
+
+  <div class="box"><span class="lbl">Three more full papers</span>
+  This page is <b>paper A</b>. When you have worked it through, <a href="mock-exams.html">papers B, C and D</a> are full 40-point papers in the same format with grader-style solutions — each one rotating a different big proof into question 5 (quicksort · the lower bound · expected linear selection), so that across all four you cover every proof on the flagged list.</div>
 
   <footer>
     Transcribed from the official first-date paper (2 July 2026) © Prof. Schichl / Universität Wien; solutions follow CLRS 4th ed. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.

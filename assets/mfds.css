@@ -213,6 +213,18 @@ body.mfds .reset { color: var(--text-dim); }
 body.mfds .reset:hover { color: #C0392B; }
 body.mfds mjx-container { color: inherit !important; }
 
+/* Display math is laid out at its natural width, so a long derivation pushes
+   the whole page sideways on a phone — measured: 15 of the 24 equations on the
+   practice-papers page are wider than a 375px viewport's content column.
+   Let each equation scroll inside itself instead. */
+body.mfds mjx-container[display="true"] {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: .2rem;   /* so a scrollbar never clips descenders */
+}
+
 /* misc */
 body.mfds footer { border-top: 1px solid var(--border); color: var(--text-dim); }
 body.mfds hr, body.mfds .divider { border-color: var(--border); }

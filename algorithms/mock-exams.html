@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F9">
+<meta name="description" content="Three extra full-length AlgoDat practice papers (B, C, D) in the real 40-point exam format, each with grader-style model solutions and a timing plan.">
+<title>Practice papers B · C · D — Algorithms &amp; Data Structures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#1a1612;--bg-elevated:#221d18;--bg-card:#1f1a15;--border:#3a342c;--border-soft:#2a251f;
+    --text:#f5efe4;--text-muted:#b8aa97;--text-dim:#8a7e6e;--accent:#e0b888;--accent-hover:#ecc89c;
+    --good:#8bc6a0;--warn:#d99a7e;--blue:#8fb8de;--glow:rgba(224,184,136,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased;min-height:100vh;background-image:radial-gradient(900px 500px at 50% -10%,var(--glow),transparent 70%);background-repeat:no-repeat}
+  .wrap{max-width:800px;margin:0 auto;padding:clamp(2rem,6vw,3rem) clamp(1.1rem,5vw,1.75rem) 5rem;padding-left:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-left));padding-right:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-right))}
+  .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-dim);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;margin-bottom:1.5rem;transition:color .15s}
+  .back-link:hover{color:var(--accent)}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--accent);font-size:clamp(.74rem,2.6vw,.82rem);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem}
+  h1{font-family:'Sora',sans-serif;font-weight:600;font-size:clamp(1.9rem,7vw,2.7rem);line-height:1.08;letter-spacing:-.03em;margin-bottom:.7rem}
+  .lede{color:var(--text-muted);font-size:clamp(.98rem,3.4vw,1.08rem);max-width:44em}
+  h2{font-family:'Sora',sans-serif;font-weight:600;font-size:clamp(1.3rem,4.5vw,1.6rem);letter-spacing:-.02em;margin:clamp(2.4rem,6vw,3rem) 0 1rem;scroll-margin-top:70px}
+  h3{font-family:'Sora',sans-serif;font-weight:600;font-size:1.05rem;margin:1.6rem 0 .5rem;color:var(--accent)}
+  p{margin:.55rem 0}
+  .pts{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--accent);border:1px solid var(--border);border-radius:5px;padding:.1rem .45rem;white-space:nowrap;vertical-align:middle}
+  .exam{background:#211c16;border:1px solid var(--border);border-radius:12px;padding:clamp(1.1rem,4vw,1.5rem);margin:1rem 0;color:var(--text-muted);font-size:.96rem}
+  .exam b{color:var(--text)}
+  .exam ol,.exam ul{margin:.4rem 0 0;padding-left:1.35rem}
+  .exam li{margin:.45rem 0}
+  pre.code{font-family:'JetBrains Mono',monospace;font-size:.84rem;line-height:1.55;background:#14110d;border:1px solid var(--border-soft);border-radius:10px;padding:.9rem 1.1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.8rem 0;color:var(--text)}
+  pre.code .kw{color:var(--blue)} pre.code .cm{color:var(--text-dim);font-style:italic}
+  details.sol{background:var(--bg-card);border:1px solid rgba(139,198,160,.35);border-radius:12px;margin:.8rem 0 1.8rem;overflow:hidden}
+  details.sol>summary{cursor:pointer;list-style:none;padding:.85rem 1.2rem;font-family:'Sora',sans-serif;font-weight:600;font-size:.95rem;color:var(--good)}
+  details.sol>summary::-webkit-details-marker{display:none}
+  details.sol>summary::before{content:'▸ ';font-size:.85em}
+  details.sol[open]>summary::before{content:'▾ '}
+  details.sol[open]>summary{border-bottom:1px solid var(--border-soft)}
+  .solbody{padding:1rem 1.25rem 1.3rem;color:var(--text-muted);font-size:.95rem}
+  .solbody p{margin:.6rem 0} .solbody b,.solbody strong{color:var(--text)}
+  .solbody ul,.solbody ol{margin:.4rem 0 .6rem;padding-left:1.3rem}
+  .solbody li{margin:.35rem 0}
+  .step{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--good)}
+  .inv{background:#1c2119;border:1px solid rgba(139,198,160,.3);border-left:4px solid var(--good);border-radius:0 8px 8px 0;padding:.7rem 1rem;margin:.7rem 0;color:var(--text)}
+  .grader{background:var(--bg-card);border:1px solid rgba(217,154,126,.35);border-left:4px solid var(--warn);border-radius:0 10px 10px 0;padding:.8rem 1.1rem;margin:.8rem 0;font-size:.9rem;color:var(--text-muted)}
+  .grader .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--warn);margin-bottom:.4rem}
+  .box{background:var(--bg-card);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:0 10px 10px 0;padding:1rem 1.25rem;margin:1.1rem 0;color:var(--text-muted);font-size:.95rem}
+  .box .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.5rem}
+  .box ul{margin:.3rem 0 0;padding-left:1.2rem} .box li{margin:.35rem 0}
+  .box a{color:var(--accent)}
+  .box.blue{border-left-color:var(--blue)} .box.blue .lbl{color:var(--blue)}
+  .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1rem 0}
+  table{border-collapse:collapse;width:100%;font-size:.88rem}
+  th,td{border:1px solid var(--border);padding:.45rem .6rem;text-align:left;vertical-align:top}
+  th{background:#2a2218;color:var(--accent);font-weight:600;white-space:nowrap}
+  .paper-nav{display:flex;flex-wrap:wrap;gap:.45rem;margin:1.3rem 0}
+  .paper-nav a{font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:700;text-decoration:none;color:var(--text-dim);border:1px solid var(--border);background:var(--bg-card);padding:.5rem .8rem;border-radius:999px;transition:border-color .15s,color .15s}
+  .paper-nav a:hover{border-color:var(--accent);color:var(--accent)}
+  .paper-head{background:linear-gradient(180deg,var(--bg-card),var(--bg-elevated));border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.35rem;margin:1rem 0 1.4rem}
+  .paper-head .theme{font-family:'JetBrains Mono',monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--warn);margin-bottom:.3rem}
+  .paper-head p{color:var(--text-muted);font-size:.93rem;margin:.35rem 0 0}
+  footer{margin-top:3rem;padding-top:1.3rem;border-top:1px solid var(--border-soft);color:var(--text-dim);font-size:.82rem}
+  footer a{color:var(--accent);text-decoration:none}
+  mjx-container{color:inherit !important}
+</style>
+<link rel="stylesheet" href="../assets/mfds.css">
+</head>
+<body class="mfds mfds-algo" data-page="algo" data-up="index.html" data-up-label="Algorithms">
+<div class="wrap">
+  <a class="back-link" href="index.html">← Algorithms &amp; Data Structures</a>
+  <div class="eyebrow">Universität Wien · Prof. Schichl · practice papers</div>
+  <h1>Three more practice papers</h1>
+  <p class="lede">Papers <b style="color:var(--accent)">B</b>, <b style="color:var(--accent)">C</b> and <b style="color:var(--accent)">D</b> — built in the exact format of the real first-date exam: five questions, <b style="color:var(--accent)">40 points</b>, 90 minutes. Each one deliberately rotates a <em>different</em> big proof into question 5, so that across all four papers you cover every proof on Prof. Schichl's list.</p>
+
+  <div class="paper-nav">
+    <a href="mock-exam-1.html">← Paper A · the real exam</a>
+    <a href="#paperB">Paper B · probability</a>
+    <a href="#paperC">Paper C · lower bounds</a>
+    <a href="#paperD">Paper D · DP &amp; selection</a>
+    <a href="#protocol">How to sit these</a>
+  </div>
+
+  <h2 id="protocol">How to sit these</h2>
+  <div class="box"><span class="lbl">The protocol — it matters more than the content</span>
+  <ul>
+    <li><b>Closed book, 90 minutes, on paper.</b> Reproducing a proof you "know" at speed, longhand, under pressure is a <em>separate skill</em> from knowing it. That is the skill these papers train.</li>
+    <li><b>Budget by points, not by question.</b> 40 points in 90 minutes ≈ <b>2 minutes per point</b>. The 10-point proof deserves 20 minutes; the 6-point describe question deserves 12. If you are 5 minutes over budget on a question, leave it and come back.</li>
+    <li><b>Answer the describe questions first</b> if the proof intimidates you. They are the most reliable points on the paper, and banking them removes the time panic that makes proofs collapse.</li>
+    <li><b>Grade honestly.</b> "I knew that" is not a point. Write the dropped points on one line each — that list <em>is</em> your remaining curriculum.</li>
+    <li><b>Space them out.</b> One paper every 3–4 days in the last two weeks. Sitting all three in one afternoon teaches you almost nothing.</li>
+  </ul></div>
+
+  <div class="box blue"><span class="lbl">What each paper rotates in</span>
+  <div class="scroll-x"><table>
+    <tr><th>Paper</th><th>Q1 invariant</th><th>Q3 / Q4 describe</th><th>Q5 — the big proof</th></tr>
+    <tr><td><b>A</b> (real)</td><td>Bubblesort</td><td>Heaps · red-black</td><td>Huffman optimality (Thm 15.4)</td></tr>
+    <tr><td><b>B</b></td><td>Insertion sort</td><td>Hashing · AVL</td><td>Randomised quicksort (Thm 7.4)</td></tr>
+    <tr><td><b>C</b></td><td>Selection sort</td><td>B-trees · DFS</td><td>Sorting lower bound (Thm 8.1)</td></tr>
+    <tr><td><b>D</b></td><td>Rod cutting (substructure)</td><td>Heaps · RB fixup</td><td>Expected linear selection (Thm 9.2)</td></tr>
+  </table></div>
+  Between the four papers every flagged proof appears at least once except the hashing theorems and the augmentation theorem — those two are drilled as Q3 material in paper B and stay on the <a href="exam-proofs.html">proofs page</a>.</div>
+
+  <!-- ==================================================================== -->
+  <!-- ============================= PAPER B ============================== -->
+  <!-- ==================================================================== -->
+  <h2 id="paperB">Paper B — the probability rotation</h2>
+  <div class="paper-head">
+    <div class="theme">40 points · 90 minutes · closed book</div>
+    <p>Built on the thesis that <b>probability is the most likely rotation</b>: sheet 3 is pure probability, sheets 4–5 apply it, and none of it appeared on the first date. Question 5 is the quicksort analysis — the single most-drilled proof in CLRS.</p>
+  </div>
+
+  <h3>B1 · Correctness of insertion sort <span class="pts">8 pts</span></h3>
+  <div class="exam">
+    Consider <code>INSERTION-SORT(A)</code> on an array $A[1..n]$:
+    <pre class="code"><span class="kw">for</span> j = 2 <span class="kw">to</span> n
+    key = A[j]
+    i = j - 1
+    <span class="kw">while</span> i &gt; 0 <span class="kw">and</span> A[i] &gt; key
+        A[i+1] = A[i]
+        i = i - 1
+    A[i+1] = key</pre>
+    <ol>
+      <li>State a loop invariant for the <b>outer</b> <code>for</code> loop that is strong enough to prove the algorithm correct.</li>
+      <li>Prove initialization, maintenance and termination.</li>
+      <li>Argue that the <b>inner</b> <code>while</code> loop terminates.</li>
+    </ol>
+  </div>
+  <details class="sol"><summary>Model solution — B1</summary><div class="solbody">
+    <div class="inv"><b>Invariant.</b> At the start of each iteration of the <code>for</code> loop with index $j$, the subarray $A[1..j-1]$ consists of <b>exactly the elements originally in $A[1..j-1]$</b> (as a multiset), <b>in sorted order</b>.</div>
+    <p><span class="step">Why both clauses</span> The sortedness clause alone is satisfied by an algorithm that overwrites $A[1..j-1]$ with zeros. The permutation clause is what makes the invariant strong enough to imply correctness — and it is where most of the marks are lost.</p>
+    <p><span class="step">Initialization</span> $j=2$: the subarray is $A[1..1]$, a single element. It is trivially sorted and is trivially the original $A[1]$. ✓</p>
+    <p><span class="step">Maintenance</span> Assume the invariant before an iteration. The body saves $\mathit{key}=A[j]$, then shifts every element of $A[1..j-1]$ that is strictly greater than $\mathit{key}$ one position right, and finally writes $\mathit{key}$ into the vacated slot $A[i+1]$.</p>
+    <ul>
+      <li><em>Multiset.</em> Shifting moves elements without creating or destroying any; the only slot written with a new value is $A[i+1]$, and it receives $\mathit{key}=$ the old $A[j]$. So $A[1..j]$ afterwards is exactly the original $A[1..j]$ as a multiset. ✓</li>
+      <li><em>Order.</em> On exit from the while loop either $i=0$ or $A[i]\le \mathit{key}$. Everything shifted right was $&gt;\mathit{key}$, so it now sits above position $i+1$; everything at or below $i$ was $\le \mathit{key}$ and is untouched. Since $A[1..j-1]$ was sorted, the result $A[1..j]$ is sorted. ✓</li>
+    </ul>
+    <p>Both clauses hold for $j+1$, which is exactly the invariant at the start of the next iteration.</p>
+    <p><span class="step">Termination</span> The loop ends when $j=n+1$. Substituting into the invariant: $A[1..n]$ is a sorted permutation of the original $A[1..n]$ — the definition of a correct sort. ∎</p>
+    <p><span class="step">Inner loop</span> $i$ starts at $j-1$ and strictly decreases by 1 each iteration, and the guard requires $i&gt;0$. So $i$ is a strictly decreasing $\mathbb{N}$-valued quantity bounded below — after at most $j-1$ iterations the guard fails. ∎</p>
+    <div class="grader"><span class="lbl">Grader notes</span>
+    Roughly 2 pts invariant (1 of them for the permutation clause), 1 initialization, 3 maintenance, 1 termination, 1 inner loop. <b>The single most common failure</b> is stating "$A[1..j-1]$ is sorted" and stopping — that caps you at about 5/8 no matter how good the rest is. The second most common is treating termination as a formality instead of <em>substituting</em> $j=n+1$ into the invariant.</div>
+  </div></details>
+
+  <h3>B2 · Runtime analysis <span class="pts">8 pts</span></h3>
+  <div class="exam">
+    Give asymptotically tight ($\Theta$) bounds. Justify each — name the method and, where you use the Master Theorem, the case.
+    <ol>
+      <li>$T(n)=4T(n/2)+n^2\lg n$</li>
+      <li>$T(n)=2T(n/2)+n/\lg n$</li>
+      <li>$T(n)=3T(n/4)+n\lg n$</li>
+      <li>$T(n)=T(n/2)+T(n/3)+n$</li>
+    </ol>
+  </div>
+  <details class="sol"><summary>Model solution — B2</summary><div class="solbody">
+    <p><b>(a)</b> Watershed $n^{\log_2 4}=n^2$. Driving function $f=n^2\lg n=\Theta(n^{\log_b a}\lg^1 n)$, so this is <b>extended case 2 with $k=1&gt;-1$</b>, which adds one log factor: <b>$T(n)=\Theta(n^2\lg^2 n)$</b>.</p>
+    <p><b>(b)</b> Watershed $n^{\log_2 2}=n$. Here $f=n/\lg n=\Theta(n\lg^{-1}n)$, i.e. $k=-1$. This is <em>not</em> case 1 — $f$ is smaller than the watershed but not <b>polynomially</b> smaller, so no $\varepsilon&gt;0$ works. The $k=-1$ row of the extended theorem gives <b>$T(n)=\Theta(n\lg\lg n)$</b>.</p>
+    <p><em>Akra–Bazzi cross-check:</em> $p=1$, and $\int_2^n \frac{u/\lg u}{u^2}\,du=\int_2^n\frac{du}{u\lg u}=\Theta(\lg\lg n)$, so $T=\Theta(n(1+\lg\lg n))=\Theta(n\lg\lg n)$ ✓.</p>
+    <p><b>(c)</b> Watershed $n^{\log_4 3}\approx n^{0.792}$. Now $f=n\lg n=\Omega(n^{0.792+\varepsilon})$ for e.g. $\varepsilon=0.1$, so <b>case 3</b> — but case 3 requires the regularity condition:
+    $$a f(n/b)=3\cdot\tfrac{n}{4}\lg\tfrac n4=\tfrac{3n}{4}(\lg n-2)\le \tfrac34\,n\lg n = c\,f(n),\quad c=\tfrac34&lt;1 \ ✓$$
+    Hence <b>$T(n)=\Theta(n\lg n)$</b>.</p>
+    <p><b>(d)</b> Unequal splits — the Master Theorem does not apply at all. <b>Akra–Bazzi:</b> find $p$ with $(1/2)^p+(1/3)^p=1$. At $p=1$ the sum is $\tfrac12+\tfrac13=\tfrac56&lt;1$ and at $p=\tfrac12$ it is $\approx1.28&gt;1$, so $p\in(\tfrac12,1)$ (numerically $p\approx0.788$). You do <b>not</b> need $p$ exactly: with $f(u)=u$,
+    $$\int_1^n\frac{u}{u^{p+1}}\,du=\int_1^n u^{-p}\,du=\Theta(n^{1-p})$$
+    since $p&lt;1$. Therefore $T(n)=\Theta\big(n^p(1+n^{1-p})\big)=\Theta(n)$. <b>$T(n)=\Theta(n)$</b>.</p>
+    <div class="grader"><span class="lbl">Grader notes</span>
+    2 pts each. Part (b) is the trap the real exam leaned on — writing "case 1" there costs the whole 2 points. In (c) you lose a point for skipping the regularity check even with the right answer. In (d), stating that the Master Theorem <em>cannot</em> apply and naming Akra–Bazzi is worth more than a numerically precise $p$.</div>
+  </div></details>
+
+  <h3>B3 · Hash tables <span class="pts">8 pts</span></h3>
+  <div class="exam">
+    <ol>
+      <li>Describe a hash table with <b>collision resolution by chaining</b>: the data structure, and INSERT / SEARCH / DELETE with their worst-case times.</li>
+      <li>Define the <b>load factor</b> $\alpha$. Under the assumption of simple uniform hashing, derive the expected time of an <b>unsuccessful</b> search.</li>
+      <li>Contrast chaining with <b>open addressing</b>: give one advantage of each, and explain what goes wrong with deletion under open addressing.</li>
+    </ol>
+  </div>
+  <details class="sol"><summary>Model solution — B3</summary><div class="solbody">
+    <p><span class="step">1 · The structure</span> An array $T[0..m-1]$ of $m$ <b>slots</b>; slot $j$ holds a linked list of all stored elements $x$ with $h(x.key)=j$, where $h:U\to\{0,\dots,m-1\}$ is the hash function.</p>
+    <ul>
+      <li><b>INSERT</b>$(T,x)$ — prepend $x$ to list $T[h(x.key)]$. $O(1)$ worst case (assuming $x$ is not already present).</li>
+      <li><b>SEARCH</b>$(T,k)$ — scan the list $T[h(k)]$. $\Theta(n)$ worst case, when all $n$ keys hash to one slot.</li>
+      <li><b>DELETE</b>$(T,x)$ — unlink $x$. $O(1)$ with a <b>doubly</b> linked list (given a pointer to $x$); $\Theta(n)$ with a singly linked list, since you must first find the predecessor.</li>
+    </ul>
+    <p><span class="step">2 · Load factor and the derivation</span> $\alpha=n/m$: the average number of elements per slot. <b>Simple uniform hashing:</b> any given key is equally likely to hash to any of the $m$ slots, independently of the other keys.</p>
+    <p>For an unsuccessful search for key $k$: the search scans list $T[h(k)]$ to its end, so its cost is $1$ (computing $h$) plus the length of that list. Let $n_j=|T[j]|$. Under the assumption, $\mathbb{E}[n_{h(k)}]=n/m=\alpha$. Hence the expected time is
+    $$\Theta(1+\alpha).$$
+    This is <b>Theorem 11.2</b>. If $m=\Omega(n)$ then $\alpha=O(1)$ and search is expected $\Theta(1)$ — which is the whole point of hashing.</p>
+    <p><span class="step">3 · Chaining vs open addressing</span></p>
+    <ul>
+      <li><b>Chaining wins on:</b> graceful degradation — it still works when $\alpha&gt;1$, and deletion is genuinely $O(1)$.</li>
+      <li><b>Open addressing wins on:</b> memory — no pointers, no list nodes, so the same space holds a larger table, which lowers $\alpha$ and improves cache behaviour.</li>
+      <li><b>Deletion under open addressing</b> is the problem. You cannot simply blank a slot: a later probe sequence that <em>passed through</em> that slot on its way to some key $k$ would now stop there and wrongly report $k$ absent. The fix is a <code>DELETED</code> sentinel (tombstone), which SEARCH treats as occupied but INSERT treats as free. The cost is that search times no longer depend only on $\alpha$ — tombstones accumulate and degrade the table until it is rebuilt.</li>
+    </ul>
+    <div class="grader"><span class="lbl">Grader notes</span>
+    3 / 3 / 2. The derivation in part 2 must actually <em>use</em> the uniformity assumption to get $\mathbb{E}[n_{h(k)}]=\alpha$ — quoting $\Theta(1+\alpha)$ from memory without that step is worth about half. In part 3, "you need tombstones" gets the point only if you say <em>why</em> blanking breaks the probe sequence.</div>
+  </div></details>
+
+  <h3>B4 · AVL trees <span class="pts">6 pts</span></h3>
+  <div class="exam">
+    <ol>
+      <li>Define an <b>AVL tree</b>.</li>
+      <li>Let $N(h)$ be the minimum number of nodes in an AVL tree of height $h$. Give a recurrence for $N(h)$ and use it to prove that the height of an AVL tree with $n$ nodes is $O(\lg n)$.</li>
+      <li>An insertion makes a node unbalanced with balance factor $+2$, and its left child has balance factor $-1$. Name the case and give the sequence of rotations that fixes it.</li>
+    </ol>
+  </div>
+  <details class="sol"><summary>Model solution — B4</summary><div class="solbody">
+    <p><span class="step">1 · Definition</span> A binary search tree in which, for <b>every</b> node $x$, the heights of the left and right subtrees differ by at most 1. That difference $\mathrm{bf}(x)=h(\text{left})-h(\text{right})\in\{-1,0,+1\}$ is the <b>balance factor</b>.</p>
+    <p><span class="step">2 · The height bound</span> A minimal AVL tree of height $h$ has a root, one subtree of height $h-1$, and — to stay legal while staying as small as possible — one of height $h-2$. So
+    $$N(0)=1,\quad N(1)=2,\quad N(h)=1+N(h-1)+N(h-2).$$
+    This is the Fibonacci recurrence shifted: $N(h)=F_{h+3}-1$, where $F_1=F_2=1$.</p>
+    <p>Since $N(h)&gt;N(h-1)+N(h-2)&gt;2N(h-2)$, we get $N(h)&gt;2^{h/2}$. A tree of height $h$ with $n$ nodes satisfies $n\ge N(h)&gt;2^{h/2}$, hence $h&lt;2\lg n=O(\lg n)$.</p>
+    <p>The sharper constant comes from $F_k\sim\varphi^k/\sqrt5$ with $\varphi=(1+\sqrt5)/2$: it gives $h\le 1.44\lg n$ asymptotically.</p>
+    <p><span class="step">3 · The case</span> Left subtree too tall ($+2$), and the left child leans <b>right</b> ($-1$): this is the <b>Left-Right</b> case. One rotation is not enough — rotating right immediately would just mirror the imbalance. The fix is a <b>double rotation</b>:</p>
+    <pre class="code">LEFT-ROTATE(x.left)     <span class="cm">// turns Left-Right into Left-Left</span>
+RIGHT-ROTATE(x)         <span class="cm">// now a single rotation balances it</span></pre>
+    <p>Worth adding: after an <b>insertion</b> a single rebalance (one or two rotations) at the lowest unbalanced node restores the whole tree, so insertion needs $O(1)$ rotations. <b>Deletion</b> is the case that can cascade — rebalancing may be required at every node on the path to the root, i.e. $O(\lg n)$ rotations.</p>
+    <div class="grader"><span class="lbl">Grader notes</span>
+    1 / 3 / 2. In part 2, the recurrence alone is worth little — you must get from it to a bound on $h$. The chain $N(h)&gt;2N(h-2)\Rightarrow N(h)&gt;2^{h/2}\Rightarrow h&lt;2\lg n$ is the short, fully-rigorous route and is safer under time pressure than quoting the $1.44$ constant. Part 3 gets no credit for a single rotation.</div>
+  </div></details>
+
+  <h3>B5 · Expected running time of randomised quicksort <span class="pts">10 pts</span></h3>
+  <div class="exam">
+    Prove that the expected running time of <code>RANDOMIZED-QUICKSORT</code> on an array of $n$ distinct elements is $O(n\lg n)$. State clearly any lemmas you use.
+  </div>
+  <details class="sol"><summary>Model solution — B5 (Theorem 7.4)</summary><div class="solbody">
+    <p><span class="step">Setup</span> Rename the elements in sorted order as $z_1&lt;z_2&lt;\dots&lt;z_n$, and write $Z_{ij}=\{z_i,z_{i+1},\dots,z_j\}$. Note the renaming is only for the analysis; the algorithm never sees it.</p>
+    <p><span class="step">Step 1 — the total cost is the number of comparisons</span> Every call to PARTITION does $O(1)$ work plus one comparison per element it examines, and each pair of elements is compared <b>at most once</b> (after a comparison, one of them is the pivot and is never compared again). So if $X$ is the total number of comparisons, the running time is $O(n+X)$.</p>
+    <p><span class="step">Step 2 — write $X$ with indicators</span> Let
+    $$X_{ij}=I\{z_i\text{ is compared with }z_j\},\qquad X=\sum_{i=1}^{n-1}\sum_{j=i+1}^{n}X_{ij}.$$
+    By linearity of expectation and $\mathbb{E}[I\{A\}]=\Pr[A]$,
+    $$\mathbb{E}[X]=\sum_{i=1}^{n-1}\sum_{j=i+1}^{n}\Pr[z_i\text{ compared with }z_j].$$
+    <b>Linearity needs no independence</b> — and that matters here, because the $X_{ij}$ are heavily dependent.</p>
+    <p><span class="step">Step 3 — the key probability</span> Consider the elements of $Z_{ij}$. As long as no element of $Z_{ij}$ has been chosen as a pivot, all of $Z_{ij}$ stays together in the same partition. Look at the <b>first</b> element of $Z_{ij}$ to be chosen as a pivot:</p>
+    <ul>
+      <li>If it is $z_i$ or $z_j$, then $z_i$ and $z_j$ <b>are</b> compared (pivot vs. every other element of the block).</li>
+      <li>If it is any $z_k$ with $i&lt;k&lt;j$, then $z_i$ and $z_j$ land in <b>different</b> partitions and are <b>never</b> compared.</li>
+    </ul>
+    <p>Each of the $j-i+1$ elements of $Z_{ij}$ is equally likely to be the first pivot chosen from that set, so
+    $$\Pr[z_i\text{ compared with }z_j]=\frac{2}{j-i+1}.$$</p>
+    <p><span class="step">Step 4 — sum it</span> Substituting and setting $k=j-i$:
+    $$\mathbb{E}[X]=\sum_{i=1}^{n-1}\sum_{j=i+1}^{n}\frac{2}{j-i+1}=\sum_{i=1}^{n-1}\sum_{k=1}^{n-i}\frac{2}{k+1}&lt;\sum_{i=1}^{n-1}\sum_{k=1}^{n}\frac{2}{k}=\sum_{i=1}^{n-1}2H_n .$$
+    Since $H_n=\Theta(\lg n)$, this is $O(n\lg n)$. With step 1, the expected running time is $O(n+n\lg n)=O(n\lg n)$. ∎</p>
+    <div class="grader"><span class="lbl">Grader notes</span>
+    Roughly 2 pts setup + "each pair compared at most once", 2 pts the indicator formulation, <b>4 pts the $2/(j-i+1)$ argument</b> (this is the heart — the first-pivot-in-$Z_{ij}$ case split must be explicit), 2 pts the harmonic sum. If you are short on time, write step 3 properly and sketch step 4: the marks live in the probability, not the algebra.</div>
+  </div></details>
+
+  <!-- ==================================================================== -->
+  <!-- ============================= PAPER C ============================== -->
+  <!-- ==================================================================== -->
+  <h2 id="paperC">Paper C — the lower-bound rotation</h2>
+  <div class="paper-head">
+    <div class="theme">40 points · 90 minutes · closed book</div>
+    <p>Question 5 is <b>Theorem 8.1</b>, the $\Omega(n\lg n)$ comparison-sort lower bound — the one flagged proof that is pure counting and needs no data structure. Questions 3 and 4 cover the two structures the first-date paper skipped entirely: B-trees and graph traversal.</p>
+  </div>
+
+  <h3>C1 · Correctness of selection sort <span class="pts">8 pts</span></h3>
+  <div class="exam">
+    <pre class="code"><span class="kw">for</span> i = 1 <span class="kw">to</span> n - 1
+    min = i
+    <span class="kw">for</span> j = i + 1 <span class="kw">to</span> n
+        <span class="kw">if</span> A[j] &lt; A[min]
+            min = j
+    swap A[i] <span class="kw">and</span> A[min]</pre>
+    <ol>
+      <li>State and prove an invariant for the <b>inner</b> loop.</li>
+      <li>State and prove an invariant for the <b>outer</b> loop, and conclude correctness.</li>
+      <li>Why does the outer loop stop at $n-1$ rather than $n$?</li>
+    </ol>
+  </div>
+  <details class="sol"><summary>Model solution — C1</summary><div class="solbody">
+    <p><span class="step">1 · Inner loop</span></p>
+    <div class="inv"><b>Invariant.</b> At the start of each iteration with index $j$, $A[\mathit{min}]=\min\{A[i],A[i+1],\dots,A[j-1]\}$ and $i\le \mathit{min}\le j-1$.</div>
+    <p><em>Initialization.</em> $j=i+1$ and $\mathit{min}=i$: the set is $\{A[i]\}$ and $A[\mathit{min}]=A[i]$ is its minimum. ✓</p>
+    <p><em>Maintenance.</em> If $A[j]&lt;A[\mathit{min}]$ the code sets $\mathit{min}=j$, so $A[\mathit{min}]=A[j]=\min\{A[i..j]\}$; otherwise $A[\mathit{min}]\le A[j]$ so $A[\mathit{min}]$ is still the minimum of the enlarged set $A[i..j]$. Either way the invariant holds for $j+1$. ✓</p>
+    <p><em>Termination.</em> $j=n+1$, so $A[\mathit{min}]=\min\{A[i..n]\}$ — the inner loop finds the index of a smallest element of the unsorted suffix.</p>
+    <p><span class="step">2 · Outer loop</span></p>
+    <div class="inv"><b>Invariant.</b> At the start of each iteration with index $i$: (a) $A[1..i-1]$ is sorted; (b) every element of $A[1..i-1]$ is $\le$ every element of $A[i..n]$; (c) $A[1..n]$ is a permutation of the original array.</div>
+    <p><em>Initialization.</em> $i=1$: $A[1..0]$ is empty, so (a) and (b) hold vacuously, and (c) holds because nothing has been modified. ✓</p>
+    <p><em>Maintenance.</em> By the inner-loop termination, $A[\mathit{min}]$ is a smallest element of $A[i..n]$. The swap puts it at position $i$ and moves the old $A[i]$ into the suffix.</p>
+    <ul>
+      <li>(c) survives because a swap is a permutation. ✓</li>
+      <li>(b) survives: the new $A[i]$ is $\ge$ everything in $A[1..i-1]$ by the old (b), and it is $\le$ everything remaining in $A[i+1..n]$ because it was the minimum of $A[i..n]$. ✓</li>
+      <li>(a) survives: $A[1..i-1]$ was sorted and the new $A[i]$ is $\ge$ all of it, so $A[1..i]$ is sorted. ✓</li>
+    </ul>
+    <p><em>Termination.</em> $i=n$. By (a), $A[1..n-1]$ is sorted; by (b), $A[n]\ge$ everything before it. So $A[1..n]$ is sorted, and by (c) it is a permutation of the input. ∎</p>
+    <p><span class="step">3 · Why $n-1$</span> When $i=n$ the unsorted suffix $A[n..n]$ is a single element. By clause (b) of the invariant it is already $\ge$ everything before it, so it is already in its final position — the iteration would compare nothing and swap $A[n]$ with itself. It is not wrong, merely redundant.</p>
+    <div class="grader"><span class="lbl">Grader notes</span>
+    3 / 4 / 1. This question rewards the <b>nested</b> structure: the inner invariant is <em>used</em> as one step of the outer maintenance, and saying so explicitly is worth a mark. Clause (b) is the one candidates forget — without it you cannot conclude at termination that $A[n]$ is in the right place, and the proof has a hole.</div>
+  </div></details>
+
+  <h3>C2 · Runtime analysis <span class="pts">8 pts</span></h3>
+  <div class="exam">
+    Give asymptotically tight bounds, naming the method in each case.
+    <ol>
+      <li>$T(n)=7T(n/2)+n^2$</li>
+      <li>$T(n)=2T(n/2)+n\lg n$</li>
+      <li>$T(n)=2T(\sqrt n)+\lg n$</li>
+      <li>$T(n)=T(n-1)+1/n$</li>
+    </ol>
+  </div>
+  <details class="sol"><summary>Model solution — C2</summary><div class="solbody">
+    <p><b>(a)</b> Watershed $n^{\log_2 7}\approx n^{2.807}$. Since $f=n^2=O(n^{\log_2 7-\varepsilon})$ for e.g. $\varepsilon=0.5$ — polynomially smaller — this is <b>case 1</b>: <b>$T(n)=\Theta(n^{\lg 7})$</b>. (Strassen's matrix multiplication.)</p>
+    <p><b>(b)</b> Watershed $n^{\log_2 2}=n$, and $f=n\lg n=\Theta(n\lg^1 n)$, so $k=1$: <b>extended case 2</b>, one extra log factor: <b>$T(n)=\Theta(n\lg^2 n)$</b>.</p>
+    <p><em>Warning:</em> this is <b>not</b> case 3. $f=n\lg n$ is larger than $n$, but only by a log factor, not polynomially — there is no $\varepsilon&gt;0$ with $n\lg n=\Omega(n^{1+\varepsilon})$.</p>
+    <p><b>(c)</b> Not Master-shaped — the argument shrinks by a <b>square root</b>. Use a <b>change of variables</b>: put $n=2^m$, i.e. $m=\lg n$, and $S(m)=T(2^m)$. Then $\sqrt n=2^{m/2}$ and
+    $$S(m)=2S(m/2)+m.$$
+    Now the Master Theorem applies: watershed $m^{\log_2 2}=m$, $f=m=\Theta(m\lg^0 m)$, case 2 with $k=0$, so $S(m)=\Theta(m\lg m)$. Substituting back $m=\lg n$:
+    $$T(n)=\Theta(\lg n\cdot\lg\lg n).$$</p>
+    <p><b>(d)</b> Not a divide-and-conquer recurrence at all — it <b>subtracts</b>. Unroll it:
+    $$T(n)=T(n-1)+\frac1n=T(n-2)+\frac1{n-1}+\frac1n=\dots=T(1)+\sum_{k=2}^{n}\frac1k=H_n-1+T(1).$$
+    Since the harmonic number $H_n=\ln n+\gamma+O(1/n)=\Theta(\lg n)$: <b>$T(n)=\Theta(\lg n)$</b>.</p>
+    <div class="grader"><span class="lbl">Grader notes</span>
+    2 pts each. Parts (c) and (d) are the discriminating ones: both are designed to catch candidates who reach for the Master Theorem reflexively. Saying "the Master Theorem does not apply because …" and then naming the right technique is worth most of the marks even if the algebra wobbles.</div>
+  </div></details>
+
+  <h3>C3 · B-trees <span class="pts">8 pts</span></h3>
+  <div class="exam">
+    <ol>
+      <li>Define a B-tree with <b>minimum degree</b> $t$: the constraints on keys per node, children per node, and leaf depth.</li>
+      <li>Prove that a B-tree with $n$ keys and minimum degree $t\ge2$ has height $h\le\log_t\frac{n+1}{2}$.</li>
+      <li>Describe insertion. Why does B-TREE-INSERT split full nodes <b>on the way down</b> instead of splitting after the fact?</li>
+      <li>Why are B-trees the structure of choice for data stored on disk?</li>
+    </ol>
+  </div>
+  <details class="sol"><summary>Model solution — C3</summary><div class="solbody">
+    <p><span class="step">1 · Definition</span> A rooted tree with minimum degree $t\ge2$ such that:</p>
+    <ul>
+      <li>Every node holds between $t-1$ and $2t-1$ keys, <b>except the root</b>, which may hold as few as 1 (and 0 if the tree is empty).</li>
+      <li>Keys within a node are stored in sorted order, and an internal node with $k$ keys has exactly $k+1$ children. So internal nodes have between $t$ and $2t$ children.</li>
+      <li>The keys separate the ranges of the subtrees: all keys in the $i$-th child lie between the $(i-1)$-st and $i$-th key of the node.</li>
+      <li><b>All leaves have the same depth</b> $h$. (This is what keeps the tree balanced; it is maintained by growing at the root, not at the leaves.)</li>
+    </ul>
+    <p><span class="step">2 · The height bound</span> The worst case (tallest tree for a given $n$) is when every node has as <em>few</em> keys as allowed: root with 1 key and 2 children, every other node with $t-1$ keys and $t$ children.</p>
+    <p>Then depth 0 has 1 node, depth 1 has 2 nodes, and depth $i\ge1$ has $2t^{i-1}$ nodes. Counting keys:
+    $$n\ \ge\ 1+\sum_{i=1}^{h}2t^{i-1}(t-1)\ =\ 1+2(t-1)\cdot\frac{t^h-1}{t-1}\ =\ 2t^h-1 .$$
+    Hence $t^h\le\frac{n+1}{2}$ and $h\le\log_t\frac{n+1}{2}$. ∎</p>
+    <p><span class="step">3 · Insertion</span> Descend from the root toward the correct leaf. Whenever you encounter a <b>full</b> node (one with $2t-1$ keys), split it immediately: its median key moves up into the parent, and the remaining $2t-2$ keys become two nodes of $t-1$ keys each. Insert the new key into the leaf you reach.</p>
+    <p><b>Why split on the way down:</b> splitting a node pushes a key into its parent, so the parent must have room. By splitting every full node as you pass through it, you guarantee the parent is never full when a child splits — so a split can never cascade upward, and the whole insertion is a <b>single downward pass</b> with no backtracking. That means one pass over the path, which for a disk-resident tree means one read per level and no re-reading.</p>
+    <p><span class="step">4 · Why disks</span> Disk (or SSD block) access is many orders of magnitude slower than a memory access, and it is charged <b>per block</b>, not per byte. So the cost model is "number of nodes visited", not "number of comparisons". Choosing $t$ so a node fills one disk block makes the branching factor huge (hundreds to thousands), and the height $\log_t n$ correspondingly tiny — a few levels for millions of keys. The extra in-node comparisons are free because the node is already in memory once its block has been read.</p>
+    <div class="grader"><span class="lbl">Grader notes</span>
+    2 / 3 / 2 / 1. Part 2 is the one that separates answers: the geometric sum must actually be evaluated. Many candidates state the bound and hand-wave. In part 3, "so it does not cascade" is the entire point — a description of splitting that does not explain the downward-pass rationale caps at half.</div>
+  </div></details>
+
+  <h3>C4 · Depth-first search <span class="pts">6 pts</span></h3>
+  <div class="exam">
+    <ol>
+      <li>Describe DFS on a directed graph $G=(V,E)$, including discovery and finishing times, and state its running time.</li>
+      <li>State the <b>parenthesis theorem</b>.</li>
+      <li>Classify the four edge types and give a timestamp test for each.</li>
+      <li>How do you detect whether a directed graph is acyclic using DFS?</li>
+    </ol>
+  </div>
+  <details class="sol"><summary>Model solution — C4</summary><div class="solbody">
+    <p><span class="step">1 · The search</span> Every vertex starts WHITE. Repeatedly pick an undiscovered vertex and explore from it: on discovering $u$, colour it GRAY and record $u.d$; recursively visit each WHITE neighbour; when all of $u$'s neighbours are exhausted, colour it BLACK and record $u.f$. A global counter increments on each of the $2|V|$ events, so $1\le u.d&lt;u.f\le 2|V|$.</p>
+    <p>Running time $\Theta(V+E)$ with adjacency lists: each vertex is coloured once, and each adjacency list is scanned once.</p>
+    <p><span class="step">2 · Parenthesis theorem</span> For any two vertices $u,v$, exactly one of the following holds:</p>
+    <ul>
+      <li>the intervals $[u.d,u.f]$ and $[v.d,v.f]$ are <b>entirely disjoint</b>, and neither is a descendant of the other in the DFS forest;</li>
+      <li>$[u.d,u.f]$ is <b>entirely contained</b> in $[v.d,v.f]$, and $u$ is a descendant of $v$;</li>
+      <li>$[v.d,v.f]$ is entirely contained in $[u.d,u.f]$, and $v$ is a descendant of $u$.</li>
+    </ul>
+    <p>The intervals are never <b>partially</b> overlapping — hence the name: written as parentheses, the sequence is always well-nested.</p>
+    <p><span class="step">3 · Edge classification</span> For an edge $(u,v)$ explored from $u$, the colour of $v$ at that moment decides:</p>
+    <div class="scroll-x"><table>
+      <tr><th>Type</th><th>Colour of $v$</th><th>Timestamp test</th></tr>
+      <tr><td><b>Tree</b></td><td>WHITE</td><td>$u.d&lt;v.d&lt;v.f&lt;u.f$ and $v.\pi=u$</td></tr>
+      <tr><td><b>Back</b></td><td>GRAY</td><td>$v.d\le u.d&lt;u.f\le v.f$ ($v$ is an ancestor)</td></tr>
+      <tr><td><b>Forward</b></td><td>BLACK</td><td>$u.d&lt;v.d&lt;v.f&lt;u.f$ and $v.\pi\ne u$</td></tr>
+      <tr><td><b>Cross</b></td><td>BLACK</td><td>$v.f&lt;u.d$ (intervals disjoint, $v$ finished first)</td></tr>
+    </table></div>
+    <p>These are exhaustive: by the parenthesis theorem the intervals are nested or disjoint. Nested with $v$ inside $u$ gives tree or forward (split by whether $u$ is the parent); nested with $u$ inside $v$ gives back; disjoint means $v$ finished before $u$ started, which is cross. Self-loops count as back edges.</p>
+    <p><em>In an <b>undirected</b> graph only tree and back edges occur</em> — forward and cross edges would require exploring an edge from the far end first, which contradicts the search order.</p>
+    <p><span class="step">4 · Acyclicity</span> A directed graph is acyclic <b>iff DFS produces no back edge</b>.</p>
+    <ul>
+      <li>(⇐) A back edge $(u,v)$ means $v$ is an ancestor of $u$, so the tree path $v\rightsquigarrow u$ plus the edge $(u,v)$ is a cycle.</li>
+      <li>(⇒) If there is a cycle, let $v$ be its first-discovered vertex. The rest of the cycle is reachable from $v$ by white paths, so all of it becomes a descendant of $v$; the cycle edge entering $v$ then comes from a descendant of $v$ while $v$ is still GRAY — a back edge.</li>
+    </ul>
+    <p>Since DFS is $\Theta(V+E)$, this is a linear-time acyclicity test. The same run gives a topological sort: list vertices in <b>decreasing finishing time</b>.</p>
+    <div class="grader"><span class="lbl">Grader notes</span>
+    2 / 1 / 2 / 1. The classification table earns full marks only with the timestamp tests, not just the colour rule — and the tree/forward distinction genuinely needs $v.\pi$. In part 4 both directions of the "iff" are expected; most candidates prove only the easy one.</div>
+  </div></details>
+
+  <h3>C5 · The comparison-sort lower bound <span class="pts">10 pts</span></h3>
+  <div class="exam">
+    Prove that any comparison sort requires $\Omega(n\lg n)$ comparisons in the worst case. Define the model you are working in, and state where each assumption is used.
+  </div>
+  <details class="sol"><summary>Model solution — C5 (Theorem 8.1)</summary><div class="solbody">
+    <p><span class="step">The model</span> A <b>comparison sort</b> determines the sorted order using only comparisons between pairs of input elements — it never inspects the values themselves. Assume the $n$ elements are distinct (this is WLOG: it only makes the problem easier).</p>
+    <p>Any such algorithm, run on inputs of a fixed size $n$, is described by a <b>decision tree</b>: an internal node is a comparison $a_i \lessgtr a_j$ with two children (the two outcomes), and a leaf is a permutation the algorithm outputs. Executing the algorithm = walking one root-to-leaf path. The number of comparisons on that input is the length of the path, so the <b>worst-case number of comparisons is the height $h$ of the tree</b>.</p>
+    <p><span class="step">Step 1 — the tree must have at least $n!$ leaves</span> There are $n!$ distinct permutations of $n$ distinct elements, and each one must be reachable: if some permutation $\pi$ labelled no leaf, then on the input requiring $\pi$ the algorithm would output something else and be incorrect. Hence the number of leaves $\ell\ge n!$.</p>
+    <p><span class="step">Step 2 — a binary tree of height $h$ has at most $2^h$ leaves</span> Immediate induction on $h$: a tree of height 0 is a single leaf ($1\le2^0$); a tree of height $h$ has two subtrees of height $\le h-1$, each with at most $2^{h-1}$ leaves.</p>
+    <p><span class="step">Step 3 — combine</span>
+    $$n!\ \le\ \ell\ \le\ 2^h \quad\Longrightarrow\quad h\ \ge\ \lg(n!).$$</p>
+    <p><span class="step">Step 4 — Stirling</span> By Stirling's approximation $n!=\sqrt{2\pi n}\,(n/e)^n\big(1+\Theta(1/n)\big)$, so
+    $$\lg(n!)\ \ge\ \lg\!\left(\frac ne\right)^{\!n}=n\lg n-n\lg e=\Omega(n\lg n).$$
+    Therefore $h=\Omega(n\lg n)$. ∎</p>
+    <p><em>(A Stirling-free route to the same bound: $n!\ge (n/2)^{n/2}$, since at least half the factors are $\ge n/2$. Then $\lg(n!)\ge \frac n2\lg\frac n2=\Omega(n\lg n)$. Worth knowing in case Stirling deserts you.)</em></p>
+    <p><span class="step">Where the assumptions are used</span> The <b>comparison-only</b> assumption is what makes the decision tree binary — it is the entire content of the theorem. It is also why counting sort ($\Theta(n+k)$) and radix sort are not contradictions: they read the values, so they are not nodes in this model. Consequently heapsort and merge sort are <b>asymptotically optimal</b> comparison sorts.</p>
+    <div class="grader"><span class="lbl">Grader notes</span>
+    2 pts model/decision tree, 3 pts the $n!$ leaves argument (with the <em>reason</em> every permutation must appear), 2 pts the $2^h$ bound, 2 pts Stirling, 1 pt the remark on why counting sort escapes. The commonest gap is asserting "there are $n!$ leaves" without justifying that every permutation must be reachable — that is the one genuinely mathematical step in the proof.</div>
+  </div></details>
+
+  <!-- ==================================================================== -->
+  <!-- ============================= PAPER D ============================== -->
+  <!-- ==================================================================== -->
+  <h2 id="paperD">Paper D — the DP &amp; selection rotation</h2>
+  <div class="paper-head">
+    <div class="theme">40 points · 90 minutes · closed book</div>
+    <p>Nineteen of the 102 sheet problems are dynamic programming and greedy, and <b>none of it appeared on the first date</b> — this paper assumes that gets corrected. Question 1 replaces the usual loop invariant with an <b>optimal-substructure</b> proof, which is the DP analogue of the same skill.</p>
+  </div>
+
+  <h3>D1 · Optimal substructure for rod cutting <span class="pts">8 pts</span></h3>
+  <div class="exam">
+    A rod of integer length $n$ can be cut into integer pieces; a piece of length $i$ sells for $p_i$. Let $r_n$ be the maximum revenue obtainable from a rod of length $n$, with $r_0=0$.
+    <ol>
+      <li>Prove that $r_n=\max_{1\le i\le n}\{p_i+r_{n-i}\}$.</li>
+      <li>Explain why this problem has <b>overlapping subproblems</b>, and give the running time of the bottom-up algorithm.</li>
+      <li>Explain how to recover an <b>optimal set of cuts</b>, not just the revenue.</li>
+    </ol>
+  </div>
+  <details class="sol"><summary>Model solution — D1</summary><div class="solbody">
+    <p><span class="step">1 · Optimal substructure</span> We show both inequalities.</p>
+    <p><b>($\ge$)</b> For any $i$ with $1\le i\le n$, we can cut a first piece of length $i$ and then cut the remaining rod of length $n-i$ optimally, earning $p_i+r_{n-i}$. This is a <em>feasible</em> solution, and $r_n$ is the maximum over all feasible solutions, so $r_n\ge p_i+r_{n-i}$ for every $i$ — hence $r_n\ge\max_i\{p_i+r_{n-i}\}$.</p>
+    <p><b>($\le$)</b> Take an optimal solution for the rod of length $n$ and let $i$ be the length of its <b>first (leftmost) piece</b>. The rest of that solution is a way of cutting a rod of length $n-i$, earning some revenue $R$. Then $r_n=p_i+R$.</p>
+    <p>Now the key step — the <b>cut-and-paste argument</b>: we must have $R=r_{n-i}$. Certainly $R\le r_{n-i}$, since $r_{n-i}$ is the maximum. If $R&lt;r_{n-i}$, replace the cutting of the remainder by an optimal one; the result is still a valid cutting of the length-$n$ rod, with revenue $p_i+r_{n-i}&gt;p_i+R=r_n$ — contradicting the optimality of $r_n$. Hence $R=r_{n-i}$ and $r_n=p_i+r_{n-i}\le\max_j\{p_j+r_{n-j}\}$.</p>
+    <p>Both inequalities give equality. ∎</p>
+    <p><span class="step">2 · Overlapping subproblems</span> The recursion tree for $r_n$ calls $r_{n-i}$ for every $i$, and those calls in turn call the same smaller values repeatedly — $r_{n-3}$ is reached as $n\to n-1\to n-2\to n-3$, as $n\to n-1\to n-3$, as $n\to n-3$, and so on. The naive recursion runs in $\Theta(2^n)$ time, yet there are only $n+1$ <b>distinct</b> subproblems $r_0,\dots,r_n$. That gap is exactly what memoisation collects.</p>
+    <p>Bottom-up: compute $r_0,r_1,\dots,r_n$ in order, each as a maximum over at most $n$ choices:
+    $$\text{time}=(\#\text{subproblems})\times(\text{choices each})=(n+1)\cdot O(n)=\Theta(n^2),$$
+    with $\Theta(n)$ space.</p>
+    <p><span class="step">3 · Recovering the cuts</span> Keep a second array $s[\,]$: when computing $r_j$, record in $s[j]$ the value of $i$ that <em>achieved</em> the maximum — the length of the first piece in an optimal cutting of length $j$. This costs nothing extra.</p>
+    <p>To print the solution for length $n$, walk the array:</p>
+    <pre class="code">j = n
+<span class="kw">while</span> j &gt; 0
+    print s[j]        <span class="cm">// first piece of the optimal cut of length j</span>
+    j = j - s[j]</pre>
+    <p>Each step removes at least one unit of length, so this terminates in $O(n)$ time. This "store the argmax, then walk back" pattern is the same for every DP on the syllabus.</p>
+    <div class="grader"><span class="lbl">Grader notes</span>
+    4 / 2 / 2. Almost all the marks in part 1 are in the <b>($\le$)</b> direction and specifically in the cut-and-paste contradiction — asserting "the remainder must be cut optimally" without the exchange argument is the standard half-credit answer. Note the structural parallel with a loop invariant: you are proving a property is preserved under decomposition.</div>
+  </div></details>
+
+  <h3>D2 · Runtime analysis <span class="pts">8 pts</span></h3>
+  <div class="exam">
+    Give asymptotically tight bounds.
+    <ol>
+      <li>$T(n)=9T(n/3)+n^3$</li>
+      <li>$T(n)=T(2n/3)+1$</li>
+      <li>$T(n)=4T(n/2)+n^2/\lg n$</li>
+      <li>$T(n)=2T(n/4)+T(n/2)+n^2$</li>
+    </ol>
+  </div>
+  <details class="sol"><summary>Model solution — D2</summary><div class="solbody">
+    <p><b>(a)</b> Watershed $n^{\log_3 9}=n^2$. Here $f=n^3=\Omega(n^{2+\varepsilon})$ with $\varepsilon=1$, so <b>case 3</b>. Regularity:
+    $$9f(n/3)=9\cdot\frac{n^3}{27}=\frac{n^3}{3}\le \frac13 f(n),\quad c=\tfrac13&lt;1\ ✓$$
+    So <b>$T(n)=\Theta(n^3)$</b>.</p>
+    <p><b>(b)</b> $a=1$, $b=3/2$, watershed $n^{\log_{3/2}1}=n^0=1$. And $f=1=\Theta(1\cdot\lg^0 n)$, so $k=0$: <b>case 2</b>, giving <b>$T(n)=\Theta(\lg n)$</b>. (This is binary-search-like: constant work per level, $\log_{3/2}n=\Theta(\lg n)$ levels.)</p>
+    <p><b>(c)</b> Watershed $n^{\log_2 4}=n^2$, and $f=n^2/\lg n=\Theta(n^2\lg^{-1}n)$, so $k=-1$ — the <b>extended case 2 boundary row</b>: <b>$T(n)=\Theta(n^2\lg\lg n)$</b>.</p>
+    <p>Again the trap: $f$ is <em>smaller</em> than the watershed, but not polynomially, so case 1 does not apply.</p>
+    <p><b>(d)</b> Unequal splits ⇒ <b>Akra–Bazzi</b>. Solve $2(1/4)^p+(1/2)^p=1$. Try $p=1$: $2\cdot\frac14+\frac12=\frac12+\frac12=1$ ✓. So $p=1$ exactly. With $f(u)=u^2$:
+    $$\int_1^n\frac{u^2}{u^{2}}\,du=\int_1^n du=n-1=\Theta(n).$$
+    Therefore $T(n)=\Theta\big(n^1(1+n)\big)=\Theta(n^2)$. <b>$T(n)=\Theta(n^2)$</b>.</p>
+    <div class="grader"><span class="lbl">Grader notes</span>
+    2 pts each. In (d) the exponent comes out to exactly 1, which is a gift — say so explicitly rather than approximating. As always, the case-3 regularity check in (a) is a free point that is routinely dropped.</div>
+  </div></details>
+
+  <h3>D3 · Binary heaps and priority queues <span class="pts">8 pts</span></h3>
+  <div class="exam">
+    <ol>
+      <li>Define a binary <b>min-heap</b> and give the array indexing formulas.</li>
+      <li>Give <code>MIN-HEAPIFY</code> in pseudocode and state its running time with justification.</li>
+      <li>Prove that <code>BUILD-MIN-HEAP</code> runs in $O(n)$ time, not $O(n\lg n)$.</li>
+      <li>Give the four min-priority-queue operations with their running times.</li>
+    </ol>
+  </div>
+  <details class="sol"><summary>Model solution — D3</summary><div class="solbody">
+    <p><span class="step">1 · Definition</span> A <b>nearly complete</b> binary tree — every level full except possibly the last, which is filled left to right — satisfying the <b>min-heap property</b>: $A[\mathrm{parent}(i)]\le A[i]$ for every node $i$ other than the root. Consequently the minimum sits at $A[1]$.</p>
+    <p>Stored in an array level by level, left to right:
+    $$\mathrm{parent}(i)=\left\lfloor i/2\right\rfloor,\qquad \mathrm{left}(i)=2i,\qquad \mathrm{right}(i)=2i+1.$$
+    The height is $\lfloor\lg n\rfloor$, and the leaves are the indices $\lfloor n/2\rfloor+1,\dots,n$.</p>
+    <p><span class="step">2 · MIN-HEAPIFY</span> Precondition: the subtrees rooted at $\mathrm{left}(i)$ and $\mathrm{right}(i)$ are min-heaps, but $A[i]$ may violate the property.</p>
+    <pre class="code">MIN-HEAPIFY(A, i)
+    l = 2i;  r = 2i + 1;  smallest = i
+    <span class="kw">if</span> l &lt;= A.heap-size <span class="kw">and</span> A[l] &lt; A[smallest]
+        smallest = l
+    <span class="kw">if</span> r &lt;= A.heap-size <span class="kw">and</span> A[r] &lt; A[smallest]
+        smallest = r
+    <span class="kw">if</span> smallest != i
+        swap A[i] <span class="kw">and</span> A[smallest]
+        MIN-HEAPIFY(A, smallest)</pre>
+    <p>The offending key <b>floats down</b> one level per call, and the recursion follows only one path to a leaf. With height $\lfloor\lg n\rfloor$ and $O(1)$ work per level, the time is $O(\lg n)$.</p>
+    <p><span class="step">3 · BUILD-MIN-HEAP is $O(n)$</span> The algorithm is <code>for i = ⌊n/2⌋ downto 1: MIN-HEAPIFY(A,i)</code>. It starts at $\lfloor n/2\rfloor$ because every index above that is a leaf, and a leaf is already a one-element heap.</p>
+    <p>The naive bound multiplies $n/2$ calls by $O(\lg n)$ each and gets $O(n\lg n)$ — correct but not tight, because <b>most nodes are near the bottom, where HEAPIFY is cheap</b>.</p>
+    <p>A HEAPIFY call on a node of height $h$ costs $O(h)$, and in an $n$-element heap at most $\lceil n/2^{h+1}\rceil$ nodes have height $h$. So the total is
+    $$\sum_{h=0}^{\lfloor\lg n\rfloor}\left\lceil\frac{n}{2^{h+1}}\right\rceil O(h)\ =\ O\!\left(n\sum_{h=0}^{\infty}\frac{h}{2^{h}}\right).$$
+    The series $\sum_{h\ge0}h x^h = x/(1-x)^2$ at $x=\tfrac12$ gives $\sum h/2^h = 2$, a <b>constant</b>. Hence the total is $O(n)$. ∎</p>
+    <p><span class="step">4 · The operations</span></p>
+    <div class="scroll-x"><table>
+      <tr><th>Operation</th><th>How</th><th>Time</th></tr>
+      <tr><td>MINIMUM</td><td>return $A[1]$</td><td>$\Theta(1)$</td></tr>
+      <tr><td>EXTRACT-MIN</td><td>save $A[1]$; move last element to root; shrink; MIN-HEAPIFY$(A,1)$</td><td>$O(\lg n)$</td></tr>
+      <tr><td>DECREASE-KEY</td><td>error if the new key is larger; else set it and <b>float up</b> while the parent is greater</td><td>$O(\lg n)$</td></tr>
+      <tr><td>INSERT</td><td>append $+\infty$ at the end, then DECREASE-KEY to the real value</td><td>$O(\lg n)$</td></tr>
+    </table></div>
+    <p>Note the two directions: HEAPIFY moves a key <b>down</b>, DECREASE-KEY moves one <b>up</b>. Confusing them is the classic error.</p>
+    <div class="grader"><span class="lbl">Grader notes</span>
+    1 / 2 / 3 / 2. Part 3 is where the marks are: the height-distribution bound $\lceil n/2^{h+1}\rceil$ and the convergent series are both required. Stating "it is $O(n)$ by a more careful analysis" earns nothing.</div>
+  </div></details>
+
+  <h3>D4 · Red-black insertion <span class="pts">6 pts</span></h3>
+  <div class="exam">
+    <ol>
+      <li>State the five red-black properties.</li>
+      <li>A new node is inserted by RB-INSERT and coloured red. Which properties can be violated, and why is red the right choice?</li>
+      <li>Describe the three cases of RB-INSERT-FIXUP and state how many rotations an insertion can require in the worst case.</li>
+    </ol>
+  </div>
+  <details class="sol"><summary>Model solution — D4</summary><div class="solbody">
+    <p><span class="step">1 · The five properties</span></p>
+    <ol>
+      <li>Every node is either <b>red</b> or <b>black</b>.</li>
+      <li>The <b>root</b> is black.</li>
+      <li>Every leaf (NIL) is black.</li>
+      <li>If a node is red, then <b>both its children are black</b> (no two reds in a row).</li>
+      <li>For each node, all simple paths from it to descendant leaves contain the <b>same number of black nodes</b> (its black-height).</li>
+    </ol>
+    <p><span class="step">2 · Why red</span> Inserting a node as a leaf and colouring it <b>black</b> would add one black node to some root-leaf paths and not others, breaking <b>property 5</b> — and black-height is a <em>global</em> property, expensive to repair.</p>
+    <p>Colouring it red leaves every black-height unchanged, so property 5 survives automatically. Only two things can break:</p>
+    <ul>
+      <li><b>Property 4</b>, if the new node's parent is also red;</li>
+      <li><b>Property 2</b>, if the new node is the root.</li>
+    </ul>
+    <p>Both are <em>local</em> conditions, fixable by recolouring and rotations near the insertion point. That is the whole design rationale.</p>
+    <p><span class="step">3 · The three cases</span> The fixup loop runs while $z$'s parent is red; the case is chosen by the colour of $z$'s <b>uncle</b> $y$ (the parent's sibling). Cases 2 and 3 below are stated for $z$'s parent being a left child; the other side is symmetric.</p>
+    <ul>
+      <li><b>Case 1 — uncle $y$ is red.</b> Recolour only: parent and uncle → black, grandparent → red; then set $z\gets$ grandparent. The violation moves <b>two levels up</b> and the loop may repeat. <em>No rotation.</em></li>
+      <li><b>Case 2 — uncle black, $z$ is a right child.</b> Set $z\gets z.p$ and LEFT-ROTATE$(z)$. This converts the "zig-zag" into case 3; it does not by itself fix anything.</li>
+      <li><b>Case 3 — uncle black, $z$ is a left child.</b> Recolour parent → black and grandparent → red, then RIGHT-ROTATE(grandparent). This <b>terminates the loop</b>: the subtree root is now black, so no red-red violation remains above.</li>
+    </ul>
+    <p>Finally the root is coloured black unconditionally, restoring property 2.</p>
+    <p><b>Worst case:</b> case 1 can repeat up to $O(\lg n)$ times climbing the tree, so the fixup is $O(\lg n)$ overall — but it performs <b>at most 2 rotations</b>, because cases 2 and 3 each occur at most once and case 3 always ends the loop.</p>
+    <div class="grader"><span class="lbl">Grader notes</span>
+    2 / 2 / 2. The "at most 2 rotations despite $O(\lg n)$ time" fact is the discriminating detail and is frequently missed — the loop is long but only its last step rotates. In part 2, naming <em>which</em> properties can break (4 and 2, not 5) is what earns the marks.</div>
+  </div></details>
+
+  <h3>D5 · Expected linear-time selection <span class="pts">10 pts</span></h3>
+  <div class="exam">
+    Prove that <code>RANDOMIZED-SELECT</code>, which finds the $i$-th smallest of $n$ distinct elements, runs in $O(n)$ expected time.
+  </div>
+  <details class="sol"><summary>Model solution — D5 (Theorem 9.2)</summary><div class="solbody">
+    <p><span class="step">The algorithm</span> RANDOMIZED-SELECT$(A,p,r,i)$ partitions $A[p..r]$ around a <b>uniformly random pivot</b>, giving pivot position $q$ with $k=q-p+1$ elements in the low side including the pivot. If $i=k$ the pivot is the answer; if $i&lt;k$ recurse on the low side; otherwise recurse on the high side for the $(i-k)$-th smallest. Unlike quicksort it recurses on <b>one side only</b> — that is the whole reason it is linear.</p>
+    <p><span class="step">Step 1 — indicators for the split</span> For $k=1,\dots,n$ let
+    $$X_k=I\{\text{the partition produces a low side with exactly }k\text{ elements}\}.$$
+    Because the pivot is uniform over the $n$ elements, $\Pr[X_k=1]=1/n$, so $\mathbb{E}[X_k]=1/n$. Exactly one $X_k$ is 1.</p>
+    <p><span class="step">Step 2 — the recurrence</span> We do not know which side the recursion takes, so bound it by the <b>larger</b> side, which has $\max(k-1,n-k)$ elements. Partition costs $O(n)$. With $T(n)$ the expected time:
+    $$T(n)\ \le\ \mathbb{E}\left[\sum_{k=1}^{n}X_k\cdot T(\max(k-1,n-k))\right]+O(n)\ =\ \frac1n\sum_{k=1}^{n}T(\max(k-1,n-k))+O(n),$$
+    using $\mathbb{E}[X_k\cdot T(\cdot)]=\mathbb{E}[X_k]\,\mathbb{E}[T(\cdot)]$ — valid because the pivot choice is independent of the recursive call's own random choices.</p>
+    <p><span class="step">Step 3 — count each term twice</span> As $k$ runs from 1 to $n$, $\max(k-1,n-k)$ takes each value in $\lceil n/2\rceil,\dots,n-1$ at most twice. Hence
+    $$T(n)\ \le\ \frac2n\sum_{k=\lceil n/2\rceil}^{n-1}T(k)+O(n).$$</p>
+    <p><span class="step">Step 4 — substitution</span> Guess $T(n)\le cn$ and induct. Assume it for all smaller arguments:
+    $$T(n)\ \le\ \frac2n\sum_{k=\lceil n/2\rceil}^{n-1}ck+an\ =\ \frac{2c}{n}\left(\sum_{k=1}^{n-1}k-\sum_{k=1}^{\lceil n/2\rceil-1}k\right)+an.$$
+    Evaluating the two arithmetic sums and simplifying gives
+    $$T(n)\ \le\ \frac{2c}{n}\left(\frac{(n-1)n}{2}-\frac{(\lceil n/2\rceil-1)\lceil n/2\rceil}{2}\right)+an\ \le\ c\left(\frac{3n}{4}+\frac12\right)+an .$$
+    So $T(n)\le cn$ provided $c\big(\tfrac n4-\tfrac12\big)\ge an$, which holds for all $n\ge2$ once $c$ is chosen large enough (e.g. $c\ge8a$ for $n\ge4$, with the finitely many smaller $n$ absorbed into the base case). Hence $T(n)=O(n)$. ∎</p>
+    <p><span class="step">The moral</span> Compare with quicksort: recursing on <b>both</b> sides costs a factor $\lg n$; recursing on one gives a geometric series $n+\tfrac34 n+(\tfrac34)^2n+\dots=\Theta(n)$. Note also the worst case is still $\Theta(n^2)$ — the guarantee here is on the <em>expectation</em>. The median-of-medians variant makes it $O(n)$ in the worst case.</p>
+    <div class="grader"><span class="lbl">Grader notes</span>
+    2 pts algorithm + "one side only", 2 pts the indicator setup with $\mathbb{E}[X_k]=1/n$, 2 pts bounding by the larger side, 2 pts the "each term at most twice" halving of the sum, 2 pts the substitution. If the algebra in step 4 defeats you under time pressure, state the guess, show the sum splits as above, and assert the constant works — you will keep most of the marks. The conceptual steps are worth more than the arithmetic.</div>
+  </div></details>
+
+  <h2>After the paper</h2>
+  <div class="box"><span class="lbl">Turn the result into a plan</span>
+  <ul>
+    <li><b>Below 24/40:</b> you are still in the content phase. Go back to the <a href="data-structures.html">notes</a> and <a href="recurrence-drills.html">drills</a> before sitting another paper.</li>
+    <li><b>24–32:</b> the standard profile — the describe questions land, the big proof leaks. Rehearse Q5-type proofs from the <a href="exam-proofs.html">proofs page</a> from memory, one per day.</li>
+    <li><b>Above 32:</b> you are in taper territory. Keep the <a href="flashcards.html">deck</a> going daily and re-sit only the questions you dropped.</li>
+    <li>Whatever the score, tick the matching lanes on the <a href="index.html">study plan</a> so the tracker reflects reality.</li>
+  </ul></div>
+
+  <footer>
+    Papers B–D are written for this site in the format of the real exam; they are <em>not</em> past papers. The real first-date paper is on the <a href="mock-exam-1.html">mock exam page</a>. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+<script src="../assets/mfds.js" data-root="../"></script>
+</body>
+</html>

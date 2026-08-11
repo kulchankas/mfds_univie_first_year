@@ -129,7 +129,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   <h2>Drill bank</h2>
   <p>Groups A→D get harder. Do them cold, then check. <span class="exam1chip">EXAM 1</span> marks the actual first-date recurrences.</p>
 
-  <h3>A — the three cases, warm-up</h3>
+  <h3 id="dA">A — the three cases, warm-up</h3>
   <details class="drill"><summary><span class="num">A1</span> $T(n)=2T(n/2)+n$</summary><div class="sol">$W=n^{\log_2 2}=n$; $f=n=\Theta(n\lg^0 n)$ — exact match, case 2 ($k=0$). <span class="ans">$\Theta(n\lg n)$</span> — merge sort.</div></details>
   <details class="drill"><summary><span class="num">A2</span> $T(n)=8T(n/2)+n^2$</summary><div class="sol">$W=n^{\log_2 8}=n^3$; $f=n^2=O(n^{3-\varepsilon})$ — polynomially smaller, case 1. <span class="ans">$\Theta(n^3)$</span>.</div></details>
   <details class="drill"><summary><span class="num">A3</span> $T(n)=2T(n/2)+n^3$</summary><div class="sol">$W=n$; $f=n^3=\Omega(n^{1+\varepsilon})$ — case 3. Regularity: $2f(n/2)=2\cdot n^3/8=n^3/4\le\frac14 f(n)$ ✓. <span class="ans">$\Theta(n^3)$</span>.</div></details>
@@ -138,7 +138,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   <details class="drill"><summary><span class="num">A6</span> $T(n)=3T(n/2)+n$</summary><div class="sol">$W=n^{\log_2 3}\approx n^{1.585}$; $f=n$ polynomially smaller — case 1. <span class="ans">$\Theta(n^{\log_2 3})$</span> — Karatsuba multiplication.</div></details>
   <details class="drill"><summary><span class="num">A7</span> $T(n)=3T(n/4)+n\lg n$</summary><div class="sol">$W=n^{\log_4 3}\approx n^{0.793}$; $f=n\lg n=\Omega(n^{0.793+\varepsilon})$ — case 3. Regularity: $3f(n/4)=\frac34 n(\lg n-2)\le\frac34 f(n)$ ✓. <span class="ans">$\Theta(n\lg n)$</span>.</div></details>
 
-  <h3>B — the case-2 family (what exam 1 actually was)</h3>
+  <h3 id="dB">B — the case-2 family (what exam 1 actually was)</h3>
   <details class="drill"><summary><span class="num">B1</span> $T(n)=16T(n/4)+n^2$ <span class="exam1chip">EXAM 1</span></summary><div class="sol">$W=n^{\log_4 16}=n^2$ — exact match ($k=0$), case 2. <span class="ans">$\Theta(n^2\lg n)$</span>.</div></details>
   <details class="drill"><summary><span class="num">B2</span> $T(n)=4T(n/2)+n^2\lg n$ <span class="exam1chip">EXAM 1</span></summary><div class="sol">$W=n^{\log_2 4}=n^2$; $f=\Theta(n^2\lg^1 n)$ — extended case 2, $k=1$. <span class="ans">$\Theta(n^2\lg^2 n)$</span>.</div></details>
   <details class="drill"><summary><span class="num">B3</span> $T(n)=2T(n/4)+\sqrt n$ <span class="exam1chip">EXAM 1</span></summary><div class="sol">$W=n^{\log_4 2}=n^{1/2}$ — exact match ($k=0$), case 2. <span class="ans">$\Theta(\sqrt n\,\lg n)$</span>.</div></details>
@@ -146,7 +146,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
   <details class="drill"><summary><span class="num">B5</span> $T(n)=9T(n/3)+n^2\lg^2 n$</summary><div class="sol">$W=n^{\log_3 9}=n^2$; $k=2$. <span class="ans">$\Theta(n^2\lg^3 n)$</span>.</div></details>
   <details class="drill"><summary><span class="num">B6</span> $T(n)=4T(n/2)+\dfrac{n^2}{\lg n}$</summary><div class="sol">$W=n^2$; $f=\Theta(n^2\lg^{-1}n)$ — the $k=-1$ row. <span class="ans">$\Theta(n^2\lg\lg n)$</span>.</div></details>
 
-  <h3>C — beyond the vanilla theorem</h3>
+  <h3 id="dC">C — beyond the vanilla theorem</h3>
   <details class="drill"><summary><span class="num">C1</span> $T(n)=3T(n/3)+\dfrac{n}{\lg n}$ <span class="exam1chip">EXAM 1</span></summary><div class="sol">$W=n$; $f=\Theta(n\lg^{-1}n)$: cases 1–3 all fail ($f$ is smaller than $W$ but not polynomially). The $k=-1$ row gives <span class="ans">$\Theta(n\lg\lg n)$</span>. Akra–Bazzi check: $p=1$, $\int_2^n\frac{du}{u\lg u}=\Theta(\lg\lg n)$ ✓.</div></details>
   <details class="drill"><summary><span class="num">C2</span> $T(n)=2T(n/2)+\dfrac{n}{\lg^2 n}$</summary><div class="sol">$W=n$; $k=-2&lt;-1$ — the level sum $\sum_j 1/j^2$ <em>converges</em>, so the driving costs add only $O(n)$. <span class="ans">$\Theta(n)$</span>.</div></details>
   <details class="drill"><summary><span class="num">C3</span> $T(n)=T(n/3)+T(2n/3)+n$</summary><div class="sol">Unequal split — Akra–Bazzi. $(1/3)^p+(2/3)^p=1\Rightarrow p=1$; $\int_1^n u\cdot u^{-2}du=\ln n$. <span class="ans">$\Theta(n\lg n)$</span>. (Recursion-tree view: every level costs $n$, depth $\Theta(\lg n)$.)</div></details>

@@ -9,6 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[['$','$']]},svg:{fontCache:'global'}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 <style>
   :root{
     --bg:#1a1612;--bg-elevated:#221d18;--bg-card:#1f1a15;--border:#3a342c;--border-soft:#2a251f;
@@ -81,7 +83,24 @@
   .lane.on .lt{background:#2FAE72;border-color:#2FAE72}
   .unit-links{font-size:.82rem;color:#55555C}
   .unit-links a{font-weight:600}
-  .unit-sheet{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#8A8A90}
+  .unit-sheet{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#8A8A90;margin-top:.5rem}
+  /* --- per-unit mastery detail --- */
+  .usec{margin:.8rem 0}
+  .ulab{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#8A8A90;margin-bottom:.35rem}
+  .ulab.ok{color:#0F6B41}
+  .umust{margin:0;padding-left:1.05rem;font-size:.87rem;color:#44444B;line-height:1.55}
+  .umust li{margin:.3rem 0}
+  .umust li::marker{color:#2FAE72}
+  .umust b{color:#1B1B1F}
+  .uterms{display:flex;flex-wrap:wrap;gap:.3rem}
+  .term{font-size:.74rem;font-weight:600;color:#4A3208;background:#FFF6E7;border:1px solid rgba(240,169,58,.35);border-radius:6px;padding:.16rem .45rem;line-height:1.5}
+  .ulearn{margin:0;padding-left:1.05rem;font-size:.86rem;color:#55555C;line-height:1.5}
+  .ulearn li{margin:.28rem 0}
+  .ulearn li::marker{color:#C9C9D0}
+  .ulearn a{font-weight:700}
+  .ulearn a[target]::after{content:'↗';font-size:.72em;margin-left:.15em;opacity:.55}
+  .ulearn .offline{color:#1B1B1F}
+  .ulearn .ln{color:#8A8A90}
   footer{margin-top:3rem;padding-top:1.3rem;border-top:1px solid var(--border-soft);color:var(--text-dim);font-size:.82rem}
   footer a{color:var(--accent);text-decoration:none}
 </style>
@@ -189,6 +208,7 @@
   <ul>
     <li><strong>Calibrate first:</strong> skim the <a href="mock-exam-1.html">real first-date paper</a>. The format is fixed: correctness-by-invariant + four recurrences + two "describe a data structure" questions + one big proof (Huffman was 10&nbsp;pts).</li>
     <li><strong>Then the two passes:</strong> content (<a href="data-structures.html">notes</a> + <a href="recurrence-drills.html">drills</a>) → <a href="exam-proofs.html">proofs from memory</a> → timed mocks. The full schedule, interleaved with Analysis and Linear Algebra, is the <a href="../study-plan.html">6-week plan</a>.</li>
+    <li><strong>Five full papers exist:</strong> the real one plus a prediction on the <a href="mock-exam-1.html">mock exam page</a>, then <a href="mock-exams.html">papers B, C and D</a> — each rotating a different big proof into question 5. One every 3–4 days in the final fortnight.</li>
     <li><strong>Daily:</strong> the <a href="flashcards.html">flashcard deck</a> (20 min) — definitions, runtimes, Master cases, fixup cases.</li>
     <li><strong>Rotation risk:</strong> flagged proofs that <em>didn't</em> appear on the first date (quicksort, lower bound, selection, hashing, augmentation) are prime candidates for the second — they're all on the proofs page.</li>
   </ul>
@@ -215,48 +235,235 @@
   var UNITS = [
     { id:'asym', t:'Asymptotics &amp; growth', s:'Landau symbols, Stirling, the lg* ordering',
       sheet:'Sheet 1 · 1, 9–14, 17', lanes:'RD',
-      links:'<a href="problem-sheets.html#s1">problem map</a> · <a href="problem-sheets/Problem_14_Sheet_1_Algo_and_Data_Structures.pdf">worked solution 14–15</a>' },
+      terms:['$O,\\Omega,\\Theta,o,\\omega$','asymptotically tight bound','witness pair $(c,n_0)$',
+             'Stirling&#39;s approximation','harmonic number $H_n$','iterated logarithm $\\lg^\\ast n$',
+             'polylogarithmic','transitivity of Landau classes'],
+      must:['Write the formal $\\exists c,n_0\\;\\forall n\\ge n_0$ definition of all five symbols — <b>and their negations</b>. You cannot <em>disprove</em> $f=O(g)$ without the negation.',
+            'Prove a bound by <b>exhibiting</b> a concrete $c$ and $n_0$. Problems 9–13 want witnesses, not hand-waving.',
+            'Sort ten functions into asymptotic order and justify <b>every adjacent pair</b> — that is the whole of problem 14/15, and the graded solution is linked below.',
+            'Recite the ladder $\\lg^\\ast n \\ll \\lg\\lg n \\ll \\lg n \\ll n^\\varepsilon \\ll n^c \\ll c^n \\ll n! \\ll n^n$.',
+            'Apply Stirling to get $\\lg(n!)=\\Theta(n\\lg n)$ — this is the bridge to the sorting lower bound in unit 10.',
+            'Avoid the three standard traps: $2^{2n}\\ne\\Theta(2^n)$; $O$ is <b>not</b> symmetric; $f+g=\\Theta(\\max(f,g))$ but $f-g$ is not $\\Theta$ of anything.'],
+      links:'<a href="problem-sheets.html#s1">problem map</a> · <a href="problem-sheets/Problem_14_Sheet_1_Algo_and_Data_Structures.pdf">worked solution 14–15</a>',
+      learn:[['CLRS ch. 3','','Characterizing running times — §3.1–3.2 definitions, §3.3 the standard function catalogue (Stirling, $\\lg^\\ast$).'],
+             ['MIT 6.006 — lecture 3','https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-3-sets-and-sorting/','Asymptotic notation used in anger, on sorting.'],
+             ['Big-O notation','https://en.wikipedia.org/wiki/Big_O_notation','Reference for the formal definitions and the algebra of the classes.'],
+             ['Stirling&#39;s approximation','https://en.wikipedia.org/wiki/Stirling%27s_approximation','The one estimate you must be able to quote from memory.'],
+             ['Iterated logarithm','https://en.wikipedia.org/wiki/Iterated_logarithm','$\\lg^\\ast$ — appears in problem 17 and confuses everyone once.']] },
+
     { id:'inv', t:'Correctness &amp; loop invariants', s:'Initialization / maintenance / termination; the permutation clause',
       sheet:'Sheet 1 · 2–7 · Sheet 5 · 51', lanes:'RPD', q:'EXAM Q1',
-      links:'<a href="exam-proofs.html#loopinv">proofs ①</a> · <a href="mock-exam-1.html">mock Q1</a>' },
+      terms:['loop invariant','initialization','maintenance','termination','partial vs total correctness',
+             'termination measure / variant','the permutation clause','postcondition'],
+      must:['State the three obligations in order, and know that <b>termination is where you convert</b> the invariant into the postcondition — it is not a formality.',
+            'Write an invariant <b>strong enough to survive</b>: it must assert sortedness <em>and</em> that the array is still a permutation of the input. This is the single most-dropped point — an algorithm that outputs a sorted array of zeros satisfies the weak invariant.',
+            'Handle a <b>nested</b> loop: prove the inner invariant first, then use it as one step of the outer maintenance.',
+            'Reproduce bubblesort (this was exam 1 Q1, 8 pts), insertion sort and selection sort <b>cold</b>, invariant and all three parts.',
+            'Give a termination argument: a strictly decreasing $\\mathbb{N}$-valued quantity.'],
+      links:'<a href="exam-proofs.html#loopinv">proofs ①</a> · <a href="mock-exam-1.html#q1">mock Q1</a>',
+      learn:[['CLRS §2.1','','Insertion sort — the canonical worked invariant, in the exact style the exam wants.'],
+             ['Loop invariant','https://en.wikipedia.org/wiki/Loop_invariant','Background on partial vs total correctness.'],
+             ['Sorting visualiser','https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html','Watch bubble/insertion/selection step by step until the invariant is obvious.']] },
+
     { id:'master', t:'Recurrences — Master Theorem', s:'Watershed, the three cases, extended case 2, regularity',
       sheet:'Sheet 1 · 8, 15, 16 · Sheet 2 · 18–21', lanes:'RPDC', q:'EXAM Q2',
-      links:'<a href="recurrence-drills.html">drills A–B</a> · <a href="exam-proofs.html#master">proofs ②</a>' },
+      terms:['watershed function $n^{\\log_b a}$','driving function $f(n)$','polynomially smaller / larger',
+             'regularity condition $af(n/b)\\le cf(n)$','extended case 2 ($\\lg^k$ family)','recursion-tree method','substitution method'],
+      must:['Compute $\\log_b a$ fast, and compare $f$ to it <b>polynomially</b> — the word "polynomially" is exactly where the cases fail. $f=n/\\lg n$ is smaller than $n$ but not by any factor $n^\\varepsilon$, so case 1 does <b>not</b> apply.',
+            'Know the <b>extended case 2</b> table for $f=\\Theta(n^{\\log_b a}\\lg^k n)$ split by $k&gt;-1$, $k=-1$, $k&lt;-1$. All four parts of exam 1 Q2 came from this family — this table alone was worth 8 points.',
+            'Check the <b>regularity condition</b> in case 3, and know it can genuinely fail.',
+            'Say out loud <em>why</em> the theorem does not apply (unequal splits, non-polynomial gap, $f$ not eventually positive) and switch to Akra–Bazzi.',
+            'Verify a guess by <b>substitution</b>, including the "strengthen the induction hypothesis" trick when the naive guess will not close.',
+            'Draw the recursion tree and read the answer off the level sums — your check when you distrust the case analysis.'],
+      links:'<a href="recurrence-drills.html#dA">drills A</a> · <a href="recurrence-drills.html#dB">drills B</a> · <a href="exam-proofs.html#master">proofs ②</a>',
+      learn:[['CLRS §4.3–4.6','','Substitution, recursion trees, the master method, and the proof of the continuous version.'],
+             ['Master theorem','https://en.wikipedia.org/wiki/Master_theorem_(analysis_of_algorithms)','Includes the extended $\\lg^k$ cases in table form.'],
+             ['MIT 6.046 — lecture 2','https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/lecture-2-divide-conquer-convex-hull-median-finding/','Divide-and-conquer with the master theorem applied throughout.']] },
+
     { id:'akra', t:'Polynomial growth &amp; Akra–Bazzi', s:'The corrected quantifier order; unequal splits; change of variables',
       sheet:'Sheet 2 · 22–29', lanes:'RPDC', q:'EXAM Q2',
-      links:'<a href="recurrence-drills.html#pgc">polynomial growth</a> · <a href="recurrence-drills.html#cov">change of vars</a> · <a href="exam-proofs.html#akra">proofs ③</a>' },
+      terms:['polynomial growth condition','Akra–Bazzi exponent $p$ with $\\sum a_ib_i^p=1$',
+             'the integral $\\int_1^n f(u)u^{-(p+1)}\\,du$','change of variables $m=\\lg n$','unequal subproblem sizes','perturbation $h_i(n)$'],
+      must:['State the polynomial growth condition with the <b>corrected quantifier order</b> — $\\forall\\varphi&gt;1\\;\\exists d&gt;1\\;\\exists N&gt;0\\;\\forall n\\ge N\\;\\forall 1\\le\\psi\\le\\varphi$. The $\\exists N$ comes <b>after</b> the $\\forall\\varphi$; the sheet as originally issued had it wrong and there is a published erratum.',
+            'Solve $\\sum a_ib_i^p=1$ for $p$ — by inspection when you can, numerically when you cannot.',
+            'Set up and actually evaluate the Akra–Bazzi integral, including the $f(u)=u/\\lg u$ case that gives $\\lg\\lg n$.',
+            'Do the change of variables $m=\\lg n$ on recurrences like $T(n)=2T(\\sqrt n)+\\lg n$, solve in $m$, and substitute back.',
+            'Use Akra–Bazzi as a <b>cross-check</b> on any master-theorem answer — it agrees whenever both apply.'],
+      links:'<a href="recurrence-drills.html#pgc">polynomial growth</a> · <a href="recurrence-drills.html#cov">change of vars</a> · <a href="recurrence-drills.html#dC">drills C–D</a> · <a href="exam-proofs.html#akra">proofs ③</a>',
+      learn:[['CLRS §4.7','','Akra–Bazzi recurrences — statement, the exponent, and the driving-function integral.'],
+             ['Akra–Bazzi method','https://en.wikipedia.org/wiki/Akra%E2%80%93Bazzi_method','Worked examples with unequal splits.'],
+             ['Sheet 2 (PDF)','problem-sheets/ss26_algodat-2.pdf','The source problems 18–29 — this is the sheet carrying the erratum.']] },
+
     { id:'prob', t:'Probability toolkit', s:'Markov, geometric variance, conditional independence, binomial estimates',
       sheet:'Sheet 3 · 30–35', lanes:'RD',
-      links:'<a href="probability.html">probability toolkit</a> · <a href="probability.html#markov">Markov</a> · <a href="probability.html#geom">geometric variance</a> · <a href="problem-sheets.html#s3">problem map</a>' },
+      terms:['indicator random variable $I\\{A\\}$','linearity of expectation','Markov&#39;s inequality','Chebyshev&#39;s inequality',
+             'variance $\\mathbb{E}[X^2]-\\mathbb{E}[X]^2$','geometric distribution','conditional independence','pairwise vs mutual independence','union bound'],
+      must:['Prove Markov in <b>one line</b> from $t\\,I\\{X\\ge t\\}\\le X$ — check both cases, take expectations. Learn this; it is the cheapest proof on the whole syllabus.',
+            'Derive Chebyshev by applying Markov to $(X-\\mu)^2$. Knowing it is a <em>corollary</em> is half the answer.',
+            'Compute the geometric mean $1/p$ and variance $(1-p)/p^2$ by <b>conditioning on the first trial</b>.',
+            'Say why linearity of expectation needs <b>no independence</b> — this is what makes the indicator method work on wildly dependent variables.',
+            'Produce a counterexample separating <b>pairwise</b> from <b>mutual</b> independence.',
+            'Estimate binomials with $(n/k)^k\\le\\binom{n}{k}\\le(en/k)^k$.'],
+      links:'<a href="probability.html">probability toolkit</a> · <a href="probability.html#markov">Markov</a> · <a href="probability.html#geom">geometric variance</a> · <a href="problem-sheets.html#s3">problem map</a>',
+      learn:[['CLRS ch. 5 + appendix C','','Probabilistic analysis; the appendix has the distributions and identities.'],
+             ['MIT 6.042J — Mathematics for CS','https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/','The probability half of this course is exactly the toolkit above.'],
+             ['Markov&#39;s inequality','https://en.wikipedia.org/wiki/Markov%27s_inequality',''],
+             ['Chebyshev&#39;s inequality','https://en.wikipedia.org/wiki/Chebyshev%27s_inequality',''],
+             ['Geometric distribution','https://en.wikipedia.org/wiki/Geometric_distribution','Mind which convention (trials vs failures) a source uses.']] },
+
     { id:'rand', t:'Randomised analysis', s:'Uniform permutation, expected search times, indicator variables',
       sheet:'Sheet 4 · 36–40 · Sheet 5 · 44–46, 50', lanes:'RPD',
-      links:'<a href="exam-proofs.html#l54">Lemma 5.4</a> · <a href="exam-proofs.html#quicksort">quicksort ⑤</a> · <a href="exam-proofs.html#select">selection ⑦</a>' },
+      terms:['uniform random permutation','RANDOMIZE-IN-PLACE','$k$-permutation invariant','expected vs worst-case running time',
+             'Las Vegas vs Monte Carlo','the comparison indicator $X_{ij}$','Fisher–Yates'],
+      must:['Prove <b>Lemma 5.4</b>: RANDOMIZE-IN-PLACE yields a uniform permutation, via the loop invariant on $k$-permutations. This is a loop-invariant proof wearing a probability costume — unit 2 pays off here.',
+            'Run the <b>indicator method</b> end to end on quicksort (Theorem 7.4): define $X_{ij}$, show $\\Pr=2/(j-i+1)$, sum to $O(n\\lg n)$.',
+            'Reproduce Theorem 9.2 — expected linear-time selection.',
+            'Analyse the three searches (deterministic scan / random probing / random permutation then scan) and get the expected counts.',
+            'Spot a <b>broken shuffler</b>: if the algorithm has $3^3=27$ equally likely execution paths but $3!=6$ outcomes, then $6\\nmid 27$ and it cannot be uniform. The divisibility test is a complete proof.'],
+      links:'<a href="exam-proofs.html#l54">Lemma 5.4</a> · <a href="exam-proofs.html#quicksort">quicksort ⑤</a> · <a href="exam-proofs.html#select">selection ⑦</a> · <a href="probability.html#shuffle">broken shufflers</a>',
+      learn:[['CLRS §5.3, ch. 7, ch. 9','','Randomized algorithms; quicksort; medians and order statistics.'],
+             ['MIT 6.046 — lecture 2','https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/lecture-2-divide-conquer-convex-hull-median-finding/','Median finding, the deterministic and randomized versions.'],
+             ['Fisher–Yates shuffle','https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle','Has a section on exactly the off-by-one that breaks uniformity.'],
+             ['Quickselect','https://en.wikipedia.org/wiki/Quickselect','']] },
+
     { id:'heap', t:'Heaps &amp; priority queues', s:'MIN-HEAPIFY, BUILD-MIN-HEAP, DECREASE-KEY from memory',
       sheet:'Sheet 4 · 41–43 · Sheet 5 · 47–49', lanes:'RDC', q:'EXAM Q3',
-      links:'<a href="data-structures.html#heaps">notes</a> · <a href="mock-exam-1.html">mock Q3</a>' },
+      terms:['nearly complete binary tree','min-heap property','$\\mathrm{parent}(i)=\\lfloor i/2\\rfloor$, $2i$, $2i+1$',
+             'heap-size vs array length','MIN-HEAPIFY','BUILD-MIN-HEAP','EXTRACT-MIN','DECREASE-KEY','heapsort'],
+      must:['Write <b>MIN-HEAPIFY</b>, <b>BUILD-MIN-HEAP</b> and <b>DECREASE-KEY</b> as pseudocode from memory. The exam asks you to <em>describe</em> — 8 points on the first date — and pseudocode is the fastest full-credit answer.',
+            'Know the two directions: HEAPIFY floats a key <b>down</b>, DECREASE-KEY floats it <b>up</b>. Mixing them up is the classic error.',
+            'Prove BUILD-MIN-HEAP is $O(n)$, not $O(n\\lg n)$: at most $\\lceil n/2^{h+1}\\rceil$ nodes have height $h$, and $\\sum_h h/2^h=2$.',
+            'Say why the loop starts at $\\lfloor n/2\\rfloor$ (everything above is a leaf) and where the leaves live.',
+            'State heapsort&#39;s properties: $\\Theta(n\\lg n)$, in place, <b>not stable</b>.'],
+      links:'<a href="data-structures.html#heaps">notes</a> · <a href="mock-exam-1.html#q3">mock Q3</a>',
+      learn:[['CLRS ch. 6','','Heapsort — the source for every pseudocode above.'],
+             ['MIT 6.006 — lecture 8','https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-8-binary-heaps/','Binary heaps, including the $O(n)$ build argument.'],
+             ['Heap visualiser','https://www.cs.usfca.edu/~galles/visualization/Heap.html','Step through insert / extract-min until the float directions stick.'],
+             ['VisuAlgo — heap','https://visualgo.net/en/heap','']] },
+
     { id:'trees', t:'BST, red-black &amp; AVL', s:'RB properties, the three fixup cases, AVL height &amp; BALANCE',
       sheet:'Sheet 7 · 62–72 · Sheet 8 · 73–80', lanes:'RDC', q:'EXAM Q4',
-      links:'<a href="data-structures.html#rbt">red-black</a> · <a href="data-structures.html#avl">AVL</a> · <a href="mock-exam-1.html">mock Q4</a>' },
+      terms:['binary-search-tree property','in-order walk','successor / predecessor','TRANSPLANT','the five red-black properties',
+             'black-height $bh(x)$','rotation','insert-fixup cases 1–3','AVL balance factor','the four AVL rotation cases'],
+      must:['Recite the <b>five red-black properties</b> in order. Exam 1 asked for exactly this, 6 points.',
+            'Prove <b>Lemma 13.1</b>: $h\\le 2\\lg(n+1)$ — subtree at $x$ has $\\ge 2^{bh(x)}-1$ internal nodes, and property 4 forces $bh\\ge h/2$.',
+            'Say why a new node is coloured <b>red</b>: it cannot break property 5, so only the locally fixable properties 2 and 4 are at risk.',
+            'Distinguish the three insert-fixup cases by the <b>uncle</b>: red uncle → recolour and move two levels up; black uncle → one or two rotations and you are done.',
+            'AVL height bound: $N(h)=1+N(h-1)+N(h-2)=F_{h+3}-1$, hence $h\\le 1.44\\lg n$ (problem 80).',
+            'Pick the right AVL rotation: Left-Left → one right rotation; Left-Right → left-rotate the child, then right-rotate. Know that <b>insertion</b> needs $O(1)$ rotations while <b>deletion</b> can cascade up the whole path.'],
+      links:'<a href="data-structures.html#bst">BST</a> · <a href="data-structures.html#rbt">red-black</a> · <a href="data-structures.html#avl">AVL</a> · <a href="mock-exam-1.html#q4">mock Q4</a>',
+      learn:[['CLRS ch. 12–13','','Binary search trees; red-black trees, including Lemma 13.1 and the fixup cases.'],
+             ['MIT 6.006 — lecture 7','https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-7-binary-trees-part-2-avl/','AVL trees: the height bound and rotations, done properly.'],
+             ['Red-black visualiser','https://www.cs.usfca.edu/~galles/visualization/RedBlack.html','Insert 1..10 one at a time and name each fixup case before you press the button.'],
+             ['AVL visualiser','https://www.cs.usfca.edu/~galles/visualization/AVLtree.html','Same drill for the four rotation cases.'],
+             ['Red–black tree','https://en.wikipedia.org/wiki/Red%E2%80%93black_tree','']] },
+
     { id:'hash', t:'Hashing', s:'Chaining vs open addressing, load factor, universal families',
       sheet:'Sheet 6 · 59–61', lanes:'RPDC',
-      links:'<a href="data-structures.html#hash">notes</a> · <a href="exam-proofs.html#hashing">Thms 11.2 / 11.8</a>' },
+      terms:['load factor $\\alpha=n/m$','simple uniform hashing','chaining','open addressing','linear / quadratic probing',
+             'double hashing','universal family of hash functions','clustering','the division and multiplication methods'],
+      must:['State and prove <b>Theorem 11.2</b>: unsuccessful search under chaining costs $\\Theta(1+\\alpha)$ on average.',
+            'State <b>Theorem 11.8</b> for open addressing: expected probes $\\le 1/(1-\\alpha)$ — and notice it <b>explodes as $\\alpha\\to1$</b>, which is why you resize.',
+            'Define a <b>universal</b> family: $\\Pr_{h}[h(k)=h(l)]\\le 1/m$ for $k\\ne l$, over the random choice of $h$ — the randomness is in <em>choosing $h$</em>, not in the keys.',
+            'Compare chaining and open addressing on: deletion (open addressing needs tombstones), memory, and behaviour at high load.',
+            'Explain <b>clustering</b> and why double hashing beats linear probing.'],
+      links:'<a href="data-structures.html#hash">notes</a> · <a href="exam-proofs.html#hashing">Thms 11.2 / 11.8</a>',
+      learn:[['CLRS ch. 11','','Hash tables — the two theorems above are §11.2 and §11.4.'],
+             ['MIT 6.006 — lecture 4','https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-4-hashing/','Hashing from first principles.'],
+             ['MIT 6.046 — lecture 8','https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/lecture-8-randomization-universal-perfect-hashing/','Universal and perfect hashing — the proof-level treatment.'],
+             ['Chaining visualiser','https://www.cs.usfca.edu/~galles/visualization/OpenHash.html','(Confusingly named: "open hash" = chaining.)'],
+             ['Probing visualiser','https://www.cs.usfca.edu/~galles/visualization/ClosedHash.html','Watch clustering form under linear probing.'],
+             ['Universal hashing','https://en.wikipedia.org/wiki/Universal_hashing','']] },
+
     { id:'sort', t:'Sorting &amp; lower bounds', s:'The zoo, stability, and the &Omega;(n lg n) decision-tree bound',
       sheet:'—', lanes:'RPC',
-      links:'<a href="data-structures.html#sorting">notes</a> · <a href="exam-proofs.html#lowerbound">Thm 8.1</a>' },
+      terms:['comparison sort','decision tree','stability','in-place','counting sort','radix sort','bucket sort','$\\lg(n!)=\\Theta(n\\lg n)$'],
+      must:['Fill the whole table from memory: insertion / merge / heap / quick / counting / radix / bucket — best, average, worst, space, stable?, in place?',
+            'Prove <b>Theorem 8.1</b>: a decision tree sorting $n$ elements has $\\ge n!$ leaves, a binary tree of height $h$ has $\\le 2^h$ leaves, so $h\\ge\\lg(n!)=\\Omega(n\\lg n)$ by Stirling.',
+            'State precisely what the bound assumes — <b>comparisons only</b> — and hence why counting sort at $\\Theta(n+k)$ is not a contradiction.',
+            'Define <b>stability</b> and say which sorts have it and why radix sort <em>requires</em> a stable digit sort.',
+            'Give the case where quicksort degrades to $\\Theta(n^2)$ and how randomisation removes it.'],
+      links:'<a href="data-structures.html#sorting">notes</a> · <a href="exam-proofs.html#lowerbound">Thm 8.1</a>',
+      learn:[['CLRS ch. 8','','Sorting in linear time — §8.1 is the lower bound, §8.2–8.4 the linear-time sorts.'],
+             ['MIT 6.006 — lecture 5','https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-5-linear-sorting/','Linear sorting and why it escapes the bound.'],
+             ['Comparison-sort visualiser','https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html',''],
+             ['Decision tree model','https://en.wikipedia.org/wiki/Decision_tree_model','The formal setting for the lower bound.']] },
+
     { id:'dp', t:'Dynamic programming', s:'Rod cutting, interval DP, tree DP, knapsack',
       sheet:'Sheet 9 · 81–89 · Sheet 10 · 90–93', lanes:'RD',
-      links:'<a href="dp-greedy.html">DP &amp; greedy patterns</a> · <a href="dp-greedy.html#recognise">which shape is it?</a> · <a href="problem-sheets.html#s9">problem map</a>' },
+      terms:['optimal substructure','overlapping subproblems','memoisation vs bottom-up','subproblem graph',
+             'reconstruction of the solution','pseudo-polynomial time','interval DP','tree DP'],
+      must:['State the <b>two hallmarks</b> and know what each one buys: without optimal substructure DP is <em>wrong</em>; without overlap it is merely <em>pointless</em> (merge sort has the first and not the second).',
+            'Read the runtime off the shape before writing code: $\\text{time}=(\\#\\text{subproblems})\\times(\\text{choices each})$. 1-D table with $O(n)$ choices → $O(n^2)$; interval table with $O(n)$ splits → $O(n^3)$.',
+            'Classify a new problem into one of the <b>four shapes</b> — linear, interval, tree, knapsack — within a minute. This is the skill; the recurrences follow.',
+            'Recover the actual solution, not just its value, by storing choices and walking back.',
+            'Explain why $O(nW)$ knapsack is <b>pseudo-polynomial</b>: $W$ is written in $\\Theta(\\lg W)$ bits, so the runtime is exponential in the input <em>length</em>.',
+            'Show where optimal substructure <b>fails</b> (longest simple path) and say why.'],
+      links:'<a href="dp-greedy.html">DP &amp; greedy patterns</a> · <a href="dp-greedy.html#recognise">which shape is it?</a> · <a href="dp-greedy.html#fails">when substructure fails</a> · <a href="problem-sheets.html#s9">problem map</a>',
+      learn:[['CLRS ch. 14','','Dynamic programming — rod cutting, matrix chains, LCS, optimal BST (= problems 90–93).'],
+             ['MIT 6.006 — DP part 1','https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-15-dynamic-programming-part-1-srtbot-fib-dags-bowling/','The SRTBOT framework — the best checklist there is for writing a DP.'],
+             ['MIT 6.006 — DP part 3','https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-17-dynamic-programming-part-3-apsp-parens-piano/','Interval DP (parenthesisation) — the $O(n^3)$ shape.'],
+             ['MIT 6.006 — DP part 4','https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-18-dynamic-programming-part-4-rods-subset-sum-pseudopolynomial/','Rod cutting, subset sum, and pseudo-polynomial time explained carefully.'],
+             ['LCS visualiser','https://www.cs.usfca.edu/~galles/visualization/DPLCS.html','Watch the table fill and the traceback run.']] },
+
     { id:'greedy', t:'Greedy &amp; Huffman', s:'Exchange arguments; Huffman optimality end-to-end',
       sheet:'Sheet 10 · 94–99', lanes:'RPDC', q:'EXAM Q5',
-      links:'<a href="exam-proofs.html#huffman">Huffman ⑩</a> · <a href="dp-greedy.html#greedy">exchange arguments</a> · <a href="mock-exam-1.html">mock Q5</a>' },
+      terms:['greedy-choice property','optimal substructure','exchange argument','activity selection','prefix-free code',
+             'full binary tree','fractional vs 0–1 knapsack','matroid'],
+      must:['Run the <b>five-step exchange template</b> on a new problem: take an optimal $A$; if it lacks the greedy choice $g$, find the $a$ that greedy beat; swap to $A&#39;=(A\\setminus\\{a\\})\\cup\\{g\\}$; show still feasible and no worse; induct.',
+            'Prove <b>Huffman optimality</b> end to end — Lemma 15.2 (two least-frequent siblings at maximum depth), Lemma 15.3 (merging preserves optimality), Theorem 15.4 (induction). This was 10 points on exam 1, the single largest item on the paper.',
+            'Prove the <b>greedy-choice property</b> for activity selection (Theorem 15.1) — earliest finishing time.',
+            'Show that plausible greedy rules <b>fail</b>: shortest-duration activity selection on $(0,10),(9,11),(10,20)$ picks 1 activity instead of 2.',
+            'Say precisely why <b>fractional</b> knapsack is greedy but <b>0–1</b> is not, and what breaks.',
+            'State the distinction from DP in one sentence: greedy commits to a local choice <em>before</em> solving the subproblem; DP solves all subproblems and then chooses.'],
+      links:'<a href="exam-proofs.html#huffman">Huffman ⑩</a> · <a href="exam-proofs.html#greedy">Thm 15.1</a> · <a href="dp-greedy.html#greedy">exchange arguments</a> · <a href="mock-exam-1.html#q5">mock Q5</a>',
+      learn:[['CLRS ch. 15','','Greedy algorithms — §15.1 activity selection, §15.3 Huffman, §15.4 matroids.'],
+             ['MIT 6.046 — lecture 1','https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/resources/lecture-1-course-overview-interval-scheduling/','Interval scheduling — exchange arguments done live.'],
+             ['Huffman visualiser','https://cmps-people.ok.ubc.ca/ylucet/DS/Huffman.html','Build the tree by hand first, then check.'],
+             ['Huffman coding','https://en.wikipedia.org/wiki/Huffman_coding',''],
+             ['Matroid','https://en.wikipedia.org/wiki/Matroid','Optional — the theory of <em>why</em> greedy works when it works.']] },
+
     { id:'graphs', t:'B-trees, lists &amp; graphs', s:'B-tree ops, tree walks, DFS edge classification, tree diameter',
       sheet:'Sheet 6 · 52–58 · Sheet 11 · 100–102', lanes:'RD',
-      links:'<a href="data-structures.html#btree">B-trees</a> · <a href="data-structures.html#graphs">graphs</a>' },
-    { id:'mock', t:'Mock exams under timed conditions', s:'The real paper, then the predicted second-date paper',
-      sheet:'—', lanes:'PD', q:'DO TWICE',
-      links:'<a href="mock-exam-1.html">mock exam + solutions</a>' }
+      terms:['minimum degree $t$','B-tree split / merge','sentinel','doubly linked list','adjacency list vs matrix',
+             'discovery / finishing times $u.d$, $u.f$','parenthesis theorem','tree / back / forward / cross edge','topological sort','tree diameter'],
+      must:['Give B-tree bounds in terms of the minimum degree $t$: every non-root node holds $t-1..2t-1$ keys, and the height is $O(\\log_t n)$. Say why the branching factor is the point (disk blocks).',
+            'Describe a split and why insertion splits <b>on the way down</b> rather than backtracking.',
+            'State the <b>parenthesis theorem</b> and use it: two intervals $[u.d,u.f]$ are either disjoint or nested — never partially overlapping.',
+            'Classify DFS edges by timestamp and <b>prove the tests are exhaustive</b> (problem 102): tree/forward if $u.d&lt;v.d&lt;v.f&lt;u.f$, back if $v.d\\le u.d&lt;u.f\\le v.f$, cross if $v.f&lt;u.d$.',
+            'Know that an undirected DFS produces <b>only tree and back edges</b>, and that a directed graph is acyclic iff DFS finds no back edge.',
+            'Produce a topological sort as reverse finishing order, and compute <b>tree diameter</b> both ways (two DFS passes, or one bottom-up pass combining the two deepest child heights).'],
+      links:'<a href="data-structures.html#btree">B-trees</a> · <a href="data-structures.html#graphs">graphs</a> · <a href="problem-sheets.html#s11">problem map</a>',
+      learn:[['CLRS ch. 18 &amp; ch. 20','','B-trees; elementary graph algorithms (§20.3 is DFS and the classification).'],
+             ['MIT 6.006 — lecture 10','https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/resources/lecture-10-depth-first-search/','DFS, edge classification, topological sort, cycle detection.'],
+             ['B-tree visualiser','https://www.cs.usfca.edu/~galles/visualization/BTree.html','Set the degree and watch splits propagate.'],
+             ['DFS visualiser','https://www.cs.usfca.edu/~galles/visualization/DFS.html',''],
+             ['Topological sort (DFS)','https://www.cs.usfca.edu/~galles/visualization/TopoSortDFS.html','Confirms the reverse-finishing-order rule.'],
+             ['VisuAlgo — graph traversal','https://visualgo.net/en/dfsbfs','Shows $u.d$/$u.f$ live.']] },
+
+    { id:'mock', t:'Mock exams under timed conditions', s:'Five full papers: the real one, the prediction, and B/C/D',
+      sheet:'—', lanes:'PD', q:'DO 5×',
+      terms:['40 points total','~5 questions','one big proof (10 pts)','two describe-a-structure questions','four recurrences','≈2 min per point'],
+      must:['Sit the <b>real first-date paper</b> (A) closed-book and timed. Grade it against the notes without mercy.',
+            'Write down every dropped point as a one-line list. That list — not the syllabus — is your remaining curriculum.',
+            'Work through <b>papers B, C and D</b>, one every 3–4 days. Each rotates a different big proof into Q5, so together they cover the whole flagged list.',
+            'Budget by points, not by question: 40 points in 90 minutes is <b>2 minutes per point</b>. The 10-point proof gets 20 minutes; the 6-point describe gets 12.',
+            'Rehearse the format: correctness-by-invariant, four recurrences, two "describe" questions, one big proof. Knowing the shape saves minutes you will need.',
+            'Practise <b>writing proofs out longhand</b> at exam speed — knowing a proof and reproducing it in 12 minutes under pressure are different skills.'],
+      links:'<a href="mock-exam-1.html">paper A — the real exam</a> · <a href="mock-exam-1.html#predicted">the prediction</a> · <a href="mock-exams.html">papers B · C · D</a>',
+      learn:[['Papers B · C · D','mock-exams.html','Three extra full papers with grader-style solutions and a timing protocol — Q5 is quicksort, the lower bound, and selection respectively.'],
+             ['Rotation risk','exam-proofs.html','The flagged proofs that did <b>not</b> appear on the first date — quicksort, the lower bound, selection, hashing, augmentation — are the prime candidates for the second.'],
+             ['Every sheet problem','problem-sheets.html','102 problems, topic-tagged, 38 flagged as exam-shaped.']] }
   ];
+
   var LANE_NAME = { R:'Read', P:'Prove', D:'Drill', C:'Cards' };
+
+  /* MathJax loads async — retry until it is actually there, otherwise the
+     unit panels render their LaTeX as raw source. */
+  function typeset(el){
+    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([el]).catch(function(){});
+    else setTimeout(function(){ typeset(el); }, 150);
+  }
 
   var state = { v:1, u:{} };
   try { var raw = JSON.parse(localStorage.getItem(KEY)||'null'); if (raw && raw.v===1 && raw.u) state = raw; } catch(e){}
@@ -278,6 +485,15 @@
         return '<span class="lane'+(st.lanes[L]?' on':'')+'" data-u="'+u.id+'" data-l="'+L+'">'+
                '<i class="lt"></i>'+LANE_NAME[L]+'</span>';
       }).join('');
+      var must = (u.must||[]).map(function(m){ return '<li>'+m+'</li>'; }).join('');
+      var terms = (u.terms||[]).map(function(t){ return '<span class="term">'+t+'</span>'; }).join('');
+      var learn = (u.learn||[]).map(function(L){
+        var head = L[1]
+          ? '<a href="'+L[1]+'"'+(/^https?:/.test(L[1]) ? ' target="_blank" rel="noopener"' : '')+'>'+L[0]+'</a>'
+          : '<b class="offline">'+L[0]+'</b>';
+        return '<li>'+head+(L[2] ? ' <span class="ln">'+L[2]+'</span>' : '')+'</li>';
+      }).join('');
+
       return '<div class="unit'+(st.done?' done':'')+'" data-u="'+u.id+'">'+
         '<div class="unit-h" data-toggle="'+u.id+'">'+
           '<span class="ubox" data-check="'+u.id+'">✓</span>'+
@@ -286,13 +502,16 @@
         '</div>'+
         '<div class="unit-b">'+
           '<div class="lanes">'+lanes+'</div>'+
+          (must  ? '<div class="usec"><div class="ulab ok">Ace this — you should be able to…</div><ul class="umust">'+must+'</ul></div>' : '')+
+          (terms ? '<div class="usec"><div class="ulab">Define these cold</div><div class="uterms">'+terms+'</div></div>' : '')+
+          (learn ? '<div class="usec"><div class="ulab">Where to learn it</div><ul class="ulearn">'+learn+'</ul></div>' : '')+
           '<div class="unit-links">'+u.links+'</div>'+
           '<div class="unit-sheet">'+u.sheet+'</div>'+
         '</div></div>';
     }).join('');
     wire();
     stats();
-    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([box]).catch(function(){});
+    typeset(box);
   }
 
   function wire(){
