@@ -17,6 +17,9 @@
     --la:#EF5DA0;--la-bg:#FDE4EC;--la-dark:#B22C6A;
     --lads:#8B5CF6;--lads-bg:#EFE6FE;--lads-dark:#5B33B0;
     --off:#B9B9BE;--off-bg:#F3F3F5;--off-dark:#6E6E76;
+    /* extra palettes, for second-year subjects */
+    --teal:#0D9488;--teal-bg:#DCF5F1;--teal-dark:#0A5C55;
+    --slate:#5B7FA6;--slate-bg:#E7EEF6;--slate-dark:#2F4A66;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
@@ -98,7 +101,37 @@
   .ring{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
   .ring i{width:30px;height:30px;border-radius:50%;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;font-style:normal}
   .subj p{font-size:12.5px;font-weight:600;margin:8px 0 12px;flex:1}
-  .subj .go{color:#fff;border:none;font-weight:700;font-size:13px;padding:8px 16px;border-radius:999px;cursor:pointer;align-self:flex-start}
+  .subj .go{color:#fff;border:none;font-weight:700;font-size:13px;padding:8px 16px;border-radius:999px;cursor:pointer;align-self:flex-start;text-decoration:none;display:inline-block}
+
+  /* year groups */
+  .yr-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 10px}
+  .yr-h.yr-next{margin-top:26px}
+  .yr-t{font-size:13px;font-weight:800;letter-spacing:.02em}
+  .yr-n{font-size:11.5px;font-weight:700;color:var(--faint)}
+  .yr-add{margin-left:auto;font-size:12px;font-weight:700;color:var(--ink);background:var(--off-bg);border:1px solid var(--border);border-radius:999px;padding:6px 13px;cursor:pointer}
+  .yr-add:hover{border-color:var(--faint)}
+  .y2-empty{font-size:12.5px;font-weight:600;color:var(--faint);background:var(--off-bg);border:1px dashed var(--border);border-radius:14px;padding:14px 16px;margin:0}
+  .y2-empty[hidden]{display:none}
+  .subj.y2 .go{background:none;border:1px solid currentColor;padding:7px 14px}
+  .y2-tools{display:flex;gap:6px;margin-top:10px}
+  .y2-tools button{font-size:11.5px;font-weight:700;background:#ffffffaa;border:none;border-radius:999px;padding:6px 11px;cursor:pointer;color:inherit}
+  .y2-tools button:hover{background:#fff}
+  .subj.y2 input[type=range]{width:100%;margin:10px 0 0}
+  .subj.y2 .pctline{display:flex;justify-content:space-between;font-size:11px;font-weight:700;opacity:.8;margin-top:6px}
+
+  /* add / edit form */
+  .y2-form{margin-top:14px;background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px}
+  .y2-form[hidden]{display:none}
+  .y2-form label{display:block;font-size:11.5px;font-weight:800;color:var(--faint);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em}
+  .y2-form .opt{text-transform:none;letter-spacing:0;font-weight:600;color:var(--faint);opacity:.8}
+  .y2-form input,.y2-form select{display:block;width:100%;margin-top:5px;font:inherit;font-size:13.5px;font-weight:600;color:var(--ink);background:var(--off-bg);border:1px solid var(--border);border-radius:10px;padding:9px 11px;text-transform:none;letter-spacing:0}
+  .y2-form input:focus,.y2-form select:focus{outline:2px solid var(--algo);outline-offset:1px}
+  .y2-two{display:grid;grid-template-columns:2fr 1fr;gap:12px}
+  .y2-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .y2-btn{font-size:13px;font-weight:700;border:1px solid var(--border);background:var(--off-bg);color:var(--ink);border-radius:999px;padding:9px 18px;cursor:pointer}
+  .y2-btn.save{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .y2-msg{font-size:12px;font-weight:700;color:var(--la-dark)}
+  @media (max-width:560px){ .y2-two{grid-template-columns:1fr} }
 
   /* right column */
   .stat-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
@@ -242,6 +275,11 @@
 
         <div>
           <div class="card-h" style="margin-bottom:12px">Your subjects</div>
+
+          <div class="yr-h">
+            <span class="yr-t">First year</span>
+            <span class="yr-n">4 subjects · exam phase</span>
+          </div>
           <div class="subj-grid">
             <div class="subj" style="background:var(--algo-bg)">
               <div class="subj-top">
@@ -276,6 +314,37 @@
               <a class="go" style="background:var(--la)" href="linear-algebra/index.html">Open</a>
             </div>
           </div>
+
+          <div class="yr-h yr-next">
+            <span class="yr-t">Second year</span>
+            <span class="yr-n" id="y2-count">nothing planned yet</span>
+            <button class="yr-add" id="y2-add" type="button">+ Add subject</button>
+          </div>
+
+          <p class="y2-empty" id="y2-empty">Add the courses you'll take next year — they're saved in this browser and included in your backup, so you can start planning before the pages exist.</p>
+          <div class="subj-grid" id="y2-grid"></div>
+
+          <form class="y2-form" id="y2-form" hidden>
+            <div class="y2-two">
+              <label>Subject name
+                <input id="y2-name" type="text" maxlength="60" required placeholder="e.g. Probability &amp; Statistics">
+              </label>
+              <label>Colour
+                <select id="y2-colour"></select>
+              </label>
+            </div>
+            <label>Note <span class="opt">optional</span>
+              <input id="y2-note" type="text" maxlength="80" placeholder="e.g. VO + UE · winter term">
+            </label>
+            <label>Link <span class="opt">optional — a page on this site, or any https:// URL</span>
+              <input id="y2-link" type="text" maxlength="200" placeholder="e.g. probability/index.html">
+            </label>
+            <div class="y2-actions">
+              <button type="submit" class="y2-btn save">Save subject</button>
+              <button type="button" class="y2-btn" id="y2-cancel">Cancel</button>
+              <span class="y2-msg" id="y2-msg"></span>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -561,6 +630,131 @@
     document.getElementById('sub-la').textContent   = 'Exam notes + five mock exams';
   }
 
+  /* ============ second year — user-editable subject list ============ */
+  var SUBJ_KEY = 'hub-subjects-v1';
+  var PALETTE = [
+    { k:'lads',  label:'Purple' }, { k:'teal',  label:'Teal'  },
+    { k:'slate', label:'Slate'  }, { k:'algo',  label:'Amber' },
+    { k:'ana',   label:'Green'  }, { k:'la',    label:'Pink'  }
+  ];
+  var y2 = [], editingId = null;
+  try { var rawY2 = JSON.parse(localStorage.getItem(SUBJ_KEY)||'[]'); if (Array.isArray(rawY2)) y2 = rawY2; } catch(e){}
+  function saveY2(){ try { localStorage.setItem(SUBJ_KEY, JSON.stringify(y2)); } catch(e){} }
+
+  function esc(s){
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+  /* Only same-site relative paths and http(s) links — never javascript: */
+  function safeHref(u){
+    u = (u||'').trim();
+    if (!u) return '';
+    if (/^https?:\/\//i.test(u)) return u;
+    if (/^[a-z][a-z0-9+.-]*:/i.test(u)) return '';   // any other scheme: reject
+    return u.replace(/^\/+/, '');
+  }
+
+  function renderY2(){
+    var grid  = document.getElementById('y2-grid');
+    var empty = document.getElementById('y2-empty');
+    document.getElementById('y2-count').textContent =
+      y2.length ? y2.length + (y2.length===1 ? ' subject planned' : ' subjects planned') : 'nothing planned yet';
+    empty.hidden = y2.length > 0;
+
+    grid.innerHTML = y2.map(function(s){
+      var c = PALETTE.some(function(p){ return p.k===s.c; }) ? s.c : 'lads';
+      var pct = Math.max(0, Math.min(100, s.pct|0));
+      var href = safeHref(s.link);
+      return '<div class="subj y2" style="background:var(--'+c+'-bg);color:var(--'+c+'-dark)" data-id="'+esc(s.id)+'">'+
+        '<div class="subj-top">'+
+          '<div class="subj-name">'+esc(s.name)+'</div>'+
+          '<div class="ring" style="background:conic-gradient(var(--'+c+') '+pct+'%, #ffffff88 0)">'+
+            '<i style="background:var(--'+c+'-bg)">'+pct+'%</i></div>'+
+        '</div>'+
+        '<p>'+(s.note ? esc(s.note) : 'Planned for next year')+'</p>'+
+        (href ? '<a class="go" style="background:var(--'+c+')" href="'+esc(href)+'">Open</a>' : '')+
+        '<input type="range" min="0" max="100" step="5" value="'+pct+'" data-pct="'+esc(s.id)+'"'+
+          ' style="accent-color:var(--'+c+')" aria-label="Progress for '+esc(s.name)+'">'+
+        '<div class="pctline"><span>progress</span><span>set it yourself</span></div>'+
+        '<div class="y2-tools">'+
+          '<button type="button" data-edit="'+esc(s.id)+'">Edit</button>'+
+          '<button type="button" data-del="'+esc(s.id)+'">Remove</button>'+
+        '</div></div>';
+    }).join('');
+
+    grid.querySelectorAll('[data-pct]').forEach(function(r){
+      r.oninput = function(){
+        var s = y2.filter(function(x){ return x.id===r.dataset.pct; })[0];
+        if (!s) return;
+        s.pct = +r.value; saveY2();
+        var card = r.closest('.subj');
+        var ring = card.querySelector('.ring');
+        var col  = PALETTE.some(function(p){ return p.k===s.c; }) ? s.c : 'lads';
+        ring.style.background = 'conic-gradient(var(--'+col+') '+s.pct+'%, #ffffff88 0)';
+        ring.querySelector('i').textContent = s.pct+'%';
+      };
+    });
+    grid.querySelectorAll('[data-edit]').forEach(function(b){
+      b.onclick = function(){ openForm(b.dataset.edit); };
+    });
+    grid.querySelectorAll('[data-del]').forEach(function(b){
+      b.onclick = function(){
+        var s = y2.filter(function(x){ return x.id===b.dataset.del; })[0];
+        if (!s || !confirm('Remove "'+s.name+'" from next year?')) return;
+        y2 = y2.filter(function(x){ return x.id!==b.dataset.del; });
+        saveY2(); renderY2();
+      };
+    });
+  }
+
+  function openForm(id){
+    editingId = id || null;
+    var s = id ? y2.filter(function(x){ return x.id===id; })[0] : null;
+    document.getElementById('y2-name').value   = s ? s.name : '';
+    document.getElementById('y2-note').value   = s && s.note ? s.note : '';
+    document.getElementById('y2-link').value   = s && s.link ? s.link : '';
+    document.getElementById('y2-colour').value = s ? s.c : PALETTE[y2.length % PALETTE.length].k;
+    document.getElementById('y2-msg').textContent = '';
+    var f = document.getElementById('y2-form');
+    f.hidden = false;
+    f.querySelector('.save').textContent = id ? 'Save changes' : 'Save subject';
+    document.getElementById('y2-name').focus();
+  }
+  function closeForm(){ document.getElementById('y2-form').hidden = true; editingId = null; }
+
+  (function wireY2(){
+    document.getElementById('y2-colour').innerHTML =
+      PALETTE.map(function(p){ return '<option value="'+p.k+'">'+p.label+'</option>'; }).join('');
+    document.getElementById('y2-add').onclick    = function(){ openForm(null); };
+    document.getElementById('y2-cancel').onclick = closeForm;
+
+    document.getElementById('y2-form').onsubmit = function(e){
+      e.preventDefault();
+      var name = document.getElementById('y2-name').value.trim();
+      if (!name){ document.getElementById('y2-msg').textContent = 'Give it a name first.'; return; }
+      var raw  = document.getElementById('y2-link').value.trim();
+      if (raw && !safeHref(raw)){
+        document.getElementById('y2-msg').textContent = 'That link is not a page path or an http(s) URL.';
+        return;
+      }
+      var fields = {
+        name: name,
+        note: document.getElementById('y2-note').value.trim(),
+        link: raw,
+        c:    document.getElementById('y2-colour').value
+      };
+      if (editingId){
+        y2.forEach(function(s){ if (s.id===editingId) { s.name=fields.name; s.note=fields.note; s.link=fields.link; s.c=fields.c; } });
+      } else {
+        fields.id  = 's'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+        fields.pct = 0;
+        y2.push(fields);
+      }
+      saveY2(); closeForm(); renderY2();
+    };
+  })();
+
   /* ================= sparkline ================= */
   function weekStart(d){ var x=new Date(d); x.setDate(x.getDate()-((x.getDay()+6)%7)); x.setHours(0,0,0,0); return x; }
   function renderSpark(){
@@ -720,6 +914,7 @@
   renderHeader();
   renderSchedule();
   renderSubjects();
+  renderY2();
   renderSpark();
   renderHomework();
   renderScores();

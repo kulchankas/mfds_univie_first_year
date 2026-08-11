@@ -136,6 +136,7 @@ window.MFDS_PLAN = {
   /* every localStorage key the site writes — used by the hub's backup */
   storageKeys: [
     'hub-state-v1',
+    'hub-subjects-v1',
     'fc_algodat_v1',
     'fc_analysis_day1_v1',
     'fc_lads_v1',
