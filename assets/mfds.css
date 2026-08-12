@@ -183,6 +183,11 @@ body.mfds code {
 }
 body.mfds th { background: #F5F5F7 !important; color: var(--text) !important; }
 body.mfds td, body.mfds th { border-color: var(--border) !important; }
+/* Every cell needs its own background, not just the striped ones. A table
+   inside a coloured callout (.def/.warn/.thm/...) on a dark-palette page
+   otherwise lets the box's near-black show through on odd rows, under text
+   the skin has already re-coloured dark grey -- about 2.2:1, unreadable. */
+body.mfds td { background: #fff; }
 body.mfds tr:nth-child(even) td { background: #FCFCFD; }
 
 /* chips / pills that used dark-on-accent text */

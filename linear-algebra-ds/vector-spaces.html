@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F9">
+<meta name="description" content="Chapter 1 of Linear Algebra for Data Science: vector spaces, subspaces, bases and direct sums, linear maps and rank-nullity, matrix representation, the dual space, norms — and a full treatment of projections and symmetries.">
+<title>Ch 1 — Vector spaces, projections &amp; symmetries</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[['$','$']]},svg:{fontCache:'global'}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#1a1612;--bg-elevated:#221d18;--bg-card:#1f1a15;--border:#3a342c;--border-soft:#2a251f;
+    --text:#f5efe4;--text-muted:#b8aa97;--text-dim:#8a7e6e;--accent:#e0b888;--accent-hover:#ecc89c;
+    --good:#8bc6a0;--warn:#d99a7e;--blue:#8fb8de;--ds:#c4a6df;--glow:rgba(224,184,136,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Figtree',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.66;-webkit-font-smoothing:antialiased;min-height:100vh;background-image:radial-gradient(900px 500px at 50% -10%,var(--glow),transparent 70%);background-repeat:no-repeat}
+  .wrap{max-width:820px;margin:0 auto;padding:clamp(1.6rem,5vw,2.6rem) clamp(1.1rem,5vw,1.75rem) 5rem;
+        padding-left:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-left));
+        padding-right:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-right))}
+  .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-dim);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;margin-bottom:1.4rem}
+  .back-link:hover{color:var(--accent)}
+  .eyebrow{font-weight:700;color:var(--accent);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.7rem}
+  h1{font-weight:800;font-size:clamp(1.8rem,6vw,2.5rem);line-height:1.08;letter-spacing:-.025em;margin-bottom:.6rem}
+  .lede{color:var(--text-muted);font-size:clamp(.96rem,3vw,1.06rem);max-width:44em}
+  h2{font-weight:800;font-size:clamp(1.2rem,4vw,1.5rem);letter-spacing:-.02em;margin:2.6rem 0 .6rem;scroll-margin-top:70px}
+  h3{font-weight:700;font-size:1rem;margin:1.5rem 0 .4rem;color:var(--accent)}
+  p{margin:.55rem 0;color:var(--text-muted);font-size:.96rem}
+  b,strong{color:var(--text)}
+  ul,ol{margin:.4rem 0 .7rem;padding-left:1.35rem;color:var(--text-muted);font-size:.95rem}
+  li{margin:.3rem 0}
+  a{color:var(--accent)}
+  code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:#14110d;color:var(--accent);padding:.05rem .3rem;border-radius:5px}
+  .def{background:var(--bg-card);border:1px solid rgba(139,198,160,.32);border-left:4px solid var(--good);border-radius:0 12px 12px 0;padding:.9rem 1.15rem;margin:.9rem 0;color:var(--text);font-size:.96rem}
+  .def .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--good);margin-bottom:.35rem}
+  .idea{background:#1a1f26;border:1px solid rgba(143,184,222,.3);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:.8rem 1.15rem;margin:.85rem 0;font-size:.93rem;color:var(--text-muted)}
+  .idea .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:.3rem}
+  .warn{background:#241a1c;border:1px solid rgba(217,154,126,.32);border-left:4px solid var(--warn);border-radius:0 12px 12px 0;padding:.8rem 1.15rem;margin:.85rem 0;font-size:.92rem;color:var(--text-muted)}
+  .warn .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--warn);margin-bottom:.3rem}
+  .ds{background:#201a26;border:1px solid rgba(196,166,223,.3);border-left:4px solid var(--ds);border-radius:0 12px 12px 0;padding:.8rem 1.15rem;margin:.85rem 0;font-size:.92rem;color:var(--text-muted)}
+  .ds .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ds);margin-bottom:.3rem}
+  .step{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--good)}
+  pre.code{font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.5;background:#14110d;border:1px solid var(--border-soft);border-radius:10px;padding:.85rem 1.05rem;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.7rem 0;color:var(--text)}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.8rem 0;border:1px solid var(--border);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:.88rem}
+  th,td{border-bottom:1px solid var(--border-soft);padding:.5rem .65rem;text-align:left;vertical-align:top}
+  th{background:#2a2218;color:var(--accent);font-weight:700;font-size:.76rem;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  .toc{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:.95rem 1.2rem;margin:1.3rem 0;font-size:.9rem;line-height:1.95}
+  .toc a{text-decoration:none;font-weight:600}
+  /* Diagram colours as variables: the page ships a dark palette but is
+     re-skinned to light by mfds.css, and inline SVG fills are not re-skinned.
+     Without this the near-white labels vanish on the light card. */
+  .fig{--f-ink:#f5efe4;--f-axis:#3a342c;--f-line:#e0b888;--f-a:#8fb8de;--f-b:#c4a6df}
+  body.mfds .fig{--f-ink:#1B1B1F;--f-axis:#C9C9D0;--f-line:#8A5A0E;--f-a:#2F6FB0;--f-b:#6B3FA0}
+  .fig{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:1rem;margin:1rem 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .fig svg{display:block;margin:0 auto;max-width:100%;height:auto}
+  .fig figcaption{color:var(--text-dim);font-size:.85rem;margin-top:.6rem;text-align:center}
+  footer{margin-top:3rem;padding-top:1.2rem;border-top:1px solid var(--border-soft);color:var(--text-dim);font-size:.82rem}
+  mjx-container{color:inherit!important}
+</style>
+<link rel="stylesheet" href="../assets/mfds.css?v=3">
+</head>
+<body class="mfds mfds-lads" data-page="lads" data-up="index.html" data-up-label="LA for DS">
+<div class="wrap">
+  <a class="back-link" href="index.html">← Linear Algebra for Data Science</a>
+  <div class="eyebrow">Universität Wien · Mula &amp; Wu · Chapter 1</div>
+  <h1>Vector spaces, projections &amp; symmetries</h1>
+  <p class="lede">Chapter 1 is the vocabulary the rest of the book speaks. Most of it is definitions you can absorb quickly — except <b>projections and symmetries</b>, which trip almost everyone up, because a Chapter-1 projection is <em>not</em> the orthogonal projection you will meet in Chapter 2. That section below is the long one, deliberately.</p>
+
+  <div class="toc"><b>Jump to:</b>
+    <a href="#spaces">spaces &amp; subspaces</a> ·
+    <a href="#basis">basis &amp; dimension</a> ·
+    <a href="#sum">direct sums</a> ·
+    <a href="#proj">★ projections</a> ·
+    <a href="#sym">★ symmetries</a> ·
+    <a href="#recipes">how to solve the exercises</a> ·
+    <a href="#maps">linear maps &amp; rank–nullity</a> ·
+    <a href="#matrix">matrices &amp; change of basis</a> ·
+    <a href="#dual">dual space</a> ·
+    <a href="#norms">norms &amp; operator norm</a> ·
+    <a href="#traps">traps</a>
+  </div>
+
+  <!-- ================= SPACES ================= -->
+  <h2 id="spaces">Vector spaces &amp; subspaces</h2>
+  <p>A <b>vector space</b> over a field $\mathbb{F}$ (for us $\mathbb{R}$ or $\mathbb{C}$) is a set with addition and scalar multiplication satisfying the usual eight axioms. In practice you almost never verify all eight — you verify that something sits <em>inside</em> a known space, i.e. that it is a subspace.</p>
+
+  <div class="def"><span class="lbl">The subspace test</span>
+  $U\subseteq V$ is a subspace iff
+  <b>(1)</b> $0\in U$; <b>(2)</b> $u,w\in U\Rightarrow u+w\in U$; <b>(3)</b> $\lambda\in\mathbb{F},u\in U\Rightarrow\lambda u\in U$.
+  <br><br>Conditions (2) and (3) combine into one: $u,w\in U,\ \lambda\in\mathbb{F}\Rightarrow u+\lambda w\in U$.</div>
+
+  <div class="idea"><span class="lbl">Use (1) as your disproof tool</span> To show something is <em>not</em> a subspace, check $0$ first — it is one line and it usually works. $\{x\in\mathbb{R}^{n}:\sum_ix_i=1\}$ fails immediately. Similarly $\{x:x_1\ge0\}$ is closed under addition but not under $\lambda=-1$, and the union of the two coordinate axes in $\mathbb{R}^{2}$ is closed under scalars but not addition.</div>
+
+  <div class="warn"><span class="lbl">Intersection yes, union no</span>
+  An arbitrary <b>intersection</b> of subspaces is a subspace. A <b>union</b> almost never is: $U\cup W$ is a subspace iff $U\subseteq W$ or $W\subseteq U$. The correct replacement for union is the <b>sum</b>
+  $$U+W=\{u+w:u\in U,\ w\in W\},$$
+  which is the smallest subspace containing both.</div>
+
+  <!-- ================= BASIS ================= -->
+  <h2 id="basis">Span, independence, basis, dimension</h2>
+  <div class="def"><span class="lbl">The four definitions</span>
+  <ul>
+    <li><b>Span</b> $\operatorname{span}(v_1,\dots,v_k)$ — all linear combinations $\sum\lambda_iv_i$. Always a subspace.</li>
+    <li><b>Linearly independent</b> — $\sum\lambda_iv_i=0$ forces every $\lambda_i=0$.</li>
+    <li><b>Basis</b> — independent <em>and</em> spanning.</li>
+    <li><b>Dimension</b> — the common cardinality of every basis.</li>
+  </ul></div>
+
+  <div class="idea"><span class="lbl">The characterisation to actually use</span> $(v_1,\dots,v_n)$ is a basis of $V$ <b>iff every $v\in V$ has exactly one representation</b> $v=\sum\lambda_iv_i$. Spanning gives <em>at least</em> one; independence gives <em>at most</em> one. That "unique decomposition" phrasing is what makes direct sums and projections work below — keep it in mind.</div>
+
+  <div class="def"><span class="lbl">Facts you will use without proof</span>
+  In a space of dimension $n$: any independent list has $\le n$ vectors; any spanning list has $\ge n$; any independent list of exactly $n$ vectors is a basis, and so is any spanning list of exactly $n$. Every independent list <b>extends</b> to a basis; every spanning list <b>contains</b> one. For $U\subseteq V$: $\dim U\le\dim V$, with equality iff $U=V$.</div>
+
+  <!-- ================= DIRECT SUM ================= -->
+  <h2 id="sum">Direct sums</h2>
+  <div class="def"><span class="lbl">Definition</span>
+  $V=U\oplus W$ ("$V$ is the direct sum of $U$ and $W$", and $W$ is a <b>complement</b> of $U$) when
+  $$V=U+W\quad\text{and}\quad U\cap W=\{0\}.$$
+  Equivalently — and this is the version that matters — <b>every $v\in V$ writes uniquely as $v=u+w$</b> with $u\in U$, $w\in W$.</div>
+
+  <p><span class="step">Why the two versions agree</span> $V=U+W$ gives existence. For uniqueness, suppose $u_1+w_1=u_2+w_2$. Then $u_1-u_2=w_2-w_1$ lies in both $U$ and $W$, hence is $0$ — so $u_1=u_2$ and $w_1=w_2$. Conversely, if decompositions are unique then any $v\in U\cap W$ has the two decompositions $v+0$ and $0+v$, forcing $v=0$.</p>
+
+  <div class="def"><span class="lbl">Dimension</span>
+  In general
+  $$\dim(U+W)=\dim U+\dim W-\dim(U\cap W),$$
+  so for a direct sum the correction term vanishes:
+  $$\dim(U\oplus W)=\dim U+\dim W .$$
+  Concatenating a basis of $U$ with a basis of $W$ gives a basis of $U\oplus W$ — an <b>adapted basis</b>, which we use constantly below.</div>
+
+  <div class="warn"><span class="lbl">Complements exist but are wildly non-unique</span>
+  Every subspace $U\subseteq V$ has <em>some</em> complement (extend a basis of $U$ to a basis of $V$). It has many. In $\mathbb{R}^{2}$, take $U$ = the line $y=x$. Then the $y$-axis is a complement, the $x$-axis is a complement, and so is <b>every</b> line through the origin other than $U$ itself.
+  <br><br>This is the root of the projection confusion: <b>"project onto $U$" is meaningless until you say <em>along which complement</em></b>. Chapter 2 removes the ambiguity by always choosing $W=U^{\perp}$ — but that requires an inner product, which Chapter 1 does not have.</div>
+
+  <!-- ================= PROJECTIONS ================= -->
+  <h2 id="proj">★ Projections</h2>
+  <p>This is the section to slow down on.</p>
+
+  <div class="def"><span class="lbl">Definition</span>
+  A linear map $p:V\to V$ is a <b>projection</b> (projector) if it is <b>idempotent</b>:
+  $$p\circ p=p .$$
+  That is the whole definition. No inner product, no orthogonality, no angles — just $p^{2}=p$.</div>
+
+  <div class="idea"><span class="lbl">What idempotence means</span> "Doing it twice is the same as doing it once." Once you have landed in the target, applying $p$ again moves nothing. So the image consists exactly of the points $p$ leaves alone — the <b>fixed points</b>. That single sentence generates every property below.</div>
+
+  <h3>The structure theorem</h3>
+  <div class="def"><span class="lbl">Theorem — projections ↔ direct sums</span>
+  If $p:V\to V$ is a projection then
+  $$V=\operatorname{im}p\;\oplus\;\ker p,$$
+  and $p$ is precisely "decompose $v=u+w$ along this sum, then keep $u$". Moreover
+  $$\operatorname{im}p=\ker(p-\operatorname{id})=\{v\in V:p(v)=v\}.$$
+  Conversely, every decomposition $V=U\oplus W$ defines a projection $p(u+w)=u$, with $\operatorname{im}p=U$ and $\ker p=W$.</div>
+
+  <p><span class="step">Proof — the sum is everything</span> For any $v$ write
+  $$v=\underbrace{p(v)}_{\in\,\operatorname{im}p}+\underbrace{\big(v-p(v)\big)}_{\in\,\ker p},$$
+  and the second piece really is in the kernel because
+  $$p\big(v-p(v)\big)=p(v)-p^{2}(v)=p(v)-p(v)=0 .$$
+  So $V=\operatorname{im}p+\ker p$.</p>
+
+  <p><span class="step">Proof — the intersection is trivial</span> Let $v\in\operatorname{im}p\cap\ker p$. Being in the image, $v=p(u)$ for some $u$. Then
+  $$v=p(u)=p^{2}(u)=p\big(p(u)\big)=p(v)=0,$$
+  the last step because $v\in\ker p$. Hence $\operatorname{im}p\cap\ker p=\{0\}$ and the sum is direct. ∎</p>
+
+  <p><span class="step">Proof — image = fixed points</span> If $p(v)=v$ then obviously $v\in\operatorname{im}p$. Conversely if $v\in\operatorname{im}p$, say $v=p(u)$, then $p(v)=p^{2}(u)=p(u)=v$. ∎</p>
+
+  <div class="idea"><span class="lbl">The practical consequence</span> To identify a projection you never need clever algebra. <b>The image is where you land — solve $p(v)=v$. The kernel is the direction you project along — solve $p(v)=0$.</b> Those two subspaces determine $p$ completely.</div>
+
+  <h3>The complementary projection</h3>
+  <div class="def"><span class="lbl">$q=\operatorname{id}-p$</span>
+  If $p$ is a projection then so is $q=\operatorname{id}-p$, because
+  $$q^{2}=(\operatorname{id}-p)^{2}=\operatorname{id}-2p+p^{2}=\operatorname{id}-2p+p=\operatorname{id}-p=q .$$
+  It projects the other way: $\operatorname{im}q=\ker p$ and $\ker q=\operatorname{im}p$. And $p$ and $q$ annihilate each other:
+  $$pq=qp=0,\qquad p+q=\operatorname{id}.$$</div>
+
+  <h3>Matrix form — why an adapted basis is worth the trouble</h3>
+  <p>Let $V=U\oplus W$ with $\dim U=r$, $\dim V=n$. Pick a basis $(u_1,\dots,u_r)$ of $U$ and $(w_1,\dots,w_{n-r})$ of $W$, and use the concatenation as a basis of $V$. In <em>that</em> basis the projection onto $U$ along $W$ is
+  $$[p]=\begin{pmatrix}I_r&0\\0&0\end{pmatrix}.$$
+  So <b>every</b> projection looks like this in a suitable basis — which instantly gives:</p>
+  <ul>
+    <li>$\operatorname{rank}p=\dim U=r$ and $\operatorname{tr}(p)=r$. So for a projection, <b>trace = rank</b>. A quick sanity check on any exercise.</li>
+    <li>The only eigenvalues are $1$ (on $U$) and $0$ (on $W$), and $p$ is always diagonalizable.</li>
+    <li>$\det p=0$ unless $p=\operatorname{id}$.</li>
+  </ul>
+
+  <h3>Worked example — the same line, two different projections</h3>
+  <p>Work in $\mathbb{R}^{2}$ and let $U=\operatorname{span}\{(1,1)\}$, the line $y=x$. We project onto $U$ twice, along two different complements, and get two different maps.</p>
+
+  <p><span class="step">(a) Along the $y$-axis</span> Take $W=\operatorname{span}\{(0,1)\}$. Decompose $(x,y)=a(1,1)+b(0,1)$: comparing coordinates, $a=x$ and $a+b=y$, so $b=y-x$. Keeping the $U$-part,
+  $$p(x,y)=x\,(1,1)=(x,x),\qquad [p]=\begin{pmatrix}1&0\\1&0\end{pmatrix}.$$
+  Check idempotence: $p(p(x,y))=p(x,x)=(x,x)$ ✓. Check trace $=1+0=1=\dim U$ ✓.</p>
+
+  <p><span class="step">(b) Along the perpendicular</span> Take $W=U^{\perp}=\operatorname{span}\{(1,-1)\}$. Decompose $(x,y)=a(1,1)+b(1,-1)$: then $a+b=x$, $a-b=y$, so $a=\tfrac{x+y}{2}$. Hence
+  $$P(x,y)=\frac{x+y}{2}(1,1),\qquad [P]=\frac12\begin{pmatrix}1&1\\1&1\end{pmatrix}.$$
+  Again $P^{2}=P$ ✓ and $\operatorname{tr}P=\tfrac12+\tfrac12=1$ ✓.</p>
+
+  <figure class="fig">
+  <svg viewBox="0 0 460 250" role="img" aria-label="A point v projected onto the line y = x in two ways: straight down along the y-axis, and perpendicularly.">
+    <defs>
+      <marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 z" fill="currentColor"/>
+      </marker>
+    </defs>
+    <!-- axes -->
+    <line x1="40" y1="205" x2="430" y2="205" stroke="var(--f-axis)" stroke-width="1.5"/>
+    <line x1="60" y1="225" x2="60" y2="25" stroke="var(--f-axis)" stroke-width="1.5"/>
+    <!-- the line y = x -->
+    <line x1="60" y1="205" x2="265" y2="25" stroke="var(--f-line)" stroke-width="2.5"/>
+    <text x="272" y="31" fill="var(--f-line)" font-family="monospace" font-size="13">U : y = x</text>
+
+    <!-- (a) projection straight down, along the y-axis -->
+    <g color="var(--f-a)">
+      <line x1="205" y1="65" x2="205" y2="139" stroke="var(--f-a)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+      <circle cx="205" cy="145" r="5" fill="var(--f-a)"/>
+      <text x="150" y="176" fill="var(--f-a)" font-family="monospace" font-size="13">p(v)</text>
+      <text x="62" y="120" fill="var(--f-a)" font-family="monospace" font-size="11">along the y-axis</text>
+    </g>
+
+    <!-- (b) orthogonal projection: perpendicular foot -->
+    <g color="var(--f-b)">
+      <line x1="205" y1="65" x2="239" y2="99" stroke="var(--f-b)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+      <circle cx="245" cy="105" r="5" fill="var(--f-b)"/>
+      <text x="258" y="110" fill="var(--f-b)" font-family="monospace" font-size="13">P(v)</text>
+      <text x="250" y="70" fill="var(--f-b)" font-family="monospace" font-size="11">perpendicular</text>
+      <path d="M237,97 L245,89 L253,97" fill="none" stroke="var(--f-b)" stroke-width="1.2" opacity=".85"/>
+    </g>
+
+    <!-- the point v, drawn last so nothing overlaps it -->
+    <circle cx="205" cy="65" r="5" fill="var(--f-ink)"/>
+    <text x="188" y="57" fill="var(--f-ink)" font-family="monospace" font-size="14">v</text>
+  </svg>
+  <figcaption>Same target line, same starting point, two different complements — two different answers. Only the purple one is the <em>orthogonal</em> projection.</figcaption>
+  </figure>
+
+  <div class="warn"><span class="lbl">The distinction that causes the trouble</span>
+  Both $p$ and $P$ are perfectly valid projections onto the <b>same</b> line $U$. They differ only in the complement. Notice:
+  <div class="tw"><table>
+    <tr><th></th><th>$[p]$ — along the $y$-axis</th><th>$[P]$ — orthogonal</th></tr>
+    <tr><td>Idempotent $M^{2}=M$</td><td>yes</td><td>yes</td></tr>
+    <tr><td>Symmetric $M^{\mathsf T}=M$</td><td><b>no</b></td><td><b>yes</b></td></tr>
+    <tr><td>Shortest distance to $U$?</td><td>no</td><td><b>yes</b></td></tr>
+  </table></div>
+  <b>Idempotent = projection. Idempotent <em>and</em> self-adjoint = orthogonal projection.</b> Chapter 1 gives you the first; Chapter 2 adds an inner product and picks out the second. When a Chapter-1 exercise says "projection", it does <b>not</b> mean the orthogonal one unless it says so.</div>
+
+  <!-- ================= SYMMETRIES ================= -->
+  <h2 id="sym">★ Symmetries</h2>
+  <div class="def"><span class="lbl">Definition</span>
+  A linear map $s:V\to V$ is a <b>symmetry</b> (an involution) if
+  $$s\circ s=\operatorname{id}.$$
+  So $s$ is its own inverse. Geometrically: a reflection.</div>
+
+  <div class="def"><span class="lbl">Theorem — symmetries ↔ direct sums too</span>
+  If $s^{2}=\operatorname{id}$ then
+  $$V=\ker(s-\operatorname{id})\;\oplus\;\ker(s+\operatorname{id}),$$
+  i.e. $V$ splits into the vectors $s$ <b>fixes</b> ($s(v)=v$) and the vectors it <b>flips</b> ($s(v)=-v$). These are the eigenspaces for $+1$ and $-1$.</div>
+
+  <p><span class="step">Proof</span> The trick is to average. For any $v$,
+  $$v=\underbrace{\frac{v+s(v)}{2}}_{=:a}+\underbrace{\frac{v-s(v)}{2}}_{=:b}.$$
+  Apply $s$ and use $s^{2}=\operatorname{id}$:
+  $$s(a)=\frac{s(v)+s^{2}(v)}{2}=\frac{s(v)+v}{2}=a,\qquad s(b)=\frac{s(v)-v}{2}=-b .$$
+  So $a$ is fixed and $b$ is flipped, giving $V=\ker(s-\operatorname{id})+\ker(s+\operatorname{id})$. For directness, if $v$ is in both then $v=s(v)=-v$, so $2v=0$ and $v=0$. ∎</p>
+
+  <div class="warn"><span class="lbl">Where the $\tfrac12$ comes from</span> That proof divides by $2$, so it needs $2\ne0$ in the field — fine over $\mathbb{R}$ and $\mathbb{C}$, false in characteristic $2$. Every statement on this page linking projections and symmetries carries that hypothesis silently.</div>
+
+  <h3>The dictionary</h3>
+  <div class="def"><span class="lbl">Projections and symmetries are the same information</span>
+  $$\boxed{\;s=2p-\operatorname{id}\qquad\Longleftrightarrow\qquad p=\tfrac12\left(s+\operatorname{id}\right)\;}$$
+  If $p$ is the projection onto $U$ along $W$, then $s$ is the symmetry <b>fixing $U$, flipping $W$</b> — and vice versa.</div>
+
+  <p><span class="step">Check one direction</span> Suppose $p^{2}=p$ and set $s=2p-\operatorname{id}$. Then
+  $$s^{2}=(2p-\operatorname{id})^{2}=4p^{2}-4p+\operatorname{id}=4p-4p+\operatorname{id}=\operatorname{id}. ✓$$</p>
+  <p><span class="step">And the other</span> Suppose $s^{2}=\operatorname{id}$ and set $p=\tfrac12(s+\operatorname{id})$. Then
+  $$p^{2}=\tfrac14\left(s^{2}+2s+\operatorname{id}\right)=\tfrac14\left(\operatorname{id}+2s+\operatorname{id}\right)=\tfrac12\left(s+\operatorname{id}\right)=p. ✓$$</p>
+
+  <div class="idea"><span class="lbl">Read it geometrically</span> $p(v)$ walks $v$ <em>half way</em> — onto $U$. $s(v)$ walks it <em>all the way through</em> — to the mirror image on the far side. Hence the factor $2$: $s=2p-\operatorname{id}$ says "go to the projection, then go the same distance again".</div>
+
+  <h3>Continuing the worked example</h3>
+  <p>From the two projections above, $s=2p-\operatorname{id}$ gives two symmetries:</p>
+  <p><b>(a)</b> $\displaystyle [s]=2\begin{pmatrix}1&0\\1&0\end{pmatrix}-\begin{pmatrix}1&0\\0&1\end{pmatrix}=\begin{pmatrix}1&0\\2&-1\end{pmatrix}$. Check:
+  $$\begin{pmatrix}1&0\\2&-1\end{pmatrix}^{2}=\begin{pmatrix}1&0\\2-2&1\end{pmatrix}=\begin{pmatrix}1&0\\0&1\end{pmatrix} ✓$$
+  A <em>skew</em> reflection — it fixes the line $y=x$ and flips the $y$-axis, but it is not a mirror reflection in the everyday sense.</p>
+
+  <p><b>(b)</b> $\displaystyle [S]=2\cdot\frac12\begin{pmatrix}1&1\\1&1\end{pmatrix}-\begin{pmatrix}1&0\\0&1\end{pmatrix}=\begin{pmatrix}0&1\\1&0\end{pmatrix}$ — the map $(x,y)\mapsto(y,x)$. That is exactly the <b>mirror reflection in the line $y=x$</b>, which is what you would have drawn by hand. Note $[S]$ is symmetric, matching the orthogonal case.</p>
+
+  <p>Both fix $U$ pointwise and reverse their respective complements. Trace check: $\operatorname{tr}(s)=\operatorname{tr}(S)=0=\dim U-\dim W=1-1$ ✓ — in general $\operatorname{tr}(s)=\dim\ker(s-\operatorname{id})-\dim\ker(s+\operatorname{id})$.</p>
+
+  <!-- ================= RECIPES ================= -->
+  <h2 id="recipes">How to solve the exercises</h2>
+
+  <div class="def"><span class="lbl">Given a matrix $M$ — is it a projection? Which one?</span>
+  <ol>
+    <li><b>Test</b> $M^{2}=M$. If it fails, it is not a projection; stop.</li>
+    <li><b>Find the image</b> $U$: solve $Mv=v$, i.e. $\ker(M-I)$. (Equivalently take the column space — but the fixed-point equation is usually faster and less error-prone.)</li>
+    <li><b>Find the direction</b> $W$: solve $Mv=0$, i.e. $\ker M$.</li>
+    <li><b>Report:</b> "$M$ is the projection onto $U$ along $W$." Sanity check $\dim U+\dim W=n$ and $\operatorname{tr}M=\dim U$.</li>
+    <li><b>Orthogonal?</b> Only if additionally $M^{\mathsf T}=M$ (real) or $M^{*}=M$ (complex).</li>
+  </ol></div>
+
+  <div class="def"><span class="lbl">Given a matrix $S$ — is it a symmetry?</span>
+  <ol>
+    <li><b>Test</b> $S^{2}=I$.</li>
+    <li><b>The mirror</b> is $U=\ker(S-I)$ (fixed vectors); <b>the flipped part</b> is $W=\ker(S+I)$.</li>
+    <li><b>Report:</b> "$S$ is the symmetry with respect to $U$ along $W$."</li>
+    <li>The associated projection is $p=\tfrac12(S+I)$; check $\operatorname{tr}S=\dim U-\dim W$.</li>
+  </ol></div>
+
+  <div class="def"><span class="lbl">Given $V=U\oplus W$ — build the projection</span>
+  <ol>
+    <li>Take a basis $(u_1,\dots,u_r)$ of $U$ and $(w_1,\dots,w_{n-r})$ of $W$.</li>
+    <li>Solve for the coefficients: write a general $v$ as $\sum a_iu_i+\sum b_jw_j$ — a linear system.</li>
+    <li>$p(v)=\sum a_iu_i$ (discard the $b_j$ part).</li>
+    <li>Read off the matrix column by column: column $k$ is $p(e_k)$ in the standard basis.</li>
+  </ol>
+  Shortcut for the <b>orthogonal</b> case only (Chapter 2): $P=A(A^{\mathsf T}A)^{-1}A^{\mathsf T}$ with the basis of $U$ in the columns of $A$.</div>
+
+  <div class="ds"><span class="lbl">Why data science cares</span>
+  Projections are the geometry of <b>fitting</b>. Least squares is a projection onto the column space of the design matrix; the "hat matrix" $H=X(X^{\mathsf T}X)^{-1}X^{\mathsf T}$ that turns $y$ into $\hat y$ is exactly an orthogonal projection, and $\operatorname{tr}H=$ the number of parameters — the trace-equals-rank fact above, used as a degrees-of-freedom count. Non-orthogonal (oblique) projections show up in oblique factor rotation and in some signal-separation methods, which is why the general definition is worth having.</div>
+
+  <!-- ================= LINEAR MAPS ================= -->
+  <h2 id="maps">Linear maps &amp; rank–nullity</h2>
+  <div class="def"><span class="lbl">Definitions</span>
+  $T:V\to W$ is linear if $T(u+\lambda v)=T(u)+\lambda T(v)$. Then
+  $\ker T=\{v:T(v)=0\}\subseteq V$ and $\operatorname{im}T=\{T(v):v\in V\}\subseteq W$ are subspaces, and $\operatorname{rank}T=\dim\operatorname{im}T$.</div>
+
+  <div class="def"><span class="lbl">Rank–nullity</span>
+  $$\dim V=\dim\ker T+\dim\operatorname{im}T .$$
+  What gets collapsed plus what survives accounts for the whole domain.</div>
+
+  <ul>
+    <li>$T$ injective $\iff\ker T=\{0\}$. (For linear maps, checking one vector suffices — no need to compare pairs.)</li>
+    <li>$T$ surjective $\iff\operatorname{rank}T=\dim W$.</li>
+    <li><b>For $T:V\to V$ with $\dim V\lt\infty$:</b> injective $\iff$ surjective $\iff$ bijective. This fails in infinite dimensions — the shift $(x_1,x_2,\dots)\mapsto(0,x_1,x_2,\dots)$ is injective but not surjective.</li>
+  </ul>
+
+  <div class="idea"><span class="lbl">Sanity check for the projection section</span> For a projection, rank–nullity <em>is</em> the direct-sum decomposition: $\dim V=\dim\ker p+\dim\operatorname{im}p$ matches $V=\operatorname{im}p\oplus\ker p$. The extra content of the projection theorem is that the two subspaces intersect trivially and together <em>span</em> — not merely that the dimensions add up.</div>
+
+  <!-- ================= MATRICES ================= -->
+  <h2 id="matrix">Matrix representation &amp; change of basis</h2>
+  <p>Fix a basis $\mathcal{B}=(e_1,\dots,e_n)$ of $V$ and $\mathcal{C}$ of $W$. The matrix $[T]_{\mathcal{B}}^{\mathcal{C}}$ has as its $j$-th <b>column</b> the coordinates of $T(e_j)$ in $\mathcal{C}$. Composition becomes matrix multiplication.</p>
+
+  <div class="def"><span class="lbl">Change of basis</span>
+  Let $P$ be the change-of-basis matrix (its columns are the new basis vectors written in the old basis). For an endomorphism $T:V\to V$,
+  $$[T]_{\text{new}}=P^{-1}[T]_{\text{old}}P .$$
+  Two matrices related this way are <b>similar</b> — the same map seen from a different angle. For a map between <em>different</em> spaces it is $B^{-1}[T]A$, called equivalence.</div>
+
+  <div class="warn"><span class="lbl">Similar ≠ congruent</span>
+  Similarity $P^{-1}MP$ is for <b>maps</b>; congruence $P^{\mathsf T}MP$ (Chapter 3) is for <b>bilinear forms</b>. They preserve different things — similarity preserves eigenvalues, congruence preserves the signature. Using the wrong one is a standard slip.</div>
+
+  <!-- ================= DUAL ================= -->
+  <h2 id="dual">The dual space</h2>
+  <div class="def"><span class="lbl">Definition</span>
+  $V^{*}=\{\varphi:V\to\mathbb{F}\ \text{linear}\}$, the <b>linear functionals</b>. Given a basis $(e_1,\dots,e_n)$ of $V$, the <b>dual basis</b> $(\varphi_1,\dots,\varphi_n)$ is defined by
+  $$\varphi_i(e_j)=\delta_{ij}.$$
+  So $\dim V^{*}=\dim V$ in finite dimensions.</div>
+
+  <p>Concretely $\varphi_i$ reads off the $i$-th coordinate: $\varphi_i\big(\sum_j\lambda_je_j\big)=\lambda_i$. Every functional is $\varphi=\sum_i\varphi(e_i)\varphi_i$.</p>
+
+  <div class="warn"><span class="lbl">The isomorphism is not canonical</span> $V\cong V^{*}$ holds, but the identification <b>depends on the basis you chose</b> — change the basis and the correspondence changes. This is why Chapter 2's <a href="theorems.html#riesz">Riesz theorem</a> is worth stating separately: an inner product gives a <em>canonical</em> identification $\varphi\leftrightarrow u$ via $\varphi(v)=\langle v,u\rangle$, no basis required. Riesz is the upgrade of this section.</div>
+
+  <!-- ================= NORMS ================= -->
+  <h2 id="norms">Metric &amp; normed spaces, operator norm</h2>
+  <div class="def"><span class="lbl">Norm axioms</span>
+  <b>(1)</b> $\lVert v\rVert\ge0$, with $\lVert v\rVert=0$ only for $v=0$; <b>(2)</b> $\lVert\lambda v\rVert=|\lambda|\,\lVert v\rVert$; <b>(3)</b> $\lVert v+w\rVert\le\lVert v\rVert+\lVert w\rVert$. Every norm induces a metric $d(v,w)=\lVert v-w\rVert$.</div>
+
+  <div class="tw"><table>
+    <tr><th>Norm</th><th>Formula</th><th>Unit ball / use</th></tr>
+    <tr><td>$\lVert x\rVert_1$</td><td>$\sum_i|x_i|$</td><td>diamond · LASSO, induces sparsity</td></tr>
+    <tr><td>$\lVert x\rVert_2$</td><td>$\sqrt{\sum_ix_i^{2}}$</td><td>circle · least squares, ridge</td></tr>
+    <tr><td>$\lVert x\rVert_\infty$</td><td>$\max_i|x_i|$</td><td>square · worst-case error</td></tr>
+  </table></div>
+
+  <div class="def"><span class="lbl">Operator norm</span>
+  $$\lVert T\rVert=\sup_{v\ne0}\frac{\lVert Tv\rVert}{\lVert v\rVert}=\sup_{\lVert v\rVert=1}\lVert Tv\rVert$$
+  — the worst stretch $T$ applies to any unit vector. It satisfies $\lVert Tv\rVert\le\lVert T\rVert\lVert v\rVert$ and is <b>submultiplicative</b>: $\lVert ST\rVert\le\lVert S\rVert\lVert T\rVert$.</div>
+
+  <div class="idea"><span class="lbl">In finite dimensions all norms are equivalent</span> For any two norms there are constants $0\lt c\le C$ with $c\lVert v\rVert_a\le\lVert v\rVert_b\le C\lVert v\rVert_a$. So convergence, open sets and continuity do not depend on which norm you pick — a genuinely finite-dimensional luxury. The <em>constants</em> still matter numerically, and they can grow with the dimension.</div>
+
+  <div class="ds"><span class="lbl">Looking ahead</span> For the Euclidean norm the operator norm turns out to be $\sigma_1$, the largest singular value — see the <a href="theorems.html#svd">SVD</a>. That is the bridge from this chapter's abstract definition to something you can actually compute.</div>
+
+  <!-- ================= TRAPS ================= -->
+  <h2 id="traps">Traps</h2>
+  <div class="tw"><table>
+    <tr><th>Trap</th><th>Reality</th></tr>
+    <tr><td>"Projection means orthogonal projection"</td><td>Not in Chapter 1. A projection is any $p$ with $p^{2}=p$; orthogonality is the extra condition $p^{*}=p$, and needs an inner product.</td></tr>
+    <tr><td>"Project onto $U$" is a complete instruction</td><td>It is not — you must also say <b>along which complement</b>. Complements are far from unique.</td></tr>
+    <tr><td>"$\operatorname{im}p$ and $\ker p$ might overlap"</td><td>For a projection they never do: $v=p(u)$ and $p(v)=0$ force $v=p^{2}(u)=p(v)=0$.</td></tr>
+    <tr><td>"$s$ is a symmetry, so it is an isometry"</td><td>No. $s^{2}=\operatorname{id}$ says nothing about lengths — example (a) above distorts them. Only <em>orthogonal</em> symmetries preserve length.</td></tr>
+    <tr><td>$U\cup W$ is a subspace</td><td>Only if one contains the other. Use $U+W$.</td></tr>
+    <tr><td>Similar vs congruent</td><td>$P^{-1}MP$ for maps, $P^{\mathsf T}MP$ for forms.</td></tr>
+    <tr><td>$V\cong V^{*}$ "naturally"</td><td>The isomorphism depends on a basis. Riesz gives the canonical one, but only with an inner product.</td></tr>
+    <tr><td>Injective $\Rightarrow$ surjective</td><td>True only for $T:V\to V$ with $\dim V$ finite.</td></tr>
+  </table></div>
+
+  <h2>Practise this</h2>
+  <p>Chapter 1 exercises on the <a href="index.html#ch1">self-study plan</a> — the flagged ones are Ex. 1.3–1.6, 1.22–1.24, 1.28–1.33, 1.37–1.45. The definitions are in the <a href="flashcards.html">flashcard deck</a>; the Chapter 2 upgrade of projections (orthogonal projection, least squares) is <a href="theorems.html#proj">theorem ②</a>.</p>
+
+  <footer>
+    Notes written for this site; notation follows Mula &amp; Wu (v. 29 Jun 2026), Chapter 1. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+<script src="../assets/mfds.js?v=3" data-root="../"></script>
+</body>
+</html>
