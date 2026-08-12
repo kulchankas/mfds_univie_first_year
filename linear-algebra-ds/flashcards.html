@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F9">
+<meta name="description" content="Spaced-repetition flashcards for Linear Algebra for Data Science (Mula &amp; Wu) — vector spaces, inner products, Gram-Schmidt, determinants, eigenvalues, the spectral theorem and the SVD.">
+<title>Flashcards — Linear Algebra for Data Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, startup: { typeset: false } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root {
+    --bg: #1a1612; --bg-elevated: #221d18; --bg-card: #1f1a15;
+    --border: #3a342c; --border-soft: #2a251f;
+    --text: #f5efe4; --text-muted: #b8aa97; --text-dim: #8a7e6e;
+    --accent: #e0b888; --accent-hover: #ecc89c;
+    --again: #c87060; --hard: #d99a7e; --good: #8bc6a0; --easy: #8fb8de;
+    --glow: rgba(224, 184, 136, 0.14);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    -webkit-font-smoothing: antialiased; min-height: 100vh;
+    background-image: radial-gradient(900px 500px at 50% -10%, var(--glow), transparent 70%);
+    background-repeat: no-repeat;
+  }
+  .wrap {
+    max-width: 720px; margin: 0 auto;
+    padding: clamp(1.5rem, 5vw, 2.5rem) clamp(1.1rem, 5vw, 1.75rem) 4rem;
+    padding-left: max(clamp(1.1rem,5vw,1.75rem), env(safe-area-inset-left));
+    padding-right: max(clamp(1.1rem,5vw,1.75rem), env(safe-area-inset-right));
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: .4rem; color: var(--text-dim);
+    text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: .8rem;
+    letter-spacing: .02em; margin-bottom: 1.5rem; transition: color .15s ease;
+  }
+  .back-link:hover { color: var(--accent); }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace; font-weight: 500; color: var(--accent);
+    font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .8rem;
+  }
+  h1 { font-family: 'Sora', sans-serif; font-weight: 600; font-size: clamp(1.8rem, 6vw, 2.4rem);
+    letter-spacing: -.03em; line-height: 1.08; margin-bottom: .5rem; }
+  .sub { color: var(--text-muted); font-size: .98rem; margin-bottom: 1.5rem; }
+  .stats { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin-bottom: 1rem;
+    font-family: 'JetBrains Mono', monospace; font-size: .82rem; color: var(--text-dim); }
+  .stats b { color: var(--accent); font-weight: 700; }
+  .bar { height: 6px; background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 99px; overflow: hidden; margin-bottom: 1.5rem; }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s ease; }
+  .card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
+    padding: clamp(1.5rem, 5vw, 2.2rem); min-height: 240px;
+    display: flex; flex-direction: column;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.28);
+  }
+  .card-meta { display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: .72rem; }
+  .chip { text-transform: uppercase; letter-spacing: .06em; font-weight: 700;
+    padding: .15rem .55rem; border-radius: 5px; border: 1px solid var(--border); color: var(--accent); background: var(--bg-elevated); }
+  .chip.def { color: var(--accent); }
+  .chip.thm { color: var(--good); border-color: rgba(139,198,160,.4); }
+  .chip.lemma { color: var(--easy); border-color: rgba(143,184,222,.4); }
+  .chip.algo { color: var(--hard); border-color: rgba(217,154,126,.4); }
+  .card-ref { color: var(--text-dim); }
+  .q { font-size: 1.12rem; line-height: 1.55; }
+  .q b { color: var(--accent); }
+  .divider { border: none; border-top: 1px dashed var(--border); margin: 1.2rem 0; }
+  .a { color: var(--text-muted); font-size: 1rem; line-height: 1.65; }
+  .a b, .a strong { color: var(--text); }
+  .a code { font-family:'JetBrains Mono',monospace; font-size:.85em; background:#14110d; color:var(--accent); padding:.06rem .3rem; border-radius:4px; }
+  .hidden { display: none !important; }
+  .controls { margin-top: 1.5rem; }
+  .btn {
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: .95rem;
+    border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text);
+    border-radius: 10px; padding: .8rem 1rem; cursor: pointer; width: 100%;
+    transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:hover { border-color: var(--accent); }
+  .btn:active { transform: scale(.985); }
+  .btn.primary { background: var(--accent); color: #221a10; border-color: var(--accent); }
+  .grades { display: grid; grid-template-columns: repeat(4, 1fr); gap: .55rem; }
+  .grades .btn { padding: .7rem .3rem; font-size: .86rem; }
+  .grades .btn small { display: block; font-family: 'JetBrains Mono', monospace; font-weight: 400;
+    font-size: .68rem; opacity: .65; margin-top: .15rem; }
+  .g-again { border-color: rgba(200,112,96,.5); color: var(--again); }
+  .g-hard  { border-color: rgba(217,154,126,.5); color: var(--hard); }
+  .g-good  { border-color: rgba(139,198,160,.5); color: var(--good); }
+  .g-easy  { border-color: rgba(143,184,222,.5); color: var(--easy); }
+  .hint { text-align: center; color: var(--text-dim); font-size: .76rem; margin-top: 1rem;
+    font-family: 'JetBrains Mono', monospace; }
+  .done { text-align: center; padding: 2rem 1rem; }
+  .done h2 { font-family: 'Sora', sans-serif; font-weight: 600; margin-bottom: .6rem; }
+  .done p { color: var(--text-muted); margin-bottom: 1.3rem; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; max-width: 420px; margin: 0 auto; }
+  .reset { background: none; border: none; color: var(--text-dim); font-size: .76rem;
+    font-family: 'JetBrains Mono', monospace; cursor: pointer; margin-top: 2rem; text-decoration: underline; }
+  .reset:hover { color: var(--again); }
+  footer { margin-top: 3rem; padding-top: 1.3rem; border-top: 1px solid var(--border-soft);
+    color: var(--text-dim); font-size: .82rem; }
+  footer a { color: var(--accent); text-decoration: none; }
+  mjx-container { color: inherit !important; }
+</style>
+<link rel="stylesheet" href="../assets/mfds.css?v=2">
+</head>
+<body class="mfds mfds-lads" data-page="lads" data-up="index.html" data-up-label="LA for DS">
+<div class="wrap">
+  <a class="back-link" href="index.html">← Linear Algebra for Data Science</a>
+  <div class="eyebrow">Mula &amp; Wu · Spaced repetition</div>
+  <h1>Flashcards</h1>
+  <p class="sub">45 cards over the whole book: vector spaces &amp; linear maps · inner products &amp; <b>Gram–Schmidt</b> · bilinear forms · determinants · eigenvalues &amp; <b>Cayley–Hamilton</b> · <b>Schur</b>, the <b>spectral theorem</b> and the <b>SVD</b>. Tagged with their chapter.</p>
+
+  <div class="stats" id="stats"></div>
+  <div class="bar"><i id="prog"></i></div>
+
+  <div id="app"></div>
+
+  <button class="reset" id="reset">Reset all progress for this deck</button>
+
+  <footer>
+    Leitner-style scheduling, stored locally in your browser — no account, nothing leaves your device.
+    Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+
+<!-- ===== Card source (literal HTML so the LaTeX survives) ===== -->
+<div id="src" hidden>
+
+  <!-- ================= CH 1 · VECTOR SPACES ================= -->
+  <article data-tag="Definition" data-ref="Ch 1 · subspaces">
+    <div class="q">What must you check to prove that $U\subseteq V$ is a <b>subspace</b>?</div>
+    <div class="a">Three things: <b>(1)</b> $0\in U$ (so $U\ne\emptyset$); <b>(2)</b> closed under addition, $u,w\in U\Rightarrow u+w\in U$; <b>(3)</b> closed under scalar multiplication, $\lambda\in\mathbb{F},u\in U\Rightarrow\lambda u\in U$. Checking $0\in U$ is the cheap way to <em>disprove</em> — e.g. $\{x:\sum x_i=1\}$ fails immediately.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 1 · basis">
+    <div class="q">Define <b>linearly independent</b>, <b>spanning</b>, <b>basis</b> and <b>dimension</b>.</div>
+    <div class="a"><b>Independent:</b> $\sum\lambda_iv_i=0\Rightarrow$ all $\lambda_i=0$. <b>Spanning:</b> every $v\in V$ is some $\sum\lambda_iv_i$. <b>Basis:</b> both at once — equivalently, every $v$ has a <em>unique</em> representation. <b>Dimension:</b> the common size of every basis (well-defined by the exchange lemma).</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 1 · direct sum">
+    <div class="q">When is a sum of subspaces a <b>direct sum</b> $U\oplus W$, and what is the dimension formula?</div>
+    <div class="a">$V=U\oplus W$ iff $V=U+W$ <b>and</b> $U\cap W=\{0\}$ — equivalently, every $v$ writes <em>uniquely</em> as $u+w$. In general $\dim(U+W)=\dim U+\dim W-\dim(U\cap W)$, so for a direct sum $\dim(U\oplus W)=\dim U+\dim W$.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 1 · rank–nullity">
+    <div class="q">State the <b>rank–nullity theorem</b> and say what it means geometrically.</div>
+    <div class="a">For linear $T:V\to W$ with $\dim V\lt\infty$: $$\dim V=\dim\ker T+\dim\operatorname{im}T.$$ Whatever $T$ collapses (the kernel) plus whatever survives (the image) accounts for the whole domain. Consequence: for $T:V\to V$, injective $\iff$ surjective $\iff$ bijective.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 1 · dual space">
+    <div class="q">What is the <b>dual space</b> $V^{*}$, and what is the <b>dual basis</b>?</div>
+    <div class="a">$V^{*}=\{\varphi:V\to\mathbb{F}\ \text{linear}\}$, the space of linear functionals. If $(e_1,\dots,e_n)$ is a basis of $V$, the dual basis $(\varphi_1,\dots,\varphi_n)$ is defined by $\varphi_i(e_j)=\delta_{ij}$. So $\dim V^{*}=\dim V$ — but the isomorphism is <em>basis-dependent</em>, which is why the inner-product version (Riesz) is the useful one.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 1 · matrix of a map">
+    <div class="q">How is the <b>matrix of a linear map</b> built, and how does it change under a change of basis?</div>
+    <div class="a">Column $j$ of $[T]$ holds the coordinates of $T(e_j)$ in the target basis. Change of basis: $[T]_{\text{new}}=P^{-1}[T]_{\text{old}}P$ where $P$ is the change-of-basis matrix — matrices of the same map are <b>similar</b>. For a map between different spaces it is $B^{-1}[T]A$ (equivalence).</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 1 · norms">
+    <div class="q">Give the <b>norm</b> axioms and the definition of the <b>operator norm</b>.</div>
+    <div class="a">Norm: <b>(1)</b> $\lVert v\rVert\ge0$ with equality iff $v=0$; <b>(2)</b> $\lVert\lambda v\rVert=|\lambda|\lVert v\rVert$; <b>(3)</b> triangle inequality $\lVert v+w\rVert\le\lVert v\rVert+\lVert w\rVert$. Operator norm: $$\lVert T\rVert=\sup_{v\ne0}\frac{\lVert Tv\rVert}{\lVert v\rVert}=\sup_{\lVert v\rVert=1}\lVert Tv\rVert$$ — the largest stretch factor. It is submultiplicative: $\lVert ST\rVert\le\lVert S\rVert\lVert T\rVert$.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 1 · projections">
+    <div class="q">What characterises a <b>projection</b>, and what extra condition makes it an <b>orthogonal</b> projection?</div>
+    <div class="a">A projection is a linear $P$ with $P^{2}=P$ (idempotent); then $V=\operatorname{im}P\oplus\ker P$. It is an <b>orthogonal</b> projection iff additionally $P^{*}=P$ (self-adjoint) — that is exactly what forces the two summands to be orthogonal rather than merely complementary.</div>
+  </article>
+
+  <!-- ================= CH 2 · INNER PRODUCTS ================= -->
+  <article data-tag="Definition" data-ref="Ch 2 · inner product">
+    <div class="q">List the <b>inner-product</b> axioms over $\mathbb{C}$.</div>
+    <div class="a"><b>(1) Linear in the first slot:</b> $\langle\alpha u+v,w\rangle=\alpha\langle u,w\rangle+\langle v,w\rangle$. <b>(2) Conjugate symmetry:</b> $\langle v,w\rangle=\overline{\langle w,v\rangle}$ — hence <em>conjugate</em>-linear in the second slot. <b>(3) Positive definite:</b> $\langle v,v\rangle\ge0$, $=0$ only for $v=0$. Then $\lVert v\rVert=\sqrt{\langle v,v\rangle}$.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 2 · Cauchy–Schwarz">
+    <div class="q">State <b>Cauchy–Schwarz</b>, including the equality case.</div>
+    <div class="a">$$|\langle u,v\rangle|\le\lVert u\rVert\,\lVert v\rVert,$$ with equality <b>iff $u$ and $v$ are linearly dependent</b>. Proof idea: expand $\lVert u-\tfrac{\langle u,v\rangle}{\lVert v\rVert^{2}}v\rVert^{2}\ge0$ — i.e. subtract the projection and use positivity. It is what makes the triangle inequality work.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 2 · orthonormal bases">
+    <div class="q">Why is an <b>orthonormal basis</b> so much better than an ordinary one?</div>
+    <div class="a">Coordinates become free: $v=\sum_j\langle v,e_j\rangle e_j$ — no linear system to solve. Also $\lVert v\rVert^{2}=\sum_j|\langle v,e_j\rangle|^{2}$ (<b>Parseval</b>), and the change-of-basis matrix between orthonormal bases is <b>unitary</b>, so its inverse is its conjugate transpose.</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="Ch 2 · Gram–Schmidt">
+    <div class="q">Write the <b>Gram–Schmidt</b> step, and say where linear independence is used.</div>
+    <div class="a">$$w_k=v_k-\sum_{j=1}^{k-1}\langle v_k,e_j\rangle e_j,\qquad e_k=\frac{w_k}{\lVert w_k\rVert}.$$ Independence guarantees $w_k\ne0$ — otherwise $v_k$ would lie in $\operatorname{span}(v_1,\dots,v_{k-1})$ and you would be dividing by zero. Spans are preserved at every stage; the matrix version is <b>QR</b>.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 2 · best approximation">
+    <div class="q">Give the <b>orthogonal projection</b> formula and the property that makes it optimal.</div>
+    <div class="a">$P_Uv=\sum_{j=1}^{m}\langle v,e_j\rangle e_j$ for an orthonormal basis of $U$. Then $v-P_Uv\perp U$, and for all $u\in U$ $$\lVert v-u\rVert^{2}=\lVert v-P_Uv\rVert^{2}+\lVert P_Uv-u\rVert^{2}\ge\lVert v-P_Uv\rVert^{2}$$ by Pythagoras — so $P_Uv$ is the <b>unique</b> closest point.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 2 · least squares">
+    <div class="q">Derive the <b>normal equations</b> for $\min_x\lVert Ax-b\rVert$.</div>
+    <div class="a">The minimiser is the projection of $b$ onto $\operatorname{col}(A)$, characterised by $b-Ax\perp\operatorname{col}(A)$, i.e. $A^{*}(b-Ax)=0$: $$A^{*}Ax=A^{*}b.$$ Full column rank $\Rightarrow x=(A^{*}A)^{-1}A^{*}b$ and $P=A(A^{*}A)^{-1}A^{*}$. In practice use QR or the SVD — forming $A^{*}A$ squares the condition number.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 2 · Riesz">
+    <div class="q">State the <b>Riesz representation theorem</b> and give the representing vector.</div>
+    <div class="a">Every linear functional $\varphi$ on a finite-dimensional inner-product space is $\varphi(v)=\langle v,u\rangle$ for a <b>unique</b> $u$. Explicitly $u=\sum_j\overline{\varphi(e_j)}\,e_j$ in any orthonormal basis. Uniqueness: if $\langle v,u_1-u_2\rangle=0$ for all $v$, take $v=u_1-u_2$.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 2 · adjoint">
+    <div class="q">Define the <b>adjoint</b> $T^{*}$, say why it exists, and give its matrix.</div>
+    <div class="a">Defined by $\langle Tv,w\rangle=\langle v,T^{*}w\rangle$ for all $v,w$. Existence: fix $w$; then $v\mapsto\langle Tv,w\rangle$ is a functional, so <b>Riesz</b> supplies a unique vector $T^{*}w$. In <b>orthonormal</b> bases $[T^{*}]=\overline{[T]}^{\mathsf T}$ — the conjugate transpose. (False in a non-orthonormal basis.)</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 2 · four subspaces">
+    <div class="q">Give the two orthogonality relations between $T$ and $T^{*}$.</div>
+    <div class="a">$$\ker T^{*}=(\operatorname{im}T)^{\perp},\qquad \operatorname{im}T^{*}=(\ker T)^{\perp}.$$ These are the <b>four fundamental subspaces</b>. They are why the least-squares residual is orthogonal to every column of $A$, and why $\operatorname{rank}A=\operatorname{rank}A^{*}$.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 2 · operator classes">
+    <div class="q">Define <b>self-adjoint</b>, <b>unitary</b> and <b>normal</b>, and give the containment.</div>
+    <div class="a"><b>Self-adjoint:</b> $T=T^{*}$. <b>Unitary:</b> $T^{*}T=TT^{*}=I$ (preserves inner products, hence lengths and angles). <b>Normal:</b> $TT^{*}=T^{*}T$. Both self-adjoint and unitary operators are <b>normal</b> — which is exactly the hypothesis of the spectral theorem, so it covers both at once.</div>
+  </article>
+
+  <!-- ================= CH 3 · FORMS ================= -->
+  <article data-tag="Definition" data-ref="Ch 3 · bilinear vs sesquilinear">
+    <div class="q">Distinguish a <b>bilinear</b> from a <b>sesquilinear</b> form.</div>
+    <div class="a"><b>Bilinear:</b> linear in <em>both</em> arguments — the natural notion over $\mathbb{R}$. <b>Sesquilinear</b> ("one and a half"): linear in one argument, <b>conjugate</b>-linear in the other — the right notion over $\mathbb{C}$. A complex inner product is a sesquilinear form that is Hermitian and positive definite.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 3 · matrix of a form">
+    <div class="q">How is a bilinear form represented by a matrix, and how does that matrix transform?</div>
+    <div class="a">$B(u,v)=u^{\mathsf T}Mv$ with $M_{ij}=B(e_i,e_j)$. Under a change of basis $u=Px$: $$M\mapsto P^{\mathsf T}MP\quad(\text{or }P^{*}MP\text{ in the sesquilinear case}).$$ This is <b>congruence</b>, <em>not</em> similarity $P^{-1}MP$ — a standard confusion. Congruence preserves the signature, not the eigenvalues.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 3 · quadratic forms">
+    <div class="q">What is a <b>quadratic form</b>, and what does <b>positive definite</b> mean?</div>
+    <div class="a">$q(v)=B(v,v)$ for a symmetric/Hermitian $B$; equivalently $q(x)=x^{*}Mx$ with $M=M^{*}$. It is <b>positive definite</b> if $q(v)\gt0$ for all $v\ne0$; <b>positive semidefinite</b> if $\ge0$. Equivalent tests: all eigenvalues $\gt0$; all leading principal minors $\gt0$ (Sylvester); $M=A^{*}A$ with $A$ of full column rank.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 3 · tensor product">
+    <div class="q">What is the defining property of the <b>tensor product</b>, and its dimension?</div>
+    <div class="a">$V\otimes W$ linearises bilinear maps: every bilinear $B:V\times W\to Z$ factors uniquely through a linear map on $V\otimes W$ (universal property). $\dim(V\otimes W)=\dim V\cdot\dim W$, with basis $\{e_i\otimes f_j\}$. Contrast $\dim(V\oplus W)=\dim V+\dim W$ — sum adds, tensor multiplies.</div>
+  </article>
+
+  <!-- ================= CH 4 · DETERMINANTS ================= -->
+  <article data-tag="Definition" data-ref="Ch 4 · determinant">
+    <div class="q">Characterise the <b>determinant</b> by its defining properties.</div>
+    <div class="a">The unique map $\det:(\mathbb{F}^{n})^{n}\to\mathbb{F}$ on the columns that is <b>(1)</b> $n$-linear (linear in each column separately), <b>(2)</b> <b>alternating</b> (zero whenever two columns are equal), <b>(3)</b> normalised, $\det I=1$. Everything else — expansion, sign rules, multiplicativity — follows from these three.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 4 · properties">
+    <div class="q">List the determinant properties you use constantly.</div>
+    <div class="a">$\det(AB)=\det A\det B$; $\det A^{\mathsf T}=\det A$; $\det A^{*}=\overline{\det A}$; $\det(\lambda A)=\lambda^{n}\det A$; triangular $\Rightarrow$ product of the diagonal; $\det(A^{-1})=1/\det A$. Row ops: swapping negates, scaling by $\lambda$ multiplies by $\lambda$, adding a multiple of another row <b>changes nothing</b>.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 4 · invertibility">
+    <div class="q">Complete: $A$ is invertible $\iff\dots$ (give five equivalents).</div>
+    <div class="a">$\det A\ne0$ $\iff$ $\ker A=\{0\}$ $\iff$ columns are linearly independent $\iff$ $\operatorname{rank}A=n$ $\iff$ $0$ is <b>not</b> an eigenvalue $\iff$ all singular values are $\gt0$. (For square $A$ only.)</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 4 · volume">
+    <div class="q">What does $|\det A|$ mean geometrically, and what does the sign mean?</div>
+    <div class="a">$|\det A|$ is the <b>volume scaling factor</b>: the unit cube maps to a parallelepiped of volume $|\det A|$. The <b>sign</b> records orientation — negative means the map reverses it (a reflection). $\det A=0$ means the image is squashed into a lower-dimensional set, i.e. zero volume.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 4 · Cramer">
+    <div class="q">State <b>Cramer's rule</b> and say why nobody computes with it.</div>
+    <div class="a">For invertible $A$, the solution of $Ax=b$ has $$x_i=\frac{\det A_i}{\det A},$$ where $A_i$ is $A$ with column $i$ replaced by $b$. It is a <em>theoretical</em> tool (it shows the solution depends smoothly on the data); computationally it needs $n+1$ determinants and is hopeless next to Gaussian elimination's $O(n^{3})$.</div>
+  </article>
+
+  <!-- ================= CH 5 · EIGENVALUES ================= -->
+  <article data-tag="Definition" data-ref="Ch 5 · eigen-">
+    <div class="q">Define <b>eigenvalue</b>, <b>eigenvector</b> and <b>eigenspace</b>.</div>
+    <div class="a">$\lambda$ is an eigenvalue of $T$ if $Tv=\lambda v$ for some $v\ne0$; such a $v$ is an eigenvector. The <b>eigenspace</b> is $E_\lambda=\ker(T-\lambda I)$ — a subspace, containing $0$ together with all eigenvectors for $\lambda$. Note $v\ne0$ is part of the definition; $0$ is never an eigenvector.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 5 · characteristic polynomial">
+    <div class="q">What is the <b>characteristic polynomial</b>, and what do its coefficients tell you?</div>
+    <div class="a">$\chi_A(\lambda)=\det(\lambda I-A)$, monic of degree $n$; its roots are exactly the eigenvalues. Two coefficients are free information: $$\sum_i\lambda_i=\operatorname{tr}A,\qquad \prod_i\lambda_i=\det A.$$ Both are excellent arithmetic checks after computing eigenvalues.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 5 · multiplicities">
+    <div class="q">Distinguish <b>algebraic</b> and <b>geometric</b> multiplicity, and give the inequality.</div>
+    <div class="a"><b>Algebraic</b> $m_a(\lambda)$: multiplicity as a root of $\chi_A$. <b>Geometric</b> $m_g(\lambda)=\dim E_\lambda$: how many independent eigenvectors. Always $$1\le m_g(\lambda)\le m_a(\lambda).$$ A strict inequality anywhere means the matrix is <b>defective</b> — not diagonalizable. Example: $\begin{pmatrix}1&1\\0&1\end{pmatrix}$ has $m_a=2$, $m_g=1$.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 5 · diagonalizability">
+    <div class="q">Give the criteria for <b>diagonalizability</b>.</div>
+    <div class="a">$A$ is diagonalizable $\iff$ there is a basis of eigenvectors $\iff$ $\sum_\lambda m_g(\lambda)=n$ $\iff$ $m_g(\lambda)=m_a(\lambda)$ for every eigenvalue. <b>Sufficient (not necessary):</b> $n$ <em>distinct</em> eigenvalues. Then $A=PDP^{-1}$ with eigenvectors in the columns of $P$.</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="Ch 5 · workflow">
+    <div class="q">Give the <b>diagonalization workflow</b>, start to finish.</div>
+    <div class="a"><b>1.</b> $\chi_A(\lambda)=\det(\lambda I-A)$. <b>2.</b> Find the roots $\to$ eigenvalues with $m_a$. <b>3.</b> For each, solve $(A-\lambda I)v=0$ for a basis of $E_\lambda$ $\to$ $m_g$. <b>4.</b> If $\sum m_g=n$, stack the eigenvectors into $P$ and the eigenvalues into $D$; then $A=PDP^{-1}$. <b>5.</b> Check with $\operatorname{tr}$ and $\det$.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 5 · Cayley–Hamilton">
+    <div class="q">State <b>Cayley–Hamilton</b> — and name the classic fake proof.</div>
+    <div class="a">$\chi_A(A)=0$: every matrix satisfies its own characteristic polynomial. <b>The fake proof:</b> "$\chi_A(A)=\det(AI-A)=0$" — wrong, because substituting a matrix into the polynomial is not the same as substituting it inside the determinant. Correct route: triangularize by Schur, then show $\prod_i(T-\lambda_iI)$ kills each basis vector in turn.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 5 · matrix functions">
+    <div class="q">How do you compute $f(A)$ — say $e^{tA}$ — for diagonalizable $A$?</div>
+    <div class="a">If $A=PDP^{-1}$ then $A^{k}=PD^{k}P^{-1}$, so for any power series $$f(A)=P\,f(D)\,P^{-1}=P\operatorname{diag}\big(f(\lambda_1),\dots,f(\lambda_n)\big)P^{-1}.$$ So $e^{tA}=P\operatorname{diag}(e^{t\lambda_i})P^{-1}$ — the solution operator of $\dot x=Ax$. Cayley–Hamilton also caps everything at degree $n-1$.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 5 · similarity">
+    <div class="q">Which quantities are invariant under <b>similarity</b> $A\mapsto P^{-1}AP$?</div>
+    <div class="a">Characteristic polynomial, eigenvalues <em>with</em> both multiplicities, trace, determinant, rank, and Jordan form. <b>Not</b> invariant: the eigen<em>vectors</em> (they transform by $P^{-1}$), the entries, and the singular values in general. Similarity = same map in a different basis.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 5 · triangularization">
+    <div class="q">Over $\mathbb{C}$, what can you always say about triangularization — and why does $\mathbb{R}$ fail?</div>
+    <div class="a">Over $\mathbb{C}$ every matrix is similar (indeed <b>unitarily</b> similar, by Schur) to an upper triangular matrix, because $\mathbb{C}$ is algebraically closed so $\chi_A$ always has a root. Over $\mathbb{R}$ this fails: $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$ has $\chi(\lambda)=\lambda^{2}+1$ with no real root.</div>
+  </article>
+
+  <!-- ================= CH 6 · SPECTRAL & SVD ================= -->
+  <article data-tag="Theorem" data-ref="Ch 6 · Schur">
+    <div class="q">State <b>Schur's lemma</b> and give the induction in one sentence.</div>
+    <div class="a">Every $A\in\mathbb{C}^{n\times n}$ is <b>unitarily</b> similar to upper triangular: $A=UTU^{*}$, with the eigenvalues on the diagonal of $T$. Induction: over $\mathbb{C}$ take an eigenvalue and a unit eigenvector, extend it to an orthonormal basis (Gram–Schmidt), which makes the first column $\lambda_1e_1$; recurse on the trailing $(n-1)\times(n-1)$ block.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 6 · spectral theorem">
+    <div class="q">State the <b>spectral theorem</b> for normal operators, three ways.</div>
+    <div class="a">For $A\in\mathbb{C}^{n\times n}$ these are equivalent: <b>(i)</b> $A$ is normal, $AA^{*}=A^{*}A$; <b>(ii)</b> $\mathbb{C}^{n}$ has an <b>orthonormal basis of eigenvectors</b> of $A$; <b>(iii)</b> $A=UDU^{*}$ with $U$ unitary, $D$ diagonal. Note the upgrade over plain diagonalizability: the eigenvector basis is <em>orthonormal</em>.</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="Ch 6 · normal + triangular">
+    <div class="q">In the proof of the spectral theorem, why is a <b>normal upper-triangular</b> matrix diagonal?</div>
+    <div class="a">Compare $(1,1)$ entries. For upper triangular $T$: $(TT^{*})_{11}=\sum_{j}|t_{1j}|^{2}$ but $(T^{*}T)_{11}=|t_{11}|^{2}$. Normality forces $\sum_{j\ge2}|t_{1j}|^{2}=0$, so the whole first row off the diagonal vanishes. Then induct on the trailing block. <b>This one calculation is the entire content</b> — the rest is Schur.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 6 · Hermitian">
+    <div class="q">Prove in one line that a <b>Hermitian</b> matrix has <b>real</b> eigenvalues.</div>
+    <div class="a">Let $Av=\lambda v$ with $\lVert v\rVert=1$. Then $$\lambda=\langle Av,v\rangle=\langle v,Av\rangle=\overline{\langle Av,v\rangle}=\bar\lambda,$$ using $A=A^{*}$ and conjugate symmetry. So $\lambda\in\mathbb{R}$. (Similarly: unitary $\Rightarrow|\lambda|=1$.)</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 6 · real symmetric">
+    <div class="q">What does the spectral theorem say for a <b>real symmetric</b> matrix?</div>
+    <div class="a">$A=A^{\mathsf T}\in\mathbb{R}^{n\times n}$ is <b>orthogonally</b> diagonalizable: $A=QDQ^{\mathsf T}$ with $Q$ orthogonal ($Q^{\mathsf T}Q=I$) and $D$ real diagonal. No complex numbers are needed anywhere. Eigenvectors for <em>distinct</em> eigenvalues are automatically orthogonal; within a repeated eigenvalue you orthonormalise by Gram–Schmidt.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 6 · positive semidefinite">
+    <div class="q">Give three equivalent characterisations of <b>positive semidefinite</b> for Hermitian $M$.</div>
+    <div class="a"><b>(1)</b> $\langle Mx,x\rangle\ge0$ for all $x$; <b>(2)</b> all eigenvalues $\ge0$; <b>(3)</b> $M=A^{*}A$ for some $A$ (equivalently $M$ has a PSD square root). Positive <em>definite</em> replaces every $\ge$ by $\gt$. $A^{*}A$ is always PSD because $\langle A^{*}Ax,x\rangle=\lVert Ax\rVert^{2}$ — which is what launches the SVD.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 6 · SVD · Thm 6.9">
+    <div class="q">State the <b>SVD</b> (Theorem 6.9). What are the shapes?</div>
+    <div class="a">Every $A\in\mathbb{C}^{m\times n}$ factors as $$A=U\Sigma V^{*}$$ with $U$ ($m\times m$) unitary, $V$ ($n\times n$) unitary, $\Sigma$ ($m\times n$) zero off the diagonal with $\sigma_1\ge\dots\ge\sigma_r\gt0$, $r=\operatorname{rank}A$. No hypotheses: it works for <b>every</b> matrix, square or not, diagonalizable or not.</div>
+  </article>
+
+  <article data-tag="Algorithm" data-ref="Ch 6 · SVD construction">
+    <div class="q">How is the SVD <b>built</b>? Where do the $v_i$, $\sigma_i$ and $u_i$ come from?</div>
+    <div class="a">$A^{*}A$ is Hermitian PSD, so the spectral theorem gives an orthonormal eigenbasis $v_1,\dots,v_n$ with eigenvalues $\lambda_i\ge0$. Set $\sigma_i=\sqrt{\lambda_i}$ (descending) and, for $\sigma_i\gt0$, $$u_i=\frac{Av_i}{\sigma_i}.$$ These $u_i$ are orthonormal because $\langle Av_i,Av_j\rangle=\langle A^{*}Av_i,v_j\rangle=\lambda_i\delta_{ij}$; extend to a basis of $\mathbb{C}^{m}$. Then $AV=U\Sigma$.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 6 · singular vs eigen">
+    <div class="q">How do <b>singular values</b> differ from <b>eigenvalues</b>?</div>
+    <div class="a">Singular values exist for <em>every</em> matrix (any shape), are always <b>real and $\ge0$</b>, and are $\sqrt{\lambda_i(A^{*}A)}$. Eigenvalues need a square matrix, can be complex or negative, and may not come with enough eigenvectors. They coincide in absolute value only when $A$ is normal: then $\sigma_i=|\lambda_i|$.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 6 · norms from SVD">
+    <div class="q">Read off from the SVD: operator norm, Frobenius norm, rank, condition number.</div>
+    <div class="a">$\lVert A\rVert_2=\sigma_1$ (largest stretch); $\lVert A\rVert_F=\sqrt{\sum_i\sigma_i^{2}}$; $\operatorname{rank}A=$ number of non-zero $\sigma_i$; $\kappa_2(A)=\sigma_1/\sigma_r$. The last one is why near-singular systems are dangerous: a large $\kappa$ means small data errors get amplified by roughly that factor.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Ch 6 · Eckart–Young">
+    <div class="q">State <b>Eckart–Young</b>. Why does it matter for data science?</div>
+    <div class="a">Truncating the SVD, $A_k=\sum_{i=1}^{k}\sigma_iu_iv_i^{*}$, is the <b>best</b> rank-$k$ approximation of $A$ in both the operator and the Frobenius norm, with error $\sigma_{k+1}$ (resp. $\sqrt{\sum_{i\gt k}\sigma_i^{2}}$). It turns "keep the top $k$ components" from a heuristic into a <b>provably optimal</b> compression — PCA, LSA, recommender systems.</div>
+  </article>
+
+  <article data-tag="Definition" data-ref="Ch 6 · pseudoinverse">
+    <div class="q">Define the <b>Moore–Penrose pseudoinverse</b> via the SVD and say what $A^{+}b$ solves.</div>
+    <div class="a">$A^{+}=V\Sigma^{+}U^{*}$, where $\Sigma^{+}$ transposes $\Sigma$ and inverts the non-zero singular values. Then $x=A^{+}b$ is the <b>minimum-norm least-squares solution</b>: among all $x$ minimising $\lVert Ax-b\rVert$, it is the one with smallest $\lVert x\rVert$. This is least squares <em>without</em> assuming full column rank.</div>
+  </article>
+
+  <article data-tag="Example" data-ref="Ch 6 · PCA">
+    <div class="q">Explain <b>PCA</b> in the language of this course.</div>
+    <div class="a">Centre the data matrix $X$. The covariance $\tfrac{1}{n-1}X^{\mathsf T}X$ is real symmetric PSD, so by the spectral theorem it has an <b>orthonormal eigenbasis</b>: those eigenvectors are the principal components and the eigenvalues are the explained variances. Equivalently, take the SVD $X=U\Sigma V^{*}$ — the columns of $V$ are the components and $\sigma_i^{2}/(n-1)$ the variances. The SVD route is preferred: it never forms $X^{\mathsf T}X$, so it does not square the condition number.</div>
+  </article>
+
+</div>
+
+<script>
+(function(){
+  const KEY = 'fc_lads_v1';
+  const DAY = 86400000;
+  const intervalsDays = [0, 1, 3, 8, 21, 60]; // box 0..5
+  const tagClass = { 'Definition':'def', 'Theorem':'thm', 'Lemma':'lemma', 'Algorithm':'algo', 'Example':'algo' };
+
+  const DECK = [...document.querySelectorAll('#src > article')].map((el,i)=>({
+    id: 'c'+i,
+    tag: el.dataset.tag,
+    ref: el.dataset.ref,
+    q: el.querySelector('.q').innerHTML,
+    a: el.querySelector('.a').innerHTML
+  }));
+
+  let store = {};
+  try { store = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){ store = {}; }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch(e){} };
+  const st = id => store[id] || { box:0, due:0, seen:false };
+  const now = () => Date.now();
+
+  const app = document.getElementById('app');
+  const statsEl = document.getElementById('stats');
+  const progEl = document.getElementById('prog');
+
+  let queue = [], sessionTotal = 0, current = null;
+
+  function buildQueue(){
+    queue = DECK.filter(c => st(c.id).due <= now());
+    queue.sort((a,b)=> (st(a.id).seen===st(b.id).seen) ? 0 : (st(a.id).seen?-1:1));
+    sessionTotal = queue.length;
+  }
+
+  function typeset(el){
+    if (window.MathJax && MathJax.typesetPromise){
+      MathJax.typesetPromise([el]).catch(()=>{});
+    } else {
+      setTimeout(()=>typeset(el), 150);
+    }
+  }
+
+  function renderStats(){
+    const dueNow = DECK.filter(c=>st(c.id).due<=now()).length;
+    const learned = DECK.filter(c=>st(c.id).box>=3).length;
+    const fresh = DECK.filter(c=>!st(c.id).seen).length;
+    statsEl.innerHTML = `<span><b>${dueNow}</b> due</span><span><b>${fresh}</b> new</span><span><b>${learned}</b> learned</span><span><b>${DECK.length}</b> total</span>`;
+    const done = sessionTotal - queue.length;
+    progEl.style.width = sessionTotal ? (100*done/sessionTotal)+'%' : '100%';
+  }
+
+  function nextDue(){
+    const ds = DECK.map(c=>st(c.id).due).filter(d=>d>now());
+    if (!ds.length) return null;
+    const ms = Math.min(...ds) - now();
+    const hrs = ms/3600000;
+    if (hrs < 1) return Math.max(1,Math.round(ms/60000))+' min';
+    if (hrs < 24) return Math.round(hrs)+' h';
+    return Math.round(hrs/24)+' d';
+  }
+
+  function showDone(){
+    current = null;
+    const nd = nextDue();
+    app.innerHTML = `<div class="card done">
+      <h2>✓ All caught up</h2>
+      <p>${nd ? 'Next card due in <b style="color:var(--accent)">'+nd+'</b>.' : 'Nothing scheduled — you have reviewed everything.'}</p>
+      <div class="row2">
+        <button class="btn" id="again-all">Review all again</button>
+        <a class="btn" href="theorems.html" style="text-align:center;text-decoration:none;display:block">Read the proofs →</a>
+      </div>
+    </div>`;
+    document.getElementById('again-all').onclick = ()=>{ queue = DECK.slice(); sessionTotal = queue.length; showCard(); };
+    renderStats();
+  }
+
+  function showCard(){
+    if (!queue.length) return showDone();
+    current = queue[0];
+    app.innerHTML = `<div class="card">
+        <div class="card-meta"><span class="chip ${tagClass[current.tag]||''}">${current.tag}</span><span class="card-ref">${current.ref}</span></div>
+        <div class="q">${current.q}</div>
+        <div id="backwrap" class="hidden"><hr class="divider"><div class="a">${current.a}</div></div>
+        <div class="controls" id="controls">
+          <button class="btn primary" id="reveal">Show answer</button>
+        </div>
+        <div class="hint">Space = reveal · 1 again · 2 hard · 3 good · 4 easy</div>
+      </div>`;
+    const card = app.querySelector('.card');
+    typeset(card);
+    document.getElementById('reveal').onclick = reveal;
+    renderStats();
+  }
+
+  function reveal(){
+    document.getElementById('backwrap').classList.remove('hidden');
+    document.getElementById('controls').innerHTML = `<div class="grades">
+        <button class="btn g-again" data-g="again">Again<small>&lt;10m</small></button>
+        <button class="btn g-hard" data-g="hard">Hard<small>1d</small></button>
+        <button class="btn g-good" data-g="good">Good<small>↑box</small></button>
+        <button class="btn g-easy" data-g="easy">Easy<small>↟↟</small></button>
+      </div>`;
+    document.querySelectorAll('.grades .btn').forEach(b => b.onclick = ()=>grade(b.dataset.g));
+    typeset(document.getElementById('backwrap'));
+  }
+
+  function grade(g){
+    if (!current) return;
+    const s = st(current.id); let box = s.box; s.seen = true;
+    if (g==='again'){ box = 0; s.due = now() + 10*60000; }
+    else if (g==='hard'){ box = Math.max(1, box); s.due = now() + 1*DAY; }
+    else if (g==='good'){ box = Math.min(box+1, 5); s.due = now() + intervalsDays[box]*DAY; }
+    else if (g==='easy'){ box = Math.min(box+2, 5); s.due = now() + Math.round(intervalsDays[box]*1.4)*DAY; }
+    s.box = box; store[current.id] = s; save();
+    queue.shift();
+    if (g==='again') queue.push(current);
+    showCard();
+  }
+
+  document.addEventListener('keydown', e=>{
+    if (!current) return;
+    const revealed = !document.getElementById('backwrap')?.classList.contains('hidden');
+    if (e.code==='Space'){ e.preventDefault(); if(!revealed) reveal(); }
+    else if (revealed && ['1','2','3','4'].includes(e.key)){
+      grade({'1':'again','2':'hard','3':'good','4':'easy'}[e.key]);
+    }
+  });
+
+  document.getElementById('reset').onclick = ()=>{
+    if (confirm('Reset all spaced-repetition progress for this deck?')){
+      store = {}; save(); buildQueue(); showCard();
+    }
+  };
+
+  buildQueue();
+  showCard();
+})();
+</script>
+<script src="../assets/mfds.js?v=2" data-root="../"></script>
+</body>
+</html>

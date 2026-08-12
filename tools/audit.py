@@ -103,8 +103,15 @@ def main():
 
     # ---- hrefs hiding inside JavaScript ----
     def js_hrefs(src):
-        """Yield literal hrefs from JS source, skipping runtime concatenation."""
-        for href in sorted(set(re.findall(r'href="([^"]+)"', src))):
+        """Yield literal hrefs from JS source, skipping runtime concatenation.
+
+        Two spellings occur: hrefs written inside HTML strings (href="...")
+        and hrefs as object properties (href:'...'), e.g. plan.js homework
+        entries. Missing the second spelling hid two dead links.
+        """
+        found = set(re.findall(r'href="([^"]+)"', src))
+        found |= set(re.findall(r"""href\s*:\s*['"]([^'"]+)['"]""", src))
+        for href in sorted(found):
             # skip string concatenation like  href="' + root + s.href + '"
             if not any(c in href for c in "'+`"):
                 yield href

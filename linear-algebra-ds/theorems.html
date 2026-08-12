@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F9">
+<meta name="description" content="The eight theorems that carry Linear Algebra for Data Science — Gram-Schmidt, orthogonal projection and least squares, Riesz, adjoints, Cayley-Hamilton, Schur, the spectral theorem and the SVD — each with the main idea and a full proof.">
+<title>Worked theorems — Linear Algebra for Data Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[['$','$']]},svg:{fontCache:'global'}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#1a1612;--bg-elevated:#221d18;--bg-card:#1f1a15;--border:#3a342c;--border-soft:#2a251f;
+    --text:#f5efe4;--text-muted:#b8aa97;--text-dim:#8a7e6e;--accent:#e0b888;--accent-hover:#ecc89c;
+    --good:#8bc6a0;--warn:#d99a7e;--blue:#8fb8de;--ds:#c4a6df;--glow:rgba(224,184,136,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Figtree',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.66;-webkit-font-smoothing:antialiased;min-height:100vh;background-image:radial-gradient(900px 500px at 50% -10%,var(--glow),transparent 70%);background-repeat:no-repeat}
+  .wrap{max-width:820px;margin:0 auto;padding:clamp(1.6rem,5vw,2.6rem) clamp(1.1rem,5vw,1.75rem) 5rem;
+        padding-left:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-left));
+        padding-right:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-right))}
+  .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-dim);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;margin-bottom:1.4rem}
+  .back-link:hover{color:var(--accent)}
+  .eyebrow{font-weight:700;color:var(--accent);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.7rem}
+  h1{font-weight:800;font-size:clamp(1.8rem,6vw,2.5rem);line-height:1.08;letter-spacing:-.025em;margin-bottom:.6rem}
+  .lede{color:var(--text-muted);font-size:clamp(.96rem,3vw,1.06rem);max-width:44em}
+  h2{font-weight:800;font-size:clamp(1.2rem,4vw,1.5rem);letter-spacing:-.02em;margin:2.6rem 0 .6rem;scroll-margin-top:70px}
+  h2 .n{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:.8em;margin-right:.35rem}
+  h3{font-weight:700;font-size:1rem;margin:1.4rem 0 .4rem;color:var(--accent)}
+  p{margin:.55rem 0;color:var(--text-muted);font-size:.96rem}
+  b,strong{color:var(--text)}
+  ul,ol{margin:.4rem 0 .7rem;padding-left:1.35rem;color:var(--text-muted);font-size:.95rem}
+  li{margin:.3rem 0}
+  a{color:var(--accent)}
+  code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:#14110d;color:var(--accent);padding:.05rem .3rem;border-radius:5px}
+  .ch{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:#2a2118;background:var(--accent);border-radius:5px;padding:.1rem .45rem;vertical-align:middle;letter-spacing:.03em}
+  .thm{background:var(--bg-card);border:1px solid rgba(139,198,160,.32);border-left:4px solid var(--good);border-radius:0 12px 12px 0;padding:.9rem 1.15rem;margin:.9rem 0;color:var(--text);font-size:.96rem}
+  .thm .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--good);margin-bottom:.35rem}
+  .idea{background:#1a1f26;border:1px solid rgba(143,184,222,.3);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:.8rem 1.15rem;margin:.85rem 0;font-size:.93rem;color:var(--text-muted)}
+  .idea .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:.3rem}
+  .warn{background:#241a1c;border:1px solid rgba(217,154,126,.32);border-left:4px solid var(--warn);border-radius:0 12px 12px 0;padding:.8rem 1.15rem;margin:.85rem 0;font-size:.92rem;color:var(--text-muted)}
+  .warn .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--warn);margin-bottom:.3rem}
+  .ds{background:#201a26;border:1px solid rgba(196,166,223,.3);border-left:4px solid var(--ds);border-radius:0 12px 12px 0;padding:.8rem 1.15rem;margin:.85rem 0;font-size:.92rem;color:var(--text-muted)}
+  .ds .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ds);margin-bottom:.3rem}
+  .step{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--good)}
+  pre.code{font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.5;background:#14110d;border:1px solid var(--border-soft);border-radius:10px;padding:.85rem 1.05rem;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.7rem 0;color:var(--text)}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.8rem 0;border:1px solid var(--border);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:.88rem}
+  th,td{border-bottom:1px solid var(--border-soft);padding:.5rem .65rem;text-align:left;vertical-align:top}
+  th{background:#2a2218;color:var(--accent);font-weight:700;font-size:.76rem;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  .toc{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:.95rem 1.2rem;margin:1.3rem 0;font-size:.9rem;line-height:1.95}
+  .toc a{text-decoration:none;font-weight:600}
+  footer{margin-top:3rem;padding-top:1.2rem;border-top:1px solid var(--border-soft);color:var(--text-dim);font-size:.82rem}
+  mjx-container{color:inherit!important}
+</style>
+<link rel="stylesheet" href="../assets/mfds.css?v=2">
+</head>
+<body class="mfds mfds-lads" data-page="lads" data-up="index.html" data-up-label="LA for DS">
+<div class="wrap">
+  <a class="back-link" href="index.html">← Linear Algebra for Data Science</a>
+  <div class="eyebrow">Universität Wien · Mula &amp; Wu · worked proofs</div>
+  <h1>The eight theorems</h1>
+  <p class="lede">Chapters 2, 5 and 6 rest on eight results, and they form a single chain: Gram–Schmidt builds orthonormal bases → projection gives least squares → Riesz gives adjoints → Schur triangularizes → the spectral theorem diagonalizes → the SVD extends that to <em>every</em> matrix. Learn them in this order and each one hands you the next.</p>
+
+  <div class="toc"><b>The chain:</b>
+    <a href="#gs">① Gram–Schmidt</a> ·
+    <a href="#proj">② Orthogonal projection &amp; least squares</a> ·
+    <a href="#riesz">③ Riesz representation</a> ·
+    <a href="#adjoint">④ Adjoints</a> ·
+    <a href="#schur">⑤ Schur</a> ·
+    <a href="#ch">⑥ Cayley–Hamilton</a> ·
+    <a href="#spectral">⑦ Spectral theorem</a> ·
+    <a href="#svd">⑧ SVD</a> ·
+    <a href="#map">how they connect</a>
+  </div>
+
+  <div class="warn"><span class="lbl">On numbering</span>
+  The textbook numbers its results; the only number confirmed here is <b>Theorem 6.9 = the SVD</b> (§6.3, added in the 29 Jun version). Everything else is referenced by <b>chapter and name</b> rather than by a number I cannot check against your copy. If you are quoting a result in an exam, use the number printed in <a href="notes/Linear_Algebra_Mula_Wu.pdf">your PDF</a> — names are safe, invented numbers are not.</div>
+
+  <!-- ============================== 1 ============================== -->
+  <h2 id="gs"><span class="n">①</span>Gram–Schmidt <span class="ch">CH 2</span></h2>
+  <div class="thm"><span class="lbl">Theorem — Gram–Schmidt orthonormalization</span>
+  Let $(v_1,\dots,v_n)$ be a <b>linearly independent</b> list in an inner-product space $V$. Then there is an <b>orthonormal</b> list $(e_1,\dots,e_n)$ such that
+  $$\operatorname{span}(v_1,\dots,v_k)=\operatorname{span}(e_1,\dots,e_k)\qquad\text{for every }k=1,\dots,n.$$</div>
+
+  <div class="idea"><span class="lbl">Main idea</span> Process the vectors one at a time. At each step, <b>subtract off everything you already have</b> — the projection onto the span built so far — and normalise what is left. Independence is exactly what guarantees the leftover is non-zero.</div>
+
+  <p><span class="step">Construction</span> Set $e_1=v_1/\lVert v_1\rVert$ (legal: $v_1\ne0$ by independence). Having built $e_1,\dots,e_{k-1}$, put
+  $$w_k=v_k-\sum_{j=1}^{k-1}\langle v_k,e_j\rangle\,e_j,\qquad e_k=\frac{w_k}{\lVert w_k\rVert}.$$</p>
+
+  <p><span class="step">$w_k\ne0$</span> Suppose $w_k=0$. Then
+  $$v_k=\sum_{j\lt k}\langle v_k,e_j\rangle e_j\in\operatorname{span}(e_1,\dots,e_{k-1})=\operatorname{span}(v_1,\dots,v_{k-1}),$$
+  using the inductive hypothesis for the last equality — and that contradicts linear independence. So $w_k\ne0$ and the division is legal.</p>
+
+  <p><span class="step">Orthogonality</span> For $i\lt k$, using $\langle e_j,e_i\rangle=\delta_{ji}$:
+  $$\langle w_k,e_i\rangle=\langle v_k,e_i\rangle-\sum_{j=1}^{k-1}\langle v_k,e_j\rangle\langle e_j,e_i\rangle=\langle v_k,e_i\rangle-\langle v_k,e_i\rangle=0 .$$
+  And $\lVert e_k\rVert=1$ by construction, so $(e_1,\dots,e_k)$ is orthonormal.</p>
+
+  <p><span class="step">Spans agree</span> $e_k$ is a combination of $v_k$ and $e_1,\dots,e_{k-1}$, so $e_k\in\operatorname{span}(v_1,\dots,v_k)$; conversely $v_k=\lVert w_k\rVert e_k+\sum_{j\lt k}\langle v_k,e_j\rangle e_j$ lies in $\operatorname{span}(e_1,\dots,e_k)$. Both spans have dimension $k$, so they are equal. ∎</p>
+
+  <div class="thm"><span class="lbl">Corollaries</span>
+  <b>(a)</b> Every finite-dimensional inner-product space has an orthonormal basis. <b>(b)</b> Every orthonormal list extends to an orthonormal basis. <b>(c)</b> <b>QR decomposition</b>: applying the process to the columns of $A$ (full column rank) gives $A=QR$ with $Q$ having orthonormal columns and $R$ upper triangular with positive diagonal.</div>
+
+  <div class="ds"><span class="lbl">Why data science cares</span> Orthonormal bases make coordinates <em>free</em>: $v=\sum\langle v,e_j\rangle e_j$, no linear system to solve. QR is also the numerically stable way to solve least squares — forming $A^{*}A$ squares the condition number, which is why <code>numpy.linalg.lstsq</code> uses a factorization instead.</div>
+
+  <!-- ============================== 2 ============================== -->
+  <h2 id="proj"><span class="n">②</span>Orthogonal projection &amp; least squares <span class="ch">CH 2</span></h2>
+  <div class="thm"><span class="lbl">Theorem — best approximation</span>
+  Let $U\subseteq V$ be a finite-dimensional subspace with orthonormal basis $(e_1,\dots,e_m)$, and define
+  $$P_Uv=\sum_{j=1}^{m}\langle v,e_j\rangle e_j .$$
+  Then <b>(i)</b> $v-P_Uv\perp U$, and <b>(ii)</b> for every $u\in U$,
+  $$\lVert v-P_Uv\rVert\le\lVert v-u\rVert,$$
+  with equality <b>only</b> for $u=P_Uv$. So $P_Uv$ is the unique closest point of $U$ to $v$.</div>
+
+  <div class="idea"><span class="lbl">Main idea</span> One line of Pythagoras. Split $v-u$ into the part perpendicular to $U$ and the part inside $U$; the perpendicular part is fixed, so you minimise by killing the inside part.</div>
+
+  <p><span class="step">(i) The residual is orthogonal</span> For each $i$,
+  $$\langle v-P_Uv,\;e_i\rangle=\langle v,e_i\rangle-\sum_{j=1}^m\langle v,e_j\rangle\langle e_j,e_i\rangle=\langle v,e_i\rangle-\langle v,e_i\rangle=0,$$
+  and since the $e_i$ span $U$, $v-P_Uv\perp U$.</p>
+
+  <p><span class="step">(ii) Minimality</span> Let $u\in U$. Write
+  $$v-u=\underbrace{(v-P_Uv)}_{\perp\,U}+\underbrace{(P_Uv-u)}_{\in\,U}.$$
+  The two pieces are orthogonal, so by the Pythagorean identity
+  $$\lVert v-u\rVert^{2}=\lVert v-P_Uv\rVert^{2}+\lVert P_Uv-u\rVert^{2}\;\ge\;\lVert v-P_Uv\rVert^{2},$$
+  with equality iff $\lVert P_Uv-u\rVert=0$, i.e. $u=P_Uv$. ∎</p>
+
+  <h3>Least squares and the normal equations</h3>
+  <p>Given $A\in\mathbb{C}^{m\times n}$ and $b\in\mathbb{C}^m$, the problem $\min_x\lVert Ax-b\rVert$ asks for the closest point to $b$ in $U=\operatorname{col}(A)$. By the theorem the minimiser is characterised by $b-Ax\perp\operatorname{col}(A)$, i.e. $A^{*}(b-Ax)=0$:
+  $$\boxed{\,A^{*}Ax=A^{*}b\,}$$
+  If $A$ has full column rank then $A^{*}A$ is invertible, so $x=(A^{*}A)^{-1}A^{*}b$ and the projection matrix onto $\operatorname{col}(A)$ is $P=A(A^{*}A)^{-1}A^{*}$.</p>
+
+  <div class="idea"><span class="lbl">Two facts worth checking yourself</span> $P^{2}=P$ (projecting twice changes nothing) and $P^{*}=P$ (orthogonal projections are self-adjoint). Together these two properties <em>characterise</em> orthogonal projections.</div>
+
+  <div class="ds"><span class="lbl">Why data science cares</span> This <b>is</b> linear regression. Fitting $y\approx X\beta$ by least squares is projecting $y$ onto the column space of the design matrix; the residual vector is orthogonal to every feature, which is why residuals-vs-fitted plots should show no structure. Ridge regression adds $\lambda I$ to $A^{*}A$ precisely to keep it invertible when the features are collinear.</div>
+
+  <!-- ============================== 3 ============================== -->
+  <h2 id="riesz"><span class="n">③</span>Riesz representation <span class="ch">CH 2</span></h2>
+  <div class="thm"><span class="lbl">Theorem — Riesz representation</span>
+  Let $V$ be a finite-dimensional inner-product space and $\varphi:V\to\mathbb{F}$ a linear functional. Then there is a <b>unique</b> $u\in V$ with
+  $$\varphi(v)=\langle v,u\rangle\quad\text{for all }v\in V.$$</div>
+
+  <div class="idea"><span class="lbl">Main idea</span> Every linear functional is "take the inner product with something". Expand $v$ in an orthonormal basis, and the coefficients of $\varphi$ assemble into the representing vector.</div>
+
+  <p><span class="step">Existence</span> Pick an orthonormal basis $(e_1,\dots,e_n)$ — this is where Gram–Schmidt is used. Every $v$ satisfies $v=\sum_j\langle v,e_j\rangle e_j$, so by linearity
+  $$\varphi(v)=\sum_{j=1}^{n}\langle v,e_j\rangle\,\varphi(e_j)=\Big\langle v,\;\sum_{j=1}^{n}\overline{\varphi(e_j)}\,e_j\Big\rangle .$$
+  So $u=\sum_j\overline{\varphi(e_j)}\,e_j$ works. (The conjugate appears because the inner product is conjugate-linear in its second slot.)</p>
+
+  <p><span class="step">Uniqueness</span> If $\langle v,u_1\rangle=\langle v,u_2\rangle$ for all $v$, then $\langle v,u_1-u_2\rangle=0$ for all $v$; take $v=u_1-u_2$ to get $\lVert u_1-u_2\rVert^{2}=0$, hence $u_1=u_2$. ∎</p>
+
+  <div class="warn"><span class="lbl">Finite dimension matters</span> The proof uses a <em>finite</em> orthonormal basis. In infinite dimensions the statement still holds for <b>continuous</b> functionals on a <b>complete</b> space (a Hilbert space) — and both hypotheses are genuinely needed. Your course is finite-dimensional, so the short proof above is the one to know.</div>
+
+  <!-- ============================== 4 ============================== -->
+  <h2 id="adjoint"><span class="n">④</span>Adjoint operators <span class="ch">CH 2</span></h2>
+  <div class="thm"><span class="lbl">Theorem — existence and uniqueness of the adjoint</span>
+  Let $T:V\to W$ be linear between finite-dimensional inner-product spaces. There is a unique linear map $T^{*}:W\to V$ with
+  $$\langle Tv,\,w\rangle_W=\langle v,\,T^{*}w\rangle_V\qquad\text{for all }v\in V,\;w\in W.$$</div>
+
+  <div class="idea"><span class="lbl">Main idea</span> Freeze $w$. Then $v\mapsto\langle Tv,w\rangle$ is a linear functional on $V$ — and Riesz says every such functional is an inner product with a unique vector. Call that vector $T^{*}w$. The adjoint is <b>Riesz applied one $w$ at a time</b>.</div>
+
+  <p><span class="step">Existence</span> Fix $w\in W$ and define $\varphi_w(v)=\langle Tv,w\rangle_W$. This is linear in $v$ (composition of $T$ with a linear functional), so by <a href="#riesz">Riesz</a> there is a unique vector — name it $T^{*}w$ — with $\varphi_w(v)=\langle v,T^{*}w\rangle_V$. That is the defining identity.</p>
+
+  <p><span class="step">$T^{*}$ is linear</span> For $w_1,w_2\in W$ and scalars, every $v$ gives
+  $$\langle v,T^{*}(w_1+\lambda w_2)\rangle=\langle Tv,w_1+\lambda w_2\rangle=\langle Tv,w_1\rangle+\bar\lambda\langle Tv,w_2\rangle=\langle v,\;T^{*}w_1+\lambda T^{*}w_2\rangle .$$
+  Since this holds for all $v$, the uniqueness half of Riesz forces $T^{*}(w_1+\lambda w_2)=T^{*}w_1+\lambda T^{*}w_2$. Uniqueness of $T^{*}$ follows the same way. ∎</p>
+
+  <div class="thm"><span class="lbl">The properties to memorise</span>
+  <ul>
+    <li>In <b>orthonormal</b> bases, the matrix of $T^{*}$ is the <b>conjugate transpose</b> of the matrix of $T$: $[T^{*}]=\overline{[T]}^{\,\mathsf T}=[T]^{*}$. (Orthonormality is essential — in a general basis this is false.)</li>
+    <li>$(S+T)^{*}=S^{*}+T^{*}$, $(\lambda T)^{*}=\bar\lambda T^{*}$, $(ST)^{*}=T^{*}S^{*}$ (order reverses), $(T^{*})^{*}=T$.</li>
+    <li>$\ker T^{*}=(\operatorname{im}T)^{\perp}$ and $\operatorname{im}T^{*}=(\ker T)^{\perp}$ — the <b>four fundamental subspaces</b>.</li>
+  </ul></div>
+
+  <p>Vocabulary that the rest of the page needs: $T$ is <b>self-adjoint</b> (Hermitian) if $T=T^{*}$; <b>unitary</b> if $T^{*}T=I$; and <b>normal</b> if $TT^{*}=T^{*}T$. Self-adjoint and unitary operators are both normal — that is why the spectral theorem is stated for normal operators.</p>
+
+  <!-- ============================== 5 ============================== -->
+  <h2 id="schur"><span class="n">⑤</span>Schur's lemma — unitary triangularization <span class="ch">CH 6</span></h2>
+  <div class="thm"><span class="lbl">Theorem — Schur</span>
+  Every $A\in\mathbb{C}^{n\times n}$ is unitarily similar to an upper triangular matrix: there is a unitary $U$ and upper triangular $T$ with
+  $$A=UTU^{*}.$$
+  The diagonal of $T$ carries the eigenvalues of $A$, with multiplicity.</div>
+
+  <div class="idea"><span class="lbl">Main idea</span> Induction on $n$. Over $\mathbb{C}$ every matrix has at least one eigenvector; make it the first vector of an orthonormal basis. In that basis the first column is $(\lambda_1,0,\dots,0)^{\mathsf T}$, so the matrix splits into a $1\times1$ block and an $(n-1)\times(n-1)$ block. Recurse on the small block.</div>
+
+  <p><span class="step">Base case</span> $n=1$: nothing to do, $A$ is already triangular.</p>
+
+  <p><span class="step">Inductive step</span> The characteristic polynomial $\chi_A$ has degree $n\ge1$, so over $\mathbb{C}$ — <b>algebraically closed</b> — it has a root $\lambda_1$. Hence there is an eigenvector, which we scale to a unit vector $u_1$. Extend $u_1$ to an orthonormal basis $(u_1,\dots,u_n)$ of $\mathbb{C}^n$ (Gram–Schmidt again) and let $U_1=[\,u_1\ \cdots\ u_n\,]$, which is unitary. Because $Au_1=\lambda_1u_1$, the first column of $U_1^{*}AU_1$ is $\lambda_1 e_1$:
+  $$U_1^{*}AU_1=\begin{pmatrix}\lambda_1&*\\[2pt]0&A'\end{pmatrix},\qquad A'\in\mathbb{C}^{(n-1)\times(n-1)} .$$
+  By induction $A'=U'T'U'^{*}$ with $U'$ unitary and $T'$ upper triangular. Put
+  $$U=U_1\begin{pmatrix}1&0\\0&U'\end{pmatrix},$$
+  a product of unitaries, hence unitary. Then $U^{*}AU$ is upper triangular. ∎</p>
+
+  <p><span class="step">The diagonal</span> Similar matrices have the same characteristic polynomial, and for a triangular matrix $\chi_T(\lambda)=\prod_i(\lambda-t_{ii})$. So the diagonal entries of $T$ are exactly the eigenvalues of $A$.</p>
+
+  <div class="warn"><span class="lbl">Over $\mathbb{R}$ this fails</span> A real rotation by $90^\circ$, $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$, has no real eigenvalue, so it cannot be triangularized over $\mathbb{R}$. Schur is a <b>complex</b> theorem; the real analogue only gives block-triangular form with $1\times1$ and $2\times2$ blocks.</div>
+
+  <!-- ============================== 6 ============================== -->
+  <h2 id="ch"><span class="n">⑥</span>Cayley–Hamilton <span class="ch">CH 5</span></h2>
+  <div class="thm"><span class="lbl">Theorem — Cayley–Hamilton</span>
+  Every square matrix satisfies its own characteristic polynomial. With $\chi_A(\lambda)=\det(\lambda I-A)$,
+  $$\chi_A(A)=0 .$$</div>
+
+  <div class="warn"><span class="lbl">The famous fake proof — do not write this</span>
+  "$\chi_A(A)=\det(AI-A)=\det(0)=0$." This is <b>wrong</b>. $\chi_A(\lambda)$ is a polynomial with <em>scalar</em> coefficients; substituting the matrix $A$ for $\lambda$ is not the same operation as substituting it inside the determinant, where $\lambda I-A$ would become a matrix of matrices. Examiners look for this.</div>
+
+  <div class="idea"><span class="lbl">Main idea (via Schur)</span> Triangularize. For a triangular $T$ with diagonal $\lambda_1,\dots,\lambda_n$, the product $(T-\lambda_1I)\cdots(T-\lambda_kI)$ annihilates the first $k$ basis vectors — each factor kills one more. After $n$ factors it kills everything.</div>
+
+  <p><span class="step">Proof over $\mathbb{C}$</span> By <a href="#schur">Schur</a>, $A=UTU^{*}$ with $T$ upper triangular, diagonal $\lambda_1,\dots,\lambda_n$. Similar matrices share a characteristic polynomial, so $\chi_A=\chi_T=\prod_{i=1}^{n}(\lambda-\lambda_i)$.</p>
+
+  <p>Let $M_k=(T-\lambda_1I)(T-\lambda_2I)\cdots(T-\lambda_kI)$. <b>Claim:</b> $M_k e_j=0$ for all $j\le k$, where $e_j$ is the $j$-th standard basis vector.</p>
+  <ul>
+    <li><em>$k=1$:</em> $T$ is upper triangular with $t_{11}=\lambda_1$, so $Te_1=\lambda_1e_1$ and $(T-\lambda_1I)e_1=0$.</li>
+    <li><em>Step:</em> assume $M_{k-1}e_j=0$ for $j\le k-1$. Since $T$ is upper triangular, $(T-\lambda_kI)e_k$ is a combination of $e_1,\dots,e_{k-1}$ (the $e_k$ component is $t_{kk}-\lambda_k=0$). Applying $M_{k-1}$ — which commutes with the factors, all being polynomials in $T$ — kills it. So $M_ke_k=M_{k-1}(T-\lambda_kI)e_k=0$, and $M_ke_j=0$ for $j\lt k$ as well because $M_k=M_{k-1}(T-\lambda_kI)$ and the factors commute.</li>
+  </ul>
+  <p>Hence $M_n$ kills every basis vector, i.e. $\chi_T(T)=M_n=0$. Finally
+  $$\chi_A(A)=\chi_T(UTU^{*})=U\,\chi_T(T)\,U^{*}=0,$$
+  using that $(UTU^{*})^{k}=UT^{k}U^{*}$, so any polynomial applied to $A$ conjugates the same way. ∎</p>
+
+  <div class="ds"><span class="lbl">What it buys you</span> $A^{n}$ is a combination of $I,A,\dots,A^{n-1}$, so <b>every</b> power — and every matrix function defined by a power series, such as $e^{tA}$ — collapses into that finite span. For invertible $A$ it also gives $A^{-1}$ as a polynomial in $A$: rearrange $\chi_A(A)=0$ and divide by the constant term $\pm\det A$.</div>
+
+  <!-- ============================== 7 ============================== -->
+  <h2 id="spectral"><span class="n">⑦</span>The spectral theorem <span class="ch">CH 6</span></h2>
+  <div class="thm"><span class="lbl">Theorem — spectral theorem for normal operators</span>
+  For $A\in\mathbb{C}^{n\times n}$ the following are equivalent:
+  <b>(i)</b> $A$ is <b>normal</b> ($AA^{*}=A^{*}A$); <b>(ii)</b> $\mathbb{C}^{n}$ has an <b>orthonormal basis of eigenvectors</b> of $A$; <b>(iii)</b> $A=UDU^{*}$ with $U$ unitary and $D$ diagonal.</div>
+
+  <div class="idea"><span class="lbl">Main idea</span> Schur already gives $A=UTU^{*}$ with $T$ triangular. Normality survives unitary conjugation, so $T$ is a <b>normal triangular</b> matrix — and a short computation forces such a matrix to be diagonal. The whole theorem is "Schur plus one calculation".</div>
+
+  <p><span class="step">(iii) ⇒ (ii)</span> Immediate: the columns of $U$ are orthonormal and $AU=UD$ says exactly that column $j$ is an eigenvector with eigenvalue $d_{jj}$.</p>
+  <p><span class="step">(ii) ⇒ (iii)</span> Put the orthonormal eigenbasis in the columns of $U$; then $U$ is unitary and $U^{*}AU=D$.</p>
+  <p><span class="step">(iii) ⇒ (i)</span> $AA^{*}=UDU^{*}UD^{*}U^{*}=UDD^{*}U^{*}$ and likewise $A^{*}A=UD^{*}DU^{*}$. Diagonal matrices commute, so the two agree.</p>
+
+  <p><span class="step">(i) ⇒ (iii) — the real content</span> By Schur, $A=UTU^{*}$ with $T$ upper triangular. Then
+  $$TT^{*}=U^{*}AUU^{*}A^{*}U=U^{*}AA^{*}U=U^{*}A^{*}AU=T^{*}T,$$
+  so $T$ is normal. Now compare the $(1,1)$ entries. Since $T$ is upper triangular,
+  $$(TT^{*})_{11}=\sum_{j=1}^{n}|t_{1j}|^{2},\qquad (T^{*}T)_{11}=|t_{11}|^{2}.$$
+  Equality forces $\sum_{j\ge2}|t_{1j}|^{2}=0$, hence $t_{1j}=0$ for all $j\ge2$: the first row is zero off the diagonal. So $T$ splits as $\begin{pmatrix}t_{11}&0\\0&T''\end{pmatrix}$ with $T''$ upper triangular and (again) normal. Induct on the size to conclude $T$ is diagonal. ∎</p>
+
+  <div class="thm"><span class="lbl">The three special cases</span>
+  <div class="tw"><table>
+    <tr><th>Operator</th><th>Condition</th><th>Eigenvalues</th><th>Consequence</th></tr>
+    <tr><td>Self-adjoint (Hermitian)</td><td>$A=A^{*}$</td><td>all <b>real</b></td><td>$A=UDU^{*}$, $D$ real</td></tr>
+    <tr><td>Real symmetric</td><td>$A=A^{\mathsf T}\in\mathbb{R}^{n\times n}$</td><td>all real</td><td>$A=QDQ^{\mathsf T}$, $Q$ <b>orthogonal</b> — no complex numbers needed</td></tr>
+    <tr><td>Unitary</td><td>$A^{*}A=I$</td><td>$|\lambda|=1$</td><td>diagonalizable, eigenvalues on the unit circle</td></tr>
+  </table></div>
+  <em>Real eigenvalues of a Hermitian $A$, in one line:</em> if $Av=\lambda v$ with $\lVert v\rVert=1$ then $\lambda=\langle Av,v\rangle=\langle v,Av\rangle=\overline{\langle Av,v\rangle}=\bar\lambda$.</div>
+
+  <div class="ds"><span class="lbl">Why data science cares</span> A covariance matrix is real symmetric and positive semidefinite, so it has an orthonormal eigenbasis with non-negative eigenvalues. <b>That is PCA</b>: principal components are the eigenvectors, explained variance is the eigenvalues. Spectral clustering and PageRank are the same theorem wearing different hats.</div>
+
+  <!-- ============================== 8 ============================== -->
+  <h2 id="svd"><span class="n">⑧</span>Singular Value Decomposition <span class="ch">CH 6 · THM 6.9</span></h2>
+  <div class="thm"><span class="lbl">Theorem 6.9 — SVD</span>
+  Every $A\in\mathbb{C}^{m\times n}$ factors as
+  $$A=U\Sigma V^{*}$$
+  with $U\in\mathbb{C}^{m\times m}$ unitary, $V\in\mathbb{C}^{n\times n}$ unitary, and $\Sigma\in\mathbb{R}^{m\times n}$ zero off the main diagonal with entries
+  $$\sigma_1\ge\sigma_2\ge\dots\ge\sigma_r\gt0=\sigma_{r+1}=\dots,\qquad r=\operatorname{rank}A .$$
+  The $\sigma_i$ are the <b>singular values</b>, and $\sigma_i=\sqrt{\lambda_i(A^{*}A)}$.</div>
+
+  <div class="idea"><span class="lbl">Main idea</span> $A$ itself may not be diagonalizable — it need not even be square. But $A^{*}A$ <b>is</b> Hermitian and positive semidefinite, so the spectral theorem applies to it. Diagonalize $A^{*}A$, take square roots of the eigenvalues, and push the eigenbasis through $A$ to get the second orthonormal family.</div>
+
+  <p><span class="step">Step 1 — apply the spectral theorem to $A^{*}A$</span> $(A^{*}A)^{*}=A^{*}A$, so it is Hermitian; and for any $x$,
+  $$\langle A^{*}Ax,x\rangle=\langle Ax,Ax\rangle=\lVert Ax\rVert^{2}\ge0,$$
+  so it is positive semidefinite and its eigenvalues $\lambda_i$ are real and $\ge0$. By <a href="#spectral">⑦</a> there is an orthonormal basis $(v_1,\dots,v_n)$ of $\mathbb{C}^{n}$ with $A^{*}Av_i=\lambda_iv_i$. Order so that $\lambda_1\ge\dots\ge\lambda_n\ge0$ and set $\sigma_i=\sqrt{\lambda_i}$. Let $r$ be the number of non-zero $\sigma_i$.</p>
+
+  <p><span class="step">Step 2 — build the left family</span> For $i\le r$ define
+  $$u_i=\frac{1}{\sigma_i}Av_i .$$
+  These are orthonormal:
+  $$\langle u_i,u_j\rangle=\frac{1}{\sigma_i\sigma_j}\langle Av_i,Av_j\rangle=\frac{1}{\sigma_i\sigma_j}\langle A^{*}Av_i,v_j\rangle=\frac{\lambda_i}{\sigma_i\sigma_j}\langle v_i,v_j\rangle=\frac{\sigma_i}{\sigma_j}\delta_{ij}=\delta_{ij}.$$
+  Extend $(u_1,\dots,u_r)$ to an orthonormal basis $(u_1,\dots,u_m)$ of $\mathbb{C}^{m}$ (Gram–Schmidt).</p>
+
+  <p><span class="step">Step 3 — the tail vanishes</span> For $i\gt r$ we have $\lambda_i=0$, so
+  $$\lVert Av_i\rVert^{2}=\langle A^{*}Av_i,v_i\rangle=\lambda_i\lVert v_i\rVert^{2}=0\;\Longrightarrow\;Av_i=0 .$$</p>
+
+  <p><span class="step">Step 4 — assemble</span> We now have $Av_i=\sigma_iu_i$ for $i\le r$ and $Av_i=0$ for $i\gt r$ — which is exactly $AV=U\Sigma$ read column by column. Since $V$ is unitary, $A=U\Sigma V^{*}$. ∎</p>
+
+  <p>Also $\operatorname{rank}A=r$: the $v_i$ with $i\gt r$ span $\ker A$, and the $u_i$ with $i\le r$ are an orthonormal basis of $\operatorname{im}A$.</p>
+
+  <div class="thm"><span class="lbl">What the SVD hands you</span>
+  <ul>
+    <li><b>Rank</b> $=$ number of non-zero singular values — and the numerically honest notion of rank (count the $\sigma_i$ above a tolerance).</li>
+    <li><b>Operator norm</b> $\lVert A\rVert_2=\sigma_1$; <b>Frobenius norm</b> $\lVert A\rVert_F=\sqrt{\sum_i\sigma_i^{2}}$.</li>
+    <li><b>Condition number</b> $\kappa_2(A)=\sigma_1/\sigma_r$ — how much the map stretches versus squashes.</li>
+    <li><b>Pseudoinverse</b> $A^{+}=V\Sigma^{+}U^{*}$, where $\Sigma^{+}$ inverts the non-zero singular values and transposes. $x=A^{+}b$ is the minimum-norm least-squares solution — <a href="#proj">②</a> without the full-rank assumption.</li>
+    <li><b>Eckart–Young</b>: truncating to the largest $k$ singular values, $A_k=\sum_{i\le k}\sigma_iu_iv_i^{*}$, is the <em>best</em> rank-$k$ approximation in both norms above.</li>
+  </ul></div>
+
+  <div class="ds"><span class="lbl">Why data science cares</span> The SVD is PCA without needing to form a covariance matrix (numerically better), it is the engine behind latent semantic analysis and recommender systems, and Eckart–Young is the theorem that makes "keep the top $k$ components" a <em>provably optimal</em> compression rather than a heuristic.</div>
+
+  <div class="idea"><span class="lbl">Mini-lab — do this once by hand</span>
+  Take $A=\begin{pmatrix}3&0\\4&5\end{pmatrix}$. Compute $A^{\mathsf T}A$, its eigenvalues and eigenvectors, then $\sigma_i$, then $u_i=Av_i/\sigma_i$. Verify against:
+  <pre class="code">import numpy as np
+A = np.array([[3.,0.],[4.,5.]])
+U, s, Vt = np.linalg.svd(A)
+print(s)                      # your sigmas, descending
+print(np.allclose(A, U @ np.diag(s) @ Vt))   # True</pre>
+  Signs of $u_i,v_i$ may differ from yours — the SVD is unique only up to those choices when singular values are distinct, and less unique still when they repeat.</div>
+
+  <!-- ============================== MAP ============================== -->
+  <h2 id="map">How they connect</h2>
+  <div class="tw"><table>
+    <tr><th>Result</th><th>Needs</th><th>Gives</th></tr>
+    <tr><td>① Gram–Schmidt</td><td>linear independence</td><td>orthonormal bases — used by ②③⑤⑧</td></tr>
+    <tr><td>② Projection</td><td>① for the basis</td><td>least squares, normal equations</td></tr>
+    <tr><td>③ Riesz</td><td>①</td><td>every functional is $\langle\cdot,u\rangle$</td></tr>
+    <tr><td>④ Adjoint</td><td>③, one $w$ at a time</td><td>$A^{*}$, and the vocabulary normal/Hermitian/unitary</td></tr>
+    <tr><td>⑤ Schur</td><td>① + $\mathbb{C}$ algebraically closed</td><td>$A=UTU^{*}$ — the workhorse</td></tr>
+    <tr><td>⑥ Cayley–Hamilton</td><td>⑤</td><td>$\chi_A(A)=0$; matrix functions</td></tr>
+    <tr><td>⑦ Spectral theorem</td><td>⑤ + normality</td><td>$A=UDU^{*}$; PCA</td></tr>
+    <tr><td>⑧ SVD</td><td>⑦ applied to $A^{*}A$, + ①</td><td>$A=U\Sigma V^{*}$ for <em>every</em> matrix</td></tr>
+  </table></div>
+
+  <div class="idea"><span class="lbl">If you only have one evening</span> Learn <b>⑤ Schur</b> and <b>⑦ the spectral theorem</b> properly. ⑥ and ⑧ are corollaries of them, ③ and ④ are four lines each, and ② is one application of Pythagoras. Schur is the load-bearing wall.</div>
+
+  <h2>Practise these</h2>
+  <p>Chapter exercises on the <a href="index.html">self-study plan</a> — the eigenvalue and spectral material is Ex. 5.x and the Ch 6 lab. Definitions and statements are in the <a href="flashcards.html">flashcard deck</a>. The textbook itself is <a href="notes/Linear_Algebra_Mula_Wu.pdf">here</a> (v. 29 Jun 2026, with §6.3 SVD).</p>
+
+  <footer>
+    Proofs written for this site; statements follow Mula &amp; Wu (v. 29 Jun 2026). Only Theorem 6.9 is cited by number — see the note at the top. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+<script src="../assets/mfds.js?v=2" data-root="../"></script>
+</body>
+</html>
