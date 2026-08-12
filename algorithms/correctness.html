@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F9">
+<meta name="description" content="Correctness and loop invariants for the AlgoDat exam: the three obligations, how to make an invariant strong enough, nested loops, termination measures, recursive correctness by strong induction, and every invariant problem from sheets 1 and 5 worked.">
+<title>Correctness &amp; loop invariants — Algorithms &amp; Data Structures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[['$','$']]},svg:{fontCache:'global'}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#F7F7F9;--card:#fff;--border:#EFEFF2;--ink:#1B1B1F;--muted:#55555C;--faint:#8A8A90;
+    --algo:#F0A93A;--algo-bg:#FFF1DC;--algo-dark:#8A5A0E;
+    --good:#2FAE72;--good-bg:#E1F5EA;--good-dark:#0F6B41;
+    --blue:#2F6FB0;--blue-bg:#EAF2FB;
+    --purple:#6B3FA0;--purple-bg:#EFE6FE;
+    --rose:#B22C6A;--rose-bg:#FDE4EC;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Figtree',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.66;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:clamp(1.5rem,4vw,2.3rem) clamp(1rem,4vw,1.7rem) 5rem;
+        padding-left:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-left));
+        padding-right:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-right))}
+  .eyebrow{font-weight:700;color:var(--faint);font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.6rem}
+  h1{font-weight:800;font-size:clamp(1.75rem,5.5vw,2.4rem);line-height:1.1;letter-spacing:-.025em;margin-bottom:.55rem}
+  .lede{color:var(--muted);font-size:clamp(.95rem,3vw,1.04rem);max-width:46em}
+  h2{font-weight:800;font-size:clamp(1.2rem,4vw,1.5rem);letter-spacing:-.02em;margin:2.4rem 0 .7rem;scroll-margin-top:70px}
+  h3{font-weight:700;font-size:1.03rem;margin:1.5rem 0 .45rem;color:var(--algo-dark)}
+  p{margin:.55rem 0;color:var(--muted);font-size:.96rem}
+  b,strong{color:var(--ink)}
+  ul,ol{margin:.4rem 0 .7rem;padding-left:1.35rem;color:var(--muted);font-size:.96rem}
+  li{margin:.32rem 0}
+  a{color:var(--purple)}
+  code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:#F0F0F3;color:var(--algo-dark);padding:.05rem .3rem;border-radius:5px}
+  .def{background:var(--good-bg);border:1px solid rgba(47,174,114,.25);border-left:4px solid var(--good);border-radius:0 14px 14px 0;padding:.85rem 1.1rem;margin:.9rem 0;color:var(--ink);font-size:.95rem}
+  .def .tag{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--good-dark);margin-bottom:.3rem}
+  .idea{background:var(--blue-bg);border:1px solid rgba(47,111,176,.25);border-left:4px solid var(--blue);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.93rem;color:#33333A}
+  .idea .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-right:.4rem}
+  .tip{background:var(--algo-bg);border:1px solid rgba(240,169,58,.3);border-left:4px solid var(--algo);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.92rem;color:#4A3A22}
+  .tip .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--algo-dark);margin-right:.4rem}
+  .warn{background:var(--rose-bg);border:1px solid rgba(178,44,106,.25);border-left:4px solid var(--rose);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.92rem;color:#4A2233}
+  .warn .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--rose);margin-right:.4rem}
+  .inv{background:#fff;border:1px solid rgba(47,174,114,.35);border-left:4px solid var(--good);border-radius:0 12px 12px 0;padding:.8rem 1.1rem;margin:.8rem 0;color:var(--ink);font-size:.95rem}
+  .inv .lbl{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--good-dark);margin-bottom:.25rem}
+  pre.code{font-family:'JetBrains Mono',monospace;font-size:.83rem;line-height:1.5;background:#F5F5F7;border:1px solid var(--border);border-radius:12px;padding:.85rem 1.05rem;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.7rem 0;color:#26262B}
+  pre.code .kw{color:var(--blue)} pre.code .cm{color:#7A7A82;font-style:italic}
+  .step{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--good-dark)}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.8rem 0;border:1px solid var(--border);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:.89rem;background:#fff}
+  th,td{border-bottom:1px solid var(--border);padding:.5rem .65rem;text-align:left;vertical-align:top}
+  th{background:#F5F5F7;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.03em;color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  .toc{background:#fff;border:1px solid var(--border);border-radius:14px;padding:.9rem 1.2rem;margin:1.3rem 0;font-size:.9rem;line-height:1.9}
+  .toc a{text-decoration:none;font-weight:600;white-space:nowrap}
+  .pchip{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:#4A3208;background:var(--algo);border-radius:5px;padding:.1rem .45rem;vertical-align:middle;letter-spacing:.03em;white-space:nowrap}
+  footer{margin-top:3rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--faint);font-size:.82rem}
+</style>
+<link rel="stylesheet" href="../assets/mfds.css?v=4">
+</head>
+<body class="mfds mfds-algo" data-page="algo" data-up="index.html" data-up-label="Algorithms">
+<div class="wrap">
+  <div class="eyebrow">Universität Wien · Prof. Schichl · unit 2 · sheets 1 &amp; 5</div>
+  <h1>Correctness &amp; loop invariants</h1>
+  <p class="lede">This was <b>question 1 on the first-date exam, worth 8 points</b> — and sheet 1 spends six of its seventeen problems on it. It is also the most <em>learnable</em> thing on the syllabus: there is one template, it never changes, and the marks are awarded for following it visibly.</p>
+
+  <div class="toc"><b>Jump to:</b>
+    <a href="#what">what correctness means</a> ·
+    <a href="#template">the three obligations</a> ·
+    <a href="#strong">making it strong enough</a> ·
+    <a href="#sum">worked: SUM-ARRAY</a> ·
+    <a href="#search">worked: linear search</a> ·
+    <a href="#nested">nested loops</a> ·
+    <a href="#term">termination measures</a> ·
+    <a href="#rec">recursive correctness</a> ·
+    <a href="#stooge">worked: stooge sort</a> ·
+    <a href="#exam">writing it in the exam</a> ·
+    <a href="#traps">traps</a>
+  </div>
+
+  <!-- ================= WHAT ================= -->
+  <h2 id="what">What "correct" actually means</h2>
+  <div class="def"><span class="tag">The two halves</span>
+  An algorithm is <b>correct</b> for a given precondition/postcondition pair when:
+  <ul>
+    <li><b>Partial correctness</b> — <em>if</em> it terminates, the output satisfies the postcondition.</li>
+    <li><b>Termination</b> — it does in fact terminate on every legal input.</li>
+  </ul>
+  <b>Total correctness = partial correctness + termination.</b> A loop invariant proves the first. Termination needs a separate argument, and it is a separate mark.</div>
+
+  <div class="warn"><span class="lbl">For a sorting algorithm, "correct" is three claims</span>
+  Sheet 1 says it explicitly — your invariant must carry <b>three</b> properties. A sort is correct when:
+  <ol>
+    <li>it <b>terminates</b>;</li>
+    <li>the output is <b>sorted</b> (non-decreasing);</li>
+    <li>the output is a <b>permutation of the input</b> — same elements, same multiplicities.</li>
+  </ol>
+  Drop clause 3 and your proof also "proves" an algorithm that overwrites the array with zeros: that output is perfectly sorted. This is the single most commonly dropped mark in the whole course, and it was literally exam 1, question 1(a).</div>
+
+  <!-- ================= TEMPLATE ================= -->
+  <h2 id="template">The three obligations</h2>
+  <div class="def"><span class="tag">The template — memorise the shape, not the words</span>
+  Pick a property $P(\cdot)$ of the program state, indexed by the loop variable. Then prove:
+  <div class="tw"><table>
+    <tr><th>Obligation</th><th>What you show</th><th>Induction analogue</th></tr>
+    <tr><td><b>Initialization</b></td><td>$P$ holds <em>just before</em> the first iteration</td><td>base case</td></tr>
+    <tr><td><b>Maintenance</b></td><td>if $P$ holds at the start of an iteration, it still holds at the start of the next</td><td>inductive step</td></tr>
+    <tr><td><b>Termination</b></td><td>the loop stops, and $P$ <em>combined with the exit condition</em> gives the postcondition</td><td>cashing in the conclusion</td></tr>
+  </table></div></div>
+
+  <div class="idea"><span class="lbl">The one insight</span> A loop invariant is <b>an induction proof wearing work clothes</b>. Initialization is the base case, maintenance is the inductive step. The only genuinely new part is <b>termination</b> — and that is where students go wrong, because they treat it as a formality. It is not: termination is where you <em>substitute the exit value of the loop variable into the invariant</em> and read off the thing you were asked to prove.</div>
+
+  <div class="tip"><span class="lbl">Say "at the start of each iteration"</span> Always state the invariant as holding <b>at the start of an iteration</b>, before the body runs. Then "the start of the next iteration" is unambiguous, and at termination the loop variable has its <em>exit</em> value (e.g. $n+1$ for <code>for i = 1 to n</code>), which is exactly what makes the final substitution work.</div>
+
+  <!-- ================= STRENGTH ================= -->
+  <h2 id="strong">Making the invariant strong enough</h2>
+  <p>Almost every failed attempt fails the same way: the invariant is <b>true but useless</b>. Two rules.</p>
+
+  <div class="def"><span class="tag">Rule 1 — it must imply the postcondition at exit</span>
+  Work backwards. Write down what you want at the end, then ask: "what statement, with the loop variable set to its exit value, becomes exactly this?" That is your invariant.
+  <br><br>For a sort with <code>for i = 1 to n</code>, you want "$A[1..n]$ is a sorted permutation of the input". Setting $i=n+1$ in "$A[1..i-1]$ is a sorted permutation of the original $A[1..i-1]$" gives precisely that. ✓</div>
+
+  <div class="def"><span class="tag">Rule 2 — it must survive the body</span>
+  If maintenance will not go through, the invariant is <b>too weak</b> and must be <em>strengthened</em> — you add a clause. This feels backwards (you are making the thing you must prove harder) but it is standard: a stronger hypothesis is also a stronger tool in the inductive step.
+  <br><br>Selection sort is the classic case. "$A[1..i-1]$ is sorted" alone does not survive: nothing stops the algorithm from placing a small element after a large one later. You must add "<b>and every element of $A[1..i-1]$ is $\le$ every element of $A[i..n]$</b>".</div>
+
+  <div class="idea"><span class="lbl">Diagnosing a stuck maintenance step</span> If you cannot finish maintenance, ask what fact you <em>wished</em> you had. That wished-for fact is the missing clause. Add it, re-check initialization (usually still trivial), and continue.</div>
+
+  <!-- ================= SUM-ARRAY ================= -->
+  <h2 id="sum">Worked — SUM-ARRAY <span class="pchip">PROB 2</span></h2>
+  <p>The gentlest possible example, and the right one to practise the <em>shape</em> on.</p>
+<pre class="code">SUM-ARRAY(A, n)
+    s = 0
+    <span class="kw">for</span> i = 1 <span class="kw">to</span> n
+        s = s + A[i]
+    <span class="kw">return</span> s</pre>
+
+  <div class="inv"><span class="lbl">Invariant</span>
+  At the start of each iteration of the <code>for</code> loop with index $i$,
+  $$s=\sum_{k=1}^{i-1}A[k].$$</div>
+
+  <p><span class="step">Initialization</span> Before the first iteration $i=1$, so the claim is $s=\sum_{k=1}^{0}A[k]$, the empty sum, which is $0$. The code sets $s=0$. ✓</p>
+
+  <p><span class="step">Maintenance</span> Suppose the invariant holds at the start of the iteration with index $i$, so $s=\sum_{k=1}^{i-1}A[k]$. The body executes $s\gets s+A[i]$, giving
+  $$s_{\text{new}}=\sum_{k=1}^{i-1}A[k]+A[i]=\sum_{k=1}^{i}A[k],$$
+  which is exactly the invariant with $i$ replaced by $i+1$ — the start of the next iteration. ✓</p>
+
+  <p><span class="step">Termination</span> The loop exits when $i=n+1$. Substituting into the invariant:
+  $$s=\sum_{k=1}^{n}A[k],$$
+  which is the value returned. That is the postcondition. ∎</p>
+
+  <p><span class="step">Termination (that it stops)</span> $i$ starts at 1, increases by 1 each iteration and the loop runs while $i\le n$; so after exactly $n$ iterations $i=n+1$ and the loop ends.</p>
+
+  <div class="tip"><span class="lbl">Note the empty-sum move</span> Initialization worked because $\sum_{k=1}^{0}=0$ by convention. Getting the <b>boundary</b> right — empty sum, empty subarray, empty set — is what makes initialization trivial instead of awkward. If initialization looks hard, your indices are probably off by one.</div>
+
+  <!-- ================= SEARCH ================= -->
+  <h2 id="search">Worked — linear search <span class="pchip">PROB 3–4</span></h2>
+  <p>The interesting feature here is that the loop has <b>two exits</b>, so termination has two cases.</p>
+<pre class="code">LINEAR-SEARCH(A, n, x)
+    <span class="kw">for</span> i = 1 <span class="kw">to</span> n
+        <span class="kw">if</span> A[i] == x
+            <span class="kw">return</span> i
+    <span class="kw">return</span> NIL</pre>
+
+  <div class="inv"><span class="lbl">Invariant</span>
+  At the start of each iteration with index $i$: <b>$x$ does not occur in $A[1..i-1]$.</b></div>
+
+  <p><span class="step">Initialization</span> $i=1$: the range $A[1..0]$ is empty, so the claim holds vacuously. ✓</p>
+
+  <p><span class="step">Maintenance</span> Assume $x\notin A[1..i-1]$ at the start of the iteration. If $A[i]=x$ the procedure returns and there is no next iteration — nothing to prove. Otherwise $A[i]\ne x$, and combined with the hypothesis, $x\notin A[1..i]$ — the invariant for $i+1$. ✓</p>
+
+  <p><span class="step">Termination — two exits</span></p>
+  <ul>
+    <li><b>Early return.</b> The guard $A[i]=x$ held, so returning $i$ is a correct index. ✓</li>
+    <li><b>Loop runs out</b>, so $i=n+1$. The invariant gives $x\notin A[1..n]$: $x$ is absent from the array, and returning NIL is correct. ✓</li>
+  </ul>
+  <p>Worst case: $x$ absent, or in the last position — $n$ comparisons, $\Theta(n)$.</p>
+
+  <h3>The sorted variant</h3>
+  <p>If $A$ is sorted you may stop early once $A[i]&gt;x$. That changes the invariant, because the extra exit needs justifying:</p>
+  <div class="inv"><span class="lbl">Invariant (sorted array)</span>
+  At the start of each iteration with index $i$: $x\notin A[1..i-1]$, <b>and</b> $A[k]&lt;x$ for every $k\le i-1$.</div>
+  <p>The second clause is what licenses the new exit: if $A[i]&gt;x$ then by sortedness every later entry is also $&gt;x$, and by the invariant every earlier one is $&lt;x$, so $x$ is nowhere — return NIL. Note this is a strengthening in exactly the sense of <a href="#strong">Rule 2</a>: the extra clause exists only to make the new termination case go through. The worst case is still $\Theta(n)$ — early exit helps on average, not in the worst case.</p>
+
+  <!-- ================= NESTED ================= -->
+  <h2 id="nested">Nested loops</h2>
+  <div class="def"><span class="tag">The discipline</span>
+  <b>Prove the inner loop first, as a self-contained invariant proof. Then use its termination conclusion as a single step inside the outer loop's maintenance.</b>
+  <br><br>Do not try to reason about both at once. The outer maintenance step is allowed to say "by the inner loop's termination, at this point $A[\dots]$ holds $\dots$" — that is what the inner proof was for.</div>
+
+  <p>Selection sort is the canonical two-loop example on sheet 1, and it is the closest sibling to the bubblesort question that actually appeared:</p>
+
+  <div class="inv"><span class="lbl">Selection sort — the two invariants <span class="pchip">PROB 5–7</span></span>
+  <b>Inner</b> (finding the minimum of $A[i..n]$): at the start of each iteration with index $j$, $A[\mathit{min}]=\min\{A[i..j-1]\}$ and $i\le\mathit{min}\le j-1$.
+  <br><br><b>Outer</b>: at the start of each iteration with index $i$ —
+  <b>(a)</b> $A[1..i-1]$ is sorted; <b>(b)</b> every element of $A[1..i-1]$ is $\le$ every element of $A[i..n]$; <b>(c)</b> $A[1..n]$ is a permutation of the input.</div>
+
+  <p>Clause <b>(b)</b> is the strengthening. Without it, at termination you know $A[1..n-1]$ is sorted but you cannot conclude that the final element belongs at the end — the proof has a hole exactly one element wide. The full write-up, with all three obligations for both loops, is <a href="mock-exams.html#paperC">paper C question 1</a>.</p>
+
+  <div class="idea"><span class="lbl">The other two are already written out</span>
+  <b>Bubblesort</b> — the actual exam question, worked with grader notes on the <a href="mock-exam-1.html#q1">mock exam page</a>.
+  <b>Insertion sort</b> — the likeliest rotation, worked in full on the <a href="exam-proofs.html#loopinv">proofs page ①</a>, and again as <a href="mock-exams.html#paperB">paper B question 1</a>.
+  Between those and selection sort above you have all four sorting invariants the course can reasonably ask for.</div>
+
+  <!-- ================= TERMINATION ================= -->
+  <h2 id="term">Termination measures</h2>
+  <div class="def"><span class="tag">The recipe</span>
+  To prove a loop terminates, exhibit a <b>variant</b>: a quantity $\mu$ taking values in $\mathbb{N}$ (or any well-founded order) such that
+  <ol>
+    <li>$\mu$ <b>strictly decreases</b> on every iteration, and</li>
+    <li>the loop guard fails once $\mu$ reaches its floor.</li>
+  </ol>
+  There is no infinite strictly decreasing sequence of naturals, so the loop must stop.</div>
+
+  <div class="tw"><table>
+    <tr><th>Loop</th><th>Variant $\mu$</th></tr>
+    <tr><td><code>for i = 1 to n</code></td><td>$n-i+1$ — trivial, but say it</td></tr>
+    <tr><td><code>while j &gt; 0 and A[j] &gt; key</code> (insertion sort)</td><td>$j$ — decremented every pass, bounded below by the guard</td></tr>
+    <tr><td><code>while low &lt;= high</code> (binary search)</td><td>$\mathit{high}-\mathit{low}+1$ — at least halves each time</td></tr>
+    <tr><td>Euclid's <code>while b != 0</code></td><td>$b$ — strictly decreasing since $a\bmod b&lt;b$</td></tr>
+  </table></div>
+
+  <div class="warn"><span class="lbl">A counted <code>for</code> loop still needs one sentence</span> It is one line — "$i$ increases by 1 each iteration and the loop runs while $i\le n$, so it ends after $n$ iterations" — and it is worth a mark. Write it. The place termination genuinely bites is a <code>while</code> loop whose guard depends on data, like the inner loop of insertion sort.</div>
+
+  <!-- ================= RECURSION ================= -->
+  <h2 id="rec">Recursive correctness — strong induction</h2>
+  <div class="def"><span class="tag">The recursive template</span>
+  A recursive procedure has no loop, so there is no invariant. Use <b>strong induction on the input size $n$</b>:
+  <ol>
+    <li><b>Base case</b> — the procedure is correct on the smallest inputs it handles without recursing.</li>
+    <li><b>Inductive step</b> — assume the procedure is correct on <em>all</em> inputs of size $&lt;n$ (this is why it must be <em>strong</em> induction: the recursive calls need not be on size $n-1$), then show the combination step turns those correct sub-results into a correct result for size $n$.</li>
+    <li><b>Termination</b> — every recursive call is on a <b>strictly smaller</b> input, and the base case is reachable.</li>
+  </ol></div>
+
+  <div class="idea"><span class="lbl">The correspondence</span> Loop invariant and strong induction are the same proof in two syntaxes: initialization ↔ base case, maintenance ↔ inductive step, termination ↔ the recursion bottoming out. If the exam gives you recursive pseudocode, do <b>not</b> try to invent a loop invariant — reach for induction on $n$.</div>
+
+  <!-- ================= STOOGE ================= -->
+  <h2 id="stooge">Worked — stooge sort <span class="pchip">PROB 51</span></h2>
+  <p>Sheet 5 asks for correctness <em>and</em> a recurrence in one problem — very exam-shaped, and the correctness half is genuinely non-obvious.</p>
+<pre class="code">STOOGE-SORT(A, i, j)
+    <span class="kw">if</span> A[i] &gt; A[j]
+        swap A[i] and A[j]
+    <span class="kw">if</span> i + 1 &gt;= j
+        <span class="kw">return</span>
+    k = floor((j - i + 1) / 3)
+    STOOGE-SORT(A, i,     j - k)    <span class="cm">// first two-thirds</span>
+    STOOGE-SORT(A, i + k, j    )    <span class="cm">// last two-thirds</span>
+    STOOGE-SORT(A, i,     j - k)    <span class="cm">// first two-thirds again</span></pre>
+
+  <p>Write $n=j-i+1$ for the length of the segment and $k=\lfloor n/3\rfloor$.</p>
+
+  <p><span class="step">Base case</span> If $n\le2$ the procedure performs the compare-and-swap and returns (the guard <code>i+1 &gt;= j</code> holds). One comparison sorts a segment of length 1 or 2. ✓</p>
+
+  <p><span class="step">Inductive step</span> Let $n\ge3$ and assume STOOGE-SORT correctly sorts every segment of length $&lt;n$. Each recursive call is on a segment of length $n-k&lt;n$, so the hypothesis applies to all three.</p>
+
+  <p><b>Claim: after the first call, the $k$ largest elements of the segment all lie in $A[i+k..j]$</b> — the region the second call will sort.</p>
+  <ul>
+    <li>The first call sorts $A[i..j-k]$. Any of the top $k$ elements that started there is now among the last $k$ positions <em>of that range</em>, i.e. in $A[j-2k+1..j-k]$.</li>
+    <li>That range sits inside $A[i+k..j]$ provided $j-2k+1\ge i+k$, i.e. $n\ge3k$ — true because $k=\lfloor n/3\rfloor$.</li>
+    <li>Any of the top $k$ elements that started in $A[j-k+1..j]$ was never touched, and that range is also inside $A[i+k..j]$.</li>
+  </ul>
+
+  <p>So after the <b>second</b> call, which sorts $A[i+k..j]$, those $k$ largest elements occupy the final $k$ positions $A[j-k+1..j]$ in sorted order — and they are the $k$ largest of the whole segment, hence they are in their final positions.</p>
+
+  <p>What remains, $A[i..j-k]$, therefore contains exactly the $n-k$ smallest elements. The <b>third</b> call sorts that range, and by the induction hypothesis it does so correctly. The whole segment is now sorted. ∎</p>
+
+  <p><span class="step">Termination</span> Each call recurses on length $n-k=n-\lfloor n/3\rfloor$, which is strictly less than $n$ for $n\ge2$, and the base case catches $n\le2$.</p>
+
+  <div class="def"><span class="tag">The recurrence half</span>
+  Each call makes three recursive calls on segments of size $\approx\tfrac23n$ plus $\Theta(1)$ work:
+  $$T(n)=3\,T\!\left(\tfrac{2n}{3}\right)+\Theta(1).$$
+  Master theorem with $a=3$, $b=\tfrac32$: watershed $n^{\log_{3/2}3}\approx n^{2.7095}$. Since $f(n)=\Theta(1)=O(n^{\log_{3/2}3-\varepsilon})$, this is <b>case 1</b>:
+  $$T(n)=\Theta\!\left(n^{\log_{1.5}3}\right)\approx\Theta(n^{2.71}).$$
+  Worse than bubblesort — the point of the exercise is that a correct algorithm can still be terrible.</div>
+
+  <!-- ================= EXAM ================= -->
+  <h2 id="exam">Writing it in the exam</h2>
+  <div class="def"><span class="tag">The skeleton — fill in the blanks</span>
+  <ol>
+    <li><b>"Loop invariant:</b> at the start of each iteration of the ⟨which⟩ loop with index ⟨var⟩, ⟨property⟩.<b>"</b> — for a sort, remember the permutation clause.</li>
+    <li><b>"Initialization."</b> Set the loop variable to its initial value, show the property is (usually vacuously) true.</li>
+    <li><b>"Maintenance."</b> Assume it at the start of iteration ⟨var⟩; walk through what the body does; conclude it holds for ⟨var⟩ + 1. If there is an inner loop, invoke <em>its</em> termination result here.</li>
+    <li><b>"Termination."</b> Give the exit value of the loop variable, substitute it into the invariant, and state that the result is the postcondition.</li>
+    <li><b>"The loop terminates because</b> ⟨variant⟩ strictly decreases and is bounded below.<b>"</b></li>
+  </ol>
+  Five labelled paragraphs. Graders look for the labels — writing them makes partial credit easy to award even if a detail is wrong.</div>
+
+  <div class="tip"><span class="lbl">Budget</span> Q1 was 8 points in a 90-minute, 40-point paper, so roughly <b>16 minutes</b>. That is comfortable for this template once you have written it three or four times. Practise on <a href="#sum">SUM-ARRAY</a> until the shape is automatic, then do selection sort cold.</div>
+
+  <!-- ================= TRAPS ================= -->
+  <h2 id="traps">Traps</h2>
+  <div class="tw"><table>
+    <tr><th>Trap</th><th>Reality</th></tr>
+    <tr><td>Invariant says only "$A[1..i-1]$ is sorted"</td><td>Also needs the <b>permutation</b> clause. Without it the proof is compatible with an algorithm that destroys data. Caps you around 5/8.</td></tr>
+    <tr><td>Termination treated as a formality</td><td>It is where you <em>substitute the exit value</em> and derive the postcondition. Skipping it means you have proved nothing about the final state.</td></tr>
+    <tr><td>Proving "the invariant holds at the end of the body"</td><td>State it at the <b>start</b> of an iteration. Otherwise the exit value of the loop variable does not line up and termination gets messy.</td></tr>
+    <tr><td>Selection sort without the "$\le$ everything after" clause</td><td>Maintenance goes through, but termination cannot place the last element. The hole is invisible unless you check it.</td></tr>
+    <tr><td>One invariant for a nested loop</td><td>Two loops, two invariants. Prove the inner one first and cite it in the outer maintenance step.</td></tr>
+    <tr><td>Inventing a loop invariant for recursive code</td><td>Use strong induction on the input size instead.</td></tr>
+    <tr><td>"Terminates because it's a <code>for</code> loop"</td><td>Fine — but write the sentence. It is a mark.</td></tr>
+    <tr><td>Ordinary induction for a recursion that isn't on $n-1$</td><td>Stooge sort recurses on $\tfrac23n$. You need <b>strong</b> induction ("correct for all sizes $&lt;n$").</td></tr>
+  </table></div>
+
+  <h2>Practise this</h2>
+  <p>Sheet 1 problems <b>2</b> (SUM-ARRAY), <b>3–4</b> (linear search), <b>5–7</b> (selection sort) — all four are on the <a href="problem-sheets.html#s1">sheet-1 map</a> — and sheet 5 problem <b>51</b> (stooge sort). Then sit <a href="mock-exam-1.html#q1">the real Q1</a> closed-book, and the Q1s of <a href="mock-exams.html#paperB">paper B</a>, <a href="mock-exams.html#paperC">paper C</a> and <a href="mock-exams.html#paperD">paper D</a>. The template card is in the <a href="flashcards.html">deck</a>.</p>
+
+  <footer>
+    Notation follows CLRS 4th ed. §2.1. Problem sheets © Prof. Schichl. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+<script src="../assets/mfds.js?v=4" data-root="../"></script>
+</body>
+</html>

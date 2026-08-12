@@ -190,8 +190,11 @@ body.mfds td, body.mfds th { border-color: var(--border) !important; }
 body.mfds td { background: #fff; }
 body.mfds tr:nth-child(even) td { background: #FCFCFD; }
 
-/* chips / pills that used dark-on-accent text */
-body.mfds .exam1chip, body.mfds .x1 {
+/* chips / pills that used dark-on-accent text.
+   .pchip pages set background:var(--algo) meaning "the amber accent", but this
+   file redefines --algo as the Algorithms *subject* blue (line ~59). The chip's
+   dark-brown text then landed on blue at 2.3:1. Pin it to the amber token. */
+body.mfds .exam1chip, body.mfds .x1, body.mfds .pchip {
   background: var(--warn-solid) !important;
   color: #4A3208 !important;
 }

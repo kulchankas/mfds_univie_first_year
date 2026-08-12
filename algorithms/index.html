@@ -104,7 +104,7 @@
   footer{margin-top:3rem;padding-top:1.3rem;border-top:1px solid var(--border-soft);color:var(--text-dim);font-size:.82rem}
   footer a{color:var(--accent);text-decoration:none}
 </style>
-<link rel="stylesheet" href="../assets/mfds.css?v=3">
+<link rel="stylesheet" href="../assets/mfds.css?v=4">
 </head>
 <body class="mfds mfds-algo" data-page="algo">
 <div class="wrap">
@@ -150,6 +150,7 @@
   <h2>Study kit</h2>
   <a class="doc" href="exam-proofs.html"><span class="ic">🧾</span><span class="t">Exam proofs — all 11 flagged items, written out <span class="s">· loop invariants · Master/Akra–Bazzi · quicksort · lower bound · selection · hashing · Huffman · augmentation</span></span><span class="ext">HTML</span></a>
   <a class="doc" href="asymptotics.html"><span class="ic">📈</span><span class="t">Asymptotics &amp; growth — the concise note <span class="s">· the five symbols and their negations · growth ladder · Stirling · the limit test · the traps</span></span><span class="ext">HTML</span></a>
+  <a class="doc" href="correctness.html"><span class="ic">✔️</span><span class="t">Correctness &amp; loop invariants — the concise note <span class="s">· the three obligations · strengthening · nested loops · termination measures · recursive correctness</span></span><span class="ext">HTML</span></a>
   <a class="doc" href="data-structures.html"><span class="ic">🗂️</span><span class="t">Data-structure notes — the "describe &amp; define" half <span class="s">· heaps · BST/RBT · hashing · B-trees · sorting zoo · DP · greedy</span></span><span class="ext">HTML</span></a>
   <a class="doc" href="recurrence-drills.html"><span class="ic">🧮</span><span class="t">Recurrence drills — decision procedure + 21 problems <span class="s">· incl. the extended case 2 and Akra–Bazzi the exam actually uses</span></span><span class="ext">HTML</span></a>
   <a class="doc" href="flashcards.html"><span class="ic">🃏</span><span class="t">Flashcards — 72 cards, spaced repetition <span class="s">· recurrences · AVL · graphs · probability · DP &amp; greedy · everything above</span></span><span class="ext">HTML</span></a>
@@ -264,8 +265,9 @@
             'Handle a <b>nested</b> loop: prove the inner invariant first, then use it as one step of the outer maintenance.',
             'Reproduce bubblesort (this was exam 1 Q1, 8 pts), insertion sort and selection sort <b>cold</b>, invariant and all three parts.',
             'Give a termination argument: a strictly decreasing $\\mathbb{N}$-valued quantity.'],
-      links:'<a href="exam-proofs.html#loopinv">proofs ①</a> · <a href="mock-exam-1.html#q1">mock Q1</a>',
-      learn:[['CLRS §2.1','','Insertion sort — the canonical worked invariant, in the exact style the exam wants.'],
+      links:'<a href="correctness.html">the correctness note</a> · <a href="exam-proofs.html#loopinv">proofs ①</a> · <a href="mock-exam-1.html#q1">mock Q1</a>',
+      learn:[['The correctness note','correctness.html','<b>Start here</b> — the three obligations, how to strengthen a weak invariant, nested loops, termination measures, and SUM-ARRAY / linear search / selection sort / stooge sort worked.'],
+             ['CLRS §2.1','','Insertion sort — the canonical worked invariant, in the exact style the exam wants.'],
              ['Loop invariant','https://en.wikipedia.org/wiki/Loop_invariant','Background on partial vs total correctness.'],
              ['Sorting visualiser','https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html','Watch bubble/insertion/selection step by step until the invariant is obvious.'],
              ['Algorithms Lab — Loop Invariant Proofs','https://www.youtube.com/watch?v=_maJ4Qy7Q0E','Initialization/maintenance/termination done live.'],
@@ -617,6 +619,6 @@
 })();
 </script>
 </div>
-<script src="../assets/mfds.js?v=3" data-root="../"></script>
+<script src="../assets/mfds.js?v=4" data-root="../"></script>
 </body>
 </html>
