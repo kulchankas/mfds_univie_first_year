@@ -159,32 +159,35 @@
 
   <!-- ================= SEARCH ================= -->
   <h2 id="search">Worked — linear search <span class="pchip">PROB 3–4</span></h2>
-  <p>The interesting feature here is that the loop has <b>two exits</b>, so termination has two cases.</p>
+
+  <div class="warn"><span class="lbl">Read the sheet's output spec carefully</span>
+  Problem 3 is <b>not</b> "return NIL if absent". The sheet asks for: an index $i$ with $x=A[i]$; if $x$ does not appear, the <b>largest</b> index $i$ with $A[i]&lt;x$; and $0$ if no such index exists. The input is <b>strictly</b> increasing. So this is a <b>predecessor search</b>, and the invariant has to be built for that postcondition — see <a href="#strong">Rule 1</a>. The full solution, with the Julia version, is on the <a href="sheet-1-solutions.html#p3">Sheet 1 page</a>.</div>
+
+  <div class="idea"><span class="lbl">The trick</span> One rule covers both hit and miss: <b>walk forward while the next element is still $\le x$.</b> On a hit you stop exactly on $x$; on a miss you stop on its predecessor; if even $A[1]&gt;x$ you never move and return $0$.</div>
+
 <pre class="code">LINEAR-SEARCH(A, n, x)
-    <span class="kw">for</span> i = 1 <span class="kw">to</span> n
-        <span class="kw">if</span> A[i] == x
-            <span class="kw">return</span> i
-    <span class="kw">return</span> NIL</pre>
+    i = 0
+    <span class="kw">while</span> i &lt; n <span class="kw">and</span> A[i+1] &lt;= x
+        i = i + 1
+    <span class="kw">return</span> i</pre>
 
   <div class="inv"><span class="lbl">Invariant</span>
-  At the start of each iteration with index $i$: <b>$x$ does not occur in $A[1..i-1]$.</b></div>
+  At the start of each iteration of the <code>while</code> loop:
+  $$0\le i\le n\quad\text{and}\quad A[k]\le x\ \text{ for every }1\le k\le i.$$</div>
 
-  <p><span class="step">Initialization</span> $i=1$: the range $A[1..0]$ is empty, so the claim holds vacuously. ✓</p>
+  <p><span class="step">Initialization</span> $i=0$: the bound holds, and $A[1..0]$ is empty so the second clause is vacuous. ✓</p>
 
-  <p><span class="step">Maintenance</span> Assume $x\notin A[1..i-1]$ at the start of the iteration. If $A[i]=x$ the procedure returns and there is no next iteration — nothing to prove. Otherwise $A[i]\ne x$, and combined with the hypothesis, $x\notin A[1..i]$ — the invariant for $i+1$. ✓</p>
+  <p><span class="step">Maintenance</span> The body runs only when $i&lt;n$ and $A[i+1]\le x$. Afterwards $i$ has become $i+1\le n$, and the guard just supplied the one missing fact $A[i+1]\le x$, so the property extends to the whole range $1..i+1$. ✓</p>
 
-  <p><span class="step">Termination — two exits</span></p>
+  <p><span class="step">Termination — two exits</span> This is the part worth the marks, because each exit needs its own argument.</p>
   <ul>
-    <li><b>Early return.</b> The guard $A[i]=x$ held, so returning $i$ is a correct index. ✓</li>
-    <li><b>Loop runs out</b>, so $i=n+1$. The invariant gives $x\notin A[1..n]$: $x$ is absent from the array, and returning NIL is correct. ✓</li>
+    <li><b>$i=n$.</b> Everything is $\le x$, so $A[n]$ is the largest element and $A[n]\le x$ — returning $n$ is correct whether it is a hit or the predecessor. ✓</li>
+    <li><b>$A[i+1]&gt;x$.</b> Here <b>sortedness</b> does the work: every $k\ge i+1$ has $A[k]\ge A[i+1]&gt;x$, so nothing beyond $i$ can be the answer. With the invariant covering $k\le i$: if $A[i]=x$ it is a hit; if $A[i]&lt;x$ then $i$ is the largest such index; and if $i=0$ nothing is $\le x$, so $0$ is right. ✓</li>
   </ul>
-  <p>Worst case: $x$ absent, or in the last position — $n$ comparisons, $\Theta(n)$.</p>
 
-  <h3>The sorted variant</h3>
-  <p>If $A$ is sorted you may stop early once $A[i]&gt;x$. That changes the invariant, because the extra exit needs justifying:</p>
-  <div class="inv"><span class="lbl">Invariant (sorted array)</span>
-  At the start of each iteration with index $i$: $x\notin A[1..i-1]$, <b>and</b> $A[k]&lt;x$ for every $k\le i-1$.</div>
-  <p>The second clause is what licenses the new exit: if $A[i]&gt;x$ then by sortedness every later entry is also $&gt;x$, and by the invariant every earlier one is $&lt;x$, so $x$ is nowhere — return NIL. Note this is a strengthening in exactly the sense of <a href="#strong">Rule 2</a>: the extra clause exists only to make the new termination case go through. The worst case is still $\Theta(n)$ — early exit helps on average, not in the worst case.</p>
+  <p><span class="step">The loop terminates</span> The variant is $n-i$: a non-negative integer, strictly decreasing, and the guard $i&lt;n$ fails at $0$.</p>
+
+  <p>Worst case $\Theta(n)$, attained whenever $x\ge A[n]$; best case $\Theta(1)$. Note that sortedness buys <em>correctness of the early exit</em>, not a better worst case — for that you need binary search, $\Theta(\lg n)$.</p>
 
   <!-- ================= NESTED ================= -->
   <h2 id="nested">Nested loops</h2>

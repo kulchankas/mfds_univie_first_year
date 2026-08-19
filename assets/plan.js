@@ -143,6 +143,7 @@ window.MFDS_PLAN = {
     'asg-progress-v1',
     'lads-progress-v1',
     'algo-progress-v1',
+    'algo-sheet1-v1',
     'analysis-daily-v1'
   ],
 

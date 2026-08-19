@@ -104,6 +104,7 @@
 
   <!-- ============================ SHEET 1 ============================ -->
   <h2 id="s1">Sheet 1 — asymptotics &amp; loop invariants</h2>
+  <div class="box" style="border-left-color:#2FAE72"><span class="lbl" style="color:#0F6B41">All 17 solved</span>Every problem on this sheet is worked out on the <a href="sheet-1-solutions.html"><b>Sheet 1 solutions page</b></a>, with tick-off progress. The only <em>official</em> solution is the bundled problem-14 PDF below.</div>
   <div class="sheet-sub">problems 1–17 · file <code>ss26_algodat-12.pdf</code> · <a href="problem-sheets/ss26_algodat-12.pdf">open PDF</a></div>
   <div class="tw"><table>
     <tr><th>#</th><th>Topic</th><th>What it tests</th></tr>
@@ -114,7 +115,7 @@
     <tr><td class="n">8</td><td class="tg"><span class="tag t-rec">induction</span></td><td>Induction on $n=2^k$ for $T(n)=2T(n/2)+n \Rightarrow T(n)=n\lg n$.</td></tr>
     <tr><td class="n">9–12</td><td class="tg"><span class="tag t-rec">Landau</span></td><td>$\Theta$ of a polynomial; $2^{n+1}=O(2^n)$ but $2^{2n}\neq O(2^n)$; transitivity of $\Theta$; $\Omega$/$\omega$ sum rule; $O\circ o\Rightarrow o$. Pure symbol manipulation — easy marks if drilled.</td></tr>
     <tr><td class="n">13</td><td class="tg"><span class="tag t-rec">Stirling</span></td><td>From Stirling: $n!=o(n^n)$, $n!=\omega(2^n)$, $\lg(n!)=\Theta(n\lg n)$. The last one is what powers the <a href="exam-proofs.html#lowerbound">$\Omega(n\lg n)$ sorting bound</a>.</td></tr>
-    <tr><td class="n">14–15 <span class="star">★</span></td><td class="tg"><span class="tag t-rec">ordering</span></td><td>Order ~30 functions incl. $\lg^*n$, $2^{\lg^*n}$, $n^{1/\lg n}$, $(\lg n)^{\lg n}$, $2^{2^n}$ by growth. <b>A full worked solution is bundled</b> — <a href="problem-sheets/Problem_14_Sheet_1_Algo_and_Data_Structures.pdf">open it</a>. Key simplifications: $(\sqrt2)^{\lg n}=n^{1/2}$, $n^{1/\lg n}=2$, $2^{\lg n}=n$.</td></tr>
+    <tr><td class="n">14–15 <span class="star">★</span></td><td class="tg"><span class="tag t-rec">ordering</span></td><td>Order ~30 functions (problem 14 only) incl. $\lg^*n$, $2^{\lg^*n}$, $n^{1/\lg n}$, $(\lg n)^{\lg n}$, $2^{2^n}$ by growth. <b>A full worked solution is bundled</b> — <a href="problem-sheets/Problem_14_Sheet_1_Algo_and_Data_Structures.pdf">open it</a>. Key simplifications: $(\sqrt2)^{\lg n}=n^{1/2}$, $n^{1/\lg n}=2$, $2^{\lg n}=n$.</td></tr>
     <tr><td class="n">16</td><td class="tg"><span class="tag t-rec">tree+subst</span></td><td>$T(n)=4T(n/3)+n$: sketch the recursion tree, guess, then prove by induction.</td></tr>
     <tr><td class="n">15b</td><td class="tg"><span class="tag t-rec">substitution</span></td><td>$T(n)=4T(n/2)+n \Rightarrow \Theta(n^2)$ by substitution. <b>Hint from the sheet: subtract a lower-order term</b> — the standard trick when the naive guess fails to tighten.</td></tr>
     <tr><td class="n">17</td><td class="tg"><span class="tag t-rec">Master</span></td><td>Strassen: $T(n)=7T(n/2)+\Theta(n^2)\Rightarrow O(n^{\lg 7})$. → <a href="recurrence-drills.html">drill A5</a>.</td></tr>

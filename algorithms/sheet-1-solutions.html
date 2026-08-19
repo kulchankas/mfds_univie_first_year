@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F9">
+<meta name="description" content="Worked solutions to all 17 problems of Problem Sheet 1 (Schichl, AlgoDat): the growth table, SUM-ARRAY and linear-search invariants, selection sort, induction, Landau algebra, Stirling, the lg* ordering, substitution, recursion trees and the Master Theorem.">
+<title>Sheet 1 — worked solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[['$','$']]},svg:{fontCache:'global'}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#F7F7F9;--card:#fff;--border:#EFEFF2;--ink:#1B1B1F;--muted:#55555C;--faint:#8A8A90;
+    --algo:#F0A93A;--algo-bg:#FFF1DC;--algo-dark:#8A5A0E;
+    --good:#2FAE72;--good-bg:#E1F5EA;--good-dark:#0F6B41;
+    --blue:#2F6FB0;--blue-bg:#EAF2FB;
+    --purple:#6B3FA0;--purple-bg:#EFE6FE;
+    --rose:#B22C6A;--rose-bg:#FDE4EC;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Figtree',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.66;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:clamp(1.5rem,4vw,2.3rem) clamp(1rem,4vw,1.7rem) 5rem;
+        padding-left:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-left));
+        padding-right:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-right))}
+  .eyebrow{font-weight:700;color:var(--faint);font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.6rem}
+  h1{font-weight:800;font-size:clamp(1.75rem,5.5vw,2.4rem);line-height:1.1;letter-spacing:-.025em;margin-bottom:.55rem}
+  .lede{color:var(--muted);font-size:clamp(.95rem,3vw,1.04rem);max-width:46em}
+  h2{font-weight:800;font-size:clamp(1.15rem,3.8vw,1.4rem);letter-spacing:-.02em;margin:2.6rem 0 .5rem;scroll-margin-top:70px}
+  h2 .pn{font-family:'JetBrains Mono',monospace;color:#fff;background:var(--algo-dark);border-radius:7px;padding:.05rem .5rem;font-size:.8em;margin-right:.4rem}
+  h3{font-weight:700;font-size:1rem;margin:1.4rem 0 .4rem;color:var(--algo-dark)}
+  p{margin:.55rem 0;color:var(--muted);font-size:.96rem}
+  b,strong{color:var(--ink)}
+  ul,ol{margin:.4rem 0 .7rem;padding-left:1.35rem;color:var(--muted);font-size:.96rem}
+  li{margin:.32rem 0}
+  a{color:var(--purple)}
+  code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:#F0F0F3;color:var(--algo-dark);padding:.05rem .3rem;border-radius:5px}
+  .q{background:#fff;border:1px solid var(--border);border-left:4px solid var(--faint);border-radius:0 12px 12px 0;padding:.8rem 1.1rem;margin:.7rem 0;font-size:.93rem;color:#3B3B42}
+  .q .lbl{display:block;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);margin-bottom:.25rem}
+  .def{background:var(--good-bg);border:1px solid rgba(47,174,114,.25);border-left:4px solid var(--good);border-radius:0 14px 14px 0;padding:.85rem 1.1rem;margin:.9rem 0;color:var(--ink);font-size:.95rem}
+  .def .tag{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--good-dark);margin-bottom:.3rem}
+  .idea{background:var(--blue-bg);border:1px solid rgba(47,111,176,.25);border-left:4px solid var(--blue);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.93rem;color:#33333A}
+  .idea .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-right:.4rem}
+  .warn{background:var(--rose-bg);border:1px solid rgba(178,44,106,.25);border-left:4px solid var(--rose);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.92rem;color:#4A2233}
+  .warn .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--rose);margin-right:.4rem}
+  .tip{background:var(--algo-bg);border:1px solid rgba(240,169,58,.3);border-left:4px solid var(--algo);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.92rem;color:#4A3A22}
+  .tip .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--algo-dark);margin-right:.4rem}
+  .inv{background:#fff;border:1px solid rgba(47,174,114,.35);border-left:4px solid var(--good);border-radius:0 12px 12px 0;padding:.8rem 1.1rem;margin:.8rem 0;color:var(--ink);font-size:.95rem}
+  .inv .lbl{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--good-dark);margin-bottom:.25rem}
+  pre.code{font-family:'JetBrains Mono',monospace;font-size:.83rem;line-height:1.5;background:#F5F5F7;border:1px solid var(--border);border-radius:12px;padding:.85rem 1.05rem;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.7rem 0;color:#26262B}
+  pre.code .kw{color:var(--blue)} pre.code .cm{color:#7A7A82;font-style:italic}
+  .step{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--good-dark)}
+  .ans{display:inline-block;font-weight:800;color:var(--good-dark);background:var(--good-bg);border-radius:6px;padding:.05rem .45rem}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.8rem 0;border:1px solid var(--border);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:.89rem;background:#fff}
+  th,td{border-bottom:1px solid var(--border);padding:.5rem .65rem;text-align:left;vertical-align:top}
+  th{background:#F5F5F7;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.03em;color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  .toc{background:#fff;border:1px solid var(--border);border-radius:14px;padding:.9rem 1.2rem;margin:1.3rem 0;font-size:.9rem;line-height:2}
+  .toc a{text-decoration:none;font-weight:600;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:.85rem;
+         border:1px solid var(--border);border-radius:7px;padding:.15rem .5rem;display:inline-block;margin:.1rem .1rem}
+  .toc a:hover{border-color:var(--algo)}
+  /* per-problem tick-off */
+  h2{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}
+  .tick{flex:none;width:22px;height:22px;border-radius:7px;border:1.5px solid #C9C9D0;background:#fff;
+        color:transparent;font-size:13px;line-height:19px;text-align:center;font-weight:800;cursor:pointer;
+        padding:0;-webkit-tap-highlight-color:transparent;transition:background .12s,border-color .12s}
+  .tick:hover{border-color:var(--good)}
+  .tick.on{background:var(--good);border-color:var(--good);color:#fff}
+  h2.done .pn{background:var(--good-dark)}
+  h2.done{opacity:.72}
+  .progress{position:sticky;top:56px;z-index:20;background:#fff;border:1px solid var(--border);border-radius:14px;
+            padding:.7rem 1rem;margin:1.2rem 0;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;
+            box-shadow:0 2px 10px rgba(0,0,0,.04)}
+  .progress .pt{font-weight:800;font-size:.9rem}
+  .progress .pb{flex:1;min-width:120px;height:8px;border-radius:99px;background:#EFEFF2;overflow:hidden}
+  .progress .pb i{display:block;height:100%;width:0;background:var(--good);transition:width .25s ease}
+  .progress button{font-size:.75rem;font-weight:700;border:1px solid var(--border);background:#F7F7F9;
+                   color:var(--muted);border-radius:999px;padding:.3rem .7rem;cursor:pointer}
+  .progress button:hover{border-color:var(--faint)}
+  footer{margin-top:3rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--faint);font-size:.82rem}
+</style>
+<link rel="stylesheet" href="../assets/mfds.css?v=4">
+</head>
+<body class="mfds mfds-algo" data-page="algo" data-up="index.html" data-up-label="Algorithms">
+<div class="wrap">
+  <div class="eyebrow">Universität Wien · Prof. Schichl · problem sheet 1</div>
+  <h1>Sheet 1 — worked solutions</h1>
+  <p class="lede">All <b>17 problems</b>, transcribed from the sheet and solved. Problems 2–7 are the loop-invariant block that became <b>exam question 1</b>; 9–13 are the Landau algebra; 15–17 are your first recurrences.</p>
+
+  <div class="warn"><span class="lbl">Use these the right way</span>
+  Attempt each problem on paper <b>before</b> reading the solution. These are written the way a grader wants to see an answer — which means they are longer than what you would scribble while thinking. The value is in comparing your write-up to the model, not in reading the model.</div>
+
+  <div class="toc"><b>Jump to:</b><br>
+    <a href="#p1">1 growth table</a>
+    <a href="#p2">2 SUM-ARRAY</a>
+    <a href="#p3">3 search</a>
+    <a href="#p4">4 its proof</a>
+    <a href="#p5">5 selection sort</a>
+    <a href="#p6">6 its invariant</a>
+    <a href="#p7">7 its runtime</a>
+    <a href="#p8">8 induction</a>
+    <a href="#p9">9 Landau</a>
+    <a href="#p10">10 Θ transitive</a>
+    <a href="#p11">11 Ω + ω</a>
+    <a href="#p12">12 O ∘ o</a>
+    <a href="#p13">13 Stirling</a>
+    <a href="#p14">14 ordering</a>
+    <a href="#p15">15 substitution</a>
+    <a href="#p16">16 recursion tree</a>
+    <a href="#p17">17 Strassen</a>
+  </div>
+
+  <div class="progress">
+    <span class="pt" id="p-count">0 / 17 done</span>
+    <span class="pb"><i id="p-bar"></i></span>
+    <button type="button" id="p-reset">reset</button>
+  </div>
+
+  <!-- ============================== 1 ============================== -->
+  <h2 id="p1" data-p="1"><button type="button" class="tick" aria-label="Mark problem 1 done">✓</button><span class="pn">1</span>The growth table</h2>
+  <div class="q"><span class="lbl">Problem</span>Your computer executes $10^{9}$ operations per second. For each running time $f(n)$ and each time limit, find the (approximate) largest problem size $n$ that can be solved.</div>
+
+  <div class="idea"><span class="lbl">The method</span> Convert the time limit into an <b>operation budget</b> $N=(\text{seconds})\times10^{9}$, then <b>invert</b> $f$: solve $f(n)=N$ for $n$. Every cell is one inversion; the table is just the same two steps thirty times.</div>
+
+  <p><span class="step">Step 1 — the budgets</span></p>
+  <div class="tw"><table>
+    <tr><th>Limit</th><th>Seconds</th><th>Budget $N$</th></tr>
+    <tr><td>1 µs</td><td>$10^{-6}$</td><td>$10^{3}$</td></tr>
+    <tr><td>1 ms</td><td>$10^{-3}$</td><td>$10^{6}$</td></tr>
+    <tr><td>1 s</td><td>$1$</td><td>$10^{9}$</td></tr>
+    <tr><td>1 min</td><td>$60$</td><td>$6\times10^{10}$</td></tr>
+    <tr><td>1 hour</td><td>$3600$</td><td>$3.6\times10^{12}$</td></tr>
+    <tr><td>1 day</td><td>$86\,400$</td><td>$8.64\times10^{13}$</td></tr>
+    <tr><td>1 week</td><td>$604\,800$</td><td>$6.05\times10^{14}$</td></tr>
+    <tr><td>30 days</td><td>$2.592\times10^{6}$</td><td>$2.59\times10^{15}$</td></tr>
+    <tr><td>1 year</td><td>$3.156\times10^{7}$</td><td>$3.15\times10^{16}$</td></tr>
+    <tr><td>1000 years</td><td>$3.156\times10^{10}$</td><td>$3.15\times10^{19}$</td></tr>
+  </table></div>
+
+  <p><span class="step">Step 2 — the inversions</span> Solve $f(n)=N$:</p>
+  <div class="tw"><table>
+    <tr><th>$f(n)$</th><th>$n=f^{-1}(N)$</th><th>$N=10^{9}$ (one second)</th></tr>
+    <tr><td>$\lg\lg n$</td><td>$2^{2^{N}}$</td><td>$2^{2^{10^{9}}}$ — beyond astronomical</td></tr>
+    <tr><td>$\lg n$</td><td>$2^{N}$</td><td>$2^{10^{9}}$</td></tr>
+    <tr><td>$\sqrt n$</td><td>$N^{2}$</td><td>$10^{18}$</td></tr>
+    <tr><td>$n$</td><td>$N$</td><td>$10^{9}$</td></tr>
+    <tr><td>$n\lg n$</td><td>no closed form — solve numerically</td><td>$\approx3.96\times10^{7}$</td></tr>
+    <tr><td>$n^{2}$</td><td>$\sqrt N$</td><td>$31\,622$</td></tr>
+    <tr><td>$n^{3}$</td><td>$N^{1/3}$</td><td>$1000$</td></tr>
+    <tr><td>$n^{4}$</td><td>$N^{1/4}$</td><td>$177$</td></tr>
+    <tr><td>$2^{n}$</td><td>$\lfloor\lg N\rfloor$</td><td>$29$</td></tr>
+    <tr><td>$n!$</td><td>largest $n$ with $n!\le N$</td><td>$12$ &nbsp;<span style="color:var(--faint)">($12!\approx4.8\times10^{8}$, $13!\approx6.2\times10^{9}$)</span></td></tr>
+  </table></div>
+
+  <p><span class="step">For $n\lg n$</span> Try $n=4\times10^{7}$: $\lg(4\times10^{7})\approx25.25$, so $n\lg n\approx1.01\times10^{9}$ — a hair over. So $n\approx3.96\times10^{7}$. Good enough; the problem says "approximate".</p>
+
+  <div class="idea"><span class="lbl">What the table is really teaching</span>
+  Compare the <b>1 µs</b> and <b>1000 years</b> columns — a factor of $3\times10^{22}$ more time:
+  <ul>
+    <li>$f(n)=n$: $n$ goes from $10^{3}$ to $3\times10^{19}$ — the same factor.</li>
+    <li>$f(n)=n^{2}$: only the square root of that factor.</li>
+    <li>$f(n)=2^{n}$: from $n\approx9$ to $n\approx64$. <b>Twenty-two orders of magnitude of extra compute buys you 55 more elements.</b></li>
+    <li>$f(n)=n!$: from $n=6$ to $n=21$.</li>
+  </ul>
+  That is the whole argument for caring about asymptotics: for exponential algorithms, hardware is <em>irrelevant</em>. Only a better algorithm helps.</div>
+
+  <!-- ============================== 2 ============================== -->
+  <h2 id="p2" data-p="2"><button type="button" class="tick" aria-label="Mark problem 2 done">✓</button><span class="pn">2</span>SUM-ARRAY, by loop invariant</h2>
+  <div class="q"><span class="lbl">Problem</span>Prove <code>SUM ARRAY</code> correct using a loop invariant.</div>
+<pre class="code">1: <span class="kw">procedure</span> SUM_ARRAY
+2:     sum = 0
+3:     <span class="kw">for</span> i = 1 <span class="kw">to</span> n <span class="kw">do</span>
+4:         sum = sum + A[i]
+5:     <span class="kw">end for</span>
+6: <span class="kw">end procedure</span></pre>
+
+  <div class="inv"><span class="lbl">Invariant</span>At the start of each iteration of the <code>for</code> loop with index $i$,
+  $$\mathit{sum}=\sum_{k=1}^{i-1}A[k].$$</div>
+
+  <p><span class="step">Initialization</span> Before the first iteration $i=1$, so the claim reads $\mathit{sum}=\sum_{k=1}^{0}A[k]$ — the empty sum, which is $0$. Line 2 sets $\mathit{sum}=0$. ✓</p>
+
+  <p><span class="step">Maintenance</span> Assume $\mathit{sum}=\sum_{k=1}^{i-1}A[k]$ at the start of iteration $i$. Line 4 gives
+  $$\mathit{sum}_{\text{new}}=\sum_{k=1}^{i-1}A[k]+A[i]=\sum_{k=1}^{i}A[k],$$
+  which is the invariant with $i$ replaced by $i+1$ — exactly the statement at the start of the next iteration. ✓</p>
+
+  <p><span class="step">Termination</span> The loop ends with $i=n+1$. Substituting,
+  $$\mathit{sum}=\sum_{k=1}^{n}A[k],$$
+  which is the required output. ∎ <span class="ans">Correct</span></p>
+
+  <p><span class="step">That it terminates</span> $i$ starts at $1$, increases by $1$ per iteration, and the loop runs while $i\le n$; after exactly $n$ iterations $i=n+1$ and it stops.</p>
+
+  <div class="tip"><span class="lbl">Why initialization was painless</span> Because $\sum_{k=1}^{0}=0$ by convention. If your initialization step looks awkward, your indices are off by one — restate the invariant over $A[1..i-1]$ rather than $A[1..i]$.</div>
+
+  <!-- ============================== 3 ============================== -->
+  <h2 id="p3" data-p="3"><button type="button" class="tick" aria-label="Mark problem 3 done">✓</button><span class="pn">3</span>Linear search on a sorted array</h2>
+  <div class="q"><span class="lbl">Problem</span><b>Input:</b> a sorted sequence $a_1&lt;a_2&lt;\dots&lt;a_n$ in an array $A$, and a value $x$. <b>Output:</b> an index $i$ with $x=A[i]$; if $x$ does not appear in $A$, the <b>largest</b> index $i$ with $A[i]&lt;x$; if no such index exists, $0$. Write pseudocode for linear search, and implement it in Julia.</div>
+
+  <div class="warn"><span class="lbl">Read the output spec twice</span>
+  This is <b>not</b> "return NIL if absent". It is a <b>predecessor search</b>: on a miss you must return the position of the largest element still below $x$. Note also that the input is <b>strictly</b> increasing, so there are no duplicates — which is what makes "the" answer unique.</div>
+
+  <div class="idea"><span class="lbl">The trick</span> Both cases — hit and miss — are covered by a single rule: <b>walk forward while the next element is still $\le x$.</b> On a hit you stop exactly on $x$; on a miss you stop on its predecessor; if even $A[1]&gt;x$ you never move and return $0$.</div>
+
+<pre class="code">LINEAR-SEARCH(A, n, x)
+    i = 0
+    <span class="kw">while</span> i &lt; n <span class="kw">and</span> A[i+1] &lt;= x
+        i = i + 1
+    <span class="kw">return</span> i</pre>
+
+  <p>Trace the three cases:</p>
+  <ul>
+    <li><b>$x=A[j]$.</b> The guard holds for every step up to $i=j$. At $i=j$ the test $A[j+1]\le x$ fails, because $A[j+1]&gt;A[j]=x$ by strict increase. Return $j$. ✓</li>
+    <li><b>$x$ absent, some element below it.</b> Equality never occurs, so the guard is $A[i+1]&lt;x$; the loop stops at the largest $i$ with $A[i]&lt;x$. ✓</li>
+    <li><b>$x&lt;A[1]$.</b> The first test fails immediately, $i=0$ is returned. ✓</li>
+  </ul>
+
+  <p><span class="step">In Julia</span></p>
+<pre class="code"><span class="kw">function</span> linear_search(A::Vector{<span class="kw">T</span>}, x::<span class="kw">T</span>) <span class="kw">where</span> T
+    i = 0
+    <span class="kw">while</span> i &lt; length(A) &amp;&amp; A[i+1] &lt;= x
+        i += 1
+    <span class="kw">end</span>
+    <span class="kw">return</span> i          <span class="cm"># 0 means "x is smaller than everything"</span>
+<span class="kw">end</span></pre>
+  <p style="color:var(--faint);font-size:.9rem">(Julia is 1-indexed, so the pseudocode carries over unchanged. <code>&amp;&amp;</code> short-circuits, which is what keeps <code>A[i+1]</code> in bounds.)</p>
+
+  <!-- ============================== 4 ============================== -->
+  <h2 id="p4" data-p="4"><button type="button" class="tick" aria-label="Mark problem 4 done">✓</button><span class="pn">4</span>Correctness of that search, and its worst case</h2>
+  <div class="q"><span class="lbl">Problem</span>Prove your algorithm from Exercise 3 correct with a loop invariant. <b>Make sure your loop invariant fulfils the three necessary properties.</b> Give the worst-case asymptotic running time.</div>
+
+  <div class="inv"><span class="lbl">Invariant</span>At the start of each iteration of the <code>while</code> loop:
+  $$0\le i\le n\quad\text{and}\quad A[k]\le x\ \text{ for every }1\le k\le i.$$</div>
+
+  <p><span class="step">Initialization</span> $i=0$: the bound $0\le0\le n$ holds, and the range $A[1..0]$ is empty, so the second clause is vacuously true. ✓</p>
+
+  <p><span class="step">Maintenance</span> The body runs only when the guard holds, i.e. $i&lt;n$ and $A[i+1]\le x$. Afterwards $i$ has become $i+1$, so $i+1\le n$ keeps the first clause. For the second: by hypothesis $A[k]\le x$ for all $k\le i$, and the guard just gave $A[i+1]\le x$; hence $A[k]\le x$ for all $k\le i+1$. ✓</p>
+
+  <p><span class="step">Termination</span> The loop exits in one of two ways.</p>
+  <ul>
+    <li><b>$i=n$.</b> The invariant gives $A[k]\le x$ for <em>all</em> $k$, so $A[n]$ is the largest element and it is $\le x$. If $A[n]=x$ then $n$ is a correct "found" index; otherwise $A[n]&lt;x$ and $n$ is the largest index with $A[k]&lt;x$. Either way returning $n$ is correct. ✓</li>
+    <li><b>$A[i+1]&gt;x$.</b> Here sortedness does the work: $A$ is increasing, so $A[k]\ge A[i+1]&gt;x$ for <em>every</em> $k\ge i+1$ — nothing beyond $i$ can be the answer. Combined with the invariant ($A[k]\le x$ for $k\le i$):
+      <ul>
+        <li>if $i\ge1$ and $A[i]=x$, returning $i$ is a correct hit;</li>
+        <li>if $i\ge1$ and $A[i]&lt;x$, then $i$ is the largest index with $A[i]&lt;x$; ✓</li>
+        <li>if $i=0$, no element is $\le x$, so returning $0$ is correct. ✓</li>
+      </ul>
+    </li>
+  </ul>
+  <p>∎ <span class="ans">Correct</span></p>
+
+  <p><span class="step">The loop terminates</span> The variant is $n-i$: it is a non-negative integer, strictly decreases each iteration (since $i$ increases by 1), and the guard $i&lt;n$ fails once it reaches $0$.</p>
+
+  <div class="def"><span class="tag">The "three necessary properties"</span>
+  The sheet's phrase refers to <b>initialization, maintenance and termination</b> — all three proved above. Note that termination here genuinely earns its keep: the loop has <b>two exits</b>, and each needs its own argument. Do not merge them.</div>
+
+  <p><span class="step">Worst case</span> Every iteration is $\Theta(1)$ and the loop runs at most $n$ times, which is attained whenever $x\ge A[n]$. So the worst-case running time is
+  $$\Theta(n)\quad\text{— in particular } O(n).$$
+  The best case is $\Theta(1)$ ($x&lt;A[1]$). Note that the sortedness buys correctness of the early exit, but <b>not</b> a better worst case — for that you would need binary search, $\Theta(\lg n)$.</p>
+
+  <!-- ============================== 5 ============================== -->
+  <h2 id="p5" data-p="5"><button type="button" class="tick" aria-label="Mark problem 5 done">✓</button><span class="pn">5</span>Selection sort — pseudocode</h2>
+  <div class="q"><span class="lbl">Problem</span>Find the smallest element of $A[1:n]$ and exchange it with the first; then the smallest of $A[2:n]$ and exchange with the second; and so on. Write pseudocode and implement it in Julia.</div>
+<pre class="code">SELECTION-SORT(A, n)
+    <span class="kw">for</span> i = 1 <span class="kw">to</span> n - 1
+        min = i
+        <span class="kw">for</span> j = i + 1 <span class="kw">to</span> n
+            <span class="kw">if</span> A[j] &lt; A[min]
+                min = j
+        swap A[i] <span class="kw">and</span> A[min]</pre>
+
+<pre class="code"><span class="kw">function</span> selection_sort!(A::Vector)
+    n = length(A)
+    <span class="kw">for</span> i <span class="kw">in</span> 1:n-1
+        m = i
+        <span class="kw">for</span> j <span class="kw">in</span> i+1:n
+            <span class="kw">if</span> A[j] &lt; A[m]
+                m = j
+            <span class="kw">end</span>
+        <span class="kw">end</span>
+        A[i], A[m] = A[m], A[i]
+    <span class="kw">end</span>
+    <span class="kw">return</span> A
+<span class="kw">end</span></pre>
+
+  <div class="tip"><span class="lbl">Why the outer loop stops at $n-1$</span> When $i=n$ the unsorted part $A[n:n]$ is a single element which, by the invariant below, is already $\ge$ everything before it. The iteration would compare nothing and swap $A[n]$ with itself — harmless but pointless.</div>
+
+  <!-- ============================== 6 ============================== -->
+  <h2 id="p6" data-p="6"><button type="button" class="tick" aria-label="Mark problem 6 done">✓</button><span class="pn">6</span>Selection sort — invariant and proof</h2>
+  <div class="q"><span class="lbl">Problem</span>Find a loop invariant for selection sort and prove your assumption.</div>
+
+  <p>Two loops, so <b>two invariants</b>. Prove the inner one first and use its conclusion as a single step of the outer maintenance.</p>
+
+  <div class="inv"><span class="lbl">Inner invariant (the <code>j</code> loop)</span>
+  At the start of each iteration with index $j$: $\;A[\mathit{min}]=\min\{A[i],\dots,A[j-1]\}\;$ and $\;i\le\mathit{min}\le j-1$.</div>
+
+  <p><span class="step">Initialization</span> $j=i+1$ and $\mathit{min}=i$: the set is $\{A[i]\}$, whose minimum is $A[i]=A[\mathit{min}]$. ✓</p>
+  <p><span class="step">Maintenance</span> If $A[j]&lt;A[\mathit{min}]$ the body sets $\mathit{min}=j$, and then $A[\mathit{min}]=A[j]=\min\{A[i..j]\}$. Otherwise $A[\mathit{min}]\le A[j]$, so $A[\mathit{min}]$ is still the minimum of the enlarged range $A[i..j]$. Either way the claim holds for $j+1$. ✓</p>
+  <p><span class="step">Termination</span> $j=n+1$, so $A[\mathit{min}]=\min\{A[i..n]\}$: the inner loop finds the index of a smallest element of the unsorted suffix. ✓</p>
+
+  <div class="inv"><span class="lbl">Outer invariant (the <code>i</code> loop)</span>
+  At the start of each iteration with index $i$:
+  <b>(a)</b> $A[1..i-1]$ is sorted in non-decreasing order;
+  <b>(b)</b> every element of $A[1..i-1]$ is $\le$ every element of $A[i..n]$;
+  <b>(c)</b> $A[1..n]$ is a permutation of the original array.</div>
+
+  <div class="warn"><span class="lbl">Clause (b) is the whole difficulty</span>
+  With only (a) you can carry out maintenance and still fail at termination: knowing "$A[1..n-1]$ is sorted" says nothing about whether $A[n]$ belongs at the end. Clause (b) is what closes that gap. This is the standard <b>strengthening</b> move — you make the invariant harder to prove precisely so that it becomes strong enough to use.</div>
+
+  <p><span class="step">Initialization</span> $i=1$: $A[1..0]$ is empty, so (a) and (b) hold vacuously, and (c) holds since nothing has been modified. ✓</p>
+
+  <p><span class="step">Maintenance</span> By the inner loop's termination, $A[\mathit{min}]$ is a smallest element of $A[i..n]$. The body swaps it into position $i$.</p>
+  <ul>
+    <li><b>(c)</b> survives: a swap permutes the array. ✓</li>
+    <li><b>(b)</b> survives: the new $A[i]$ came from $A[i..n]$, so by the old (b) it is $\ge$ everything in $A[1..i-1]$; and it was the minimum of $A[i..n]$, so it is $\le$ everything left in $A[i+1..n]$. ✓</li>
+    <li><b>(a)</b> survives: $A[1..i-1]$ was sorted and the new $A[i]$ is $\ge$ all of it, so $A[1..i]$ is sorted. ✓</li>
+  </ul>
+  <p>All three hold for $i+1$. ✓</p>
+
+  <p><span class="step">Termination</span> The loop ends with $i=n$. By (a), $A[1..n-1]$ is sorted; by (b), $A[n]\ge$ every earlier element. Hence $A[1..n]$ is sorted, and by (c) it is a permutation of the input — which is exactly the definition of a correct sort. ∎ <span class="ans">Correct</span></p>
+
+  <!-- ============================== 7 ============================== -->
+  <h2 id="p7" data-p="7"><button type="button" class="tick" aria-label="Mark problem 7 done">✓</button><span class="pn">7</span>Selection sort — best and worst case</h2>
+  <div class="q"><span class="lbl">Problem</span>Determine best- and worst-case running times, using $O$, $\Omega$ or $\Theta$, whichever fits best.</div>
+
+  <p><span class="step">Count the comparisons</span> For a fixed $i$ the inner loop runs from $j=i+1$ to $n$, i.e. $n-i$ times. Summing over $i=1,\dots,n-1$:
+  $$\sum_{i=1}^{n-1}(n-i)=\sum_{m=1}^{n-1}m=\frac{n(n-1)}{2}.$$</p>
+
+  <div class="def"><span class="tag">The point of the exercise</span>
+  That count does <b>not depend on the input at all</b> — the loops are counted <code>for</code> loops with no early exit. The comparison count is $\frac{n(n-1)}{2}$ on every input, and the algorithm performs exactly $n-1$ swaps. Therefore
+  $$T_{\text{best}}(n)=T_{\text{worst}}(n)=\Theta(n^{2}),$$
+  and since best and worst coincide we may simply say the running time is $\Theta(n^{2})$ — no $O$/$\Omega$ hedging needed.</div>
+
+  <div class="idea"><span class="lbl">Contrast with insertion sort</span> Insertion sort's inner <code>while</code> loop <em>can</em> exit early, so it is $\Theta(n)$ on an already-sorted array and $\Theta(n^{2})$ in the worst case. Selection sort has no such escape — that is the answer the question is fishing for. Its one advantage is the swap count: $n-1$, versus up to $\Theta(n^{2})$ moves for insertion sort.</div>
+
+  <!-- ============================== 8 ============================== -->
+  <h2 id="p8" data-p="8"><button type="button" class="tick" aria-label="Mark problem 8 done">✓</button><span class="pn">8</span>Induction on $n=2^{k}$</h2>
+  <div class="q"><span class="lbl">Problem</span>Show by induction that for $n=2^{k}$, $k\ge1$, the solution of
+  $$T(n)=\begin{cases}2 & n=2\\ 2T\!\left(\frac n2\right)+n & n&gt;2\end{cases}$$
+  is $T(n)=n\lg n$.</div>
+
+  <p>Induct on $k$; write $n=2^{k}$ so the claim is $T(2^{k})=2^{k}k$.</p>
+
+  <p><span class="step">Base case $k=1$</span> $T(2)=2$ by definition, and $2\lg2=2\cdot1=2$. ✓</p>
+
+  <p><span class="step">Inductive step</span> Assume $T(2^{k})=2^{k}k$ for some $k\ge1$. Then $2^{k+1}&gt;2$, so the second branch applies:
+  $$T(2^{k+1})=2\,T\!\left(2^{k}\right)+2^{k+1}=2\cdot2^{k}k+2^{k+1}=2^{k+1}k+2^{k+1}=2^{k+1}(k+1).$$
+  With $n=2^{k+1}$ this reads $T(n)=n\lg n$, the claim for $k+1$. ✓</p>
+
+  <p>By induction $T(n)=n\lg n$ for every $n=2^{k}$, $k\ge1$. ∎ <span class="ans">$T(n)=n\lg n$</span></p>
+
+  <div class="tip"><span class="lbl">Check with small values</span> $T(4)=2T(2)+4=8=4\lg4$ ✓ and $T(8)=2T(4)+8=24=8\lg8$ ✓. Thirty seconds of arithmetic that catches an algebra slip.</div>
+
+  <!-- ============================== 9 ============================== -->
+  <h2 id="p9" data-p="9"><button type="button" class="tick" aria-label="Mark problem 9 done">✓</button><span class="pn">9</span>Landau symbol drills</h2>
+  <div class="q"><span class="lbl">Problem</span>(a) Express $123n^{2}+345n-148$ as $\Theta$ of a simple expression. (b) Is $2^{n+1}=O(2^{n})$? (c) Is $2^{2n}=O(2^{n})$? (d) Is $2^{n}=O(2^{2n})$? (e) Is $2^{n+1}=o(2^{n})$? (f) Is $2^{n}=o(2^{2n})$?</div>
+
+  <p><b>(a)</b> <span class="ans">$\Theta(n^{2})$</span>. Upper: for $n\ge1$,
+  $$123n^{2}+345n-148\le123n^{2}+345n^{2}=468n^{2}.$$ Lower: for $n\ge1$, $345n-148\ge197&gt;0$, so the expression is $\ge123n^{2}$. Witnesses $c_1=123$, $c_2=468$, $n_0=1$.</p>
+
+  <p><b>(b)</b> <span class="ans">Yes</span>. $2^{n+1}=2\cdot2^{n}$, so take $c=2$, $n_0=1$.</p>
+
+  <p><b>(c)</b> <span class="ans">No</span>. $2^{2n}=(2^{n})^{2}$. If $2^{2n}\le c\,2^{n}$ for all large $n$, dividing gives $2^{n}\le c$ — impossible for a constant $c$, since $2^{n}\to\infty$.</p>
+
+  <p><b>(d)</b> <span class="ans">Yes</span>. $2^{n}\le2^{2n}$ for all $n\ge0$, so $c=1$, $n_0=0$.</p>
+
+  <p><b>(e)</b> <span class="ans">No</span>. Little-o requires the ratio to tend to $0$, but $2^{n+1}/2^{n}=2$ for every $n$. Formally: $o$ demands the bound for <em>every</em> $c&gt;0$, and it fails for e.g. $c=1$.</p>
+
+  <p><b>(f)</b> <span class="ans">Yes</span>. $2^{n}/2^{2n}=2^{-n}\to0$.</p>
+
+  <div class="idea"><span class="lbl">The lesson of (b) vs (c)</span> A constant <b>added</b> to the exponent is a constant factor and disappears inside $O$. A constant <b>multiplying</b> the exponent is a change of base and does not: $2^{2n}=4^{n}$. This shows up again in every recurrence you will meet.</div>
+
+  <!-- ============================== 10 ============================== -->
+  <h2 id="p10" data-p="10"><button type="button" class="tick" aria-label="Mark problem 10 done">✓</button><span class="pn">10</span>$\Theta$ is transitive</h2>
+  <div class="q"><span class="lbl">Problem</span>Assume $f=\Theta(g)$ and $g=\Theta(h)$. Show $f=\Theta(h)$.</div>
+
+  <p>By definition there are constants $c_1,c_2&gt;0$ and $n_1$ with
+  $$c_1g(n)\le f(n)\le c_2g(n)\qquad\text{for all }n\ge n_1,$$
+  and constants $d_1,d_2&gt;0$ and $n_2$ with
+  $$d_1h(n)\le g(n)\le d_2h(n)\qquad\text{for all }n\ge n_2.$$</p>
+
+  <p>Let $n_0=\max(n_1,n_2)$ and take any $n\ge n_0$. Chaining the upper bounds (legal because $c_2&gt;0$ and the functions are eventually non-negative):
+  $$f(n)\le c_2\,g(n)\le c_2d_2\,h(n),$$
+  and chaining the lower bounds:
+  $$f(n)\ge c_1\,g(n)\ge c_1d_1\,h(n).$$
+  So $c_1d_1\,h(n)\le f(n)\le c_2d_2\,h(n)$ for all $n\ge n_0$, with $c_1d_1&gt;0$ and $c_2d_2&gt;0$. That is exactly $f=\Theta(h)$. ∎</p>
+
+  <!-- ============================== 11 ============================== -->
+  <h2 id="p11" data-p="11"><button type="button" class="tick" aria-label="Mark problem 11 done">✓</button><span class="pn">11</span>$\Omega$ plus $\omega$</h2>
+  <div class="q"><span class="lbl">Problem</span>Prove that $f=\Omega(h)$ and $g=\omega(k)$ imply $f+g=\Omega(h+k)$.</div>
+
+  <div class="idea"><span class="lbl">Main idea</span> $\omega$ is <b>stronger</b> than $\Omega$, so the second hypothesis gives you a lower bound too — with a constant of your choosing. Pick $1$, add the two bounds, and take the smaller constant.</div>
+
+  <p>From $f=\Omega(h)$: there are $c&gt;0$ and $n_1$ with $f(n)\ge c\,h(n)$ for $n\ge n_1$.</p>
+
+  <p>From $g=\omega(k)$: for <em>every</em> constant $c'&gt;0$ there is an $n$ beyond which $g(n)&gt;c'k(n)$. Apply this with $c'=1$: there is $n_2$ with $g(n)&gt;k(n)$ for all $n\ge n_2$.</p>
+
+  <p>Now set $n_0=\max(n_1,n_2)$ and $c''=\min(c,1)&gt;0$. For $n\ge n_0$:
+  $$f(n)+g(n)\;\ge\;c\,h(n)+k(n)\;\ge\;c''h(n)+c''k(n)\;=\;c''\big(h(n)+k(n)\big).$$
+  So $f+g=\Omega(h+k)$. ∎</p>
+
+  <p style="color:var(--faint);font-size:.9rem">(As everywhere in this course, the functions are assumed eventually non-negative — otherwise "$\ge c''h$" cannot be weakened from "$\ge ch$".)</p>
+
+  <!-- ============================== 12 ============================== -->
+  <h2 id="p12" data-p="12"><button type="button" class="tick" aria-label="Mark problem 12 done">✓</button><span class="pn">12</span>$O$ composed with $o$</h2>
+  <div class="q"><span class="lbl">Problem</span>Let $f=O(g)$ and $g=o(h)$. Prove $f=o(h)$.</div>
+
+  <div class="idea"><span class="lbl">Main idea</span> $o$ requires the bound for <b>every</b> constant, so the proof must start "let $a&gt;0$ be arbitrary". The trick is to feed $a/c$ into the $o$ hypothesis, so that the $c$ from the $O$ hypothesis cancels.</div>
+
+  <p>From $f=O(g)$: fix $c&gt;0$ and $n_1$ with $0\le f(n)\le c\,g(n)$ for $n\ge n_1$.</p>
+
+  <p>Let $a&gt;0$ be arbitrary. Since $g=o(h)$, the definition applies to the positive constant $a/c$: there is $n_2$ with $0\le g(n)&lt;\dfrac{a}{c}\,h(n)$ for all $n\ge n_2$.</p>
+
+  <p>For $n\ge\max(n_1,n_2)$ we may chain them:
+  $$0\le f(n)\le c\,g(n)&lt;c\cdot\frac{a}{c}\,h(n)=a\,h(n).$$
+  Since $a&gt;0$ was arbitrary, $f=o(h)$. ∎</p>
+
+  <!-- ============================== 13 ============================== -->
+  <h2 id="p13" data-p="13"><button type="button" class="tick" aria-label="Mark problem 13 done">✓</button><span class="pn">13</span>Three consequences of Stirling</h2>
+  <div class="q"><span class="lbl">Problem</span>Use $\displaystyle n!=\sqrt{2\pi n}\left(\frac ne\right)^{n}\!\left(1+\Theta\!\left(\frac1n\right)\right)$ to show (a) $n!=o(n^{n})$, (b) $n!=\omega(2^{n})$, (c) $\lg(n!)=\Theta(n\lg n)$.</div>
+
+  <p>Write $S(n)=\sqrt{2\pi n}\left(1+\Theta(1/n)\right)$ for the sub-exponential factor; note $S(n)=\Theta(\sqrt n)$.</p>
+
+  <p><b>(a) $n!=o(n^{n})$.</b> Divide:
+  $$\frac{n!}{n^{n}}=S(n)\cdot\frac{(n/e)^{n}}{n^{n}}=S(n)\cdot e^{-n}=\Theta(\sqrt n)\,e^{-n}\;\longrightarrow\;0,$$
+  because $e^{-n}$ decays exponentially and $\sqrt n$ only grows polynomially. A ratio tending to $0$ is precisely little-o. ✓</p>
+
+  <p><b>(b) $n!=\omega(2^{n})$.</b> Divide the other way:
+  $$\frac{n!}{2^{n}}=S(n)\cdot\frac{(n/e)^{n}}{2^{n}}=S(n)\left(\frac{n}{2e}\right)^{n}.$$
+  As soon as $n&gt;2e\approx5.44$ the base $\frac{n}{2e}$ exceeds $1$ and keeps growing, so the ratio $\to\infty$. That is $\omega$. ✓</p>
+
+  <p><b>(c) $\lg(n!)=\Theta(n\lg n)$.</b> Take logarithms:
+  $$\lg(n!)=\underbrace{\tfrac12\lg(2\pi n)}_{\Theta(\lg n)}+\;n\lg\frac ne\;+\underbrace{\lg\!\left(1+\Theta(1/n)\right)}_{O(1)}
+  = n\lg n-n\lg e+\Theta(\lg n).$$
+  The leading term is $n\lg n$ and everything else is $O(n)=o(n\lg n)$, so $\lg(n!)=\Theta(n\lg n)$. ✓ ∎</p>
+
+  <div class="idea"><span class="lbl">Why (c) matters more than the other two</span> It is the engine of the <b>$\Omega(n\lg n)$ comparison-sort lower bound</b>: a decision tree must have $\ge n!$ leaves, a binary tree of height $h$ has $\le2^{h}$ leaves, so $h\ge\lg(n!)=\Omega(n\lg n)$. See <a href="exam-proofs.html#lowerbound">Theorem 8.1</a>.</div>
+
+  <!-- ============================== 14 ============================== -->
+  <h2 id="p14" data-p="14"><button type="button" class="tick" aria-label="Mark problem 14 done">✓</button><span class="pn">14</span>Ordering ~30 functions by growth</h2>
+  <div class="q"><span class="lbl">Problem</span>Define $\lg^{*}(n)=\min\{i\in\mathbb{N}\mid \lg^{(i)}(n)\le1\}$. Order the given ~30 functions by asymptotic growth.</div>
+
+  <div class="tip"><span class="lbl">This is the one problem with an official solution</span>
+  The bundled PDF works the full ordering: <a href="problem-sheets/Problem_14_Sheet_1_Algo_and_Data_Structures.pdf">open it here</a>. Its internal heading says "Question 15", but the problem it solves is number <b>14</b> on this sheet — another of the numbering slips this course is prone to. Below is the part worth memorising: the <b>simplifications you must spot first</b>, because the ordering is easy once the disguises are removed.</div>
+
+  <div class="def"><span class="tag">Step 1 — unmask the disguised functions</span>
+  <div class="tw"><table>
+    <tr><th>Written as</th><th>Really is</th><th>Why</th></tr>
+    <tr><td>$n^{1/\lg n}$</td><td>$2$ — a <b>constant</b></td><td>$n=2^{\lg n}$, so $n^{1/\lg n}=2^{\lg n\cdot\frac1{\lg n}}=2$</td></tr>
+    <tr><td>$2^{\lg n}$</td><td>$n$</td><td>same identity</td></tr>
+    <tr><td>$(\sqrt2)^{\lg n}$</td><td>$\sqrt n$</td><td>$=2^{\frac12\lg n}=n^{1/2}$</td></tr>
+    <tr><td>$4^{\lg n}$</td><td>$n^{2}$</td><td>$=2^{2\lg n}=n^{2}$</td></tr>
+    <tr><td>$\lg(n!)$</td><td>$\Theta(n\lg n)$</td><td>Stirling — problem 13(c)</td></tr>
+    <tr><td>$(\lg n)^{\lg n}$</td><td>$n^{\lg\lg n}$</td><td>$=2^{\lg\lg n\cdot\lg n}$ — both sides are the same expression</td></tr>
+    <tr><td>$\log n$</td><td>$\Theta(\lg n)$</td><td>bases differ by a constant factor</td></tr>
+    <tr><td>$\lg^{*}(\lg n)$</td><td>$\lg^{*}n-1=\Theta(\lg^{*}n)$</td><td>one iteration already applied</td></tr>
+    <tr><td>$2^{2^{n+1}}$</td><td>$\left(2^{2^{n}}\right)^{2}$</td><td>$2^{n+1}=2\cdot2^{n}$ — so it dwarfs $2^{2^{n}}$</td></tr>
+  </table></div></div>
+
+  <div class="def"><span class="tag">Step 2 — sort into growth classes</span>
+  <ol>
+    <li><b>Constants:</b> $1$, $n^{1/\lg n}=2$.</li>
+    <li><b>Iterated logs:</b><br>$$\lg(\lg^{*}n)\ \ll\ \lg^{*}n\approx\lg^{*}(\lg n)\ \ll\ 2^{\lg^{*}n}$$</li>
+    <li><b>Logs and polylogs:</b><br>$$\lg\lg n\ \ll\ \sqrt{\lg n}\ \ll\ \lg n\approx\log n\ \ll\ \lg^{2}n$$</li>
+    <li><b>Polynomials:</b><br>$$\sqrt n\ \ll\ n\ \ll\ n\lg n\approx\lg(n!)\ \ll\ n^{2}=4^{\lg n}\ \ll\ n^{3}$$</li>
+    <li><b>Quasi-polynomial:</b> $(\lg n)^{\lg n}=n^{\lg\lg n}$ and $(\lceil\lg n\rceil)!$ — faster than every polynomial, slower than every exponential.</li>
+    <li><b>Exponentials:</b> $(3/2)^{n}\ \ll\ 2^{n}\ \ll\ e^{n}\ \ll\ n2^{n}\ \ll\ n^{\lg n}$? — careful, compare by <b>logs</b> here (see below).</li>
+    <li><b>Factorials and towers:</b><br>$$n!\ \ll\ (n+1)!\ \ll\ n^{n}\ \ll\ 2^{2^{n}}\ \ll\ 2^{2^{n+1}}$$</li>
+  </ol></div>
+
+  <div class="idea"><span class="lbl">Step 3 — the technique for the hard pairs: take logs</span>
+  When two functions are both huge, compare $\lg f$ against $\lg g$ instead. For instance $n^{\lg n}$ versus $2^{n}$:
+  $$\lg\!\left(n^{\lg n}\right)=\lg^{2}n,\qquad \lg\!\left(2^{n}\right)=n,$$
+  and $\lg^{2}n=o(n)$, so $n^{\lg n}=o(2^{n})$ — the polylog-beats-polynomial rule applied one level up. The same move settles $(\lceil\lg n\rceil)!$ and $(\lg n)^{\lg n}$ against the polynomials.</div>
+
+  <div class="warn"><span class="lbl">The two that catch everyone</span>
+  $n^{1/\lg n}$ is a <b>constant</b>, not a function that grows — if you leave it among the logs you have already lost the ordering. And $\lg^{*}$ grows so slowly that $\lg^{*}(\lg n)$ and $\lg^{*}n$ differ by exactly $1$: they are in the <em>same</em> class, not different ones.</div>
+
+  <!-- ============================== 15 ============================== -->
+  <h2 id="p15" data-p="15"><button type="button" class="tick" aria-label="Mark problem 15 done">✓</button><span class="pn">15</span>Substitution: $T(n)=4T(n/2)+n$</h2>
+  <div class="q"><span class="lbl">Problem</span>Use the substitution method to prove $T(n)=4T(n/2)+n$ implies $T(n)=\Theta(n^{2})$. <em>Hint from the sheet: subtract a lower-order term.</em></div>
+
+  <div class="idea"><span class="lbl">Why the naive guess fails</span> Try $T(n)\le cn^{2}$. Then
+  $$T(n)\le4c\left(\frac n2\right)^{2}+n=cn^{2}+n,$$
+  which is <b>bigger</b> than $cn^{2}$ — the induction does not close. The residue $+n$ has nowhere to go. That is exactly the situation the hint is describing.</div>
+
+  <p><span class="step">Upper bound — strengthen the hypothesis</span> Guess instead
+  $$T(n)\le cn^{2}-dn\qquad\text{for constants }c,d&gt;0.$$
+  This is a <em>stronger</em> claim, which is the point: the extra $-dn$ gives the induction something to spend. Assume it for $n/2$:
+  $$T(n)\le4\left[c\left(\frac n2\right)^{2}-d\,\frac n2\right]+n=cn^{2}-2dn+n=cn^{2}-dn-\big(d-1\big)n .$$
+  This is $\le cn^{2}-dn$ exactly when $(d-1)n\ge0$, i.e. <b>$d\ge1$</b>. Choose $d=1$, and choose $c$ large enough that the bound holds on the base cases. Hence $T(n)=O(n^{2})$.</p>
+
+  <p><span class="step">Lower bound</span> Guess $T(n)\ge cn^{2}$. Then
+  $$T(n)\ge4c\left(\frac n2\right)^{2}+n=cn^{2}+n\ge cn^{2},$$
+  which closes immediately — here the leftover $+n$ works <em>for</em> us. So $T(n)=\Omega(n^{2})$.</p>
+
+  <p>Both bounds give <span class="ans">$T(n)=\Theta(n^{2})$</span>. ∎</p>
+
+  <div class="tip"><span class="lbl">Sanity check with the Master Theorem</span> $a=4$, $b=2$, watershed $n^{\log_2 4}=n^{2}$; $f(n)=n=O(n^{2-\varepsilon})$ with $\varepsilon=1$, so <b>case 1</b> gives $\Theta(n^{2})$ ✓. The exercise wants substitution, but always check your answer this way — it costs ten seconds.</div>
+
+  <div class="idea"><span class="lbl">Remember the asymmetry</span> Subtracting a lower-order term helps the <b>upper</b> bound and is unnecessary for the lower one. The general rule: if the induction leaves a positive residue you cannot absorb, strengthen by subtracting a term of the residue's order.</div>
+
+  <!-- ============================== 16 ============================== -->
+  <h2 id="p16" data-p="16"><button type="button" class="tick" aria-label="Mark problem 16 done">✓</button><span class="pn">16</span>Recursion tree: $T(n)=4T(n/3)+n$</h2>
+  <div class="q"><span class="lbl">Problem</span>Sketch the recursion tree, derive a guess for an asymptotic upper bound, then prove the guess by induction.</div>
+
+  <p><span class="step">The tree</span> At depth $i$ there are $4^{i}$ nodes, each with a subproblem of size $n/3^{i}$ and hence local cost $n/3^{i}$. So the cost of an entire level is
+  $$4^{i}\cdot\frac{n}{3^{i}}=n\left(\frac43\right)^{i}.$$
+  Levels get <b>more</b> expensive as you descend, since $4/3&gt;1$ — the leaves dominate. The tree has depth $\log_3 n$, so the total is
+  $$\sum_{i=0}^{\log_3 n}n\left(\frac43\right)^{i}=n\cdot\Theta\!\left(\left(\tfrac43\right)^{\log_3 n}\right)=n\cdot\Theta\!\left(n^{\log_3(4/3)}\right)=\Theta\!\left(n^{1+\log_3 4-1}\right)=\Theta\!\left(n^{\log_3 4}\right),$$
+  using $\log_3(4/3)=\log_3 4-1$. Since $\log_3 4\approx1.2619$, the guess is
+  $$T(n)=O\!\left(n^{\log_3 4}\right).$$</p>
+
+  <p><span class="step">Proof by induction</span> The same trap as problem 15 appears, so subtract a lower-order term from the start. Guess
+  $$T(n)\le c\,n^{\log_3 4}-dn .$$
+  The key identity is $4\cdot\left(\tfrac13\right)^{\log_3 4}=4\cdot\tfrac14=1$, because $3^{\log_3 4}=4$. Assuming the bound for $n/3$:
+  $$T(n)\le4\left[c\left(\frac n3\right)^{\log_3 4}-d\,\frac n3\right]+n
+  = c\,n^{\log_3 4}-\frac{4d}{3}n+n
+  = c\,n^{\log_3 4}-dn-\left(\frac d3-1\right)n .$$
+  This is $\le c\,n^{\log_3 4}-dn$ provided $\frac d3\ge1$, i.e. <b>$d\ge3$</b>. Take $d=3$ and $c$ large enough for the base cases. ∎ <span class="ans">$T(n)=\Theta\!\left(n^{\log_3 4}\right)$</span></p>
+
+  <div class="tip"><span class="lbl">Cross-check</span> Master theorem: $a=4$, $b=3$, watershed $n^{\log_3 4}\approx n^{1.26}$; $f(n)=n=O(n^{\log_3 4-\varepsilon})$ for small $\varepsilon$ — case 1 ✓. And note the contrast with problem 15: there the <em>root</em> dominated the leaves in cost per level? No — in both cases the leaves dominate, which is why both are case 1.</div>
+
+  <!-- ============================== 17 ============================== -->
+  <h2 id="p17" data-p="17"><button type="button" class="tick" aria-label="Mark problem 17 done">✓</button><span class="pn">17</span>Strassen by the Master Theorem</h2>
+  <div class="q"><span class="lbl">Problem</span>Consider the recursion for Strassen's matrix-multiplication algorithm. Using the Master Theorem, prove that its running time satisfies $T(n)=O(n^{\lg7})$.</div>
+
+  <p><span class="step">The recurrence</span> Strassen splits two $n\times n$ matrices into four $\frac n2\times\frac n2$ blocks and — this is the whole trick — computes the product with <b>7</b> recursive multiplications instead of the obvious 8, using $\Theta(n^{2})$ additions and subtractions to combine:
+  $$T(n)=7\,T\!\left(\frac n2\right)+\Theta(n^{2}).$$</p>
+
+  <p><span class="step">Apply the theorem</span> Here $a=7$, $b=2$, $f(n)=\Theta(n^{2})$. The watershed function is
+  $$n^{\log_b a}=n^{\log_2 7}=n^{\lg7},\qquad \lg7\approx2.807.$$</p>
+
+  <p>Compare $f$ with it: we need $f(n)=O\!\left(n^{\lg7-\varepsilon}\right)$ for some $\varepsilon&gt;0$. Taking $\varepsilon=0.8$ gives $n^{\lg7-0.8}\approx n^{2.007}$, and indeed $n^{2}=O(n^{2.007})$. So $f$ is <b>polynomially smaller</b> than the watershed — this is <b>case 1</b>, and
+  $$T(n)=\Theta\!\left(n^{\lg7}\right)=O\!\left(n^{\lg7}\right).\qquad\blacksquare$$</p>
+
+  <div class="idea"><span class="lbl">Why this is the famous example</span> Ordinary block multiplication gives $T(n)=8T(n/2)+\Theta(n^{2})$, watershed $n^{\log_2 8}=n^{3}$ — case 1 again, so $\Theta(n^{3})$, no better than the schoolbook algorithm. Saving <b>one</b> of the eight multiplications drops the exponent from $3$ to $\lg7\approx2.807$. The entire gain is in $a$, not in $f$.</div>
+
+  <div class="warn"><span class="lbl">Say "polynomially smaller" and mean it</span> Case 1 needs a genuine $\varepsilon&gt;0$; it is not enough that $f$ is smaller. Exhibiting the $\varepsilon$ (as above) is worth a mark, and it is the habit that saves you on the recurrences where the gap is only logarithmic and the case <em>fails</em> — see <a href="recurrence-drills.html#dC">drill group C</a>.</div>
+
+  <!-- ============================== NEXT ============================== -->
+  <h2>What to do next</h2>
+  <div class="def"><span class="tag">If this sheet went well</span>
+  Problems 2–7 are the exam-question-1 block: re-do <b>6</b> (selection sort) closed-book until the three clauses come out automatically, then sit <a href="mock-exam-1.html#q1">the real Q1</a>. Problems 15–17 lead straight into <a href="recurrence-drills.html">the drill bank</a> — 29 recurrences in the same style.</div>
+  <div class="def"><span class="tag">If it did not</span>
+  Read the <a href="asymptotics.html">asymptotics note</a> before problems 9–14, and the <a href="correctness.html">correctness note</a> before 2–7. Both are written as the missing prerequisites for exactly these problems.</div>
+
+  <footer>
+    Problems © Prof. Schichl / Universität Wien, transcribed from <code>ss26_algodat-12.pdf</code>; solutions written for this site and <b>not</b> official. The only official solution is the bundled <a href="problem-sheets/Problem_14_Sheet_1_Algo_and_Data_Structures.pdf">problem 14 PDF</a>. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+<script>
+(function(){
+  'use strict';
+  var KEY = 'algo-sheet1-v1';
+  var heads = [].slice.call(document.querySelectorAll('h2[data-p]'));
+  var done = {};
+  try { var raw = JSON.parse(localStorage.getItem(KEY)||'{}'); if (raw && typeof raw === 'object') done = raw; } catch(e){}
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(done)); } catch(e){} }
+
+  function paint(){
+    var n = 0;
+    heads.forEach(function(h){
+      var on = !!done[h.dataset.p];
+      if (on) n++;
+      h.classList.toggle('done', on);
+      h.querySelector('.tick').classList.toggle('on', on);
+      h.querySelector('.tick').setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    document.getElementById('p-count').textContent = n + ' / ' + heads.length + ' done';
+    document.getElementById('p-bar').style.width = (100*n/heads.length) + '%';
+  }
+
+  heads.forEach(function(h){
+    h.querySelector('.tick').onclick = function(){
+      var k = h.dataset.p;
+      done[k] = !done[k];
+      save(); paint();
+    };
+  });
+  document.getElementById('p-reset').onclick = function(){
+    if (confirm('Clear your Sheet 1 progress?')) { done = {}; save(); paint(); }
+  };
+  paint();
+})();
+</script>
+<script src="../assets/mfds.js?v=4" data-root="../"></script>
+</body>
+</html>
