@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#F7F7F9">
-<meta name="description" content="The eight theorems that carry Linear Algebra for Data Science — Gram-Schmidt, orthogonal projection and least squares, Riesz, adjoints, Cayley-Hamilton, Schur, the spectral theorem and the SVD — each with the main idea and a full proof.">
+<meta name="description" content="The nine theorems that carry Linear Algebra for Data Science — Gram-Schmidt, orthogonal projection and least squares, Riesz, adjoints, Cayley-Hamilton, Schur, the spectral theorem, the SVD and the polar decomposition — each with the main idea and a full proof.">
 <title>Worked theorems — Linear Algebra for Data Science</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -64,8 +64,8 @@
 <div class="wrap">
   <a class="back-link" href="index.html">← Linear Algebra for Data Science</a>
   <div class="eyebrow">Universität Wien · Mula &amp; Wu · worked proofs</div>
-  <h1>The eight theorems</h1>
-  <p class="lede">Chapters 2, 5 and 6 rest on eight results, and they form a single chain: Gram–Schmidt builds orthonormal bases → projection gives least squares → Riesz gives adjoints → Schur triangularizes → the spectral theorem diagonalizes → the SVD extends that to <em>every</em> matrix. Learn them in this order and each one hands you the next.</p>
+  <h1>The nine theorems</h1>
+  <p class="lede">Chapters 2, 5 and 6 rest on nine results, and they form a single chain: Gram–Schmidt builds orthonormal bases → projection gives least squares → Riesz gives adjoints → Schur triangularizes → the spectral theorem diagonalizes → the SVD extends that to <em>every</em> matrix. Learn them in this order and each one hands you the next.</p>
 
   <div class="toc"><b>The chain:</b>
     <a href="#gs">① Gram–Schmidt</a> ·
@@ -76,11 +76,13 @@
     <a href="#ch">⑥ Cayley–Hamilton</a> ·
     <a href="#spectral">⑦ Spectral theorem</a> ·
     <a href="#svd">⑧ SVD</a> ·
+    <a href="#polar">⑨ polar decomposition</a> ·
     <a href="#map">how they connect</a>
   </div>
 
   <div class="warn"><span class="lbl">On numbering</span>
-  The textbook numbers its results; the only number confirmed here is <b>Theorem 6.9 = the SVD</b> (§6.3, added in the 29 Jun version). Everything else is referenced by <b>chapter and name</b> rather than by a number I cannot check against your copy. If you are quoting a result in an exam, use the number printed in <a href="notes/Linear_Algebra_Mula_Wu.pdf">your PDF</a> — names are safe, invented numbers are not.</div>
+  Three references are now confirmed against primary sources — <b>Theorem 6.9 = the SVD</b> (§6.3 of the 29 Jun version), and, from the <a href="mock-exam-1.html">real exam paper</a>, which cites the same version: <b>Eq. (1.3) = the matrix representation of $f$</b> and <b>Theorem 5.20 = the three necessary and sufficient conditions for diagonalizability</b>.
+  <br><br>Everything else below is referenced by <b>chapter and name</b> rather than by a number I cannot check against your copy. If you are quoting a result in an exam, use the number printed in <a href="notes/Linear_Algebra_Mula_Wu.pdf">your PDF</a> — names are safe, invented numbers are not.</div>
 
   <!-- ============================== 1 ============================== -->
   <h2 id="gs"><span class="n">①</span>Gram–Schmidt <span class="ch">CH 2</span></h2>
@@ -299,6 +301,47 @@ print(s)                      # your sigmas, descending
 print(np.allclose(A, U @ np.diag(s) @ Vt))   # True</pre>
   Signs of $u_i,v_i$ may differ from yours — the SVD is unique only up to those choices when singular values are distinct, and less unique still when they repeat.</div>
 
+
+  <!-- ============================== 9 ============================== -->
+  <h2 id="polar"><span class="n">⑨</span>Polar decomposition <span class="ch">CH 6 · EXAM Q3</span></h2>
+  <div class="thm"><span class="lbl">Theorem — polar decomposition</span>
+  Let $(E,\langle\cdot,\cdot\rangle)$ be a finite-dimensional inner-product space and $u\in\mathcal{L}(E)$ <b>bijective</b>. Then there are
+  <ul>
+    <li>an <b>isometry</b> $\sigma\in\mathcal{L}(E)$ — i.e. $\lVert\sigma(x)\rVert=\lVert x\rVert$ for all $x$, equivalently $\sigma$ unitary — and</li>
+    <li>a <b>self-adjoint</b> $\tau\in\mathcal{L}(E)$ with <b>strictly positive</b> eigenvalues,</li>
+  </ul>
+  such that $u=\sigma\circ\tau$. (Matrix form: $A=UP$ with $U$ unitary and $P$ Hermitian positive definite.)</div>
+
+  <div class="warn"><span class="lbl">This was question 3 of the real first-date exam, for 8 of 24 points</span>
+  Asked as a <b>guided</b> proof in four steps. The <a href="mock-exam-1.html#q3">exam page</a> has the official solution with grader notes; below is the same argument written as a theorem.</div>
+
+  <div class="idea"><span class="lbl">Main idea</span> It is the <a href="#svd">SVD</a> wearing different clothes. $u$ itself need not be diagonalizable, but $u^{*}u$ <b>is</b> — it is self-adjoint and positive, so the <a href="#spectral">spectral theorem</a> applies. Take square roots of its eigenvalues to build $\tau$, and let $\sigma$ carry the resulting orthonormal frame across. Geometrically: <b>every invertible map is a stretch along orthogonal axes, followed by a rotation/reflection.</b></div>
+
+  <p><span class="step">Step 1 — $w=u^{*}u$ is self-adjoint and positive definite</span> Self-adjoint, using order-reversal and $(f^{*})^{*}=f$:
+  $$w^{*}=(u^{*}u)^{*}=u^{*}(u^{*})^{*}=u^{*}u=w .$$
+  Positive definite: for $x\ne0$,
+  $$\langle w(x),x\rangle=\langle u^{*}u(x),x\rangle=\langle u(x),u(x)\rangle=\lVert u(x)\rVert^{2}>0,$$
+  where strictness needs $u(x)\ne0$ — i.e. <b>bijectivity of $u$</b>. By the spectral theorem there is an orthonormal basis $(e_1,\dots,e_n)$ with $w(e_i)=\lambda_ie_i$, and applying the display to $e_i$ gives $\lambda_i=\langle w(e_i),e_i\rangle>0$.</p>
+
+  <p><span class="step">Step 2 — the images have known lengths</span>
+  $$\lVert u(e_i)\rVert^{2}=\langle u(e_i),u(e_i)\rangle=\langle u^{*}u(e_i),e_i\rangle=\lambda_i\lVert e_i\rVert^{2}=\lambda_i\;\Longrightarrow\;\lVert u(e_i)\rVert=\sqrt{\lambda_i}\;(>0).$$</p>
+
+  <p><span class="step">Step 3 — define $\sigma$ and check it is an isometry</span> Put $\sigma(e_i)=u(e_i)/\sqrt{\lambda_i}$ and extend linearly. The same computation with two indices gives
+  $$\langle u(e_i),u(e_j)\rangle=\langle u^{*}u(e_i),e_j\rangle=\lambda_i\langle e_i,e_j\rangle=\lambda_i\delta_{ij},$$
+  hence $\langle\sigma(e_i),\sigma(e_j)\rangle=\lambda_i\delta_{ij}/\sqrt{\lambda_i\lambda_j}=\delta_{ij}$. So $\sigma$ maps an orthonormal basis to an orthonormal basis; expanding any $x=\sum\mu_ie_i$ then gives $\lVert\sigma(x)\rVert^{2}=\sum|\mu_i|^{2}=\lVert x\rVert^{2}$. ∎</p>
+
+  <p><span class="step">Step 4 — $\tau=\sigma^{-1}u$ is self-adjoint and positive</span> $\sigma$ is an isometry, hence injective, hence bijective in finite dimension, so $\sigma^{-1}$ exists. Unwinding the definition,
+  $$\sigma(e_i)=\frac{u(e_i)}{\sqrt{\lambda_i}}\;\Longleftrightarrow\;\tau(e_i)=\sigma^{-1}u(e_i)=\sqrt{\lambda_i}\,e_i .$$
+  So $\tau$ is diagonal in the <em>orthonormal</em> basis $(e_i)$ with real positive entries $\sqrt{\lambda_i}$ — by the <a href="#spectral">spectral theorem</a> (direction (ii)⇒(iii)) that makes it self-adjoint with strictly positive eigenvalues. Finally $\sigma\tau=\sigma\sigma^{-1}u=u$. ∎</p>
+
+  <div class="thm"><span class="lbl">Relation to the SVD</span>
+  Write the SVD $u=U\Sigma V^{*}$. Then
+  $$u=\underbrace{UV^{*}}_{\text{unitary}=\;\sigma}\cdot\underbrace{V\Sigma V^{*}}_{\text{Hermitian}\;\ge0\;=\;\tau},$$
+  which is exactly the polar decomposition — and conversely, diagonalizing $\tau$ recovers the SVD. <b>The two theorems are the same fact.</b> Polar splits $u$ into "rotate" and "stretch"; the SVD splits the stretch further into its principal axes.
+  <br><br>Dropping bijectivity: the decomposition still exists with $\tau$ merely positive <em>semi</em>-definite, but $\sigma$ is then no longer unique.</div>
+
+  <div class="ds"><span class="lbl">Why data science cares</span> $\sigma=UV^{*}$ is the solution of the <b>orthogonal Procrustes problem</b> — the closest rotation aligning two point clouds — which is how shape matching, point-cloud registration and word-embedding alignment are done. The $\tau$ factor is the symmetric "strain" part, used in continuum mechanics for the same reason.</div>
+
   <!-- ============================== MAP ============================== -->
   <h2 id="map">How they connect</h2>
   <div class="tw"><table>
@@ -311,6 +354,7 @@ print(np.allclose(A, U @ np.diag(s) @ Vt))   # True</pre>
     <tr><td>⑥ Cayley–Hamilton</td><td>⑤</td><td>$\chi_A(A)=0$; matrix functions</td></tr>
     <tr><td>⑦ Spectral theorem</td><td>⑤ + normality</td><td>$A=UDU^{*}$; PCA</td></tr>
     <tr><td>⑧ SVD</td><td>⑦ applied to $A^{*}A$, + ①</td><td>$A=U\Sigma V^{*}$ for <em>every</em> matrix</td></tr>
+    <tr><td>⑨ Polar</td><td>⑦ applied to $u^{*}u$</td><td>$u=\sigma\tau$ — rotate ∘ stretch; <b>exam Q3</b></td></tr>
   </table></div>
 
   <div class="idea"><span class="lbl">If you only have one evening</span> Learn <b>⑤ Schur</b> and <b>⑦ the spectral theorem</b> properly. ⑥ and ⑧ are corollaries of them, ③ and ④ are four lines each, and ② is one application of Pythagoras. Schur is the load-bearing wall.</div>

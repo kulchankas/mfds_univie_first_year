@@ -71,7 +71,7 @@
   <a class="back-link" href="index.html">← Linear Algebra for Data Science</a>
   <div class="eyebrow">Universität Wien · Mula &amp; Wu · Chapter 1</div>
   <h1>Vector spaces, projections &amp; symmetries</h1>
-  <p class="lede">Chapter 1 is the vocabulary the rest of the book speaks. Most of it is definitions you can absorb quickly — except <b>projections and symmetries</b>, which trip almost everyone up, because a Chapter-1 projection is <em>not</em> the orthogonal projection you will meet in Chapter 2. That section below is the long one, deliberately.</p>
+  <p class="lede">Chapter 1 is the vocabulary the rest of the book speaks. Most of it is definitions you can absorb quickly — except <b>projections and symmetries</b>, which trip almost everyone up, because a Chapter-1 projection is <em>not</em> the orthogonal projection you will meet in Chapter 2. That section below is the long one, deliberately — and the <a href="mock-exam-1.html#q1">real exam</a> opened with a projection question worth 5 of its 24 points, so it earns the space.</p>
 
   <div class="toc"><b>Jump to:</b>
     <a href="#spaces">spaces &amp; subspaces</a> ·
@@ -79,6 +79,7 @@
     <a href="#sum">direct sums</a> ·
     <a href="#proj">★ projections</a> ·
     <a href="#sym">★ symmetries</a> ·
+    <a href="#stable">★ stable subspaces</a> ·
     <a href="#recipes">how to solve the exercises</a> ·
     <a href="#maps">linear maps &amp; rank–nullity</a> ·
     <a href="#matrix">matrices &amp; change of basis</a> ·
@@ -288,6 +289,50 @@
   <p><b>(b)</b> $\displaystyle [S]=2\cdot\frac12\begin{pmatrix}1&1\\1&1\end{pmatrix}-\begin{pmatrix}1&0\\0&1\end{pmatrix}=\begin{pmatrix}0&1\\1&0\end{pmatrix}$ — the map $(x,y)\mapsto(y,x)$. That is exactly the <b>mirror reflection in the line $y=x$</b>, which is what you would have drawn by hand. Note $[S]$ is symmetric, matching the orthogonal case.</p>
 
   <p>Both fix $U$ pointwise and reverse their respective complements. Trace check: $\operatorname{tr}(s)=\operatorname{tr}(S)=0=\dim U-\dim W=1-1$ ✓ — in general $\operatorname{tr}(s)=\dim\ker(s-\operatorname{id})-\dim\ker(s+\operatorname{id})$.</p>
+
+
+  <!-- ================= STABLE ================= -->
+  <h2 id="stable">★ Stable (invariant) subspaces</h2>
+  <div class="warn"><span class="lbl">This was question 1 of the real exam, for 5 of 24 points</span>
+  The <a href="mock-exam-1.html#q1">first-date paper</a> asked: for a projection $p$ and any $f$, show that $p\circ f=f\circ p$ <b>iff</b> $\operatorname{im}p$ and $\ker p$ are stable by $f$. It combines everything above — so it is worth having the vocabulary straight.</div>
+
+  <div class="def"><span class="lbl">Definition</span>
+  A subspace $U\subseteq E$ is <b>stable</b> (or <b>invariant</b>) under $f\in\mathcal{L}(E)$ if
+  $$f(U)\subseteq U,$$
+  i.e. $u\in U\Rightarrow f(u)\in U$. Note the inclusion is <b>one-way</b> — $f(U)=U$ is <em>not</em> required, and is false in general (take $f=0$).</div>
+
+  <div class="idea"><span class="lbl">Why anyone cares</span> If $U$ is stable, $f$ restricts to an endomorphism $f|_U\in\mathcal{L}(U)$. And if $E=U\oplus W$ with <b>both</b> summands stable, then in a basis adapted to the decomposition the matrix of $f$ is <b>block diagonal</b>:
+  $$[f]=\begin{pmatrix}[f|_U]&0\\0&[f|_W]\end{pmatrix}.$$
+  Splitting a map into independent blocks is the entire point — it is what diagonalization (Ch 5) and the spectral theorem (Ch 6) do, in the special case where the blocks are one-dimensional.</div>
+
+  <h3>Examples you should be able to produce</h3>
+  <ul>
+    <li>$\{0\}$ and $E$ are stable under every $f$ — the trivial ones.</li>
+    <li>Every <b>eigenspace</b> $F_\lambda=\ker(f-\lambda\,\mathrm{Id})$ is stable under $f$: if $f(x)=\lambda x$ then $f(x)=\lambda x\in F_\lambda$. More generally $\ker f$ and $\operatorname{im}f$ are stable under $f$ itself.</li>
+    <li>$\ker g$ and $\operatorname{im}g$ are stable under any $f$ that <b>commutes</b> with $g$ — that is exactly the exam question, in the case $g=p$.</li>
+  </ul>
+
+  <div class="def"><span class="lbl">The exam result</span>
+  Let $p$ be a projection and $f\in\mathcal{L}(E)$. Then
+  $$p\circ f=f\circ p\quad\Longleftrightarrow\quad \operatorname{im}p\ \text{and}\ \ker p\ \text{are stable by }f.$$</div>
+
+  <p><span class="step">(⇒) The easy direction</span> Assume they commute.</p>
+  <ul>
+    <li><b>Image.</b> Take $y\in\operatorname{im}p$, say $y=p(x)$. Then $f(y)=f(p(x))=p(f(x))\in\operatorname{im}p$. ✓</li>
+    <li><b>Kernel.</b> Take $x\in\ker p$. Then $p(f(x))=f(p(x))=f(0)=0$, so $f(x)\in\ker p$. ✓</li>
+  </ul>
+  <p>Both are one line. Notice neither used that $p$ is a <em>projection</em> — the forward direction works for any $g$ in place of $p$.</p>
+
+  <p><span class="step">(⇐) The direction that needs the projection structure</span> This is where the two facts from <a href="#proj">the projections section</a> earn their keep:</p>
+  <ul>
+    <li><b>(A)</b> $E=\operatorname{im}p\oplus\ker p$ — so every $x$ splits <em>uniquely</em> as $x=y+z$;</li>
+    <li><b>(B)</b> $p\big|_{\operatorname{im}p}=\mathrm{Id}$ — the image is the set of fixed points.</li>
+  </ul>
+  <p>Set $g=f\circ p-p\circ f$ and show $g=0$. Split $x=y+z$ with $y\in\operatorname{im}p$, $z\in\ker p$:
+  $$g(x)=f\underbrace{(p(y))}_{\text{(B)}\,=\,y}+f\underbrace{(p(z))}_{=\,0}-p\underbrace{(f(y))}_{\in\,\operatorname{im}p\ \text{by stability}}-p\underbrace{(f(z))}_{\in\,\ker p\ \text{by stability}}=f(y)+0-f(y)-0=0 .$$
+  Each of the four terms dies for a <em>different</em> reason — annotate which, as above. ∎</p>
+
+  <div class="idea"><span class="lbl">The exam-technique takeaway</span> Whenever a question says "show $X$ is stable", the proof is always the same shape: <b>take an element of $X$, apply $f$, show the result is still in $X$</b> — using whatever characterisation of $X$ is cheapest. For $\operatorname{im}p$ use "it is $p$ of something"; for $\ker p$ use "$p$ of it is zero"; for an eigenspace use the eigenvalue equation.</div>
 
   <!-- ================= RECIPES ================= -->
   <h2 id="recipes">How to solve the exercises</h2>

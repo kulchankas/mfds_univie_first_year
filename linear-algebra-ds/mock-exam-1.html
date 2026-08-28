@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F9">
+<meta name="description" content="The real first-date Linear Algebra for Data Science exam (7 July 2026, 250076 VO) transcribed with the official solutions, grader notes, and a predicted second-date paper.">
+<title>The real LA for DS exam — 7 July 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[['$','$']]},svg:{fontCache:'global'}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#1a1612;--bg-elevated:#221d18;--bg-card:#1f1a15;--border:#3a342c;--border-soft:#2a251f;
+    --text:#f5efe4;--text-muted:#b8aa97;--text-dim:#8a7e6e;--accent:#e0b888;--accent-hover:#ecc89c;
+    --good:#8bc6a0;--warn:#d99a7e;--blue:#8fb8de;--ds:#c4a6df;--glow:rgba(224,184,136,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Figtree',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.66;-webkit-font-smoothing:antialiased;min-height:100vh;background-image:radial-gradient(900px 500px at 50% -10%,var(--glow),transparent 70%);background-repeat:no-repeat}
+  .wrap{max-width:820px;margin:0 auto;padding:clamp(1.6rem,5vw,2.6rem) clamp(1.1rem,5vw,1.75rem) 5rem;
+        padding-left:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-left));
+        padding-right:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-right))}
+  .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-dim);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;margin-bottom:1.4rem}
+  .back-link:hover{color:var(--accent)}
+  .eyebrow{font-weight:700;color:var(--accent);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.7rem}
+  h1{font-weight:800;font-size:clamp(1.8rem,6vw,2.5rem);line-height:1.08;letter-spacing:-.025em;margin-bottom:.6rem}
+  .lede{color:var(--text-muted);font-size:clamp(.96rem,3vw,1.06rem);max-width:44em}
+  h2{font-weight:800;font-size:clamp(1.2rem,4vw,1.5rem);letter-spacing:-.02em;margin:2.6rem 0 .6rem;scroll-margin-top:70px}
+  h3{font-weight:700;font-size:1rem;margin:1.5rem 0 .4rem;color:var(--accent)}
+  p{margin:.55rem 0;color:var(--text-muted);font-size:.96rem}
+  b,strong{color:var(--text)}
+  ul,ol{margin:.4rem 0 .7rem;padding-left:1.35rem;color:var(--text-muted);font-size:.95rem}
+  li{margin:.3rem 0}
+  a{color:var(--accent)}
+  code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:#14110d;color:var(--accent);padding:.05rem .3rem;border-radius:5px}
+  .pts{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--accent);border:1px solid var(--border);border-radius:5px;padding:.1rem .45rem;white-space:nowrap;vertical-align:middle}
+  .exam{background:#211c16;border:1px solid var(--border);border-radius:12px;padding:clamp(1.1rem,4vw,1.5rem);margin:1rem 0;color:var(--text-muted);font-size:.96rem}
+  .exam b{color:var(--text)}
+  .exam ol,.exam ul{margin:.4rem 0 0;padding-left:1.35rem}
+  .exam li{margin:.45rem 0}
+  details.sol{background:var(--bg-card);border:1px solid rgba(139,198,160,.35);border-radius:12px;margin:.8rem 0 1.8rem;overflow:hidden}
+  details.sol>summary{cursor:pointer;list-style:none;padding:.85rem 1.2rem;font-weight:700;font-size:.95rem;color:var(--good)}
+  details.sol>summary::-webkit-details-marker{display:none}
+  details.sol>summary::before{content:'▸ ';font-size:.85em}
+  details.sol[open]>summary::before{content:'▾ '}
+  details.sol[open]>summary{border-bottom:1px solid var(--border-soft)}
+  .solbody{padding:1rem 1.25rem 1.3rem;color:var(--text-muted);font-size:.95rem}
+  .solbody p{margin:.6rem 0} .solbody b,.solbody strong{color:var(--text)}
+  .solbody ul,.solbody ol{margin:.4rem 0 .6rem;padding-left:1.3rem}
+  .step{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--good)}
+  .grader{background:var(--bg-card);border:1px solid rgba(217,154,126,.35);border-left:4px solid var(--warn);border-radius:0 10px 10px 0;padding:.8rem 1.1rem;margin:.8rem 0;font-size:.9rem;color:var(--text-muted)}
+  .grader .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--warn);margin-bottom:.4rem}
+  .box{background:var(--bg-card);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:0 10px 10px 0;padding:1rem 1.25rem;margin:1.1rem 0;color:var(--text-muted);font-size:.95rem}
+  .box .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.5rem}
+  .box ul{margin:.3rem 0 0;padding-left:1.2rem}
+  .box.good{border-left-color:var(--good)} .box.good .lbl{color:var(--good)}
+  .box.blue{border-left-color:var(--blue)} .box.blue .lbl{color:var(--blue)}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.8rem 0;border:1px solid var(--border);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:.88rem}
+  th,td{border-bottom:1px solid var(--border-soft);padding:.5rem .65rem;text-align:left;vertical-align:top}
+  th{background:#2a2218;color:var(--accent);font-weight:700;font-size:.76rem;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  .doc{display:flex;align-items:center;gap:.7rem;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:.8rem 1rem;margin:.7rem 0;text-decoration:none;color:inherit}
+  .doc:hover{border-color:var(--accent)}
+  .doc .t{font-weight:700;font-size:.93rem;color:var(--text)}
+  .doc .s{display:block;font-weight:600;font-size:.82rem;color:var(--text-dim)}
+  footer{margin-top:3rem;padding-top:1.2rem;border-top:1px solid var(--border-soft);color:var(--text-dim);font-size:.82rem}
+  mjx-container{color:inherit!important}
+</style>
+<link rel="stylesheet" href="../assets/mfds.css?v=4">
+</head>
+<body class="mfds mfds-lads" data-page="lads" data-up="index.html" data-up-label="LA for DS">
+<div class="wrap">
+  <a class="back-link" href="index.html">← Linear Algebra for Data Science</a>
+  <div class="eyebrow">Universität Wien · 250076 VO · first date</div>
+  <h1>The real exam — 7 July 2026</h1>
+  <p class="lede">The actual first-date paper, <b>with the official solutions</b>. Three questions, <b style="color:var(--accent)">24 points</b>, 90 minutes (15:00–16:30). This is the single most valuable document on the site: it tells you the format, the weighting, and — from its own citations — exactly which lecture-note results you are expected to quote.</p>
+
+  <a class="doc" href="exams/LA-DS_exam_2026-07-07_with_solutions.pdf">
+    <span>📄</span><span><span class="t">The original PDF, with official solutions</span>
+    <span class="s">4 pages · Faculty of Mathematics · sit it before reading anything below</span></span>
+  </a>
+
+  <div class="box"><span class="lbl">What the paper tells us about the second date</span>
+  <div class="tw"><table>
+    <tr><th>#</th><th>Topic</th><th>Pts</th><th>Chapter</th></tr>
+    <tr><td>1</td><td>Stable subspaces &amp; commuting with a projection</td><td>5</td><td>Ch 1</td></tr>
+    <tr><td>2</td><td>Diagonalizability of a $4\times4$ family — with two pure <em>definition/statement</em> parts</td><td>11</td><td>Ch 5</td></tr>
+    <tr><td>3</td><td>Polar decomposition $u=\sigma\circ\tau$, guided</td><td>8</td><td>Ch 6</td></tr>
+  </table></div>
+  <b>Three structural facts worth more than any single topic:</b>
+  <ul>
+    <li><b>Ch 1 is examined, and it is examined through projections.</b> Question 1 is entirely about a projection operator. If you skipped Chapter 1 as "just definitions", that was 5 of 24 points.</li>
+    <li><b>4 of the 24 points are pure recall</b> — "define the matrix representation" (2 pts) and "state the theorem with the three necessary and sufficient conditions for diagonalizability" (2 pts). Free marks, and the fastest thing to revise.</li>
+    <li><b>The big question is guided.</b> Question 3 proves a serious theorem, but in four sign-posted steps. You are never asked to invent a proof from nothing — you are asked to execute steps. That changes how you should prepare: rehearse <em>techniques</em>, not whole proofs.</li>
+  </ul></div>
+
+  <div class="box good"><span class="lbl">Numbering, now confirmed</span>
+  The paper cites the lecture notes <b>version of 29 June 2026</b> — the same version <a href="notes/Linear_Algebra_Mula_Wu.pdf">hosted here</a>. From its own citations we can now pin down two references that were previously guesses:
+  <ul>
+    <li><b>Eq. (1.3)</b> — the definition of the matrix representation of $f$.</li>
+    <li><b>Theorem 5.20</b> — the three necessary and sufficient conditions for diagonalizability.</li>
+  </ul>
+  Together with <b>Theorem 6.9</b> (the SVD) these are the only three numbers verified against a primary source. Everything else on this site is still cited by name — see the note on the <a href="theorems.html">theorems page</a>.</div>
+
+  <!-- ============================================================ Q1 -->
+  <h2 id="q1">1 · Stable subspaces <span class="pts">5 pts</span></h2>
+  <div class="exam">
+    Let $E$ be a $\mathbb{K}$-vector space, let $f\in\mathcal{L}(E)$ and let $p\in\mathcal{L}(E)$ be a <b>projection operator</b>. Show that
+    $$p\circ f=f\circ p\quad\Longleftrightarrow\quad \operatorname{im}(p)\ \text{and}\ \ker(p)\ \text{are stable by }f.$$
+  </div>
+
+  <details class="sol"><summary>Official solution — Q1</summary><div class="solbody">
+    <p><span class="step">(⇒) Commuting implies stable</span></p>
+    <p><b>$\operatorname{im}p$ is stable.</b> Let $y\in\operatorname{im}p$. Then $y=p(x)$ for some $x\in E$, and
+    $$p\big[f(x)\big]=f\big[\underbrace{p(x)}_{=\,y}\big]=f(y)\;\Longrightarrow\;f(y)\in\operatorname{im}p .$$
+    So $f(\operatorname{im}p)\subset\operatorname{im}p$.</p>
+    <p><b>$\ker p$ is stable.</b> Let $x\in\ker p$. Then
+    $$p\big[f(x)\big]=f\big[\underbrace{p(x)}_{=\,0}\big]=f(0)=0\;\Longrightarrow\;f(x)\in\ker p .$$
+    So $f(\ker p)\subset\ker p$.</p>
+
+    <p><span class="step">(⇐) Stable implies commuting</span></p>
+    <p>Assume $f(\operatorname{im}p)\subset\operatorname{im}p$ &nbsp;(1)&nbsp; and $f(\ker p)\subset\ker p$ &nbsp;(2). Recall the two standard facts about a projection:</p>
+    <ul>
+      <li><b>(A)</b> $E=\operatorname{im}p\oplus\ker p$;</li>
+      <li><b>(B)</b> $p$ restricted to $\operatorname{im}p$ is the identity: $p\big|_{\operatorname{im}p}=\mathrm{Id}$.</li>
+    </ul>
+    <p>Consider the commutator $g=[f,p]=f\circ p-p\circ f$; showing $g=0$ is exactly showing that $f$ and $p$ commute.</p>
+    <p>Let $x\in E$. By <b>(A)</b> there is a <em>unique</em> decomposition $x=y+z$ with $y\in\operatorname{im}p$ and $z\in\ker p$. Then
+    $$g(x)=f\big[\underbrace{p(y)}_{\text{(B)}=\,y}\big]+f\big[\underbrace{p(z)}_{z\in\ker p\;=\,0}\big]-p\big[\underbrace{f(y)}_{\text{(1),(B)}}\big]-p\big[\underbrace{f(z)}_{\text{(2)}=\,0}\big]$$
+    $$=f(y)+f(0)-f(y)-0=0 .$$
+    Since this holds for every $x\in E$, $g=0$ and the two maps commute. ∎</p>
+
+    <div class="grader"><span class="lbl">Grader notes · 5 pts</span>
+    Roughly 2 pts for (⇒) and 3 for (⇐), because the converse is where the work is. The two things that earn the marks:
+    <ul>
+      <li><b>Naming (A) and (B) explicitly.</b> The converse is impossible without the direct-sum decomposition and $p|_{\operatorname{im}p}=\mathrm{Id}$. Write them down as recalled facts before you use them — the solution does exactly that.</li>
+      <li><b>Splitting $x=y+z$.</b> Every term in the four-term expansion collapses for a <em>different</em> reason: (B), then $z\in\ker p$, then (1)+(B), then (2). Annotating which fact kills which term is the difference between a complete answer and a hand-wave.</li>
+    </ul>
+    <em>(The paper writes the commutator as "$g=[f,g]$" — a typo for $[f,p]$.)</em></div>
+
+    <div class="box blue"><span class="lbl">Where to revise this</span>
+    Projections are Chapter 1: the definition $p^{2}=p$, the decomposition $E=\operatorname{im}p\oplus\ker p$ and $\operatorname{im}p=$ the fixed points are all on the <a href="vector-spaces.html#proj">Chapter 1 notes</a>, and <b>stable (invariant) subspaces</b> now have <a href="vector-spaces.html#stable">their own section</a> because of this question.</div>
+  </div></details>
+
+  <!-- ============================================================ Q2 -->
+  <h2 id="q2">2 · Diagonalization <span class="pts">11 pts</span></h2>
+  <div class="exam">
+    Let $E$ be an $n$-dimensional vector space and $f\in\mathcal{L}(E)$.
+    <ol>
+      <li>Define the concept of the <b>matrix representation</b> of $f$. <span class="pts">2</span></li>
+      <li>State the theorem providing the <b>three necessary and sufficient conditions</b> for $f$ to be diagonalizable. <span class="pts">2</span></li>
+    </ol>
+    <p>Now $E=\mathbb{R}^{4}$ and $f\in\mathcal{L}(\mathbb{R}^{4})$ has, in the canonical basis $\mathcal{E}$,
+    $$[f]_{\mathcal{E}}^{\mathcal{E}}=\begin{pmatrix}1&0&0&0\\ h&h&0&0\\ 0&0&h&h\\ 0&0&0&1\end{pmatrix},\qquad h\in\mathbb{R}^{*}.$$
+    The goal is to study diagonalizability as a function of $h$.</p>
+    <ol start="3">
+      <li>Compute the characteristic polynomial, in factorized form. <span class="pts">2</span></li>
+      <li>Deduce the eigenvalues and their algebraic multiplicities. <span class="pts">1</span></li>
+      <li>Compute the eigenspaces and give the geometric multiplicities. <span class="pts">3</span></li>
+      <li>For which $h\in\mathbb{R}^{*}$ is $f$ diagonalizable? <span class="pts">1</span></li>
+    </ol>
+  </div>
+
+  <details class="sol"><summary>Official solution — Q2</summary><div class="solbody">
+    <p><span class="step">1 · Matrix representation</span> The official solution just points at <b>Eq. (1.3)</b> of the lecture notes. The statement expected: given a basis $\mathcal{E}=(e_1,\dots,e_n)$ of $E$, the matrix $[f]_{\mathcal{E}}^{\mathcal{E}}$ is the $n\times n$ matrix whose <b>$j$-th column holds the coordinates of $f(e_j)$ in the basis $\mathcal{E}$</b>; equivalently $f(e_j)=\sum_{i=1}^{n}a_{ij}e_i$ defines the entries $a_{ij}$.</p>
+
+    <p><span class="step">2 · The diagonalizability theorem</span> Cited as <b>Theorem 5.20</b>. The three equivalent conditions: $f$ is diagonalizable iff</p>
+    <ul>
+      <li>$E$ has a <b>basis of eigenvectors</b> of $f$; equivalently</li>
+      <li>$E$ is the <b>direct sum of the eigenspaces</b>, $E=\bigoplus_\lambda F_\lambda$, i.e. $\sum_\lambda\dim F_\lambda=n$; equivalently</li>
+      <li>the characteristic polynomial <b>splits</b> over $\mathbb{K}$ <b>and</b> for every eigenvalue the <b>geometric multiplicity equals the algebraic multiplicity</b>.</li>
+    </ul>
+
+    <p><span class="step">3 · Characteristic polynomial</span> The matrix is block diagonal in two $2\times2$ blocks, so the determinant factorises:
+    $$p_f(t)=\det\big([f]-t\,\mathrm{Id}\big)=\det\begin{pmatrix}1-t&0\\ h&h-t\end{pmatrix}\cdot\det\begin{pmatrix}h-t&h\\ 0&1-t\end{pmatrix}=(1-t)^{2}(h-t)^{2}.$$</p>
+
+    <p><span class="step">4 · Eigenvalues and algebraic multiplicities</span></p>
+    <ul>
+      <li><b>$h=1$:</b> one eigenvalue $\lambda_0=1$, algebraic multiplicity $4$.</li>
+      <li><b>$h\ne1$:</b> two eigenvalues $\lambda_1=1$ and $\lambda_2=h$, each of algebraic multiplicity $2$.</li>
+    </ul>
+
+    <p><span class="step">5 · Eigenspaces and geometric multiplicities</span></p>
+    <p><b>Case $h=1$.</b>
+    $$F_{\lambda_0}=\ker\big([f]-\mathrm{Id}\big)=\ker\begin{pmatrix}0&0&0&0\\ 1&0&0&0\\ 0&0&0&1\\ 0&0&0&0\end{pmatrix}
+    =\operatorname{span}\left\{\begin{pmatrix}0\\1\\0\\0\end{pmatrix},\begin{pmatrix}0\\0\\1\\0\end{pmatrix}\right\}$$
+    — the conditions are $x_1=0$ and $x_4=0$, leaving $x_2,x_3$ free. <b>Geometric multiplicity 2</b>, against algebraic multiplicity 4.</p>
+
+    <p><b>Case $h\ne1$.</b> For $\lambda_1=1$ the conditions are $hx_1+(h-1)x_2=0$ and $(h-1)x_3+hx_4=0$, so $x_1$ and $x_4$ are free:
+    $$F_{\lambda_1}=\operatorname{span}\left\{\begin{pmatrix}h-1\\-h\\0\\0\end{pmatrix},\begin{pmatrix}0\\0\\-h\\h-1\end{pmatrix}\right\},\qquad \dim F_{\lambda_1}=2 .$$
+    For $\lambda_2=h$ the conditions are $(1-h)x_1=0$ and $hx_4=0$, so $x_1=x_4=0$ (using $h\ne1$ and $h\ne0$):
+    $$F_{\lambda_2}=\operatorname{span}\left\{\begin{pmatrix}0\\1\\0\\0\end{pmatrix},\begin{pmatrix}0\\0\\1\\0\end{pmatrix}\right\},\qquad \dim F_{\lambda_2}=2 .$$
+    Both geometric multiplicities are <b>2</b>.</p>
+
+    <p><span class="step">6 · Conclusion</span> Geometric and algebraic multiplicities agree exactly when $h\ne1$. So
+    $$\boxed{f\ \text{is diagonalizable}\iff h\in\mathbb{R}^{*}\setminus\{1\}.}$$</p>
+
+    <div class="grader"><span class="lbl">Grader notes · 11 pts</span>
+    <ul>
+      <li><b>Parts 1–2 are 4 free points</b> for reciting two things. Do them first, in full sentences. If you can only revise one thing for the second date, revise the statements you might be asked to quote.</li>
+      <li><b>Part 3:</b> spot the block structure. Expanding a $4\times4$ determinant by cofactors is legal but slow and error-prone; the two $2\times2$ blocks give the factorised form immediately, which is what the question asks for.</li>
+      <li><b>Part 5 carries 3 points and is where the case split lives.</b> The whole exercise is engineered so that $h=1$ collapses the two eigenvalues into one; you must handle that case <em>separately</em>. Note also that $h\ne0$ is given ($h\in\mathbb{R}^{*}$) and you genuinely use it in the $\lambda_2$ eigenspace.</li>
+      <li>The eigenvector bases are only defined up to scaling — any nonzero multiples are fine.</li>
+    </ul></div>
+
+    <div class="box blue"><span class="lbl">Where to revise this</span>
+    The full workflow — characteristic polynomial → eigenvalues → eigenspaces → compare multiplicities — is card-drilled in the <a href="flashcards.html">deck</a> (Ch 5 cards) and stated on the <a href="theorems.html">theorems page</a>.</div>
+  </div></details>
+
+  <!-- ============================================================ Q3 -->
+  <h2 id="q3">3 · Polar decomposition <span class="pts">8 pts</span></h2>
+  <div class="exam">
+    Let $(E,\langle\cdot,\cdot\rangle)$ be an $n$-dimensional $\mathbb{K}$-inner-product space, $\mathbb{K}=\mathbb{R}$ or $\mathbb{C}$, and let $u$ be a <b>bijective</b> endomorphism. Prove that there exist an isometry $\sigma\in\mathcal{L}(E)$ (i.e. $\lVert\sigma(x)\rVert=\lVert x\rVert$ for all $x$) and a self-adjoint $\tau\in\mathcal{L}(E)$ with strictly positive eigenvalues such that $u=\sigma\circ\tau$.
+    <ol>
+      <li>Justify that $w:=u^{*}\circ u$ is diagonalizable in an orthonormal basis $\mathcal{E}=\{e_1,\dots,e_n\}$, and show its eigenvalues are real and strictly positive. <span class="pts">2</span></li>
+      <li>Writing $\lambda_i$ for the eigenvalue attached to $e_i$, express $\lVert u(e_i)\rVert$ in terms of $\lambda_i$. <span class="pts">1</span></li>
+      <li>Show that $\sigma$ defined by $\sigma(e_i):=u(e_i)/\lVert u(e_i)\rVert$ is an isometry. <span class="pts">3</span></li>
+      <li>With $\tau=\sigma^{-1}\circ u$, show $\tau(e_i)=\lambda_i^{1/2}e_i$, and deduce that $\tau$ is self-adjoint with strictly positive eigenvalues. <span class="pts">2</span></li>
+    </ol>
+  </div>
+
+  <details class="sol"><summary>Official solution — Q3</summary><div class="solbody">
+    <p><span class="step">1 · $w=u^{*}u$ is self-adjoint and positive</span> First, $w$ is self-adjoint:
+    $$w^{*}=(u^{*}\circ u)^{*}=u^{*}\circ(u^{*})^{*}=u^{*}\circ u=w,$$
+    using $(f^{*})^{*}=f$ and the order-reversal $(ST)^{*}=T^{*}S^{*}$. By the <b>spectral theorem</b> there is an orthonormal basis $\mathcal{E}$ diagonalizing $w$, and self-adjointness forces every $\lambda_i\in\mathbb{R}$.</p>
+    <p>For strict positivity, note that for every $x\ne0$,
+    $$\langle w(x),x\rangle=\langle u^{*}u(x),x\rangle=\langle u(x),u(x)\rangle=\lVert u(x)\rVert^{2}>0,$$
+    the last inequality because $u$ is <b>bijective</b>, so $u(x)\ne0$. Applying this to an eigenpair $(\lambda_i,e_i)$:
+    $$0<\langle w(e_i),e_i\rangle=\lambda_i\lVert e_i\rVert^{2}\;\Longrightarrow\;\lambda_i=\frac{\langle w(e_i),e_i\rangle}{\lVert e_i\rVert^{2}}>0 .$$</p>
+
+    <p><span class="step">2 · The norm of $u(e_i)$</span> Using $\lVert e_i\rVert=1$:
+    $$\lVert u(e_i)\rVert^{2}=\langle u(e_i),u(e_i)\rangle=\langle u^{*}u(e_i),e_i\rangle=\langle w(e_i),e_i\rangle=\lambda_i\lVert e_i\rVert^{2}=\lambda_i,$$
+    so $\lVert u(e_i)\rVert=\sqrt{\lambda_i}$ — which is nonzero precisely because part 1 gave $\lambda_i>0$.</p>
+
+    <p><span class="step">3 · $\sigma$ is an isometry</span> The official solution expands $\lVert\sigma(x)\rVert^{2}$ for a general $x=\sum_i\mu_ie_i$ and shows every cross term vanishes. The <b>shorter route to the same conclusion</b> — worth knowing, because it is far harder to make an algebra slip:</p>
+    <p>Compute the inner products of the images directly:
+    $$\langle u(e_i),u(e_j)\rangle=\langle u^{*}u(e_i),e_j\rangle=\langle w(e_i),e_j\rangle=\lambda_i\langle e_i,e_j\rangle=\lambda_i\delta_{ij}.$$
+    Therefore
+    $$\big\langle \sigma(e_i),\sigma(e_j)\big\rangle=\frac{\langle u(e_i),u(e_j)\rangle}{\sqrt{\lambda_i}\sqrt{\lambda_j}}=\frac{\lambda_i\delta_{ij}}{\sqrt{\lambda_i}\sqrt{\lambda_j}}=\delta_{ij},$$
+    so $\sigma$ maps the orthonormal basis $\mathcal{E}$ to an <b>orthonormal</b> family. A linear map that sends an orthonormal basis to an orthonormal basis preserves the norm of every vector — expand $x=\sum\mu_ie_i$ once and both sides give $\sum_i|\mu_i|^{2}$. Hence $\sigma$ is an isometry. ∎</p>
+
+    <p><span class="step">4 · $\tau$ is self-adjoint and positive</span> $\sigma$ is an isometry, hence injective, hence (finite dimension) bijective — so $\sigma^{-1}$ exists. From the definition of $\sigma$,
+    $$\sigma(e_i)=\frac{u(e_i)}{\lVert u(e_i)\rVert}\iff \sigma^{-1}\!\big(u(e_i)\big)=\lVert u(e_i)\rVert\,e_i\iff \tau(e_i)=\sigma^{-1}\circ u\,(e_i)=\sqrt{\lambda_i}\,e_i .$$
+    So the $e_i$ are eigenvectors of $\tau$ with eigenvalues $\sqrt{\lambda_i}>0$. Self-adjointness follows because $\tau$ is diagonal in an <em>orthonormal</em> basis with real entries: for all $i,j$,
+    $$\langle\tau e_i,e_j\rangle=\sqrt{\lambda_i}\,\langle e_i,e_j\rangle=\sqrt{\lambda_j}\,\langle e_i,e_j\rangle=\langle e_i,\tau e_j\rangle$$
+    (both sides vanish when $i\ne j$, and agree when $i=j$). Finally $\sigma\circ\tau=\sigma\circ\sigma^{-1}\circ u=u$. ∎</p>
+
+    <div class="grader"><span class="lbl">Grader notes · 8 pts</span>
+    <ul>
+      <li><b>Part 1 is the load-bearing step</b> and only worth 2 points — but everything downstream needs $\lambda_i>0$ (you divide by $\sqrt{\lambda_i}$ in part 3). The two facts to state explicitly: $w^{*}=w$ via order-reversal, and $\langle w(x),x\rangle=\lVert u(x)\rVert^{2}$, where <b>bijectivity of $u$</b> is what makes it strict.</li>
+      <li><b>Part 3 is the 3-point step.</b> If you are short on time, prove $\langle\sigma(e_i),\sigma(e_j)\rangle=\delta_{ij}$ and state that an ONB-to-ONB map is an isometry — that is the whole content, and it fits in four lines.</li>
+      <li>The official write-up of part 3 contains a typo in a denominator ($\lVert u(e_i)\rVert\lVert e_j\rVert$ where it should be $\lVert u(e_i)\rVert\lVert u(e_j)\rVert$); the conclusion is unaffected.</li>
+    </ul></div>
+
+    <div class="box blue"><span class="lbl">Where to revise this</span>
+    This is the <b>polar decomposition</b>, and it is the SVD's twin: both come from applying the spectral theorem to $u^{*}u$. It now has <a href="theorems.html#polar">its own entry</a> on the theorems page, next to <a href="theorems.html#svd">the SVD</a>.</div>
+  </div></details>
+
+  <!-- ============================================================ predicted -->
+  <h2 id="predicted">Predicted second-date paper</h2>
+  <p>Same skeleton — one Ch 1/2 structural question, one computational eigen-question with recall parts, one guided Ch 6 proof — with the topics rotated. Attempt closed-book in 90 minutes.</p>
+
+  <div class="exam">
+    <ol>
+      <li><b>Orthogonal projections</b> <span class="pts">~5</span> — Let $U\subseteq E$ be a subspace of a finite-dimensional inner-product space and $p$ the orthogonal projection onto $U$. (a) Show $p^{2}=p$ and $p^{*}=p$. (b) Show that a projection $q$ is <em>orthogonal</em> iff $\ker q\perp\operatorname{im}q$. (c) Deduce that $\lVert p(x)\rVert\le\lVert x\rVert$ for all $x$.</li>
+      <li><b>Eigen-computation with a parameter</b> <span class="pts">~11</span> — (i) Define the <em>characteristic polynomial</em> and state the relation between algebraic and geometric multiplicity. (ii) State the spectral theorem for normal endomorphisms. (iii) For $A(a)=\begin{pmatrix}2&a&0\\0&2&0\\0&0&a\end{pmatrix}$ compute $p_A$, the eigenvalues with algebraic multiplicities, the eigenspaces with geometric multiplicities, and decide for which $a\in\mathbb{R}$ the matrix is diagonalizable.</li>
+      <li><b>Guided proof, Ch 6</b> <span class="pts">~8</span> — one of: <em>(a)</em> build the <b>SVD</b> of a bijective $u$ from the spectral theorem applied to $u^{*}u$ (the same machinery as this year's Q3, one step further); <em>(b)</em> prove <b>Schur's lemma</b> by induction on $\dim E$; <em>(c)</em> prove that a normal upper-triangular matrix is diagonal, and deduce the spectral theorem.</li>
+    </ol>
+  </div>
+
+  <div class="box"><span class="lbl">Why these three</span>
+  Question 1 rotates <em>within</em> Chapter 1–2 from algebraic projections to orthogonal ones — the natural neighbour, and the one that connects to least squares. Question 2 keeps the format that carried 11 points (recall + parameterised computation) but moves the degeneracy from a repeated eigenvalue to a defective Jordan block. Question 3 stays in Chapter 6: this year's polar decomposition and the SVD are built from the same lemma, so if the paper rotates, it rotates to a sibling.</div>
+
+  <h2>How to use this</h2>
+  <div class="box good"><span class="lbl">The protocol</span>
+  <ul>
+    <li><b>First:</b> sit the real paper closed-book, 90 minutes, on paper, <em>before</em> opening any solution. It is only 24 points — you will know where you stand within the hour.</li>
+    <li><b>Budget by points:</b> 24 points in 90 minutes is <b>3.75 minutes per point</b>. Q2 is worth 11 and should get ~40 minutes; the 4 recall points inside it should take five.</li>
+    <li><b>Bank the definitions first.</b> Unlike the Algorithms paper, this one hands you 4 points for two statements. Write them, then compute.</li>
+    <li><b>Then:</b> the <a href="theorems.html">eight theorems</a> for the proof machinery, the <a href="flashcards.html">deck</a> for the statements, and <a href="vector-spaces.html">Chapter 1</a> for projections and stable subspaces — which this paper proves are examinable.</li>
+  </ul></div>
+
+  <footer>
+    Exam paper and official solutions © Universität Wien / Faculty of Mathematics (250076 VO, 7 July 2026); reproduced here for personal study. Commentary, grader notes and the predicted paper are written for this site and are <b>not</b> official. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+<script src="../assets/mfds.js?v=4" data-root="../"></script>
+</body>
+</html>
