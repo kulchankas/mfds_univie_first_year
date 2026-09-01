@@ -317,11 +317,21 @@
 
           <div class="yr-h yr-next">
             <span class="yr-t">Second year</span>
-            <span class="yr-n" id="y2-count">nothing planned yet</span>
+            <span class="yr-n" id="y2-count">1 course · self-study</span>
             <button class="yr-add" id="y2-add" type="button">+ Add subject</button>
           </div>
+          <div class="subj-grid" style="margin-bottom:14px">
+            <div class="subj" style="background:var(--teal-bg)">
+              <div class="subj-top">
+                <div class="subj-name">Introduction to Probability Theory</div>
+                <div class="ring" id="ring-prob"><i style="background:var(--teal-bg)">0%</i></div>
+              </div>
+              <p style="color:var(--teal-dark)" id="sub-prob">—</p>
+              <a class="go" style="background:var(--teal)" href="probability/index.html">Open</a>
+            </div>
+          </div>
 
-          <p class="y2-empty" id="y2-empty">Add the courses you'll take next year — they're saved in this browser and included in your backup, so you can start planning before the pages exist.</p>
+          <p class="y2-empty" id="y2-empty">Add any other second-year courses here — they're saved in this browser and included in your backup, so you can start planning before the pages exist.</p>
           <div class="subj-grid" id="y2-grid"></div>
 
           <form class="y2-form" id="y2-form" hidden>
@@ -421,7 +431,7 @@
   </div>
 </form></dialog>
 
-<script src="assets/plan.js?v=4"></script>
+<script src="assets/plan.js?v=5"></script>
 <script>
 (function(){
   'use strict';
@@ -512,6 +522,9 @@
   if (asg && asg.blocks) for (var b in asg.blocks) if (asg.blocks[b]) blocksDone++;
   var lads = readJSON('lads-progress-v1'); var chaptersDone = 0;
   if (lads && lads.chapters) for (var c in lads.chapters) if (lads.chapters[c] && lads.chapters[c].done) chaptersDone++;
+  var prob = readJSON('prob-progress-v1'); var probUnits = 0, probItems = 0;
+  if (prob && prob.units) for (var pu in prob.units) if (prob.units[pu] && prob.units[pu].done) probUnits++;
+  if (prob && prob.checklist) for (var pc in prob.checklist) if (prob.checklist[pc]) probItems++;
   var daily = readJSON('analysis-daily-v1'); var sheetsDone = 0;
   if (daily && daily.days) for (var d in daily.days) if (daily.days[d]) sheetsDone++;
   var algoPlan = readJSON('algo-progress-v1');            // {u:{id:{done,lanes}}}
@@ -527,7 +540,7 @@
   }
   var tasksDone = 0; for (var t in state.tasks) if (state.tasks[t]) tasksDone++;
 
-  var xp = tasksDone*25 + (algoLearned+anaLearned+ladsLearned)*20 + blocksDone*80 + chaptersDone*100 + sheetsDone*40;
+  var xp = tasksDone*25 + (algoLearned+anaLearned+ladsLearned)*20 + blocksDone*80 + (chaptersDone+probUnits)*100 + sheetsDone*40;
   var THRESH = [0,500,1500,3000,5000], STAGES = ['Seed','Sprout','Sapling','Budding','Flourishing'];
 
   /* ================= streak: days with work, not page-opens ================= */
@@ -623,11 +636,14 @@
     ring('ring-ana',  n, 'var(--ana)');
     ring('ring-lads', Math.round((l + i)/2), 'var(--lads)');
     ring('ring-la',   state.scores.la != null ? state.scores.la : 0, 'var(--la)');
+    ring('ring-prob', Math.round(100*probUnits/16), 'var(--teal)');
     document.getElementById('sub-algo').textContent =
       algoUnits+' of '+algoUnitsTotal+' units · '+algoLearned+' of 72 cards';
     document.getElementById('sub-ana').textContent  = blocksDone+' of 10 guide blocks complete';
     document.getElementById('sub-lads').textContent = chaptersDone+' of 6 chapters · '+ladsLearned+' of 49 cards';
     document.getElementById('sub-la').textContent   = 'Exam notes + five mock exams';
+    document.getElementById('sub-prob').textContent =
+      probUnits+' of 16 units · '+probItems+(probItems===1 ? ' item checked' : ' items checked');
   }
 
   /* ============ second year — user-editable subject list ============ */
@@ -659,7 +675,7 @@
     var grid  = document.getElementById('y2-grid');
     var empty = document.getElementById('y2-empty');
     document.getElementById('y2-count').textContent =
-      y2.length ? y2.length + (y2.length===1 ? ' subject planned' : ' subjects planned') : 'nothing planned yet';
+      y2.length ? '1 course · ' + y2.length + ' more planned' : '1 course · self-study';
     empty.hidden = y2.length > 0;
 
     grid.innerHTML = y2.map(function(s){
@@ -849,7 +865,7 @@
   /* recompute the derived numbers after a task toggle, without a reload */
   function recomputeStats(){
     tasksDone = 0; for (var t in state.tasks) if (state.tasks[t]) tasksDone++;
-    xp = tasksDone*25 + (algoLearned+anaLearned+ladsLearned)*20 + blocksDone*80 + chaptersDone*100 + sheetsDone*40;
+    xp = tasksDone*25 + (algoLearned+anaLearned+ladsLearned)*20 + blocksDone*80 + (chaptersDone+probUnits)*100 + sheetsDone*40;
     streak = 0; var c = new Date(today);
     while (state.worked[iso(c)]) { streak++; c.setDate(c.getDate()-1); }
     renderHeader(); renderSpark(); renderTree();

@@ -1,0 +1,1783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F9">
+<meta name="description" content="Introduction to Probability Theory (Universität Wien, second year) — a 16-unit self-study programme: probability foundations, limit theorems, Markov chains, statistical inference, regression and classification, with Python labs and progress tracking.">
+<title>Introduction to Probability Theory — Self-study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#12181a;--bg-elevated:#182023;--bg-card:#161d20;--border:#2c383b;--border-soft:#222b2e;
+    --text:#eaf3f2;--text-muted:#a5b8b6;--text-dim:#7c8f8d;--accent:#7fd1c5;--accent-hover:#9adfd4;
+    --watch:#d99a7e;--read:#8fb8de;--prac:#8bc6a0;--ds:#c4a6df;--ml:#86c4c4;--recall:#e8a87c;--glow:rgba(127,209,197,.14);
+    --recall-bg:rgba(232,168,124,.09);--ml-bg:rgba(134,196,196,.09);
+    --radius:12px;--radius-sm:8px;--ring:rgba(127,209,197,.42);--touch:44px;
+    --watch-bg:rgba(217,154,126,.09);--read-bg:rgba(143,184,222,.09);--prac-bg:rgba(139,198,160,.09);--ds-bg:rgba(196,166,223,.09);
+    --success:#8bc6a0;--danger:#d99a7e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;background-image:radial-gradient(900px 500px at 50% -10%,var(--glow),transparent 70%);background-repeat:no-repeat}
+  :focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ring)}
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+    html{scroll-behavior:auto}
+  }
+  .wrap{max-width:840px;margin:0 auto;padding:clamp(2rem,6vw,3rem) clamp(1.1rem,5vw,1.75rem) 6rem;padding-left:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-left));padding-right:max(clamp(1.1rem,5vw,1.75rem),env(safe-area-inset-right))}
+  .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-dim);text-decoration:none;font-size:.8rem;margin-bottom:1.5rem;min-height:var(--touch);padding:.35rem 0;transition:color .15s}
+  .back-link:hover{color:var(--accent)}
+  .eyebrow{font-weight:700;color:var(--accent);font-size:clamp(.74rem,2.6vw,.82rem);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem}
+  h1{font-weight:800;font-size:clamp(2rem,7vw,2.9rem);line-height:1.06;letter-spacing:-.03em;margin-bottom:.7rem}
+  .lede{color:var(--text-muted);font-size:clamp(1rem,3.4vw,1.1rem);max-width:44em}
+  h2{font-weight:800;font-size:clamp(1.35rem,4.5vw,1.7rem);letter-spacing:-.02em;margin:clamp(2.5rem,6vw,3.25rem) 0 1rem}
+  h2 .sec-tag{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.35rem}
+  h3{font-weight:800;font-size:1.05rem;letter-spacing:-.01em;margin:1.6rem 0 .5rem}
+  p+p{margin-top:.7rem}
+  .feature{display:block;background:linear-gradient(180deg,var(--bg-card),var(--bg-elevated));border:1px solid var(--border);border-radius:14px;padding:clamp(1.4rem,4vw,1.85rem);text-decoration:none;color:inherit;margin:1.5rem 0 .5rem;transition:transform .2s,border-color .2s,box-shadow .2s}
+  .feature:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 12px 30px rgba(0,0,0,.35)}
+  .feature-tag{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.6rem}
+  .feature-title{font-weight:800;font-size:clamp(1.3rem,4.5vw,1.65rem);letter-spacing:-.02em;margin-bottom:.5rem}
+  .feature-desc{color:var(--text-muted);font-size:.96rem;margin-bottom:1rem}
+  .feature-cta{font-weight:700;font-size:.9rem;color:var(--accent)}
+  .box{background:var(--bg-card);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:1rem 1.25rem;margin:1.2rem 0;color:var(--text-muted);font-size:.95rem}
+  .box .lbl{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.5rem}
+  .box a{color:var(--accent)}
+  .box ul{margin:.3rem 0 0;padding-left:1.2rem}
+  .box li{margin:.3rem 0}
+  .box.general{border-left-color:var(--read)}
+  .box.general .lbl{color:var(--read)}
+
+  /* ---- progress dashboard ---- */
+  #read-progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:90;background:linear-gradient(90deg,var(--accent),var(--read));transition:width .08s linear}
+  .dashboard{background:linear-gradient(180deg,var(--bg-card),var(--bg-elevated));border:1px solid var(--border);border-radius:var(--radius);padding:clamp(1.1rem,3.5vw,1.5rem);margin:1.75rem 0 1rem}
+  .dash-head{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:.75rem 1rem;margin-bottom:1.1rem}
+  .dash-title{font-size:1.15rem;font-weight:800;letter-spacing:-.02em}
+  .dash-sub{font-size:.86rem;color:var(--text-dim);margin-top:.15rem}
+  .dash-actions{display:flex;flex-wrap:wrap;gap:.45rem}
+  .btn{font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--bg);color:var(--text-muted);min-height:var(--touch);min-width:var(--touch);padding:0 .85rem;border-radius:var(--radius-sm);display:inline-flex;align-items:center;justify-content:center;gap:.35rem;transition:background .15s,border-color .15s,color .15s}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.primary{background:rgba(127,209,197,.12);border-color:rgba(127,209,197,.35);color:var(--accent)}
+  .btn.danger:hover{border-color:var(--danger);color:var(--danger)}
+  .dash-stats{display:flex;align-items:center;gap:1.25rem;margin-bottom:1.15rem}
+  .ring-wrap{position:relative;width:72px;height:72px;flex-shrink:0}
+  .ring-wrap svg{transform:rotate(-90deg);width:100%;height:100%}
+  .ring-bg{fill:none;stroke:var(--border-soft);stroke-width:6}
+  .ring-fg{fill:none;stroke:var(--accent);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .35s ease}
+  .ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;color:var(--accent)}
+  .stat-lines{flex:1;min-width:0}
+  .stat-line{display:flex;align-items:center;justify-content:space-between;gap:.5rem;font-size:.86rem;color:var(--text-muted);padding:.28rem 0;border-bottom:1px solid var(--border-soft)}
+  .stat-line:last-child{border-bottom:none}
+  .stat-line strong{color:var(--text);font-weight:700}
+  .lane-pills{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.65rem}
+  .pill{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:.28rem .55rem;border-radius:999px;border:1px solid transparent}
+  .pill.watch{color:var(--watch);background:var(--watch-bg);border-color:rgba(217,154,126,.25)}
+  .pill.read{color:var(--read);background:var(--read-bg);border-color:rgba(143,184,222,.25)}
+  .pill.prac{color:var(--prac);background:var(--prac-bg);border-color:rgba(139,198,160,.25)}
+  .pill.ds{color:var(--ds);background:var(--ds-bg);border-color:rgba(196,166,223,.25)}
+  .pill.recall{color:var(--recall);background:var(--recall-bg);border-color:rgba(232,168,124,.25)}
+  .pill.ml{color:var(--ml);background:var(--ml-bg);border-color:rgba(134,196,196,.25)}
+
+  /* session recipe */
+  .box.session{border-left-color:var(--read)}
+  .session-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.6rem;margin-top:.5rem}
+  .session-block{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.65rem .75rem}
+  .session-block .time{font-size:.68rem;font-weight:700;color:var(--read);margin-bottom:.25rem}
+  .session-block p{font-size:.86rem;margin:0;color:var(--text-muted)}
+  .cl-list{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.15rem}
+  .cl-chip{font-size:.72rem;color:var(--text-dim);background:var(--bg-elevated);border:1px solid var(--border);border-radius:999px;padding:.35rem .65rem;min-height:var(--touch);cursor:pointer;display:inline-flex;align-items:center;gap:.35rem;text-align:left;transition:border-color .15s,color .15s,background .15s}
+  .cl-chip[data-lane="watch"]:hover{border-color:var(--watch);color:var(--text-muted)}
+  .cl-chip[data-lane="watch"].done{background:var(--watch-bg);border-color:var(--watch);color:var(--watch);text-decoration:line-through}
+  .cl-chip[data-lane="read"]:hover{border-color:var(--read);color:var(--text-muted)}
+  .cl-chip[data-lane="read"].done{background:var(--read-bg);border-color:var(--read);color:var(--read);text-decoration:line-through}
+  .cl-chip[data-lane="prac"]:hover{border-color:var(--prac);color:var(--text-muted)}
+  .cl-chip[data-lane="prac"].done{background:var(--prac-bg);border-color:var(--prac);color:var(--prac);text-decoration:line-through}
+  .cl-chip[data-lane="ds"]:hover{border-color:var(--ds);color:var(--text-muted)}
+  .cl-chip[data-lane="ds"].done{background:var(--ds-bg);border-color:var(--ds);color:var(--ds);text-decoration:line-through}
+  .cl-progress{font-size:.7rem;color:var(--text-dim);margin-top:.4rem;font-weight:600}
+  mjx-container{color:var(--text)!important}
+
+  /* sync panel */
+  .sync-panel{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border-soft)}
+  .sync-panel[hidden]{display:none}
+  .sync-panel label{display:block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-dim);margin-bottom:.4rem}
+  .sync-panel textarea{width:100%;min-height:88px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.75rem;background:#0d1214;color:var(--text-muted);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.65rem .75rem;resize:vertical}
+  .sync-panel .sync-row{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.55rem}
+  .sync-msg{font-size:.82rem;margin-top:.5rem;min-height:1.2em}
+  .sync-msg.ok{color:var(--success)} .sync-msg.err{color:var(--danger)}
+
+  /* sticky unit jump */
+  .ch-jump-wrap{position:sticky;top:0;z-index:50;margin:0 -0.25rem 1rem;padding:.55rem 0;background:linear-gradient(180deg,var(--bg) 70%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .ch-jump{display:flex;gap:.4rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:.15rem .25rem}
+  .ch-jump::-webkit-scrollbar{display:none}
+  .ch-jump a{flex-shrink:0;font-size:.72rem;font-weight:700;text-decoration:none;color:var(--text-dim);border:1px solid var(--border);background:var(--bg-card);padding:.55rem .75rem;border-radius:999px;min-height:var(--touch);display:inline-flex;align-items:center;gap:.35rem;transition:border-color .15s,color .15s,background .15s}
+  .ch-jump a:hover,.ch-jump a.active{border-color:var(--accent);color:var(--accent)}
+  .ch-jump a.done{background:rgba(139,198,160,.12);border-color:rgba(139,198,160,.35);color:var(--prac)}
+  .ch-jump a .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5}
+
+  /* units */
+  details.ch{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);margin-top:1rem;overflow:hidden;scroll-margin-top:5.5rem;transition:border-color .2s}
+  details.ch.is-done{border-color:rgba(139,198,160,.35)}
+  details.ch>summary{cursor:pointer;list-style:none;padding:1rem 1.25rem;font-weight:800;font-size:1.02rem;display:flex;gap:.55rem;align-items:center;flex-wrap:wrap;min-height:var(--touch);transition:background .15s}
+  details.ch>summary::-webkit-details-marker{display:none}
+  details.ch>summary::before{content:'▸';color:var(--accent);font-size:.8em;flex-shrink:0;transition:transform .15s}
+  details.ch[open]>summary::before{content:'▾'}
+  details.ch[open]>summary{border-bottom:1px solid var(--border-soft);background:rgba(255,255,255,.02)}
+  summary .cnum{color:var(--accent);font-size:.85rem;font-weight:800}
+  summary .ctopics{font-weight:400;color:var(--text-dim);font-size:.82rem;flex-basis:100%;padding-left:1.35rem}
+  summary .ch-meta{margin-left:auto;display:flex;align-items:center;gap:.45rem;flex-shrink:0}
+  .mini-bar{display:flex;gap:3px;align-items:center}
+  .mini-bar span{width:14px;height:4px;border-radius:2px;background:var(--border-soft);transition:background .15s}
+  .mini-bar span.on.watch{background:var(--watch)} .mini-bar span.on.read{background:var(--read)}
+  .mini-bar span.on.prac{background:var(--prac)} .mini-bar span.on.ds{background:var(--ds)}
+  .chbody{padding:1rem 1.25rem 1.3rem}
+  .lane-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.85rem;padding-bottom:.75rem;border-bottom:1px solid var(--border-soft)}
+  .lane-head .hint{font-size:.82rem;color:var(--text-dim)}
+  .lane-toggles{display:flex;flex-wrap:wrap;gap:.35rem}
+  .lane-btn{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text-dim);min-height:var(--touch);padding:0 .65rem;border-radius:999px;display:inline-flex;align-items:center;gap:.3rem;transition:background .15s,border-color .15s,color .15s}
+  .lane-btn[data-lane="watch"].on{color:var(--watch);background:var(--watch-bg);border-color:rgba(217,154,126,.4)}
+  .lane-btn[data-lane="read"].on{color:var(--read);background:var(--read-bg);border-color:rgba(143,184,222,.4)}
+  .lane-btn[data-lane="prac"].on{color:var(--prac);background:var(--prac-bg);border-color:rgba(139,198,160,.4)}
+  .lane-btn[data-lane="ds"].on{color:var(--ds);background:var(--ds-bg);border-color:rgba(196,166,223,.4)}
+  .row{margin:.65rem 0;padding:.75rem .85rem;border-radius:var(--radius-sm);border-left:3px solid transparent}
+  .row.watch{background:var(--watch-bg);border-left-color:var(--watch)}
+  .row.read{background:var(--read-bg);border-left-color:var(--read)}
+  .row.prac{background:var(--prac-bg);border-left-color:var(--prac)}
+  .row.ds{background:var(--ds-bg);border-left-color:var(--ds)}
+  .row.recall{background:var(--recall-bg);border-left-color:var(--recall)}
+  .row.ml-intuition{background:var(--ml-bg);border-left-color:var(--ml)}
+  .row .rl{display:inline-flex;align-items:center;gap:.4rem;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem}
+  .row.watch .rl{color:var(--watch)} .row.read .rl{color:var(--read)} .row.prac .rl{color:var(--prac)} .row.ds .rl{color:var(--ds)} .row.ml-intuition .rl{color:var(--ml)} .row.recall .rl{color:var(--recall)}
+  .ml-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:.65rem;margin-top:.15rem}
+  .ml-part{background:var(--bg-elevated);border:1px solid rgba(134,196,196,.18);border-radius:var(--radius-sm);padding:.65rem .75rem}
+  .ml-part .ml-lbl{display:block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ml);margin-bottom:.35rem}
+  .ml-part p{font-size:.88rem;color:var(--text-muted);margin:0;line-height:1.55}
+  .row p,.row div{color:var(--text-muted);font-size:.94rem}
+  .row a{color:var(--accent);text-decoration:none} .row a:hover{text-decoration:underline}
+  .check{width:var(--touch);height:var(--touch);flex-shrink:0;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:transparent;transition:border-color .15s,background .15s,color .15s}
+  .check:hover{border-color:var(--accent)}
+  .check[aria-checked="true"]{background:rgba(139,198,160,.15);border-color:var(--prac);color:var(--prac)}
+  .check[aria-checked="true"]::after{content:'✓';font-size:1rem;font-weight:700;line-height:1}
+  .found-item{display:flex;gap:.65rem;align-items:flex-start;padding:.65rem 0;border-bottom:1px solid var(--border-soft)}
+  .found-item:last-child{border-bottom:none}
+  .found-item .txt{flex:1;font-size:.94rem;color:var(--text-muted)}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.85em;background:#0d1214;color:var(--accent);padding:.08rem .35rem;border-radius:4px}
+  pre.code{background:#0d1214;border:1px solid var(--border);border-radius:var(--radius-sm);padding:.85rem 1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8rem;line-height:1.55;color:var(--text-muted);margin:.7rem 0}
+  pre.code .cm{color:var(--text-dim)}
+  .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.2rem 0;border-radius:var(--radius-sm);border:1px solid var(--border-soft)}
+  table{border-collapse:collapse;width:100%;font-size:.86rem}
+  th,td{border:1px solid var(--border);padding:.55rem .65rem;text-align:left;vertical-align:top}
+  th{background:#1b2528;color:var(--accent);font-weight:700;white-space:nowrap;position:sticky;top:0;z-index:1}
+  tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+  .legend{display:flex;flex-wrap:wrap;gap:.5rem 1rem;margin:1rem 0;font-size:.85rem;color:var(--text-dim)}
+  .legend b{font-weight:700}
+  #toTop{position:fixed;right:max(1rem,env(safe-area-inset-right));bottom:max(1rem,env(safe-area-inset-bottom));width:var(--touch);height:var(--touch);border-radius:50%;border:1px solid var(--border);background:var(--bg-elevated);color:var(--accent);font-size:1.15rem;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .2s,transform .2s,border-color .15s,background .15s;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+  #toTop.show{opacity:1;pointer-events:auto;transform:none}
+  #toTop:hover{border-color:var(--accent);background:var(--bg-card)}
+  footer{margin-top:3rem;padding-top:1.3rem;border-top:1px solid var(--border-soft);color:var(--text-dim);font-size:.82rem}
+  footer a{color:var(--accent);text-decoration:none}
+  section[id]{scroll-margin-top:5.5rem}
+  @media (max-width:560px){
+    .dash-stats{flex-direction:column;align-items:flex-start}
+    summary .ch-meta{margin-left:0;width:100%;justify-content:space-between;padding-left:1.35rem}
+    .ch-jump-wrap{top:0;margin-left:max(-.5rem,calc(-1 * env(safe-area-inset-left)));margin-right:max(-.5rem,calc(-1 * env(safe-area-inset-right)));padding-left:max(.25rem,env(safe-area-inset-left));padding-right:max(.25rem,env(safe-area-inset-right))}
+    .btn{font-size:.68rem;padding:0 .65rem}
+  }
+  @media print{
+    #read-progress,#toTop,.dashboard,.ch-jump-wrap,.check,.cl-chip,.lane-btn,.lane-head{display:none!important}
+    details.ch{border:1px solid #ccc;page-break-inside:avoid}
+    details.ch[open] summary,details.ch .chbody{display:block!important}
+  }
+</style>
+<link rel="stylesheet" href="../assets/mfds.css?v=5">
+</head>
+<body class="mfds mfds-prob" data-page="prob">
+<div id="read-progress" role="progressbar" aria-label="Page scroll progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+<div class="wrap">
+  <a class="back-link" href="../index.html">← All subjects</a>
+  <div class="eyebrow">Universität Wien · second year · self-paced</div>
+  <h1>Introduction to Probability Theory</h1>
+  <p class="lede">The whole course, rebuilt as a study programme you can actually run: <b>16 units</b>, from the axioms of probability to cross-validated binary classification. Each unit has the same four passes — watch for intuition, read for rigour, practise on paper, then write the Python that makes it real. The exam is a single written paper on everything, so the programme is built to leave you able to <em>derive</em>, not recognise. Progress saves in your browser.</p>
+
+  <section class="dashboard" aria-labelledby="dash-title">
+    <div class="dash-head">
+      <div>
+        <h2 class="dash-title" id="dash-title">Your progress</h2>
+        <p class="dash-sub">Saved locally in this browser · export to move devices</p>
+      </div>
+      <div class="dash-actions">
+        <button type="button" class="btn primary" id="btn-export" aria-label="Export progress as JSON">Export</button>
+        <button type="button" class="btn" id="btn-import-toggle" aria-expanded="false" aria-controls="sync-panel">Import</button>
+        <button type="button" class="btn danger" id="btn-reset" aria-label="Reset all progress">Reset</button>
+      </div>
+    </div>
+    <div class="dash-stats">
+      <div class="ring-wrap" aria-hidden="true">
+        <svg viewBox="0 0 72 72"><circle class="ring-bg" cx="36" cy="36" r="30"/><circle class="ring-fg" id="ring-fg" cx="36" cy="36" r="30" stroke-dasharray="188.5" stroke-dashoffset="188.5"/></svg>
+        <div class="ring-label" id="ring-label">0/16</div>
+      </div>
+      <div class="stat-lines">
+        <div class="stat-line"><span>Units complete</span><strong id="stat-units">0 / 16</strong></div>
+        <div class="stat-line"><span>Items checked</span><strong id="stat-items">0 / 0</strong></div>
+        <div class="stat-line"><span>Python labs done</span><strong id="stat-labs">0 / 16</strong></div>
+        <div class="stat-line"><span>Foundations</span><strong id="stat-found">0 / 7</strong></div>
+        <div class="lane-pills" aria-label="Study lanes">
+          <span class="pill watch">Watch</span><span class="pill read">Read</span><span class="pill prac">Practise</span><span class="pill ds">Python</span><span class="pill ml">Why it matters</span><span class="pill recall">Recall</span>
+        </div>
+      </div>
+    </div>
+    <div class="sync-panel" id="sync-panel" hidden>
+      <label for="import-data">Paste exported JSON</label>
+      <textarea id="import-data" rows="4" spellcheck="false" placeholder='{"v":1,"units":{...},"checklist":{...}}'></textarea>
+      <div class="sync-row">
+        <button type="button" class="btn primary" id="btn-import-apply">Apply import</button>
+        <button type="button" class="btn" id="btn-import-cancel">Cancel</button>
+      </div>
+      <p class="sync-msg" id="sync-msg" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <div class="box session"><span class="lbl">One study session (~2 h)</span>
+  <p style="margin-bottom:.6rem">Keep the order. Reading before deriving leaves you fluent but helpless; coding before deriving gives you a plot you can't defend.</p>
+  <div class="session-grid">
+    <div class="session-block"><div class="time">0–10 min · 🗣 Warm-up</div><p>Answer last unit's recall prompts from memory, out loud. Anything that stalls goes on today's list.</p></div>
+    <div class="session-block"><div class="time">10–40 min · 📖 Read</div><p>One textbook section, pen in hand. Re-derive every displayed formula in the margin as you meet it.</p></div>
+    <div class="session-block"><div class="time">40–80 min · 🎯 Practise</div><p>Two or three problems, written out fully. Solutions stay shut until you have a real attempt on paper.</p></div>
+    <div class="session-block"><div class="time">80–110 min · 🐍 Python</div><p>The unit's lab. Simulate what you just proved and check the two numbers agree.</p></div>
+    <div class="session-block"><div class="time">110–120 min · ✍️ Write-up</div><p>Five lines in your own words: statement, assumption it needs, and where it breaks.</p></div>
+  </div></div>
+
+  <div class="box"><span class="lbl">The rule that makes this course click</span>
+  <p><b>Every probability statement gets simulated, and every simulation gets a formula.</b> The course is explicitly "mathematical theory consistently combined with computation" — so treat a result as unlearned until you have both: the derivation on paper <em>and</em> a short script whose Monte-Carlo estimate lands on it. When the two disagree, one of them is wrong, and finding out which is the single most instructive half-hour in the whole subject.</p>
+  </div>
+
+  <a class="feature" href="https://probability4datascience.com/">
+    <div class="feature-tag">📘 Principal reference</div>
+    <div class="feature-title">Chan — Introduction to Probability for Data Science</div>
+    <p class="feature-desc">The course's main text and the closest match to its spirit: probability developed with data-science examples and Python throughout. Free PDF from the author's site. Use it as your spine — read a section, then do that section's Python lab below.</p>
+    <span class="feature-cta">Open the book →</span>
+  </a>
+
+  <a class="feature" href="https://projects.iq.harvard.edu/stat110/home" style="border-color:rgba(143,184,222,.5)">
+    <div class="feature-tag">🎓 Second opinion, when a proof won't land</div>
+    <div class="feature-title">Blitzstein &amp; Hwang + Harvard Stat 110</div>
+    <p class="feature-desc">The free <a href="http://probabilitybook.net/">Introduction to Probability</a> (2nd ed.), its problem sets with solutions, and Blitzstein's full lecture series on YouTube. Best-in-class on conditioning, the story proofs, and Markov chains — the three places most people stall.</p>
+    <span class="feature-cta">Open the course page →</span>
+  </a>
+
+  <a class="feature" href="https://www.statlearning.com/" style="border-color:rgba(196,166,223,.5)">
+    <div class="feature-tag">🐍 The second half, in Python</div>
+    <div class="feature-title">An Introduction to Statistical Learning with Python (ISLP)</div>
+    <p class="feature-desc">Free PDF and labs. Chapters 2–5 carry the regression, overfitting, cross-validation and classification material of units 15–16 almost exactly, and the labs are the fastest route to running code you understand line by line.</p>
+    <span class="feature-cta">Open ISLP →</span>
+  </a>
+
+  <nav class="ch-jump-wrap" aria-label="Jump to section">
+    <div class="ch-jump" id="ch-jump">
+      <a href="#course"><span class="dot"></span>Course</a>
+      <a href="#foundations"><span class="dot"></span>Setup</a>
+      <a href="#schedule"><span class="dot"></span>16 weeks</a>
+      <a href="#u1" data-ch="1"><span class="dot"></span>1</a>
+      <a href="#u2" data-ch="2"><span class="dot"></span>2</a>
+      <a href="#u3" data-ch="3"><span class="dot"></span>3</a>
+      <a href="#u4" data-ch="4"><span class="dot"></span>4</a>
+      <a href="#u5" data-ch="5"><span class="dot"></span>5</a>
+      <a href="#u6" data-ch="6"><span class="dot"></span>6</a>
+      <a href="#u7" data-ch="7"><span class="dot"></span>7</a>
+      <a href="#u8" data-ch="8"><span class="dot"></span>8</a>
+      <a href="#u9" data-ch="9"><span class="dot"></span>9</a>
+      <a href="#u10" data-ch="10"><span class="dot"></span>10</a>
+      <a href="#u11" data-ch="11"><span class="dot"></span>11</a>
+      <a href="#u12" data-ch="12"><span class="dot"></span>12</a>
+      <a href="#u13" data-ch="13"><span class="dot"></span>13</a>
+      <a href="#u14" data-ch="14"><span class="dot"></span>14</a>
+      <a href="#u15" data-ch="15"><span class="dot"></span>15</a>
+      <a href="#u16" data-ch="16"><span class="dot"></span>16</a>
+      <a href="#distributions"><span class="dot"></span>Distributions</a>
+      <a href="#which-test"><span class="dot"></span>Which test?</a>
+      <a href="#exam"><span class="dot"></span>Exam</a>
+    </div>
+  </nav>
+
+  <section id="course">
+  <h2><span class="sec-tag">u:find · what the course says</span>The course, in its own words</h2>
+  <p>By the end you should be able to <b>formulate and analyse probabilistic and statistical models, calculate and simulate probabilities, quantify uncertainty, and interpret statistical results</b> — selecting appropriate methods for estimation, confidence intervals, hypothesis testing, regression and basic classification, judging their assumptions and limits, and implementing reproducible analyses in Python.</p>
+  <div class="scroll-x">
+  <table>
+    <tr><th>Half</th><th>What it covers</th><th>Units here</th></tr>
+    <tr><td><b>First half</b><br>Probability</td><td>Events, conditional probability, independence, random variables, standard distributions, expectation and variance, joint distributions, concentration inequalities, laws of large numbers, the central limit theorem, finite-state Markov chains.</td><td>1–9</td></tr>
+    <tr><td><b>Second half</b><br>Inference</td><td>Sampling and statistical models, estimation and likelihood, sampling distributions, bootstrap methods, confidence intervals, hypothesis and permutation tests, categorical data analysis, linear regression, model diagnostics, overfitting, cross-validation, basic binary classification.</td><td>10–16</td></tr>
+  </table>
+  </div>
+  <div class="box general"><span class="lbl">Assessment</span>
+  <p>One <b>written exam at the end of the lecture, covering everything presented</b> — and the exam mark is the whole grade. There is no continuous assessment to cushion a bad day, which changes how you should study: closed-book recall of definitions and derivations matters more than in a course with graded homework, and the Python work is there to build understanding, not to be handed in. Plan for a paper that mixes short computations, one or two derivations, and interpretation questions ("what does this confidence interval actually claim?").</p>
+  </div>
+  <div class="box"><span class="lbl">Reading list, and what each book is for</span>
+  <ul>
+    <li><b>Chan (2026), <a href="https://probability4datascience.com/">Introduction to Probability for Data Science</a>, 2nd ed.</b> — the principal reference. Read this by default.</li>
+    <li><b>Blitzstein &amp; Hwang (2019), <a href="http://probabilitybook.net/">Introduction to Probability</a>, 2nd ed.</b> — conceptual explanations and the best exercise bank. Go here when a proof in Chan feels like a rabbit out of a hat.</li>
+    <li><b>Georgii (2015), Stochastik</b> (de Gruyter, German) — the rigorous mathematical spine: measure-flavoured foundations, limit theorems, Markov chains, and the inference chapters. The reference to check a statement's exact hypotheses.</li>
+    <li><b>Devore, Berk &amp; Carlton (2021), Modern Mathematical Statistics with Applications</b>, 3rd ed. — estimation, confidence intervals, hypothesis testing, regression, with worked numeric examples in the style exam questions are written in.</li>
+    <li><b>James, Witten, Hastie, Tibshirani &amp; Taylor (2023), <a href="https://www.statlearning.com/">ISLP</a></b> — regression, classification, resampling, model evaluation, with Python labs. Units 15–16.</li>
+    <li><b>Adhikari, DeNero &amp; Wagner (2022), <a href="https://inferentialthinking.com/">Computational and Inferential Thinking</a></b>, 2nd ed. — simulation, sampling, bootstrap and randomisation tests explained computationally. The gentlest on-ramp to units 10–14.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section id="foundations">
+  <h2><span class="sec-tag">Once · up front</span>Set-up — do this before unit 1</h2>
+  <p class="lede" style="font-size:1rem">Half a day, once. It removes every "I'll find the book later" excuse for the next sixteen weeks.</p>
+  <div class="box"><span class="lbl">Get these open and bookmarked</span>
+  <div class="found-item" data-found="chan">
+    <button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Mark Chan textbook set up"></button>
+    <div class="txt">📘 <a href="https://probability4datascience.com/">Chan — Introduction to Probability for Data Science</a>. Download the PDF and skim the table of contents so you know where each unit below lives.</div>
+  </div>
+  <div class="found-item" data-found="blitz">
+    <button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Mark Blitzstein and Hwang set up"></button>
+    <div class="txt">📗 <a href="http://probabilitybook.net/">Blitzstein &amp; Hwang — Introduction to Probability</a> plus the <a href="https://projects.iq.harvard.edu/stat110/">Stat 110</a> problem sets, solutions and lecture videos.</div>
+  </div>
+  <div class="found-item" data-found="islp">
+    <button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Mark ISLP set up"></button>
+    <div class="txt">🐍 <a href="https://www.statlearning.com/">ISLP</a> — PDF and the <code>ISLP</code> package installed, so the labs run when you reach units 15–16.</div>
+  </div>
+  <div class="found-item" data-found="cit">
+    <button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Mark Computational and Inferential Thinking set up"></button>
+    <div class="txt">💡 <a href="https://inferentialthinking.com/">Computational and Inferential Thinking</a> — free online. The simulation-first take on sampling, bootstrap and randomisation tests.</div>
+  </div>
+  <div class="found-item" data-found="refs">
+    <button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Mark Georgii and Devore located"></button>
+    <div class="txt">📚 Locate <b>Georgii, Stochastik</b> and <b>Devore, Berk &amp; Carlton</b> in the university library (or as e-books through the <a href="https://bibliothek.univie.ac.at/">UB Wien</a> catalogue). You want them reachable, not read cover to cover.</div>
+  </div>
+  <div class="found-item" data-found="python">
+    <button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Mark Python environment ready"></button>
+    <div class="txt">⚙️ A working environment: <code>numpy scipy pandas matplotlib statsmodels scikit-learn</code> in a virtual environment, and a notebook that runs. Fix this <em>now</em>, not in week 11 at midnight.
+    <pre class="code"><span class="cm"># one-time setup</span>
+python3 -m venv .venv &amp;&amp; source .venv/bin/activate
+pip install numpy scipy pandas matplotlib statsmodels scikit-learn jupyterlab ISLP
+
+<span class="cm"># the habit that makes every lab reproducible</span>
+rng = np.random.default_rng(20260901)   <span class="cm"># seed it, always</span></pre></div>
+  </div>
+  <div class="found-item" data-found="seeing">
+    <button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Mark visual references bookmarked"></button>
+    <div class="txt">👁 Two visual references to keep in a tab: <a href="https://seeing-theory.brown.edu/">Seeing Theory</a> (Brown) for interactive intuition, and <a href="https://www.3blue1brown.com/topics/probability">3Blue1Brown — probability</a> for the geometry of binomials, Bayes and the CLT.</div>
+  </div>
+  </div>
+  </section>
+
+  <section id="schedule">
+  <h2><span class="sec-tag">One unit per week</span>The 16-week programme</h2>
+  <p class="lede" style="font-size:1rem">Two sessions of ~2 h per unit is a comfortable pace (≈4–5 h/week). Weeks 8 and 16 are deliberately light — they are consolidation, not new material. The "deliverable" column is what should physically exist at the end of the week: a page of derivations and a notebook that runs.</p>
+  <div class="scroll-x">
+  <table>
+    <tr><th>Wk</th><th>Unit</th><th>Focus</th><th>Deliverable at the end of the week</th></tr>
+    <tr><td>1</td><td>1</td><td>Events &amp; probability spaces</td><td>Birthday-problem notebook; the axioms written from memory</td></tr>
+    <tr><td>2</td><td>2</td><td>Conditional probability, Bayes, independence</td><td>Monty Hall + disease-test simulation; Bayes derived, not quoted</td></tr>
+    <tr><td>3</td><td>3</td><td>Discrete random variables</td><td>Empirical vs theoretical PMFs for all five discrete models</td></tr>
+    <tr><td>4</td><td>4</td><td>Continuous random variables</td><td>Inverse-transform sampler you wrote yourself; a Q–Q plot</td></tr>
+    <tr><td>5</td><td>5</td><td>Expectation, variance, moments</td><td>A table of $E[X]$, $\mathrm{Var}(X)$ derived for every named distribution</td></tr>
+    <tr><td>6</td><td>6</td><td>Joint distributions &amp; conditional expectation</td><td>Bivariate-normal sampler; conditional mean plotted as a line</td></tr>
+    <tr><td>7</td><td>7</td><td>Concentration inequalities</td><td>Markov / Chebyshev / Hoeffding bounds drawn over the true tail</td></tr>
+    <tr><td>8</td><td>1–7</td><td><b>Consolidation</b> — no new material</td><td>Closed-book sheet of every definition and inequality so far</td></tr>
+    <tr><td>9</td><td>8</td><td>LLN &amp; the central limit theorem</td><td>The convergence plot, and one honest counterexample (Cauchy)</td></tr>
+    <tr><td>10</td><td>9</td><td>Finite-state Markov chains</td><td>Stationary distribution three ways: powers, eigenvector, simulation</td></tr>
+    <tr><td>11</td><td>10–11</td><td>Sampling models; estimation &amp; likelihood</td><td>Log-likelihood curve; MLE by hand and by <code>scipy.optimize</code></td></tr>
+    <tr><td>12</td><td>12</td><td>Sampling distributions, bootstrap, CIs</td><td>A coverage experiment: does your 95% interval cover 95% of the time?</td></tr>
+    <tr><td>13</td><td>13</td><td>Hypothesis &amp; permutation tests</td><td>A permutation test written from scratch, no library</td></tr>
+    <tr><td>14</td><td>14</td><td>Categorical data analysis</td><td>$\chi^2$ by hand on a $2\times2$ table, then checked with <code>scipy</code></td></tr>
+    <tr><td>15</td><td>15</td><td>Linear regression &amp; diagnostics</td><td>OLS fit with residual, Q–Q and leverage plots you can interpret</td></tr>
+    <tr><td>16</td><td>16</td><td>Overfitting, CV &amp; classification</td><td>A cross-validated classifier with an ROC curve and a confusion matrix</td></tr>
+    <tr><td>17+</td><td>—</td><td><b>Revision</b> (see <a href="#exam">exam plan</a>)</td><td>Formula sheet from memory; timed mixed problems</td></tr>
+  </table>
+  </div>
+  </section>
+
+  <section id="units">
+  <h2><span class="sec-tag">Unit by unit</span>The programme</h2>
+  <div class="legend">
+    <span><b style="color:var(--watch)">📺 Watch</b> — intuition first</span>
+    <span><b style="color:var(--read)">📖 Read</b> — the rigour</span>
+    <span><b style="color:var(--prac)">🎯 Practise</b> — on paper, closed book</span>
+    <span><b style="color:var(--ds)">🐍 Python</b> — the lab</span>
+    <span><b style="color:var(--ml)">🧠 Why it matters</b> — where it is used</span>
+    <span><b style="color:var(--recall)">🗣 Recall</b> — before moving on</span>
+  </div>
+  <p style="color:var(--text-muted);font-size:.94rem">Tap a chip when that piece is done; a lane lights up on its own once all its chips are checked. Tick the big box in the header when the whole unit — including its recall prompts — is behind you.</p>
+
+  <details class="ch" id="u1" data-ch="1"><summary>
+    <button type="button" class="check ch-done" role="checkbox" aria-checked="false" aria-label="Mark Unit 1 complete"></button>
+    <span class="cnum">Unit 1</span> Events &amp; probability spaces
+    <span class="ch-meta"><span class="mini-bar" aria-hidden="true"><span data-l="watch"></span><span data-l="read"></span><span data-l="prac"></span><span data-l="ds"></span></span></span>
+    <span class="ctopics">sample space · events as sets · the three axioms · counting · inclusion–exclusion · union bound</span>
+  </summary>
+  <div class="chbody">
+    <div class="lane-head"><span class="hint">Tap lanes as you finish each pass</span>
+      <div class="lane-toggles">
+        <button type="button" class="lane-btn" data-lane="watch" aria-pressed="false">📺 Watch</button>
+        <button type="button" class="lane-btn" data-lane="read" aria-pressed="false">📖 Read</button>
+        <button type="button" class="lane-btn" data-lane="prac" aria-pressed="false">🎯 Practise</button>
+        <button type="button" class="lane-btn" data-lane="ds" aria-pressed="false">🐍 Python</button>
+      </div>
+    </div>
+    <div class="box"><span class="lbl">The spine of this unit</span>
+    <p>A probability model is a triple $(\Omega,\mathcal{F},P)$: outcomes, the events you are allowed to ask about, and a measure with $P(A)\ge 0$, $P(\Omega)=1$, and $P(\bigcup_i A_i)=\sum_i P(A_i)$ for disjoint $A_i$. <b>Everything else in the first half of this course is a consequence of those three lines.</b></p>
+    <p>Derive, don't memorise: $P(A^c)=1-P(A)$; monotonicity $A\subseteq B \Rightarrow P(A)\le P(B)$; inclusion–exclusion $P(A\cup B)=P(A)+P(B)-P(A\cap B)$; the union bound $P(\bigcup_i A_i)\le\sum_i P(A_i)$; and continuity $P(A_n)\to P(A)$ for $A_n\uparrow A$. Counting is a special case, not the subject: $|A|/|\Omega|$ is a valid probability <em>only</em> when the model declares outcomes equally likely.</p>
+    </div>
+    <div class="row watch"><span class="rl">📺 Watch</span>
+      <div class="cl-list" data-checklist-group="1-watch"></div>
+      <div class="cl-progress" data-cl-progress="1-watch"></div>
+    </div>
+    <div class="row read"><span class="rl">📖 Read</span>
+      <div class="cl-list" data-checklist-group="1-read"></div>
+      <div class="cl-progress" data-cl-progress="1-read"></div>
+    </div>
+    <div class="row prac"><span class="rl">🎯 Practise — closed book, written out</span>
+      <div class="cl-list" data-checklist-group="1-prac"></div>
+      <div class="cl-progress" data-cl-progress="1-prac"></div>
+    </div>
+    <div class="row ds"><span class="rl">🐍 Python lab — counting vs simulating</span>
+      <div class="cl-list" data-checklist-group="1-ds"></div>
+      <div class="cl-progress" data-cl-progress="1-ds"></div>
+      <pre class="code"><span class="cm"># the birthday problem: exact formula vs Monte Carlo</span>
+rng = np.random.default_rng(0)
+def sim(n, trials=200_000):
+    days = rng.integers(0, 365, size=(trials, n))
+    return np.mean([len(np.unique(r)) &lt; n for r in days])
+exact = lambda n: 1 - np.prod([(365-k)/365 for k in range(n)])
+<span class="cm"># agree to ~3 decimals at n = 23 -&gt; 0.507</span></pre>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 Why it matters</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Where it shows up</span><p>The union bound is the single most-used inequality in the rest of the course and in machine learning: it is how a guarantee for one hypothesis becomes a guarantee for all of them at once, and it costs nothing but a factor of the number of events.</p></div>
+        <div class="ml-part"><span class="ml-lbl">The classic mistake</span><p>Assuming equally likely outcomes because the problem mentions dice or cards. Write $\Omega$ down explicitly: "two dice" has 36 ordered outcomes, not 21 unordered ones, and the two models give different answers.</p></div>
+      </div>
+    </div>
+    <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Without notes: (1) state the three axioms and derive $P(A\cup B)$ from them; (2) why does $P$ need a $\sigma$-algebra rather than every subset of $\Omega$? (3) give a sample space where $|A|/|\Omega|$ is the <em>wrong</em> answer, and say why.</div></div>
+  </div></details>
+
+  <details class="ch" id="u2" data-ch="2"><summary>
+    <button type="button" class="check ch-done" role="checkbox" aria-checked="false" aria-label="Mark Unit 2 complete"></button>
+    <span class="cnum">Unit 2</span> Conditional probability, Bayes &amp; independence
+    <span class="ch-meta"><span class="mini-bar" aria-hidden="true"><span data-l="watch"></span><span data-l="read"></span><span data-l="prac"></span><span data-l="ds"></span></span></span>
+    <span class="ctopics">conditioning · multiplication rule · law of total probability · Bayes · independence vs conditional independence · base rates</span>
+  </summary>
+  <div class="chbody">
+    <div class="lane-head"><span class="hint">Tap lanes as you finish each pass</span>
+      <div class="lane-toggles">
+        <button type="button" class="lane-btn" data-lane="watch" aria-pressed="false">📺 Watch</button>
+        <button type="button" class="lane-btn" data-lane="read" aria-pressed="false">📖 Read</button>
+        <button type="button" class="lane-btn" data-lane="prac" aria-pressed="false">🎯 Practise</button>
+        <button type="button" class="lane-btn" data-lane="ds" aria-pressed="false">🐍 Python</button>
+      </div>
+    </div>
+    <div class="box"><span class="lbl">The spine of this unit</span>
+    <p>$P(A\mid B)=\dfrac{P(A\cap B)}{P(B)}$ for $P(B)\gt 0$ — and note that $P(\cdot\mid B)$ is itself a probability measure, so every result from unit 1 still holds inside it. From it: the multiplication rule $P(A\cap B)=P(A\mid B)P(B)$, the law of total probability $P(A)=\sum_i P(A\mid B_i)P(B_i)$ over a partition, and <b>Bayes</b>: $P(B_i\mid A)=\dfrac{P(A\mid B_i)P(B_i)}{\sum_j P(A\mid B_j)P(B_j)}$.</p>
+    <p>Independence is $P(A\cap B)=P(A)P(B)$, equivalently $P(A\mid B)=P(A)$ — an <em>assumption of the model</em>, never something you read off a data table. Pairwise independence does not imply mutual independence, and conditional independence given $C$ neither implies nor is implied by independence.</p>
+    </div>
+    <div class="row watch"><span class="rl">📺 Watch</span>
+      <div class="cl-list" data-checklist-group="2-watch"></div>
+      <div class="cl-progress" data-cl-progress="2-watch"></div>
+    </div>
+    <div class="row read"><span class="rl">📖 Read</span>
+      <div class="cl-list" data-checklist-group="2-read"></div>
+      <div class="cl-progress" data-cl-progress="2-read"></div>
+    </div>
+    <div class="row prac"><span class="rl">🎯 Practise — closed book, written out</span>
+      <div class="cl-list" data-checklist-group="2-prac"></div>
+      <div class="cl-progress" data-cl-progress="2-prac"></div>
+    </div>
+    <div class="row ds"><span class="rl">🐍 Python lab — the paradoxes, simulated</span>
+      <div class="cl-list" data-checklist-group="2-ds"></div>
+      <div class="cl-progress" data-cl-progress="2-ds"></div>
+      <pre class="code"><span class="cm"># base rates beat test accuracy: prevalence 1%, sensitivity 99%, specificity 95%</span>
+prev, sens, spec = 0.01, 0.99, 0.95
+post = sens*prev / (sens*prev + (1-spec)*(1-prev))
+<span class="cm"># ~0.167 — a "99% accurate" positive is wrong five times out of six</span></pre>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 Why it matters</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Where it shows up</span><p>Every classifier reports $P(\text{class}\mid\text{features})$ and is trained on $P(\text{features}\mid\text{class})$ — naive Bayes is literally this unit plus a conditional-independence assumption. Precision, recall and the confusion matrix in unit 16 are conditional probabilities read in the two different directions.</p></div>
+        <div class="ml-part"><span class="ml-lbl">The classic mistake</span><p>Swapping $P(A\mid B)$ for $P(B\mid A)$ — the prosecutor's fallacy. Say the conditioning event out loud every time: "given that the test is positive", not "given the disease".</p></div>
+      </div>
+    </div>
+    <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Without notes: (1) derive Bayes' rule from the definition of conditional probability; (2) give three events that are pairwise but not mutually independent; (3) explain in one sentence why a 99%-accurate test for a rare disease mostly returns false positives.</div></div>
+  </div></details>
+
+  <details class="ch" id="u3" data-ch="3"><summary>
+    <button type="button" class="check ch-done" role="checkbox" aria-checked="false" aria-label="Mark Unit 3 complete"></button>
+    <span class="cnum">Unit 3</span> Discrete random variables
+    <span class="ch-meta"><span class="mini-bar" aria-hidden="true"><span data-l="watch"></span><span data-l="read"></span><span data-l="prac"></span><span data-l="ds"></span></span></span>
+    <span class="ctopics">PMF &amp; CDF · Bernoulli · binomial · geometric · negative binomial · Poisson · hypergeometric · the Poisson limit</span>
+  </summary>
+  <div class="chbody">
+    <div class="lane-head"><span class="hint">Tap lanes as you finish each pass</span>
+      <div class="lane-toggles">
+        <button type="button" class="lane-btn" data-lane="watch" aria-pressed="false">📺 Watch</button>
+        <button type="button" class="lane-btn" data-lane="read" aria-pressed="false">📖 Read</button>
+        <button type="button" class="lane-btn" data-lane="prac" aria-pressed="false">🎯 Practise</button>
+        <button type="button" class="lane-btn" data-lane="ds" aria-pressed="false">🐍 Python</button>
+      </div>
+    </div>
+    <div class="box"><span class="lbl">The spine of this unit</span>
+    <p>A random variable is a <em>function</em> $X:\Omega\to\mathbb{R}$; its PMF $p_X(k)=P(X=k)$ and CDF $F_X(x)=P(X\le x)$ are what you actually compute with. Learn each named model by its <b>story</b>, not its formula: binomial = number of successes in $n$ independent trials; geometric = trials until the first success; Poisson = counts of rare events at rate $\lambda$; hypergeometric = successes when sampling <em>without</em> replacement.</p>
+    <p>Two results worth deriving in full: the <b>Poisson limit</b>, $\binom{n}{k}p^k(1-p)^{n-k}\to e^{-\lambda}\lambda^k/k!$ when $n\to\infty$, $np\to\lambda$; and <b>memorylessness</b> of the geometric, $P(X\gt m+n\mid X\gt m)=P(X\gt n)$. Sums of independent binomials with the same $p$ are binomial; sums of independent Poissons are Poisson.</p>
+    </div>
+    <div class="row watch"><span class="rl">📺 Watch</span>
+      <div class="cl-list" data-checklist-group="3-watch"></div>
+      <div class="cl-progress" data-cl-progress="3-watch"></div>
+    </div>
+    <div class="row read"><span class="rl">📖 Read</span>
+      <div class="cl-list" data-checklist-group="3-read"></div>
+      <div class="cl-progress" data-cl-progress="3-read"></div>
+    </div>
+    <div class="row prac"><span class="rl">🎯 Practise — closed book, written out</span>
+      <div class="cl-list" data-checklist-group="3-prac"></div>
+      <div class="cl-progress" data-cl-progress="3-prac"></div>
+    </div>
+    <div class="row ds"><span class="rl">🐍 Python lab — empirical vs theoretical PMFs</span>
+      <div class="cl-list" data-checklist-group="3-ds"></div>
+      <div class="cl-progress" data-cl-progress="3-ds"></div>
+      <pre class="code"><span class="cm"># does the sampler agree with the formula?</span>
+from scipy import stats
+x = rng.binomial(n=20, p=0.3, size=100_000)
+emp = np.bincount(x, minlength=21) / x.size
+thy = stats.binom.pmf(np.arange(21), 20, 0.3)
+np.abs(emp - thy).max()      <span class="cm"># ~1e-3; shrinks like 1/sqrt(N)</span></pre>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 Why it matters</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Where it shows up</span><p>Click-through, conversion and A/B test data are binomial; arrivals, defects and word counts are Poisson; "how many attempts until it works" is geometric. Choosing the wrong story is how a plausible-looking analysis becomes silently wrong.</p></div>
+        <div class="ml-part"><span class="ml-lbl">The classic mistake</span><p>Binomial where hypergeometric belongs. Sampling <em>without</em> replacement from a small population makes trials dependent; the mean survives but the variance shrinks by the finite-population correction.</p></div>
+      </div>
+    </div>
+    <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Without notes: (1) state the story behind each of the five named discrete models; (2) prove the geometric is memoryless; (3) when does a binomial become a Poisson, and what does "rare" mean quantitatively?</div></div>
+  </div></details>
+
+  <details class="ch" id="u4" data-ch="4"><summary>
+    <button type="button" class="check ch-done" role="checkbox" aria-checked="false" aria-label="Mark Unit 4 complete"></button>
+    <span class="cnum">Unit 4</span> Continuous random variables
+    <span class="ch-meta"><span class="mini-bar" aria-hidden="true"><span data-l="watch"></span><span data-l="read"></span><span data-l="prac"></span><span data-l="ds"></span></span></span>
+    <span class="ctopics">PDF &amp; CDF · uniform · exponential · normal · gamma &amp; beta · transformations · inverse-transform sampling · quantiles</span>
+  </summary>
+  <div class="chbody">
+    <div class="lane-head"><span class="hint">Tap lanes as you finish each pass</span>
+      <div class="lane-toggles">
+        <button type="button" class="lane-btn" data-lane="watch" aria-pressed="false">📺 Watch</button>
+        <button type="button" class="lane-btn" data-lane="read" aria-pressed="false">📖 Read</button>
+        <button type="button" class="lane-btn" data-lane="prac" aria-pressed="false">🎯 Practise</button>
+        <button type="button" class="lane-btn" data-lane="ds" aria-pressed="false">🐍 Python</button>
+      </div>
+    </div>
+    <div class="box"><span class="lbl">The spine of this unit</span>
+    <p>$F_X(x)=\int_{-\infty}^{x} f_X(t)\,dt$ and $f_X=F_X'$ where $F_X$ is differentiable. A density is <em>not</em> a probability: $f_X(x)$ can exceed 1, and $P(X=x)=0$ for every single point — probability lives in areas, so $P(a\le X\le b)=F_X(b)-F_X(a)$ and the endpoints do not matter.</p>
+    <p>Transformations are the workhorse. For strictly monotone $g$, $f_Y(y)=f_X(g^{-1}(y))\,\bigl|\tfrac{d}{dy}g^{-1}(y)\bigr|$; when $g$ is not monotone, split the domain and add the branches. Two consequences you will use all term: <b>standardisation</b> $Z=(X-\mu)/\sigma$, and <b>inverse-transform sampling</b> — if $U\sim\mathrm{Unif}(0,1)$ then $F^{-1}(U)$ has CDF $F$, which is how a computer produces any distribution at all.</p>
+    </div>
+    <div class="row watch"><span class="rl">📺 Watch</span>
+      <div class="cl-list" data-checklist-group="4-watch"></div>
+      <div class="cl-progress" data-cl-progress="4-watch"></div>
+    </div>
+    <div class="row read"><span class="rl">📖 Read</span>
+      <div class="cl-list" data-checklist-group="4-read"></div>
+      <div class="cl-progress" data-cl-progress="4-read"></div>
+    </div>
+    <div class="row prac"><span class="rl">🎯 Practise — closed book, written out</span>
+      <div class="cl-list" data-checklist-group="4-prac"></div>
+      <div class="cl-progress" data-cl-progress="4-prac"></div>
+    </div>
+    <div class="row ds"><span class="rl">🐍 Python lab — build your own sampler</span>
+      <div class="cl-list" data-checklist-group="4-ds"></div>
+      <div class="cl-progress" data-cl-progress="4-ds"></div>
+      <pre class="code"><span class="cm"># inverse-transform: F(x) = 1 - exp(-lam x)  =&gt;  F^-1(u) = -ln(1-u)/lam</span>
+u = rng.random(200_000)
+x = -np.log1p(-u) / 2.0                  <span class="cm"># Exponential(lam = 2)</span>
+x.mean(), x.var()                        <span class="cm"># -&gt; 0.5, 0.25  (1/lam, 1/lam^2)</span>
+stats.kstest(x, 'expon', args=(0, 0.5))  <span class="cm"># p-value should be unremarkable</span></pre>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 Why it matters</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Where it shows up</span><p>Every simulation in the rest of this programme rests on inverse-transform (or rejection) sampling, and every normal-approximation argument from unit 8 onwards rests on standardisation. The Q–Q plot you build here is the diagnostic you will reuse on regression residuals in unit 15.</p></div>
+        <div class="ml-part"><span class="ml-lbl">The classic mistake</span><p>Reading a density as a probability, and forgetting the Jacobian $|dg^{-1}/dy|$ when transforming. If your transformed "density" does not integrate to 1, that factor is what you dropped.</p></div>
+      </div>
+    </div>
+    <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Without notes: (1) why is $P(X=x)=0$ yet $X$ certainly takes <em>some</em> value? (2) derive the density of $Y=X^2$ for $X\sim N(0,1)$; (3) explain how a uniform random number becomes an exponential one, and why it works.</div></div>
+  </div></details>
+
+  <details class="ch" id="u5" data-ch="5"><summary>
+    <button type="button" class="check ch-done" role="checkbox" aria-checked="false" aria-label="Mark Unit 5 complete"></button>
+    <span class="cnum">Unit 5</span> Expectation, variance &amp; moments
+    <span class="ch-meta"><span class="mini-bar" aria-hidden="true"><span data-l="watch"></span><span data-l="read"></span><span data-l="prac"></span><span data-l="ds"></span></span></span>
+    <span class="ctopics">expectation · LOTUS · linearity · variance &amp; standard deviation · indicator trick · moment-generating functions · Jensen</span>
+  </summary>
+  <div class="chbody">
+    <div class="lane-head"><span class="hint">Tap lanes as you finish each pass</span>
+      <div class="lane-toggles">
+        <button type="button" class="lane-btn" data-lane="watch" aria-pressed="false">📺 Watch</button>
+        <button type="button" class="lane-btn" data-lane="read" aria-pressed="false">📖 Read</button>
+        <button type="button" class="lane-btn" data-lane="prac" aria-pressed="false">🎯 Practise</button>
+        <button type="button" class="lane-btn" data-lane="ds" aria-pressed="false">🐍 Python</button>
+      </div>
+    </div>
+    <div class="box"><span class="lbl">The spine of this unit</span>
+    <p><b>LOTUS</b> — you do not need the distribution of $Y=g(X)$ to get its mean: $E[g(X)]=\sum_k g(k)p_X(k)$ or $\int g(x)f_X(x)\,dx$. <b>Linearity</b> $E[aX+bY]=aE[X]+bE[Y]$ holds with no independence assumption whatsoever, which is what makes the indicator trick work: write $X=\sum_i \mathbb{1}_{A_i}$ and the mean falls out in one line even when the $A_i$ are hopelessly dependent.</p>
+    <p>Variance is not linear: $\mathrm{Var}(X)=E[X^2]-(E[X])^2$, $\mathrm{Var}(aX+b)=a^2\mathrm{Var}(X)$, and $\mathrm{Var}(X+Y)=\mathrm{Var}(X)+\mathrm{Var}(Y)$ <em>only</em> when $X,Y$ are uncorrelated. The MGF $M_X(t)=E[e^{tX}]$ generates moments by differentiation at $0$, turns sums of independent variables into products, and determines the distribution when it exists near $0$ — it is the tool behind both the Chernoff bound (unit 7) and the CLT (unit 8).</p>
+    </div>
+    <div class="row watch"><span class="rl">📺 Watch</span>
+      <div class="cl-list" data-checklist-group="5-watch"></div>
+      <div class="cl-progress" data-cl-progress="5-watch"></div>
+    </div>
+    <div class="row read"><span class="rl">📖 Read</span>
+      <div class="cl-list" data-checklist-group="5-read"></div>
+      <div class="cl-progress" data-cl-progress="5-read"></div>
+    </div>
+    <div class="row prac"><span class="rl">🎯 Practise — closed book, written out</span>
+      <div class="cl-list" data-checklist-group="5-prac"></div>
+      <div class="cl-progress" data-cl-progress="5-prac"></div>
+    </div>
+    <div class="row ds"><span class="rl">🐍 Python lab — the moment table, checked</span>
+      <div class="cl-list" data-checklist-group="5-ds"></div>
+      <div class="cl-progress" data-cl-progress="5-ds"></div>
+      <pre class="code"><span class="cm"># build the table you derived on paper, then let the machine mark it</span>
+for name, sampler, mean, var in [
+    ('Binomial(20,.3)', lambda: rng.binomial(20,.3,10**6), 6.0,  4.2),
+    ('Geometric(.25)',  lambda: rng.geometric(.25,10**6),  4.0,  12.0),
+    ('Poisson(3)',      lambda: rng.poisson(3,10**6),      3.0,  3.0),
+    ('Exp(2)',          lambda: rng.exponential(.5,10**6), 0.5,  0.25)]:
+    s = sampler(); print(name, round(s.mean(),3), mean, round(s.var(),3), var)</pre>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 Why it matters</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Where it shows up</span><p>Every loss function is an expectation, and the bias–variance decomposition of unit 16 is this unit's algebra applied to prediction error. "Standard error" is nothing but $\sqrt{\mathrm{Var}(\bar X)}=\sigma/\sqrt{n}$, which you derive here and use for the rest of the course.</p></div>
+        <div class="ml-part"><span class="ml-lbl">The classic mistake</span><p>Assuming $E[g(X)]=g(E[X])$. Jensen says which way the inequality goes for convex $g$, and the gap is exactly why an unbiased estimator of $\sigma^2$ does not give an unbiased estimator of $\sigma$.</p></div>
+      </div>
+    </div>
+    <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Without notes: (1) get the mean of a binomial in one line with indicators; (2) state LOTUS and say why it saves work; (3) differentiate the Poisson MGF twice to recover $E[X]$ and $\mathrm{Var}(X)$.</div></div>
+  </div></details>
+
+  <details class="ch" id="u6" data-ch="6"><summary>
+    <button type="button" class="check ch-done" role="checkbox" aria-checked="false" aria-label="Mark Unit 6 complete"></button>
+    <span class="cnum">Unit 6</span> Joint distributions &amp; conditional expectation
+    <span class="ch-meta"><span class="mini-bar" aria-hidden="true"><span data-l="watch"></span><span data-l="read"></span><span data-l="prac"></span><span data-l="ds"></span></span></span>
+    <span class="ctopics">joint &amp; marginal · independence · covariance &amp; correlation · covariance matrix · $E[Y\mid X]$ · tower property · law of total variance · bivariate normal · convolution</span>
+  </summary>
+  <div class="chbody">
+    <div class="lane-head"><span class="hint">Tap lanes as you finish each pass</span>
+      <div class="lane-toggles">
+        <button type="button" class="lane-btn" data-lane="watch" aria-pressed="false">📺 Watch</button>
+        <button type="button" class="lane-btn" data-lane="read" aria-pressed="false">📖 Read</button>
+        <button type="button" class="lane-btn" data-lane="prac" aria-pressed="false">🎯 Practise</button>
+        <button type="button" class="lane-btn" data-lane="ds" aria-pressed="false">🐍 Python</button>
+      </div>
+    </div>
+    <div class="box"><span class="lbl">The spine of this unit</span>
+    <p>Marginals come from summing or integrating out; independence is the statement that the joint <em>factors</em>, $f_{X,Y}=f_Xf_Y$. Dependence is measured by $\mathrm{Cov}(X,Y)=E[XY]-E[X]E[Y]$ and $\rho=\mathrm{Cov}(X,Y)/(\sigma_X\sigma_Y)\in[-1,1]$, giving $\mathrm{Var}(X+Y)=\mathrm{Var}(X)+\mathrm{Var}(Y)+2\mathrm{Cov}(X,Y)$. <b>Uncorrelated does not mean independent</b> — $X\sim\mathrm{Unif}(-1,1)$ with $Y=X^2$ is the example to remember — though for jointly normal variables the two coincide.</p>
+    <p>$E[Y\mid X]$ is a <em>random variable</em>, a function of $X$: the tower property $E\bigl[E[Y\mid X]\bigr]=E[Y]$ and the law of total variance $\mathrm{Var}(Y)=E[\mathrm{Var}(Y\mid X)]+\mathrm{Var}(E[Y\mid X])$ are the two identities to have automatic. For the bivariate normal, $E[Y\mid X=x]=\mu_Y+\rho\frac{\sigma_Y}{\sigma_X}(x-\mu_X)$ — a straight line, which is precisely the regression line of unit 15.</p>
+    </div>
+    <div class="row watch"><span class="rl">📺 Watch</span>
+      <div class="cl-list" data-checklist-group="6-watch"></div>
+      <div class="cl-progress" data-cl-progress="6-watch"></div>
+    </div>
+    <div class="row read"><span class="rl">📖 Read</span>
+      <div class="cl-list" data-checklist-group="6-read"></div>
+      <div class="cl-progress" data-cl-progress="6-read"></div>
+    </div>
+    <div class="row prac"><span class="rl">🎯 Practise — closed book, written out</span>
+      <div class="cl-list" data-checklist-group="6-prac"></div>
+      <div class="cl-progress" data-cl-progress="6-prac"></div>
+    </div>
+    <div class="row ds"><span class="rl">🐍 Python lab — dependence you can see</span>
+      <div class="cl-list" data-checklist-group="6-ds"></div>
+      <div class="cl-progress" data-cl-progress="6-ds"></div>
+      <pre class="code"><span class="cm"># a correlated pair, and the conditional mean recovered by binning</span>
+rho, n = 0.7, 200_000
+z = rng.standard_normal((n, 2))
+x = z[:,0]; y = rho*x + np.sqrt(1-rho**2)*z[:,1]
+np.corrcoef(x, y)[0,1]                       <span class="cm"># -&gt; 0.7</span>
+b = np.digitize(x, np.linspace(-3,3,31))
+[y[b==k].mean() for k in range(1,31)]        <span class="cm"># -&gt; the line rho*x</span></pre>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 Why it matters</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Where it shows up</span><p>The covariance matrix is the object PCA diagonalises, and $E[Y\mid X]$ is what <em>every</em> regression model is trying to estimate — least squares is the best approximation to it inside a linear family. The law of total variance is the honest version of "explained versus unexplained variation".</p></div>
+        <div class="ml-part"><span class="ml-lbl">The classic mistake</span><p>Reading $\rho=0$ as "no relationship". Correlation only sees the linear part; a perfect parabola has zero correlation. Plot the data before you trust a coefficient.</p></div>
+      </div>
+    </div>
+    <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Without notes: (1) an example of uncorrelated but dependent variables; (2) prove the tower property; (3) explain why $E[Y\mid X]$ is a random variable and what its own expectation is.</div></div>
+  </div></details>
+
+  <details class="ch" id="u7" data-ch="7"><summary>
+    <button type="button" class="check ch-done" role="checkbox" aria-checked="false" aria-label="Mark Unit 7 complete"></button>
+    <span class="cnum">Unit 7</span> Concentration inequalities
+    <span class="ch-meta"><span class="mini-bar" aria-hidden="true"><span data-l="watch"></span><span data-l="read"></span><span data-l="prac"></span><span data-l="ds"></span></span></span>
+    <span class="ctopics">Markov · Chebyshev · Chernoff via the MGF · Hoeffding · sample-size bounds · what "with high probability" means</span>
+  </summary>
+  <div class="chbody">
+    <div class="lane-head"><span class="hint">Tap lanes as you finish each pass</span>
+      <div class="lane-toggles">
+        <button type="button" class="lane-btn" data-lane="watch" aria-pressed="false">📺 Watch</button>
+        <button type="button" class="lane-btn" data-lane="read" aria-pressed="false">📖 Read</button>
+        <button type="button" class="lane-btn" data-lane="prac" aria-pressed="false">🎯 Practise</button>
+        <button type="button" class="lane-btn" data-lane="ds" aria-pressed="false">🐍 Python</button>
+      </div>
+    </div>
+    <div class="box"><span class="lbl">The spine of this unit</span>
+    <p>Three bounds, each buying sharpness with an extra assumption. <b>Markov</b> (only $X\ge 0$ and a mean): $P(X\ge a)\le E[X]/a$. <b>Chebyshev</b> (a variance too), obtained by applying Markov to $(X-\mu)^2$: $P(|X-\mu|\ge k\sigma)\le 1/k^{2}$. <b>Chernoff / Hoeffding</b> (an MGF, or bounded variables): for iid $X_i\in[a,b]$,</p>
+    <p style="text-align:center">$P\bigl(|\bar X_n-\mu|\ge t\bigr)\ \le\ 2\exp\!\Bigl(-\dfrac{2nt^{2}}{(b-a)^{2}}\Bigr).$</p>
+    <p>The pattern is always the same: turn a tail into an expectation, then optimise the free parameter. Read the last bound backwards and it sizes an experiment — $n\ge\frac{(b-a)^2}{2t^2}\log\frac{2}{\delta}$ samples put you within $t$ of the truth with probability $1-\delta$, <em>with no distributional assumption at all</em>.</p>
+    </div>
+    <div class="row watch"><span class="rl">📺 Watch</span>
+      <div class="cl-list" data-checklist-group="7-watch"></div>
+      <div class="cl-progress" data-cl-progress="7-watch"></div>
+    </div>
+    <div class="row read"><span class="rl">📖 Read</span>
+      <div class="cl-list" data-checklist-group="7-read"></div>
+      <div class="cl-progress" data-cl-progress="7-read"></div>
+    </div>
+    <div class="row prac"><span class="rl">🎯 Practise — closed book, written out</span>
+      <div class="cl-list" data-checklist-group="7-prac"></div>
+      <div class="cl-progress" data-cl-progress="7-prac"></div>
+    </div>
+    <div class="row ds"><span class="rl">🐍 Python lab — how loose is loose?</span>
+      <div class="cl-list" data-checklist-group="7-ds"></div>
+      <div class="cl-progress" data-cl-progress="7-ds"></div>
+      <pre class="code"><span class="cm"># true tail vs the bounds, for the mean of n Bernoulli(0.5)</span>
+n, t = 100, np.linspace(0.01, 0.35, 40)
+true = 2*stats.binom.sf(np.ceil(n*(0.5+t))-1, n, 0.5)
+cheb = np.minimum(1, 0.25/(n*t**2))
+hoef = 2*np.exp(-2*n*t**2)
+<span class="cm"># plot all three on a log y-axis: Hoeffding tracks the shape, Chebyshev does not</span></pre>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 Why it matters</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Where it shows up</span><p>Concentration is what licenses learning from finite data: a test-set estimate of accuracy is a mean of bounded variables, so Hoeffding plus a union bound over models is a generalisation guarantee. It is also how you answer "how many samples do I need?" before collecting any.</p></div>
+        <div class="ml-part"><span class="ml-lbl">The classic mistake</span><p>Treating a bound as an estimate. These are worst-case guarantees; Chebyshev at $k=2$ promises only 75% coverage while a normal delivers 95%. Use bounds to be <em>safe</em>, the CLT to be <em>accurate</em>.</p></div>
+      </div>
+    </div>
+    <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Without notes: (1) prove Markov, then get Chebyshev from it; (2) state Hoeffding and name every assumption it needs; (3) how many coin flips to estimate $p$ within $\pm 0.01$ with 95% confidence — by Hoeffding, and by the CLT?</div></div>
+  </div></details>
+
+  <details class="ch" id="u8" data-ch="8"><summary>
+    <button type="button" class="check ch-done" role="checkbox" aria-checked="false" aria-label="Mark Unit 8 complete"></button>
+    <span class="cnum">Unit 8</span> Laws of large numbers &amp; the central limit theorem
+    <span class="ch-meta"><span class="mini-bar" aria-hidden="true"><span data-l="watch"></span><span data-l="read"></span><span data-l="prac"></span><span data-l="ds"></span></span></span>
+    <span class="ctopics">convergence in probability / almost surely / in distribution · WLLN &amp; SLLN · the CLT · $\sigma/\sqrt{n}$ · normal approximation · when it fails</span>
+  </summary>
+  <div class="chbody">
+    <div class="lane-head"><span class="hint">Tap lanes as you finish each pass</span>
+      <div class="lane-toggles">
+        <button type="button" class="lane-btn" data-lane="watch" aria-pressed="false">📺 Watch</button>
+        <button type="button" class="lane-btn" data-lane="read" aria-pressed="false">📖 Read</button>
+        <button type="button" class="lane-btn" data-lane="prac" aria-pressed="false">🎯 Practise</button>
+        <button type="button" class="lane-btn" data-lane="ds" aria-pressed="false">🐍 Python</button>
+      </div>
+    </div>
+    <div class="box"><span class="lbl">The spine of this unit</span>
+    <p>Two different promises about $\bar X_n$. The <b>law of large numbers</b> says where it goes: $\bar X_n\to\mu$ (in probability for the weak law — one line from Chebyshev — and almost surely for the strong law). The <b>central limit theorem</b> says how it wobbles on the way:</p>
+    <p style="text-align:center">$\dfrac{\sqrt{n}\,(\bar X_n-\mu)}{\sigma}\ \xrightarrow{\ d\ }\ N(0,1)$ &nbsp;for iid $X_i$ with finite variance.</p>
+    <p>Read it as: the error shrinks like $1/\sqrt{n}$ <em>and</em> its shape is normal whatever the population looked like. That is what makes $\bar X\pm 1.96\,\sigma/\sqrt{n}$ meaningful in unit 12. The hypotheses matter: finite variance is essential (a Cauchy sample mean never settles), independence is essential, and for skewed populations or small $n$ the approximation can be poor — check it rather than assume it.</p>
+    </div>
+    <div class="row watch"><span class="rl">📺 Watch</span>
+      <div class="cl-list" data-checklist-group="8-watch"></div>
+      <div class="cl-progress" data-cl-progress="8-watch"></div>
+    </div>
+    <div class="row read"><span class="rl">📖 Read</span>
+      <div class="cl-list" data-checklist-group="8-read"></div>
+      <div class="cl-progress" data-cl-progress="8-read"></div>
+    </div>
+    <div class="row prac"><span class="rl">🎯 Practise — closed book, written out</span>
+      <div class="cl-list" data-checklist-group="8-prac"></div>
+      <div class="cl-progress" data-cl-progress="8-prac"></div>
+    </div>
+    <div class="row ds"><span class="rl">🐍 Python lab — the two theorems, on one screen</span>
+      <div class="cl-list" data-checklist-group="8-ds"></div>
+      <div class="cl-progress" data-cl-progress="8-ds"></div>
+      <pre class="code"><span class="cm"># CLT: sampling distribution of the mean of a very skewed population</span>
+for n in (1, 2, 5, 30, 100):
+    m = rng.exponential(1.0, size=(20_000, n)).mean(axis=1)
+    print(n, round(stats.skew(m), 3), round(m.std(), 3), round(1/np.sqrt(n), 3))
+<span class="cm"># skew -&gt; 0 and sd -&gt; 1/sqrt(n): the theorem, measured</span>
+<span class="cm"># then repeat with rng.standard_cauchy -- the spread never shrinks</span></pre>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 Why it matters</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Where it shows up</span><p>Every standard error, $t$-test, $z$-interval and A/B test in the second half of this course is the CLT wearing different clothes. It is also why quadrupling your data only halves your error bar — a fact worth knowing before promising anyone a more precise result.</p></div>
+        <div class="ml-part"><span class="ml-lbl">The classic mistake</span><p>"$n\ge 30$, therefore normal." That rule of thumb is about the <em>mean</em>, never about individual observations, and it fails badly for heavy tails or strong skew. Simulate the sampling distribution and look.</p></div>
+      </div>
+    </div>
+    <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Without notes: (1) prove the weak law from Chebyshev; (2) state the CLT with every hypothesis; (3) explain precisely what converges to what — and why the CLT says nothing about the shape of your <em>data</em>.</div></div>
+  </div></details>
+
+  <details class="ch" id="u9" data-ch="9"><summary>
+    <button type="button" class="check ch-done" role="checkbox" aria-checked="false" aria-label="Mark Unit 9 complete"></button>
+    <span class="cnum">Unit 9</span> Finite-state Markov chains
+    <span class="ch-meta"><span class="mini-bar" aria-hidden="true"><span data-l="watch"></span><span data-l="read"></span><span data-l="prac"></span><span data-l="ds"></span></span></span>
+    <span class="ctopics">the Markov property · transition matrix · $n$-step probabilities · irreducibility &amp; aperiodicity · stationary distribution · absorption · reversibility</span>
+  </summary>
+  <div class="chbody">
+    <div class="lane-head"><span class="hint">Tap lanes as you finish each pass</span>
+      <div class="lane-toggles">
+        <button type="button" class="lane-btn" data-lane="watch" aria-pressed="false">📺 Watch</button>
+        <button type="button" class="lane-btn" data-lane="read" aria-pressed="false">📖 Read</button>
+        <button type="button" class="lane-btn" data-lane="prac" aria-pressed="false">🎯 Practise</button>
+        <button type="button" class="lane-btn" data-lane="ds" aria-pressed="false">🐍 Python</button>
+      </div>
+    </div>
+    <div class="box"><span class="lbl">The spine of this unit</span>
+    <p>The Markov property is a statement about <em>forgetting</em>: $P(X_{t+1}=j\mid X_t=i, \text{past})=P(X_{t+1}=j\mid X_t=i)=p_{ij}$. Collect the $p_{ij}$ into a row-stochastic matrix $P$ and all the dynamics become linear algebra: $n$-step probabilities are the entries of $P^{n}$ (Chapman–Kolmogorov), and a distribution evolves as the row vector $\pi_{t+1}=\pi_t P$.</p>
+    <p>A <b>stationary distribution</b> solves $\pi P=\pi$ with $\pi_i\ge 0$, $\sum_i\pi_i=1$ — a left eigenvector of $P$ for eigenvalue 1. For a finite chain that is <b>irreducible</b> (every state reachable from every other) and <b>aperiodic</b>, it exists, is unique, and $\pi_t\to\pi$ from <em>any</em> start. Two more tools carry most exam questions: first-step analysis for absorption probabilities and expected hitting times, and detailed balance $\pi_ip_{ij}=\pi_jp_{ji}$ as a shortcut to $\pi$ when the chain is reversible.</p>
+    </div>
+    <div class="row watch"><span class="rl">📺 Watch</span>
+      <div class="cl-list" data-checklist-group="9-watch"></div>
+      <div class="cl-progress" data-cl-progress="9-watch"></div>
+    </div>
+    <div class="row read"><span class="rl">📖 Read</span>
+      <div class="cl-list" data-checklist-group="9-read"></div>
+      <div class="cl-progress" data-cl-progress="9-read"></div>
+    </div>
+    <div class="row prac"><span class="rl">🎯 Practise — closed book, written out</span>
+      <div class="cl-list" data-checklist-group="9-prac"></div>
+      <div class="cl-progress" data-cl-progress="9-prac"></div>
+    </div>
+    <div class="row ds"><span class="rl">🐍 Python lab — the stationary distribution, three ways</span>
+      <div class="cl-list" data-checklist-group="9-ds"></div>
+      <div class="cl-progress" data-cl-progress="9-ds"></div>
+      <pre class="code">P = np.array([[.7,.2,.1],[.3,.5,.2],[.2,.3,.5]])
+<span class="cm"># 1. brute force</span>
+pi_pow = np.linalg.matrix_power(P, 200)[0]
+<span class="cm"># 2. left eigenvector for eigenvalue 1</span>
+w, v = np.linalg.eig(P.T)
+pi_eig = np.real(v[:, np.argmin(abs(w-1))]); pi_eig /= pi_eig.sum()
+<span class="cm"># 3. one long trajectory -- the ergodic theorem, empirically</span>
+s, visits = 0, np.zeros(3)
+for _ in range(500_000):
+    visits[s] += 1; s = rng.choice(3, p=P[s])
+<span class="cm"># all three agree to ~3 decimals</span></pre>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 Why it matters</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Where it shows up</span><p>PageRank is the stationary distribution of a random surfer; MCMC turns the convergence theorem around, <em>designing</em> a chain whose stationary distribution is the posterior you want to sample. Queueing, reliability and text generation are all finite-state chains before they are anything else.</p></div>
+        <div class="ml-part"><span class="ml-lbl">The classic mistake</span><p>Solving $\pi P=\pi$ and forgetting $\sum_i\pi_i=1$ — the eigenvector is only determined up to scale. And a chain can be irreducible yet periodic, in which case $\pi$ exists but $\pi_t$ never converges; it cycles.</p></div>
+      </div>
+    </div>
+    <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Without notes: (1) state the Markov property and write the transition matrix of a small chain; (2) what must hold for $\pi$ to exist, be unique, <em>and</em> be the limit? (3) set up first-step analysis for the probability of hitting state $A$ before state $B$.</div></div>
+  </div></details>
+
+  <details class="ch" id="u10" data-ch="10"><summary>
+    <button type="button" class="check ch-done" role="checkbox" aria-checked="false" aria-label="Mark Unit 10 complete"></button>
+    <span class="cnum">Unit 10</span> Sampling &amp; statistical models
+    <span class="ch-meta"><span class="mini-bar" aria-hidden="true"><span data-l="watch"></span><span data-l="read"></span><span data-l="prac"></span><span data-l="ds"></span></span></span>
+    <span class="ctopics">population vs sample · the iid model · statistic vs parameter · sampling distribution · $\bar X$ and $S^2$ · why $n-1$ · sampling bias</span>
+  </summary>
+  <div class="chbody">
+    <div class="lane-head"><span class="hint">Tap lanes as you finish each pass</span>
+      <div class="lane-toggles">
+        <button type="button" class="lane-btn" data-lane="watch" aria-pressed="false">📺 Watch</button>
+        <button type="button" class="lane-btn" data-lane="read" aria-pressed="false">📖 Read</button>
+        <button type="button" class="lane-btn" data-lane="prac" aria-pressed="false">🎯 Practise</button>
+        <button type="button" class="lane-btn" data-lane="ds" aria-pressed="false">🐍 Python</button>
+      </div>
+    </div>
+    <div class="box"><span class="lbl">The spine of this unit</span>
+    <p>The second half of the course runs the first half backwards. Before: the model was given and you computed probabilities. Now: the data are given and the model's parameter $\theta$ is unknown. A <b>statistical model</b> says the data are $X_1,\dots,X_n$ iid from $f(\cdot\,;\theta)$; a <b>statistic</b> is any function of the data alone; its distribution over repeated samples is the <b>sampling distribution</b>, and every claim about uncertainty in this course is a statement about that distribution.</p>
+    <p>Core facts: $E[\bar X]=\mu$ and $\mathrm{Var}(\bar X)=\sigma^2/n$ always; $S^2=\frac{1}{n-1}\sum(X_i-\bar X)^2$ is unbiased for $\sigma^2$ — the $n-1$ is the one degree of freedom spent estimating $\mu$, not a fudge. And no amount of data fixes a broken sampling scheme: <b>bias does not shrink with $n$</b>, it converges to the wrong answer more confidently.</p>
+    </div>
+    <div class="row watch"><span class="rl">📺 Watch</span>
+      <div class="cl-list" data-checklist-group="10-watch"></div>
+      <div class="cl-progress" data-cl-progress="10-watch"></div>
+    </div>
+    <div class="row read"><span class="rl">📖 Read</span>
+      <div class="cl-list" data-checklist-group="10-read"></div>
+      <div class="cl-progress" data-cl-progress="10-read"></div>
+    </div>
+    <div class="row prac"><span class="rl">🎯 Practise — closed book, written out</span>
+      <div class="cl-list" data-checklist-group="10-prac"></div>
+      <div class="cl-progress" data-cl-progress="10-prac"></div>
+    </div>
+    <div class="row ds"><span class="rl">🐍 Python lab — the sampling distribution, built by hand</span>
+      <div class="cl-list" data-checklist-group="10-ds"></div>
+      <div class="cl-progress" data-cl-progress="10-ds"></div>
+      <pre class="code"><span class="cm"># a synthetic "population", then 10 000 samples of size 40 from it</span>
+pop = np.concatenate([rng.normal(70, 8, 9_000), rng.normal(95, 5, 1_000)])
+means = np.array([rng.choice(pop, 40, replace=False).mean() for _ in range(10_000)])
+means.mean(), pop.mean()          <span class="cm"># unbiased: these match</span>
+means.std(),  pop.std()/np.sqrt(40)   <span class="cm"># and the SE formula holds</span>
+<span class="cm"># now sample only from pop[pop &lt; 85] and watch the bias refuse to shrink</span></pre>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 Why it matters</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Where it shows up</span><p>Train/test splits, A/B tests and survey estimates are all "is my sample representative of the population I care about?" — and the answer decides whether a model's reported accuracy means anything outside the notebook it was computed in.</p></div>
+        <div class="ml-part"><span class="ml-lbl">The classic mistake</span><p>Confusing the spread of the <em>data</em> ($\sigma$, unchanged by more data) with the spread of the <em>estimate</em> ($\sigma/\sqrt n$, which shrinks). Say which one a number refers to every single time you write it.</p></div>
+      </div>
+    </div>
+    <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Without notes: (1) define statistic, estimator, estimate and sampling distribution, and give an example of each; (2) show $E[S^2]=\sigma^2$; (3) explain why a large but self-selected sample can be worse than a small random one.</div></div>
+  </div></details>
+
+  <details class="ch" id="u11" data-ch="11"><summary>
+    <button type="button" class="check ch-done" role="checkbox" aria-checked="false" aria-label="Mark Unit 11 complete"></button>
+    <span class="cnum">Unit 11</span> Estimation &amp; likelihood
+    <span class="ch-meta"><span class="mini-bar" aria-hidden="true"><span data-l="watch"></span><span data-l="read"></span><span data-l="prac"></span><span data-l="ds"></span></span></span>
+    <span class="ctopics">method of moments · likelihood &amp; log-likelihood · MLE · bias, variance, MSE · consistency · Fisher information · asymptotic normality</span>
+  </summary>
+  <div class="chbody">
+    <div class="lane-head"><span class="hint">Tap lanes as you finish each pass</span>
+      <div class="lane-toggles">
+        <button type="button" class="lane-btn" data-lane="watch" aria-pressed="false">📺 Watch</button>
+        <button type="button" class="lane-btn" data-lane="read" aria-pressed="false">📖 Read</button>
+        <button type="button" class="lane-btn" data-lane="prac" aria-pressed="false">🎯 Practise</button>
+        <button type="button" class="lane-btn" data-lane="ds" aria-pressed="false">🐍 Python</button>
+      </div>
+    </div>
+    <div class="box"><span class="lbl">The spine of this unit</span>
+    <p>The <b>likelihood</b> $L(\theta)=\prod_i f(x_i;\theta)$ is the joint density read as a function of $\theta$ with the data held fixed — not a probability distribution over $\theta$. Maximising $\ell(\theta)=\log L(\theta)$ gives the MLE; the log turns products into sums, and the sum is what you actually differentiate.</p>
+    <p>Judge an estimator by its whole error, not its centre: $\mathrm{MSE}(\hat\theta)=\mathrm{Var}(\hat\theta)+\mathrm{bias}(\hat\theta)^2$. Unbiased is not automatically better — a little bias for a lot less variance is the whole idea behind regularisation in unit 16. Know the standard results: $\hat p=\bar X$ for Bernoulli, $\hat\lambda=\bar X$ for Poisson, $\hat\mu=\bar X$ and $\hat\sigma^2=\frac1n\sum(x_i-\bar x)^2$ (biased!) for the normal, and $\hat\theta=\max_i x_i$ for $\mathrm{Unif}(0,\theta)$ — the case where calculus fails and you must argue directly. Asymptotically the MLE is consistent and $\hat\theta\approx N\bigl(\theta, 1/(nI(\theta))\bigr)$, which is where its standard errors come from.</p>
+    </div>
+    <div class="row watch"><span class="rl">📺 Watch</span>
+      <div class="cl-list" data-checklist-group="11-watch"></div>
+      <div class="cl-progress" data-cl-progress="11-watch"></div>
+    </div>
+    <div class="row read"><span class="rl">📖 Read</span>
+      <div class="cl-list" data-checklist-group="11-read"></div>
+      <div class="cl-progress" data-cl-progress="11-read"></div>
+    </div>
+    <div class="row prac"><span class="rl">🎯 Practise — closed book, written out</span>
+      <div class="cl-list" data-checklist-group="11-prac"></div>
+      <div class="cl-progress" data-cl-progress="11-prac"></div>
+    </div>
+    <div class="row ds"><span class="rl">🐍 Python lab — the likelihood curve</span>
+      <div class="cl-list" data-checklist-group="11-ds"></div>
+      <div class="cl-progress" data-cl-progress="11-ds"></div>
+      <pre class="code">from scipy.optimize import minimize_scalar
+x = rng.exponential(1/2.5, size=200)          <span class="cm"># true lambda = 2.5</span>
+nll = lambda lam: -np.sum(np.log(lam) - lam*x)
+print(minimize_scalar(nll, bounds=(.1, 10), method='bounded').x, 1/x.mean())
+<span class="cm"># numerical optimum == closed form 1/xbar; plot nll to see the curvature</span>
+<span class="cm"># the curvature IS the Fisher information: sharper curve -&gt; smaller SE</span></pre>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 Why it matters</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Where it shows up</span><p>Training a model <em>is</em> maximising a likelihood: least squares is the MLE under normal errors, and cross-entropy loss is the negative log-likelihood of a Bernoulli. Understanding this unit means logistic regression in unit 16 needs no new ideas.</p></div>
+        <div class="ml-part"><span class="ml-lbl">The classic mistake</span><p>Treating $L(\theta)$ as $P(\theta\mid\text{data})$. It is not a density in $\theta$ and does not integrate to 1 — that reading needs a prior, which is Bayes, not this.</p></div>
+      </div>
+    </div>
+    <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Without notes: (1) derive the MLE for a Poisson sample; (2) state the bias–variance decomposition of MSE and give an estimator that trades one for the other; (3) why does the $\mathrm{Unif}(0,\theta)$ MLE need a different argument from setting a derivative to zero?</div></div>
+  </div></details>
+
+  <details class="ch" id="u12" data-ch="12"><summary>
+    <button type="button" class="check ch-done" role="checkbox" aria-checked="false" aria-label="Mark Unit 12 complete"></button>
+    <span class="cnum">Unit 12</span> Sampling distributions, the bootstrap &amp; confidence intervals
+    <span class="ch-meta"><span class="mini-bar" aria-hidden="true"><span data-l="watch"></span><span data-l="read"></span><span data-l="prac"></span><span data-l="ds"></span></span></span>
+    <span class="ctopics">$\chi^2$, $t$ and $F$ · $z$- vs $t$-intervals · CI for a mean and a proportion · coverage · the bootstrap · sample size</span>
+  </summary>
+  <div class="chbody">
+    <div class="lane-head"><span class="hint">Tap lanes as you finish each pass</span>
+      <div class="lane-toggles">
+        <button type="button" class="lane-btn" data-lane="watch" aria-pressed="false">📺 Watch</button>
+        <button type="button" class="lane-btn" data-lane="read" aria-pressed="false">📖 Read</button>
+        <button type="button" class="lane-btn" data-lane="prac" aria-pressed="false">🎯 Practise</button>
+        <button type="button" class="lane-btn" data-lane="ds" aria-pressed="false">🐍 Python</button>
+      </div>
+    </div>
+    <div class="box"><span class="lbl">The spine of this unit</span>
+    <p>Three derived distributions, each with a job. If $X_i\sim N(\mu,\sigma^2)$ iid then $(n-1)S^2/\sigma^2\sim\chi^2_{n-1}$, and replacing the unknown $\sigma$ by $S$ turns the $z$ into $t$: $\frac{\bar X-\mu}{S/\sqrt{n}}\sim t_{n-1}$ — fatter tails, paying for the estimated scale. The $F$ is a ratio of two scaled $\chi^2$s and shows up comparing variances and in regression.</p>
+    <p>A confidence interval inverts a sampling distribution: $\bar x\pm t_{n-1,1-\alpha/2}\,s/\sqrt n$. <b>Its guarantee is about the procedure, not this interval</b> — 95% of intervals built this way over repeated samples contain $\theta$; the one on your page either does or does not. When no formula exists (a median, a correlation, an $R^2$), the <b>bootstrap</b> gets you a sampling distribution anyway: resample $n$ points from your data <em>with replacement</em>, recompute the statistic, repeat $B$ times, and read off the 2.5th and 97.5th percentiles. It needs the sample to represent the population and the statistic to be smooth — it fails for extremes like the maximum.</p>
+    </div>
+    <div class="row watch"><span class="rl">📺 Watch</span>
+      <div class="cl-list" data-checklist-group="12-watch"></div>
+      <div class="cl-progress" data-cl-progress="12-watch"></div>
+    </div>
+    <div class="row read"><span class="rl">📖 Read</span>
+      <div class="cl-list" data-checklist-group="12-read"></div>
+      <div class="cl-progress" data-cl-progress="12-read"></div>
+    </div>
+    <div class="row prac"><span class="rl">🎯 Practise — closed book, written out</span>
+      <div class="cl-list" data-checklist-group="12-prac"></div>
+      <div class="cl-progress" data-cl-progress="12-prac"></div>
+    </div>
+    <div class="row ds"><span class="rl">🐍 Python lab — does 95% mean 95%?</span>
+      <div class="cl-list" data-checklist-group="12-ds"></div>
+      <div class="cl-progress" data-cl-progress="12-ds"></div>
+      <pre class="code"><span class="cm"># coverage experiment: build 10 000 intervals, count the hits</span>
+hits, n = 0, 25
+for _ in range(10_000):
+    s = rng.exponential(1.0, n)                       <span class="cm"># skewed population, mu = 1</span>
+    half = stats.t.ppf(.975, n-1) * s.std(ddof=1)/np.sqrt(n)
+    hits += abs(s.mean() - 1.0) &lt;= half
+print(hits/10_000)      <span class="cm"># noticeably under 0.95 -- skew at n=25 costs coverage</span>
+
+<span class="cm"># bootstrap CI for a median, where no textbook formula exists</span>
+data = rng.exponential(1.0, 200)
+boot = np.median(rng.choice(data, (10_000, 200)), axis=1)
+np.percentile(boot, [2.5, 97.5])</pre>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 Why it matters</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Where it shows up</span><p>"Accuracy 0.91" is worthless without an interval; the bootstrap is how you put one on any metric your model reports, including ones with no analytic sampling distribution. It is also the honest answer to "is this improvement real or noise?"</p></div>
+        <div class="ml-part"><span class="ml-lbl">The classic mistake</span><p>"There is a 95% probability that $\mu$ lies in this interval." Under this course's frequentist reading $\mu$ is a constant — the randomness is in the interval. Get the wording right; exams ask for it explicitly.</p></div>
+      </div>
+    </div>
+    <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Without notes: (1) derive the $z$-interval for a mean from the CLT and say exactly when you need $t$ instead; (2) state what "95% confidence" means in one careful sentence; (3) write the bootstrap in five lines of pseudocode and name a case where it fails.</div></div>
+  </div></details>
+
+  <details class="ch" id="u13" data-ch="13"><summary>
+    <button type="button" class="check ch-done" role="checkbox" aria-checked="false" aria-label="Mark Unit 13 complete"></button>
+    <span class="cnum">Unit 13</span> Hypothesis &amp; permutation tests
+    <span class="ch-meta"><span class="mini-bar" aria-hidden="true"><span data-l="watch"></span><span data-l="read"></span><span data-l="prac"></span><span data-l="ds"></span></span></span>
+    <span class="ctopics">$H_0$ vs $H_1$ · null distribution · $p$-values · type I/II errors &amp; power · $z$- and $t$-tests · permutation tests · multiple testing</span>
+  </summary>
+  <div class="chbody">
+    <div class="lane-head"><span class="hint">Tap lanes as you finish each pass</span>
+      <div class="lane-toggles">
+        <button type="button" class="lane-btn" data-lane="watch" aria-pressed="false">📺 Watch</button>
+        <button type="button" class="lane-btn" data-lane="read" aria-pressed="false">📖 Read</button>
+        <button type="button" class="lane-btn" data-lane="prac" aria-pressed="false">🎯 Practise</button>
+        <button type="button" class="lane-btn" data-lane="ds" aria-pressed="false">🐍 Python</button>
+      </div>
+    </div>
+    <div class="box"><span class="lbl">The spine of this unit</span>
+    <p>A test is one question asked in a fixed order: state $H_0$ and $H_1$, choose a statistic $T$, work out the distribution of $T$ <em>assuming $H_0$ is true</em>, and ask how extreme the observed $t_{\text{obs}}$ is in that distribution. The <b>$p$-value</b> is $P(T\text{ at least as extreme as }t_{\text{obs}}\mid H_0)$ — a statement about data given the hypothesis, never about the hypothesis given the data.</p>
+    <p>Two error types, and they trade off: type I (reject a true $H_0$, rate $\alpha$) and type II (fail to reject a false $H_0$, rate $\beta$); <b>power</b> $=1-\beta$ rises with $n$, with effect size, and with $\alpha$. Tests and intervals are two views of one object: a two-sided level-$\alpha$ test rejects $\theta_0$ exactly when the $1-\alpha$ confidence interval excludes it. When you cannot justify a parametric null, build the null distribution yourself: a <b>permutation test</b> shuffles the group labels thousands of times, because under "the groups are alike" every labelling was equally likely.</p>
+    </div>
+    <div class="row watch"><span class="rl">📺 Watch</span>
+      <div class="cl-list" data-checklist-group="13-watch"></div>
+      <div class="cl-progress" data-cl-progress="13-watch"></div>
+    </div>
+    <div class="row read"><span class="rl">📖 Read</span>
+      <div class="cl-list" data-checklist-group="13-read"></div>
+      <div class="cl-progress" data-cl-progress="13-read"></div>
+    </div>
+    <div class="row prac"><span class="rl">🎯 Practise — closed book, written out</span>
+      <div class="cl-list" data-checklist-group="13-prac"></div>
+      <div class="cl-progress" data-cl-progress="13-prac"></div>
+    </div>
+    <div class="row ds"><span class="rl">🐍 Python lab — build the null distribution yourself</span>
+      <div class="cl-list" data-checklist-group="13-ds"></div>
+      <div class="cl-progress" data-cl-progress="13-ds"></div>
+      <pre class="code"><span class="cm"># two groups, one statistic, no distributional assumption at all</span>
+a, b = rng.normal(0, 1, 40), rng.normal(0.6, 1, 35)
+obs  = a.mean() - b.mean()
+pool = np.concatenate([a, b])
+null = np.empty(20_000)
+for i in range(null.size):
+    p = rng.permutation(pool)
+    null[i] = p[:a.size].mean() - p[a.size:].mean()
+p_perm = np.mean(np.abs(null) &gt;= abs(obs))
+print(p_perm, stats.ttest_ind(a, b).pvalue)   <span class="cm"># two routes, same story</span></pre>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 Why it matters</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Where it shows up</span><p>Every A/B test and every "is model B better than model A?" comparison. Permutation tests in particular travel everywhere, because they work for any statistic you can compute — median difference, AUC gap, whatever the situation actually calls for.</p></div>
+        <div class="ml-part"><span class="ml-lbl">The classic mistake</span><p>Reading $p$ as "the probability $H_0$ is true", and reading $p\gt 0.05$ as "no effect" when it may just mean no power. Twenty tests at $\alpha=0.05$ produce one significant result on average from pure noise — say how many tests you ran.</p></div>
+      </div>
+    </div>
+    <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Without notes: (1) define the $p$-value in one precise sentence; (2) name the two error types and say what raises power; (3) explain the test–interval duality, and describe a permutation test to someone who has never seen one.</div></div>
+  </div></details>
+
+  <details class="ch" id="u14" data-ch="14"><summary>
+    <button type="button" class="check ch-done" role="checkbox" aria-checked="false" aria-label="Mark Unit 14 complete"></button>
+    <span class="cnum">Unit 14</span> Categorical data analysis
+    <span class="ch-meta"><span class="mini-bar" aria-hidden="true"><span data-l="watch"></span><span data-l="read"></span><span data-l="prac"></span><span data-l="ds"></span></span></span>
+    <span class="ctopics">contingency tables · goodness of fit · the $\chi^2$ test of independence · expected counts &amp; degrees of freedom · Fisher's exact test · odds ratios</span>
+  </summary>
+  <div class="chbody">
+    <div class="lane-head"><span class="hint">Tap lanes as you finish each pass</span>
+      <div class="lane-toggles">
+        <button type="button" class="lane-btn" data-lane="watch" aria-pressed="false">📺 Watch</button>
+        <button type="button" class="lane-btn" data-lane="read" aria-pressed="false">📖 Read</button>
+        <button type="button" class="lane-btn" data-lane="prac" aria-pressed="false">🎯 Practise</button>
+        <button type="button" class="lane-btn" data-lane="ds" aria-pressed="false">🐍 Python</button>
+      </div>
+    </div>
+    <div class="box"><span class="lbl">The spine of this unit</span>
+    <p>One statistic covers both jobs: $\chi^2=\sum\dfrac{(O-E)^2}{E}$, summed over cells. For <b>goodness of fit</b>, $E_i=np_i$ under the claimed distribution and $\mathrm{df}=k-1-(\text{parameters estimated})$. For <b>independence</b> in an $r\times c$ table, the null builds the expected counts from the margins, $E_{ij}=\dfrac{R_i C_j}{n}$, and $\mathrm{df}=(r-1)(c-1)$ — the count of free cells once the margins are fixed.</p>
+    <p>The $\chi^2$ reference distribution is an approximation: it needs independent observations, counts (not percentages), and expected cell counts of roughly 5 or more. When cells are sparse, use Fisher's exact test or permute. And a significant $\chi^2$ says only "not independent" — for the size and direction of the association you need residuals, a relative risk, or an odds ratio $\dfrac{a d}{b c}$.</p>
+    </div>
+    <div class="row watch"><span class="rl">📺 Watch</span>
+      <div class="cl-list" data-checklist-group="14-watch"></div>
+      <div class="cl-progress" data-cl-progress="14-watch"></div>
+    </div>
+    <div class="row read"><span class="rl">📖 Read</span>
+      <div class="cl-list" data-checklist-group="14-read"></div>
+      <div class="cl-progress" data-cl-progress="14-read"></div>
+    </div>
+    <div class="row prac"><span class="rl">🎯 Practise — closed book, written out</span>
+      <div class="cl-list" data-checklist-group="14-prac"></div>
+      <div class="cl-progress" data-cl-progress="14-prac"></div>
+    </div>
+    <div class="row ds"><span class="rl">🐍 Python lab — by hand, then by library</span>
+      <div class="cl-list" data-checklist-group="14-ds"></div>
+      <div class="cl-progress" data-cl-progress="14-ds"></div>
+      <pre class="code">obs = np.array([[43, 57], [61, 39]])          <span class="cm"># treatment x outcome</span>
+E   = obs.sum(1, keepdims=True) * obs.sum(0, keepdims=True) / obs.sum()
+chi2 = ((obs - E)**2 / E).sum()
+print(chi2, 1 - stats.chi2.cdf(chi2, df=1))
+print(stats.chi2_contingency(obs, correction=False)[:2])   <span class="cm"># same numbers</span>
+odds = (obs[0,0]*obs[1,1]) / (obs[0,1]*obs[1,0])           <span class="cm"># the effect size</span></pre>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 Why it matters</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Where it shows up</span><p>Conversion by variant, click by segment, error by class — most product and survey data arrives as counts in a table, and the confusion matrix of unit 16 is itself a $2\times2$ contingency table.</p></div>
+        <div class="ml-part"><span class="ml-lbl">The classic mistake</span><p>Running $\chi^2$ on percentages or on repeated measurements from the same people. The test counts <em>independent</em> observations; feed it anything else and the $p$-value is fiction.</p></div>
+      </div>
+    </div>
+    <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Without notes: (1) build the expected counts for a $2\times3$ table and say why $\mathrm{df}=2$; (2) list the conditions the $\chi^2$ approximation needs; (3) explain why a significant result still tells you nothing about the strength of the association.</div></div>
+  </div></details>
+
+  <details class="ch" id="u15" data-ch="15"><summary>
+    <button type="button" class="check ch-done" role="checkbox" aria-checked="false" aria-label="Mark Unit 15 complete"></button>
+    <span class="cnum">Unit 15</span> Linear regression &amp; model diagnostics
+    <span class="ch-meta"><span class="mini-bar" aria-hidden="true"><span data-l="watch"></span><span data-l="read"></span><span data-l="prac"></span><span data-l="ds"></span></span></span>
+    <span class="ctopics">the linear model · least squares · coefficient interpretation · $R^2$ · inference on $\beta$ · residual plots · leverage &amp; influence · multicollinearity</span>
+  </summary>
+  <div class="chbody">
+    <div class="lane-head"><span class="hint">Tap lanes as you finish each pass</span>
+      <div class="lane-toggles">
+        <button type="button" class="lane-btn" data-lane="watch" aria-pressed="false">📺 Watch</button>
+        <button type="button" class="lane-btn" data-lane="read" aria-pressed="false">📖 Read</button>
+        <button type="button" class="lane-btn" data-lane="prac" aria-pressed="false">🎯 Practise</button>
+        <button type="button" class="lane-btn" data-lane="ds" aria-pressed="false">🐍 Python</button>
+      </div>
+    </div>
+    <div class="box"><span class="lbl">The spine of this unit</span>
+    <p>The model is $Y_i=\beta_0+\beta_1x_{i1}+\dots+\beta_px_{ip}+\varepsilon_i$ with $\varepsilon_i$ iid, mean zero, constant variance $\sigma^2$ — and normal if you want exact $t$-tests. Least squares minimises $\mathrm{RSS}=\sum(y_i-\hat y_i)^2$, giving $\hat\beta=(X^{\top}X)^{-1}X^{\top}y$: geometrically, the orthogonal projection of $y$ onto the column space of $X$, which is exactly the projection you met in linear algebra.</p>
+    <p>Read the output properly. $\hat\beta_j$ is the expected change in $Y$ per unit of $x_j$ <em>with the other predictors held fixed</em>; $R^2$ is the fraction of variance explained and never decreases when you add a predictor, so it cannot be used to choose models; each coefficient's $t=\hat\beta_j/\mathrm{SE}(\hat\beta_j)$ tests $\beta_j=0$ given the rest. The assumptions live in the <b>residuals</b>, not in $R^2$: residuals vs fitted (linearity, equal variance), a Q–Q plot (normality), leverage and Cook's distance (single points steering the fit). Anscombe's quartet is the standing reminder that four wildly different datasets can share every summary number.</p>
+    </div>
+    <div class="row watch"><span class="rl">📺 Watch</span>
+      <div class="cl-list" data-checklist-group="15-watch"></div>
+      <div class="cl-progress" data-cl-progress="15-watch"></div>
+    </div>
+    <div class="row read"><span class="rl">📖 Read</span>
+      <div class="cl-list" data-checklist-group="15-read"></div>
+      <div class="cl-progress" data-cl-progress="15-read"></div>
+    </div>
+    <div class="row prac"><span class="rl">🎯 Practise — closed book, written out</span>
+      <div class="cl-list" data-checklist-group="15-prac"></div>
+      <div class="cl-progress" data-cl-progress="15-prac"></div>
+    </div>
+    <div class="row ds"><span class="rl">🐍 Python lab — read the summary table line by line</span>
+      <div class="cl-list" data-checklist-group="15-ds"></div>
+      <div class="cl-progress" data-cl-progress="15-ds"></div>
+      <pre class="code">import statsmodels.api as sm
+X = sm.add_constant(np.c_[x1, x2])
+fit = sm.OLS(y, X).fit()
+print(fit.summary())                  <span class="cm"># coef, SE, t, p, CI, R^2, F</span>
+resid, fitted = fit.resid, fit.fittedvalues
+<span class="cm"># the four plots that decide whether any of the above is trustworthy:</span>
+<span class="cm">#   resid vs fitted | Q-Q of resid | sqrt|resid| vs fitted | leverage vs resid</span>
+inf = fit.get_influence(); inf.cooks_distance[0].max()</pre>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 Why it matters</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Where it shows up</span><p>Regression is the baseline every fancier model has to beat, and the one whose coefficients a human can actually argue about. It is also unit 6 made concrete: fitting a line is estimating $E[Y\mid X]$.</p></div>
+        <div class="ml-part"><span class="ml-lbl">The classic mistake</span><p>Causal language for an observational fit, and trusting a high $R^2$ on unexamined residuals. Also: correlated predictors inflate standard errors, so an "insignificant" coefficient may just be sharing its information with a neighbour.</p></div>
+      </div>
+    </div>
+    <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Without notes: (1) derive $\hat\beta$ by minimising RSS; (2) state every assumption and name the plot that checks it; (3) explain why adding a useless predictor can never lower $R^2$, and what to use instead.</div></div>
+  </div></details>
+
+  <details class="ch" id="u16" data-ch="16"><summary>
+    <button type="button" class="check ch-done" role="checkbox" aria-checked="false" aria-label="Mark Unit 16 complete"></button>
+    <span class="cnum">Unit 16</span> Overfitting, cross-validation &amp; binary classification
+    <span class="ch-meta"><span class="mini-bar" aria-hidden="true"><span data-l="watch"></span><span data-l="read"></span><span data-l="prac"></span><span data-l="ds"></span></span></span>
+    <span class="ctopics">train/test · bias–variance · regularisation · $K$-fold CV · data leakage · logistic regression · confusion matrix · precision/recall · ROC &amp; AUC</span>
+  </summary>
+  <div class="chbody">
+    <div class="lane-head"><span class="hint">Tap lanes as you finish each pass</span>
+      <div class="lane-toggles">
+        <button type="button" class="lane-btn" data-lane="watch" aria-pressed="false">📺 Watch</button>
+        <button type="button" class="lane-btn" data-lane="read" aria-pressed="false">📖 Read</button>
+        <button type="button" class="lane-btn" data-lane="prac" aria-pressed="false">🎯 Practise</button>
+        <button type="button" class="lane-btn" data-lane="ds" aria-pressed="false">🐍 Python</button>
+      </div>
+    </div>
+    <div class="box"><span class="lbl">The spine of this unit</span>
+    <p>Training error falls forever as a model grows; test error falls, bottoms out, then climbs. That U is the <b>bias–variance trade-off</b> of unit 11 applied to prediction — and it is why the error you report must come from data the model never saw. <b>$K$-fold cross-validation</b> reuses the data honestly: split into $K$ parts, train on $K-1$, test on the held-out one, rotate, average. The rule that catches everybody: every fitted step — scaling, imputation, feature selection — must happen <em>inside</em> the fold, or the estimate leaks and flatters itself.</p>
+    <p><b>Logistic regression</b> is unit 11 again with a Bernoulli likelihood: model the log-odds as linear, $\log\frac{p}{1-p}=\beta^{\top}x$, so $p=\sigma(\beta^{\top}x)$, and fit by maximum likelihood (equivalently, minimise cross-entropy). It outputs a probability; a <em>threshold</em> turns it into a decision, and the threshold is a business choice, not a statistical one. Judge it with the confusion matrix and its ratios — precision $\frac{TP}{TP+FP}$, recall $\frac{TP}{TP+FN}$ — and with the ROC curve and its AUC, which sweeps every threshold at once. On imbalanced data accuracy is worthless: 99% of nothing is the majority class.</p>
+    </div>
+    <div class="row watch"><span class="rl">📺 Watch</span>
+      <div class="cl-list" data-checklist-group="16-watch"></div>
+      <div class="cl-progress" data-cl-progress="16-watch"></div>
+    </div>
+    <div class="row read"><span class="rl">📖 Read</span>
+      <div class="cl-list" data-checklist-group="16-read"></div>
+      <div class="cl-progress" data-cl-progress="16-read"></div>
+    </div>
+    <div class="row prac"><span class="rl">🎯 Practise — closed book, written out</span>
+      <div class="cl-list" data-checklist-group="16-prac"></div>
+      <div class="cl-progress" data-cl-progress="16-prac"></div>
+    </div>
+    <div class="row ds"><span class="rl">🐍 Python lab — an honest evaluation, end to end</span>
+      <div class="cl-list" data-checklist-group="16-ds"></div>
+      <div class="cl-progress" data-cl-progress="16-ds"></div>
+      <pre class="code">from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import cross_val_score, StratifiedKFold
+from sklearn.metrics import confusion_matrix, roc_auc_score, roc_curve
+
+pipe = make_pipeline(StandardScaler(), LogisticRegression())   <span class="cm"># scaler INSIDE</span>
+cv   = StratifiedKFold(5, shuffle=True, random_state=0)
+print(cross_val_score(pipe, X, y, cv=cv, scoring='roc_auc'))
+pipe.fit(Xtr, ytr); p = pipe.predict_proba(Xte)[:, 1]
+print(confusion_matrix(yte, p &gt;= 0.5), roc_auc_score(yte, p))
+<span class="cm"># then move the threshold and watch precision and recall trade places</span></pre>
+    </div>
+    <div class="row ml-intuition"><span class="rl">🧠 Why it matters</span>
+      <div class="ml-grid">
+        <div class="ml-part"><span class="ml-lbl">Where it shows up</span><p>This unit is the bridge from the course into every applied data-science task you will meet afterwards. Everything harder — trees, boosting, networks — changes the model but keeps this evaluation discipline unchanged.</p></div>
+        <div class="ml-part"><span class="ml-lbl">The classic mistake</span><p>Scaling or selecting features on the full dataset before cross-validating, and then reporting the CV score of the model you tuned on that same CV. Both inflate the number; both are invisible until production.</p></div>
+      </div>
+    </div>
+    <div class="row recall"><span class="rl">🗣 Before moving on</span><div>Without notes: (1) draw the training/test error curves against complexity and explain both branches; (2) describe $K$-fold CV and one way to leak data into it; (3) write the confusion matrix, define precision and recall, and say what an ROC curve sweeps.</div></div>
+  </div></details>
+  </section>
+
+  <section id="distributions">
+  <h2><span class="sec-tag">Reference</span>The distributions, on one page</h2>
+  <p class="lede" style="font-size:1rem">Do not memorise this table — <em>rebuild</em> it. In week 5 derive every mean and variance yourself, then use this only to check. In the exam, a distribution you can re-derive is worth ten you half-remember.</p>
+  <div class="scroll-x">
+  <table>
+    <tr><th>Distribution</th><th>The story</th><th>PMF / PDF</th><th>Mean</th><th>Variance</th><th>In Python</th></tr>
+    <tr><td>Bernoulli$(p)$</td><td>one trial, success or not</td><td>$p^k(1-p)^{1-k}$, $k\in\{0,1\}$</td><td>$p$</td><td>$p(1-p)$</td><td><code>stats.bernoulli</code></td></tr>
+    <tr><td>Binomial$(n,p)$</td><td>successes in $n$ independent trials</td><td>$\binom{n}{k}p^k(1-p)^{n-k}$</td><td>$np$</td><td>$np(1-p)$</td><td><code>stats.binom</code></td></tr>
+    <tr><td>Geometric$(p)$</td><td>trials up to and including the first success</td><td>$(1-p)^{k-1}p$, $k\ge 1$</td><td>$1/p$</td><td>$(1-p)/p^2$</td><td><code>stats.geom</code></td></tr>
+    <tr><td>Neg. binomial$(r,p)$</td><td>trials until the $r$-th success</td><td>$\binom{k-1}{r-1}p^r(1-p)^{k-r}$</td><td>$r/p$</td><td>$r(1-p)/p^2$</td><td><code>stats.nbinom</code></td></tr>
+    <tr><td>Poisson$(\lambda)$</td><td>rare events at rate $\lambda$ per interval</td><td>$e^{-\lambda}\lambda^k/k!$</td><td>$\lambda$</td><td>$\lambda$</td><td><code>stats.poisson</code></td></tr>
+    <tr><td>Hypergeom.$(N,K,n)$</td><td>successes sampling <em>without</em> replacement</td><td>$\binom{K}{k}\binom{N-K}{n-k}\big/\binom{N}{n}$</td><td>$n\frac{K}{N}$</td><td>$n\frac{K}{N}\bigl(1-\frac{K}{N}\bigr)\frac{N-n}{N-1}$</td><td><code>stats.hypergeom</code></td></tr>
+    <tr><td>Uniform$(a,b)$</td><td>no preference inside an interval</td><td>$\frac{1}{b-a}$ on $[a,b]$</td><td>$\frac{a+b}{2}$</td><td>$\frac{(b-a)^2}{12}$</td><td><code>stats.uniform</code></td></tr>
+    <tr><td>Exponential$(\lambda)$</td><td>waiting time, memoryless</td><td>$\lambda e^{-\lambda x}$, $x\ge0$</td><td>$1/\lambda$</td><td>$1/\lambda^2$</td><td><code>stats.expon(scale=1/λ)</code></td></tr>
+    <tr><td>Normal$(\mu,\sigma^2)$</td><td>sums and averages of many small effects</td><td>$\frac{1}{\sigma\sqrt{2\pi}}e^{-(x-\mu)^2/2\sigma^2}$</td><td>$\mu$</td><td>$\sigma^2$</td><td><code>stats.norm</code></td></tr>
+    <tr><td>Gamma$(\alpha,\beta)$</td><td>sum of $\alpha$ exponential waits</td><td>$\frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x}$</td><td>$\alpha/\beta$</td><td>$\alpha/\beta^2$</td><td><code>stats.gamma</code></td></tr>
+    <tr><td>Beta$(\alpha,\beta)$</td><td>an unknown proportion in $[0,1]$</td><td>$\frac{x^{\alpha-1}(1-x)^{\beta-1}}{B(\alpha,\beta)}$</td><td>$\frac{\alpha}{\alpha+\beta}$</td><td>$\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$</td><td><code>stats.beta</code></td></tr>
+    <tr><td>$\chi^2_k$</td><td>sum of $k$ squared standard normals</td><td>Gamma$(k/2,1/2)$</td><td>$k$</td><td>$2k$</td><td><code>stats.chi2</code></td></tr>
+    <tr><td>$t_\nu$</td><td>a normal mean with $\sigma$ estimated</td><td>heavier tails than $N(0,1)$</td><td>$0$ &nbsp;($\nu\gt1$)</td><td>$\frac{\nu}{\nu-2}$ &nbsp;($\nu\gt2$)</td><td><code>stats.t</code></td></tr>
+    <tr><td>$F_{d_1,d_2}$</td><td>ratio of two scaled $\chi^2$s</td><td>—</td><td>$\frac{d_2}{d_2-2}$ &nbsp;($d_2\gt2$)</td><td>—</td><td><code>stats.f</code></td></tr>
+  </table>
+  </div>
+  <div class="box"><span class="lbl">The parametrisation trap</span>
+  <p><code>scipy.stats</code> uses <b>location and scale</b>, not the parameters in your lecture notes. An Exponential with rate $\lambda$ is <code>stats.expon(scale=1/lam)</code>; a Gamma with rate $\beta$ is <code>stats.gamma(a=alpha, scale=1/beta)</code>; <code>stats.norm</code> takes $\sigma$, not $\sigma^2$; and <code>numpy</code>'s <code>rng.exponential</code> also takes the <em>mean</em>. Check the mean of anything you sample before you trust a plot built from it — one line, and it catches the error every time.</p>
+  </div>
+  </section>
+
+  <section id="which-test">
+  <h2><span class="sec-tag">Reference</span>Which procedure does this question want?</h2>
+  <p class="lede" style="font-size:1rem">Half of the second-half exam marks come from choosing correctly and naming the assumptions. Read down the first column until it matches the question asked.</p>
+  <div class="scroll-x">
+  <table>
+    <tr><th>You want to know…</th><th>Procedure</th><th>Needs</th><th>In Python</th></tr>
+    <tr><td>Is one mean different from a fixed value?</td><td>One-sample $t$-test (or $z$ if $\sigma$ known)</td><td>iid; normal or $n$ large enough for the CLT</td><td><code>stats.ttest_1samp</code></td></tr>
+    <tr><td>Do two independent groups differ in mean?</td><td>Two-sample $t$-test (Welch by default)</td><td>iid within groups, independence between them</td><td><code>stats.ttest_ind(equal_var=False)</code></td></tr>
+    <tr><td>Did the same units change (before/after)?</td><td>Paired $t$-test on the differences</td><td>pairing is real; differences roughly normal</td><td><code>stats.ttest_rel</code></td></tr>
+    <tr><td>Any statistic, two groups, no assumptions?</td><td>Permutation test</td><td>exchangeability under $H_0$</td><td><code>stats.permutation_test</code></td></tr>
+    <tr><td>Is one proportion different from $p_0$?</td><td>Exact binomial test, or a $z$-test for $p$</td><td>independent trials, constant $p$</td><td><code>stats.binomtest</code></td></tr>
+    <tr><td>Are two categorical variables associated?</td><td>$\chi^2$ test of independence; Fisher if sparse</td><td>independent counts; expected cells $\ge 5$</td><td><code>stats.chi2_contingency</code>, <code>stats.fisher_exact</code></td></tr>
+    <tr><td>Do the data fit a claimed distribution?</td><td>$\chi^2$ goodness of fit, or Kolmogorov–Smirnov</td><td>df loses one per estimated parameter</td><td><code>stats.chisquare</code>, <code>stats.kstest</code></td></tr>
+    <tr><td>Is there a linear relationship?</td><td>Correlation test, or the $t$-test on the OLS slope</td><td>the regression assumptions of unit 15</td><td><code>stats.pearsonr</code>, <code>sm.OLS</code></td></tr>
+    <tr><td>How uncertain is a statistic with no formula?</td><td>Bootstrap percentile interval</td><td>representative sample; smooth statistic</td><td><code>stats.bootstrap</code></td></tr>
+    <tr><td>How well will this model do on new data?</td><td>$K$-fold cross-validation</td><td>all fitting inside the fold; no leakage</td><td><code>cross_val_score</code></td></tr>
+  </table>
+  </div>
+  </section>
+
+  <section id="exam">
+  <h2><span class="sec-tag">The last three weeks</span>Revision &amp; the written exam</h2>
+  <p>One written paper decides the grade, and it covers everything presented in the lecture. So the last stretch is not more material — it is converting recognition into recall, under time pressure, with nothing to look at.</p>
+  <div class="box"><span class="lbl">Week −3 · rebuild the formula sheet from memory</span>
+  <p>Blank page. Write out: the axioms and their consequences; the six discrete and six continuous distributions with means and variances; LOTUS, linearity, and the variance rules; the three inequalities; the LLN and the CLT with their hypotheses; the Markov chain conditions for a unique limiting $\pi$. Then check against the tables above and mark only what you missed. Repeat two days later — the second pass is where the learning happens.</p>
+  </div>
+  <div class="box"><span class="lbl">Week −2 · derivations, timed</span>
+  <p>Twelve derivations, 15 minutes each, closed book: Bayes from the definition; geometric memorylessness; the Poisson limit of the binomial; $E$ and $\mathrm{Var}$ of the binomial by indicators; Markov $\Rightarrow$ Chebyshev; the weak law; the MLE for Bernoulli, Poisson and normal; $E[S^2]=\sigma^2$; the $z$-interval from the CLT; $\hat\beta$ from minimising RSS; $\chi^2$ expected counts and degrees of freedom. Anything you cannot do inside the time goes on tomorrow's list.</p>
+  </div>
+  <div class="box"><span class="lbl">Week −1 · mixed papers, then taper</span>
+  <p>Build 90-minute mixed papers from Blitzstein &amp; Hwang and Devore end-of-chapter exercises — a computation, a derivation, a modelling question, and one interpretation question ("state precisely what this interval claims"). Grade yourself harshly and keep a one-page dropped-points list; that list, not the textbook, is your final two days. Stop new material 48 hours out.</p>
+  </div>
+  <div class="box general"><span class="lbl">Where marks are actually lost</span>
+  <ul>
+    <li><b>Unstated assumptions.</b> Independence, finite variance, expected counts $\ge5$ — name them, even when the question does not ask.</li>
+    <li><b>Interpretation sentences.</b> "95% confidence" and "$p$-value" have precise meanings; a fluent-but-wrong sentence costs the whole part.</li>
+    <li><b>Conditioning the wrong way round.</b> Write $P(A\mid B)$ with the conditioning event spelled out in words next to it.</li>
+    <li><b>Parametrisations.</b> Rate versus mean for the exponential, $\sigma$ versus $\sigma^2$ for the normal, $n-1$ versus $n$ for the sample variance.</li>
+    <li><b>Not sanity-checking.</b> A probability outside $[0,1]$, a negative variance, or a stationary vector that does not sum to 1 is a free mark you can catch yourself.</li>
+  </ul>
+  </div>
+  </section>
+
+  <footer>
+    <p>Built for <b>Introduction to Probability Theory</b> (Universität Wien, second year) from the u:find course description. Sources: Chan; Blitzstein &amp; Hwang; Georgii; Devore, Berk &amp; Carlton; James et&nbsp;al. (ISLP); Adhikari, DeNero &amp; Wagner. Progress is stored only in this browser — use <b>Export</b> before switching devices.</p>
+    <p style="margin-top:.6rem"><a href="../index.html">← All subjects</a></p>
+  </footer>
+</div>
+<button id="toTop" type="button" aria-label="Back to top">↑</button>
+<script>
+(function(){
+  var KEY = 'prob-progress-v1';
+  var UNIT_COUNT = 16;
+  var FOUND_KEYS = ['chan','blitz','islp','cit','refs','python','seeing'];
+  var LANES = ['watch','read','prac','ds'];
+  var CIRC = 188.5;
+
+  var CHECKLIST = {
+    '1-watch': [ {id:'1-w-s110', label:'Stat 110 lec. 1–2'}, {id:'1-w-seeing', label:'Seeing Theory ch. 1'} ],
+    '1-read':  [ {id:'1-r-chan1', label:'Chan ch. 1 (background)'}, {id:'1-r-chan2', label:'Chan ch. 2.1–2.2'},
+                 {id:'1-r-bh1', label:'BH ch. 1'}, {id:'1-r-geo1', label:'Georgii ch. 1'} ],
+    '1-prac':  [ {id:'1-p-union', label:'Derive P(A ∪ B)'}, {id:'1-p-bound', label:'Union-bound proof'},
+                 {id:'1-p-bday', label:'Birthday problem, exactly'}, {id:'1-p-demorgan', label:'De Morgan on events'},
+                 {id:'1-p-count', label:'Counting: poker hands'}, {id:'1-p-cont', label:'Continuity of P'} ],
+    '1-ds':    [ {id:'1-d-mc', label:'Monte-Carlo P(A)'}, {id:'1-d-bday', label:'Birthday: sim vs exact'},
+                 {id:'1-d-incl', label:'Inclusion–exclusion, checked'} ],
+
+    '2-watch': [ {id:'2-w-s110', label:'Stat 110 lec. 3–4'}, {id:'2-w-bayes', label:'3B1B — Bayes'},
+                 {id:'2-w-med', label:'3B1B — medical-test paradox'} ],
+    '2-read':  [ {id:'2-r-chan', label:'Chan ch. 2.3–2.4'}, {id:'2-r-bh2', label:'BH ch. 2'}, {id:'2-r-geo3', label:'Georgii ch. 3'} ],
+    '2-prac':  [ {id:'2-p-bayes', label:'Bayes from scratch'}, {id:'2-p-total', label:'Total probability over a partition'},
+                 {id:'2-p-monty', label:'Monty Hall by conditioning'}, {id:'2-p-pair', label:'Pairwise ≠ mutual'},
+                 {id:'2-p-pros', label:'Prosecutor fallacy, written out'}, {id:'2-p-simpson', label:'Simpson reversal'} ],
+    '2-ds':    [ {id:'2-d-monty', label:'Monty Hall simulated'}, {id:'2-d-base', label:'Base-rate calculator'},
+                 {id:'2-d-simpson', label:'Simpson reversal on a table'} ],
+
+    '3-watch': [ {id:'3-w-s110', label:'Stat 110 lec. 4–6'}, {id:'3-w-binom', label:'StatQuest — binomial'},
+                 {id:'3-w-pois', label:'StatQuest — Poisson'} ],
+    '3-read':  [ {id:'3-r-chan', label:'Chan ch. 3'}, {id:'3-r-bh', label:'BH ch. 3–4'}, {id:'3-r-dev', label:'Devore ch. 3'} ],
+    '3-prac':  [ {id:'3-p-cdf', label:'PMF → CDF, both directions'}, {id:'3-p-moments', label:'E and Var of all five'},
+                 {id:'3-p-mem', label:'Geometric memorylessness'}, {id:'3-p-poislim', label:'Poisson limit, derived'},
+                 {id:'3-p-hyper', label:'Binomial vs hypergeometric'} ],
+    '3-ds':    [ {id:'3-d-pmf', label:'Empirical vs scipy PMF'}, {id:'3-d-poislim', label:'Poisson limit, measured'},
+                 {id:'3-d-mem', label:'Memorylessness, checked'} ],
+
+    '4-watch': [ {id:'4-w-s110', label:'Stat 110 lec. 8–9'}, {id:'4-w-seeing', label:'Seeing Theory ch. 3'},
+                 {id:'4-w-3b1b', label:'3B1B — why π is in the normal'} ],
+    '4-read':  [ {id:'4-r-chan', label:'Chan ch. 4'}, {id:'4-r-bh', label:'BH ch. 5'}, {id:'4-r-dev', label:'Devore ch. 4'} ],
+    '4-prac':  [ {id:'4-p-pdf', label:'PDF vs CDF vs P(X = x)'}, {id:'4-p-mem', label:'Exponential memorylessness'},
+                 {id:'4-p-trans', label:'Density of Y = X²'}, {id:'4-p-std', label:'Standardise and use a z-table'},
+                 {id:'4-p-inv', label:'Inverse-CDF sampling, derived'} ],
+    '4-ds':    [ {id:'4-d-sampler', label:'Write an inverse-CDF sampler'}, {id:'4-d-hist', label:'Histogram vs density'},
+                 {id:'4-d-qq', label:'Q–Q plot from scratch'} ],
+
+    '5-watch': [ {id:'5-w-s110', label:'Stat 110 lec. 7–9'}, {id:'5-w-ev', label:'StatQuest — expected value'},
+                 {id:'5-w-var', label:'StatQuest — variance'} ],
+    '5-read':  [ {id:'5-r-chan', label:'Chan ch. 3.4–3.5, 4.3'}, {id:'5-r-mgf', label:'Chan ch. 6.1 (MGFs)'},
+                 {id:'5-r-bh', label:'BH ch. 4 and 6'}, {id:'5-r-geo', label:'Georgii ch. 4'} ],
+    '5-prac':  [ {id:'5-p-lotus', label:'LOTUS on a nonlinear g'}, {id:'5-p-ind', label:'Binomial mean by indicators'},
+                 {id:'5-p-var', label:'Var(aX + b) and Var(X + Y)'}, {id:'5-p-mgf', label:'MGF → moments (Poisson)'},
+                 {id:'5-p-jensen', label:'Jensen, with the direction right'} ],
+    '5-ds':    [ {id:'5-d-mc', label:'Monte-Carlo E[g(X)]'}, {id:'5-d-table', label:'The moment table, checked'},
+                 {id:'5-d-se', label:'SE shrinks like 1/√n'} ],
+
+    '6-watch': [ {id:'6-w-s110', label:'Stat 110 lec. 21–23'}, {id:'6-w-seeing', label:'Seeing Theory ch. 2'},
+                 {id:'6-w-cov', label:'StatQuest — covariance'} ],
+    '6-read':  [ {id:'6-r-chan', label:'Chan ch. 5'}, {id:'6-r-bh', label:'BH ch. 7 and 9'}, {id:'6-r-geo', label:'Georgii ch. 4'} ],
+    '6-prac':  [ {id:'6-p-marg', label:'Marginals from a joint table'}, {id:'6-p-var', label:'Var(X + Y) with covariance'},
+                 {id:'6-p-uncorr', label:'Uncorrelated but dependent'}, {id:'6-p-tower', label:'Tower property, proved'},
+                 {id:'6-p-ltv', label:'Law of total variance'}, {id:'6-p-conv', label:'Convolution of two uniforms'} ],
+    '6-ds':    [ {id:'6-d-bvn', label:'Bivariate normal sampler'}, {id:'6-d-cov', label:'Empirical covariance matrix'},
+                 {id:'6-d-cond', label:'E[Y | X] recovered by binning'} ],
+
+    '7-watch': [ {id:'7-w-s110', label:'Stat 110 lec. 20'}, {id:'7-w-mit', label:'MIT 6.041 — inequalities'} ],
+    '7-read':  [ {id:'7-r-chan', label:'Chan ch. 6.2'}, {id:'7-r-bh', label:'BH ch. 10'}, {id:'7-r-geo', label:'Georgii ch. 5'} ],
+    '7-prac':  [ {id:'7-p-markov', label:'Prove Markov'}, {id:'7-p-cheb', label:'Chebyshev from Markov'},
+                 {id:'7-p-chern', label:'Chernoff exponent for Bernoulli'}, {id:'7-p-poll', label:'Size a poll with Hoeffding'} ],
+    '7-ds':    [ {id:'7-d-tail', label:'Bounds vs the true tail'}, {id:'7-d-normal', label:'Chebyshev on a normal'},
+                 {id:'7-d-n', label:'n for ±0.01 at 95%'} ],
+
+    '8-watch': [ {id:'8-w-3b1b', label:'3B1B — central limit theorem'}, {id:'8-w-s110', label:'Stat 110 lec. 29'},
+                 {id:'8-w-sq', label:'StatQuest — the CLT'} ],
+    '8-read':  [ {id:'8-r-chan', label:'Chan ch. 6.3–6.4'}, {id:'8-r-bh', label:'BH ch. 10'},
+                 {id:'8-r-cit', label:'CIT ch. 14'}, {id:'8-r-geo', label:'Georgii ch. 5'} ],
+    '8-prac':  [ {id:'8-p-wlln', label:'WLLN from Chebyshev'}, {id:'8-p-modes', label:'The three modes of convergence'},
+                 {id:'8-p-approx', label:'Normal approximation to a binomial'}, {id:'8-p-fail', label:'Where the CLT fails'} ],
+    '8-ds':    [ {id:'8-d-run', label:'Running-mean convergence'}, {id:'8-d-sampling', label:'Sampling distribution, n = 1…100'},
+                 {id:'8-d-cauchy', label:'Cauchy: no LLN'} ],
+
+    '9-watch': [ {id:'9-w-nn', label:'Normalized Nerd — Markov chains'}, {id:'9-w-s110', label:'Stat 110 lec. 31–32'} ],
+    '9-read':  [ {id:'9-r-bh', label:'BH ch. 11'}, {id:'9-r-geo', label:'Georgii ch. 6'},
+                 {id:'9-r-gs', label:'Grinstead and Snell ch. 11'} ],
+    '9-prac':  [ {id:'9-p-pow', label:'Pⁿ for a 2-state chain'}, {id:'9-p-stat', label:'Solve πP = π by hand'},
+                 {id:'9-p-class', label:'Classify the states'}, {id:'9-p-first', label:'First-step analysis'},
+                 {id:'9-p-bal', label:'Check detailed balance'} ],
+    '9-ds':    [ {id:'9-d-three', label:'Stationary distribution, three ways'}, {id:'9-d-hit', label:'Hitting times by simulation'},
+                 {id:'9-d-pr', label:'PageRank on a tiny graph'} ],
+
+    '10-watch':[ {id:'10-w-cit', label:'CIT ch. 10 walkthrough'}, {id:'10-w-sq', label:'StatQuest — sampling distributions'} ],
+    '10-read': [ {id:'10-r-chan', label:'Chan ch. 6 (sample statistics)'}, {id:'10-r-dev', label:'Devore ch. 6'},
+                 {id:'10-r-cit', label:'CIT ch. 10'}, {id:'10-r-geo', label:'Georgii ch. 7 (intro)'} ],
+    '10-prac': [ {id:'10-p-terms', label:'Estimand vs estimator vs estimate'}, {id:'10-p-s2', label:'E[S²] = σ² , proved'},
+                 {id:'10-p-se', label:'SE of the mean'}, {id:'10-p-bias', label:'Name the bias in a study'} ],
+    '10-ds':   [ {id:'10-d-build', label:'Build a sampling distribution'}, {id:'10-d-se', label:'SE formula, verified'},
+                 {id:'10-d-bias', label:'Bias that never shrinks'} ],
+
+    '11-watch':[ {id:'11-w-mle', label:'StatQuest — maximum likelihood'}, {id:'11-w-lik', label:'StatQuest — likelihood vs probability'} ],
+    '11-read': [ {id:'11-r-chan', label:'Chan ch. 8'}, {id:'11-r-dev', label:'Devore ch. 7'}, {id:'11-r-geo', label:'Georgii ch. 7'} ],
+    '11-prac': [ {id:'11-p-mle1', label:'MLE: Bernoulli, Poisson, exponential'}, {id:'11-p-mle2', label:'MLE for N(μ, σ²)'},
+                 {id:'11-p-unif', label:'Uniform(0, θ): why calculus fails'}, {id:'11-p-mse', label:'MSE = variance + bias²'},
+                 {id:'11-p-mom', label:'Method of moments vs MLE'} ],
+    '11-ds':   [ {id:'11-d-curve', label:'Plot the log-likelihood'}, {id:'11-d-opt', label:'Closed form vs optimiser'},
+                 {id:'11-d-bv', label:'Bias and variance by simulation'} ],
+
+    '12-watch':[ {id:'12-w-ci', label:'StatQuest — confidence intervals'}, {id:'12-w-boot', label:'StatQuest — bootstrapping'},
+                 {id:'12-w-cit', label:'CIT ch. 13 walkthrough'} ],
+    '12-read': [ {id:'12-r-chan', label:'Chan ch. 9.1–9.2'}, {id:'12-r-dev', label:'Devore ch. 8'},
+                 {id:'12-r-cit', label:'CIT ch. 13'}, {id:'12-r-islp', label:'ISLP 5.2 (bootstrap)'} ],
+    '12-prac': [ {id:'12-p-z', label:'z-interval from the CLT'}, {id:'12-p-t', label:'When t, and not z'},
+                 {id:'12-p-prop', label:'CI for a proportion'}, {id:'12-p-boot', label:'Bootstrap in five lines'},
+                 {id:'12-p-n', label:'Sample size for a target width'} ],
+    '12-ds':   [ {id:'12-d-cov', label:'Coverage experiment'}, {id:'12-d-med', label:'Bootstrap CI for a median'},
+                 {id:'12-d-fail', label:'A case where the bootstrap fails'} ],
+
+    '13-watch':[ {id:'13-w-p', label:'StatQuest — p-values'}, {id:'13-w-pow', label:'StatQuest — power'},
+                 {id:'13-w-cit', label:'CIT ch. 11–12'} ],
+    '13-read': [ {id:'13-r-chan', label:'Chan ch. 9.3–9.4'}, {id:'13-r-dev', label:'Devore ch. 9–10'},
+                 {id:'13-r-cit', label:'CIT ch. 11–12'}, {id:'13-r-geo', label:'Georgii ch. 10'} ],
+    '13-prac': [ {id:'13-p-def', label:'Define the p-value precisely'}, {id:'13-p-rej', label:'Rejection region for a t-test'},
+                 {id:'13-p-power', label:'Power at a stated alternative'}, {id:'13-p-dual', label:'Test–interval duality'},
+                 {id:'13-p-multi', label:'Bonferroni over 20 tests'} ],
+    '13-ds':   [ {id:'13-d-perm', label:'Permutation test from scratch'}, {id:'13-d-unif', label:'p uniform under H₀'},
+                 {id:'13-d-power', label:'Power curve against n'} ],
+
+    '14-watch':[ {id:'14-w-chi', label:'StatQuest — the chi-square test'}, {id:'14-w-fisher', label:'Fisher exact, explained'} ],
+    '14-read': [ {id:'14-r-dev', label:'Devore ch. 13'}, {id:'14-r-geo', label:'Georgii ch. 11'},
+                 {id:'14-r-scipy', label:'scipy: chi2_contingency docs'} ],
+    '14-prac': [ {id:'14-p-exp', label:'Expected counts from the margins'}, {id:'14-p-df', label:'Degrees of freedom, argued'},
+                 {id:'14-p-hand', label:'χ² by hand on a 2×2'}, {id:'14-p-or', label:'Odds ratio and relative risk'},
+                 {id:'14-p-fisher', label:'When to switch to Fisher'} ],
+    '14-ds':   [ {id:'14-d-hand', label:'By hand, then by scipy'}, {id:'14-d-perm', label:'Permute the labels instead'},
+                 {id:'14-d-sparse', label:'Sparse table: exact vs approximate'} ],
+
+    '15-watch':[ {id:'15-w-lr', label:'StatQuest — linear regression'}, {id:'15-w-r2', label:'StatQuest — R² explained'},
+                 {id:'15-w-islp', label:'ISLP ch. 3 lecture'} ],
+    '15-read': [ {id:'15-r-islp', label:'ISLP ch. 3'}, {id:'15-r-dev', label:'Devore ch. 12'},
+                 {id:'15-r-chan', label:'Chan ch. 7'}, {id:'15-r-geo', label:'Georgii ch. 12'} ],
+    '15-prac': [ {id:'15-p-beta', label:'Derive β̂ from RSS'}, {id:'15-p-interp', label:'Interpret a coefficient in words'},
+                 {id:'15-p-r2', label:'R² and its failure mode'}, {id:'15-p-diag', label:'Assumption → diagnostic plot'},
+                 {id:'15-p-ans', label:'Anscombe quartet, by hand'} ],
+    '15-ds':   [ {id:'15-d-ols', label:'OLS summary, line by line'}, {id:'15-d-resid', label:'The four residual plots'},
+                 {id:'15-d-infl', label:'Leverage and influence'} ],
+
+    '16-watch':[ {id:'16-w-bv', label:'StatQuest — bias and variance'}, {id:'16-w-cv', label:'StatQuest — cross-validation'},
+                 {id:'16-w-log', label:'StatQuest — logistic regression'}, {id:'16-w-roc', label:'StatQuest — ROC and AUC'} ],
+    '16-read': [ {id:'16-r-islp2', label:'ISLP ch. 2.2 and 5.1'}, {id:'16-r-islp4', label:'ISLP ch. 4.1–4.3'},
+                 {id:'16-r-chan', label:'Chan ch. 7.2–7.3'}, {id:'16-r-cit', label:'CIT ch. 17'} ],
+    '16-prac': [ {id:'16-p-curve', label:'Draw the complexity curves'}, {id:'16-p-kfold', label:'K-fold, described precisely'},
+                 {id:'16-p-odds', label:'Log-odds → sigmoid'}, {id:'16-p-cm', label:'Confusion matrix by hand'},
+                 {id:'16-p-pr', label:'Precision vs recall trade-off'}, {id:'16-p-leak', label:'Name three ways to leak'} ],
+    '16-ds':   [ {id:'16-d-pipe', label:'Pipeline + StratifiedKFold'}, {id:'16-d-roc', label:'ROC curve and AUC'},
+                 {id:'16-d-leak', label:'Leakage, demonstrated'} ]
+  };
+
+  var LANE_LABELS = { watch:'Watch', read:'Read', prac:'Practise', ds:'Python' };
+
+  var state = { v:1, units:{}, foundations:{}, checklist:{} };
+  FOUND_KEYS.forEach(function(k){ state.foundations[k] = false; });
+  for (var i = 1; i <= UNIT_COUNT; i++){
+    state.units[String(i)] = { done:false, lanes:{} };
+    LANES.forEach(function(l){ state.units[String(i)].lanes[l] = false; });
+  }
+
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
+
+  function groupProgress(group){
+    var items = CHECKLIST[group];
+    if (!items || !items.length) return { done:0, total:0 };
+    var done = 0;
+    items.forEach(function(it){ if (state.checklist[it.id]) done++; });
+    return { done: done, total: items.length };
+  }
+
+  function syncLane(group){
+    var parts = group.split('-'), id = parts[0], lane = parts[1];
+    if (LANES.indexOf(lane) === -1 || !state.units[id]) return;
+    var p = groupProgress(group);
+    if (p.total > 0 && p.done === p.total) state.units[id].lanes[lane] = true;
+  }
+  function syncAllLanes(){ Object.keys(CHECKLIST).forEach(syncLane); }
+
+  function load(){
+    try {
+      var parsed = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (!parsed || parsed.v !== 1) return;
+      FOUND_KEYS.forEach(function(k){
+        if (parsed.foundations && typeof parsed.foundations[k] === 'boolean') state.foundations[k] = parsed.foundations[k];
+      });
+      for (var i = 1; i <= UNIT_COUNT; i++){
+        var id = String(i), src = parsed.units && parsed.units[id];
+        if (!src) continue;
+        if (typeof src.done === 'boolean') state.units[id].done = src.done;
+        LANES.forEach(function(l){
+          if (src.lanes && typeof src.lanes[l] === 'boolean') state.units[id].lanes[l] = src.lanes[l];
+        });
+      }
+      if (parsed.checklist && typeof parsed.checklist === 'object'){
+        state.checklist = {};
+        Object.keys(parsed.checklist).forEach(function(k){
+          if (typeof parsed.checklist[k] === 'boolean') state.checklist[k] = parsed.checklist[k];
+        });
+      }
+      syncAllLanes();
+    } catch(e){}
+  }
+
+  function setCheck(btn, on){ btn.setAttribute('aria-checked', on ? 'true' : 'false'); }
+
+  function buildChips(){
+    document.querySelectorAll('[data-checklist-group]').forEach(function(container){
+      if (container.dataset.built) return;
+      container.dataset.built = '1';
+      var group = container.getAttribute('data-checklist-group');
+      var items = CHECKLIST[group];
+      if (!items) return;
+      var lane = group.split('-')[1];
+      items.forEach(function(item){
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cl-chip';
+        btn.dataset.cl = item.id;
+        btn.dataset.lane = lane;
+        btn.textContent = item.label;
+        btn.setAttribute('aria-pressed', state.checklist[item.id] ? 'true' : 'false');
+        btn.setAttribute('aria-label', 'Mark "' + item.label + '" done');
+        if (state.checklist[item.id]) btn.classList.add('done');
+        btn.addEventListener('click', function(){
+          state.checklist[item.id] = !state.checklist[item.id];
+          btn.classList.toggle('done', state.checklist[item.id]);
+          btn.setAttribute('aria-pressed', state.checklist[item.id] ? 'true' : 'false');
+          syncLane(group);
+          save();
+          renderGroupStats();
+          var unitEl = document.querySelector('details.ch[data-ch="' + group.split('-')[0] + '"]');
+          if (unitEl) renderUnit(unitEl);
+          renderStats();
+        });
+        container.appendChild(btn);
+      });
+    });
+  }
+
+  function renderGroupStats(){
+    Object.keys(CHECKLIST).forEach(function(group){
+      var el = document.querySelector('[data-cl-progress="' + group + '"]');
+      if (!el) return;
+      var p = groupProgress(group);
+      el.textContent = (LANE_LABELS[group.split('-')[1]] || '') + ' ' + p.done + ' / ' + p.total;
+    });
+  }
+
+  function renderUnit(unitEl){
+    var id = unitEl.getAttribute('data-ch');
+    var data = state.units[id];
+    if (!data) return;
+    var doneBtn = unitEl.querySelector('.ch-done');
+    if (doneBtn) setCheck(doneBtn, data.done);
+    unitEl.classList.toggle('is-done', data.done);
+    unitEl.querySelectorAll('.lane-btn').forEach(function(btn){
+      var lane = btn.getAttribute('data-lane');
+      var on = !!data.lanes[lane];
+      btn.classList.toggle('on', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    unitEl.querySelectorAll('.mini-bar span').forEach(function(dot){
+      var l = dot.getAttribute('data-l');
+      dot.classList.toggle('on', !!data.lanes[l]);
+      dot.classList.toggle(l, !!data.lanes[l]);
+    });
+    var jump = document.querySelector('.ch-jump a[data-ch="' + id + '"]');
+    if (jump) jump.classList.toggle('done', data.done);
+  }
+
+  function renderFoundations(){
+    document.querySelectorAll('.found-item').forEach(function(item){
+      var k = item.getAttribute('data-found');
+      var btn = item.querySelector('.check');
+      if (btn && typeof state.foundations[k] === 'boolean') setCheck(btn, state.foundations[k]);
+    });
+  }
+
+  function renderStats(){
+    var done = 0, items = 0, total = 0, labs = 0;
+    for (var i = 1; i <= UNIT_COUNT; i++){
+      if (state.units[String(i)].done) done++;
+      var lab = groupProgress(i + '-ds');
+      if (lab.total > 0 && lab.done === lab.total) labs++;
+    }
+    Object.keys(CHECKLIST).forEach(function(g){
+      var p = groupProgress(g); items += p.done; total += p.total;
+    });
+    var found = FOUND_KEYS.filter(function(k){ return state.foundations[k]; }).length;
+    document.getElementById('stat-units').textContent = done + ' / ' + UNIT_COUNT;
+    document.getElementById('stat-items').textContent = items + ' / ' + total;
+    document.getElementById('stat-labs').textContent  = labs + ' / ' + UNIT_COUNT;
+    document.getElementById('stat-found').textContent = found + ' / ' + FOUND_KEYS.length;
+    document.getElementById('ring-label').textContent = done + '/' + UNIT_COUNT;
+    document.getElementById('ring-fg').setAttribute('stroke-dashoffset', String(CIRC * (1 - done / UNIT_COUNT)));
+  }
+
+  function renderAll(){
+    document.querySelectorAll('details.ch').forEach(renderUnit);
+    renderFoundations();
+    document.querySelectorAll('[data-cl]').forEach(function(btn){
+      var on = !!state.checklist[btn.dataset.cl];
+      btn.classList.toggle('done', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    renderGroupStats();
+    renderStats();
+  }
+
+  load();
+  buildChips();
+  syncAllLanes();
+  renderAll();
+
+  document.querySelectorAll('details.ch').forEach(function(unitEl){
+    var id = unitEl.getAttribute('data-ch');
+    var doneBtn = unitEl.querySelector('.ch-done');
+    if (doneBtn){
+      ['click','mousedown'].forEach(function(ev){
+        doneBtn.addEventListener(ev, function(e){
+          e.preventDefault(); e.stopPropagation();
+          if (ev === 'click'){
+            state.units[id].done = !state.units[id].done;
+            save(); renderUnit(unitEl); renderStats();
+          }
+        });
+      });
+    }
+    unitEl.querySelectorAll('.lane-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var lane = btn.getAttribute('data-lane');
+        state.units[id].lanes[lane] = !state.units[id].lanes[lane];
+        save(); renderUnit(unitEl); renderStats();
+      });
+    });
+  });
+
+  document.querySelectorAll('.found-item .check').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var k = btn.closest('.found-item').getAttribute('data-found');
+      state.foundations[k] = !state.foundations[k];
+      save(); renderFoundations(); renderStats();
+    });
+  });
+
+  var syncPanel = document.getElementById('sync-panel');
+  var syncMsg = document.getElementById('sync-msg');
+  function showSync(msg, ok){
+    syncMsg.textContent = msg;
+    syncMsg.className = 'sync-msg ' + (ok ? 'ok' : 'err');
+  }
+  function fallbackExport(json){
+    document.getElementById('import-data').value = json;
+    syncPanel.hidden = false;
+    document.getElementById('btn-import-toggle').setAttribute('aria-expanded','true');
+    showSync('JSON shown below — copy manually if needed.', true);
+  }
+
+  document.getElementById('btn-export').addEventListener('click', function(){
+    var json = JSON.stringify(state, null, 2);
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(json).then(function(){
+        showSync('Copied to clipboard.', true);
+        syncPanel.hidden = false;
+        document.getElementById('import-data').value = json;
+        document.getElementById('btn-import-toggle').setAttribute('aria-expanded','true');
+      }).catch(function(){ fallbackExport(json); });
+    } else fallbackExport(json);
+  });
+
+  document.getElementById('btn-import-toggle').addEventListener('click', function(){
+    var open = syncPanel.hidden;
+    syncPanel.hidden = !open;
+    this.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open){ document.getElementById('import-data').focus(); syncMsg.textContent = ''; }
+  });
+
+  document.getElementById('btn-import-cancel').addEventListener('click', function(){
+    syncPanel.hidden = true;
+    document.getElementById('btn-import-toggle').setAttribute('aria-expanded','false');
+    syncMsg.textContent = '';
+  });
+
+  document.getElementById('btn-import-apply').addEventListener('click', function(){
+    try {
+      var parsed = JSON.parse(document.getElementById('import-data').value.trim());
+      if (!parsed || parsed.v !== 1) throw new Error('Invalid version');
+      FOUND_KEYS.forEach(function(k){
+        if (parsed.foundations && typeof parsed.foundations[k] === 'boolean') state.foundations[k] = parsed.foundations[k];
+      });
+      for (var i = 1; i <= UNIT_COUNT; i++){
+        var id = String(i), src = parsed.units && parsed.units[id];
+        if (!src) continue;
+        if (typeof src.done === 'boolean') state.units[id].done = src.done;
+        LANES.forEach(function(l){
+          if (src.lanes && typeof src.lanes[l] === 'boolean') state.units[id].lanes[l] = src.lanes[l];
+        });
+      }
+      state.checklist = {};
+      if (parsed.checklist && typeof parsed.checklist === 'object'){
+        Object.keys(parsed.checklist).forEach(function(k){
+          if (typeof parsed.checklist[k] === 'boolean') state.checklist[k] = parsed.checklist[k];
+        });
+      }
+      syncAllLanes();
+      save(); renderAll();
+      showSync('Progress imported.', true);
+    } catch(e){ showSync('Could not import — check the JSON.', false); }
+  });
+
+  document.getElementById('btn-reset').addEventListener('click', function(){
+    if (!confirm('Reset all progress on this page?')) return;
+    FOUND_KEYS.forEach(function(k){ state.foundations[k] = false; });
+    for (var i = 1; i <= UNIT_COUNT; i++){
+      state.units[String(i)] = { done:false, lanes:{} };
+      LANES.forEach(function(l){ state.units[String(i)].lanes[l] = false; });
+    }
+    state.checklist = {};
+    save(); renderAll(); syncMsg.textContent = '';
+  });
+
+  var prog = document.getElementById('read-progress');
+  var toTop = document.getElementById('toTop');
+  function onScroll(){
+    var st = window.scrollY || document.documentElement.scrollTop;
+    var sh = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    var pct = sh > 0 ? (st / sh * 100) : 0;
+    prog.style.width = pct + '%';
+    prog.setAttribute('aria-valuenow', Math.round(pct));
+    toTop.classList.toggle('show', st > 420);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  toTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  var jumpLinks = Array.prototype.slice.call(document.querySelectorAll('.ch-jump a[href^="#"]'));
+  var sectionMap = {};
+  jumpLinks.forEach(function(a){
+    var id = a.getAttribute('href').slice(1);
+    if (document.getElementById(id)) sectionMap[id] = a;
+    a.addEventListener('click', function(){
+      var target = document.getElementById(id);
+      if (target && target.tagName === 'DETAILS') target.open = true;
+    });
+  });
+  if ('IntersectionObserver' in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){
+          jumpLinks.forEach(function(a){ a.classList.remove('active'); });
+          if (sectionMap[e.target.id]) sectionMap[e.target.id].classList.add('active');
+        }
+      });
+    }, {rootMargin:'-40% 0px -55% 0px', threshold:0});
+    Object.keys(sectionMap).forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) obs.observe(el);
+    });
+  }
+})();
+</script>
+<script src="../assets/mfds.js?v=5" data-root="../"></script>
+</body>
+</html>

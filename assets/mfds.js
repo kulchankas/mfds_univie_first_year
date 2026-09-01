@@ -17,7 +17,8 @@
     { id: 'algo',  label: 'Algorithms', href: 'algorithms/index.html' },
     { id: 'ana',   label: 'Analysis',   href: 'analysis/index.html' },
     { id: 'lads',  label: 'LA for DS',  href: 'linear-algebra-ds/index.html' },
-    { id: 'la',    label: 'LA (intro)', href: 'linear-algebra/index.html' }
+    { id: 'la',    label: 'LA (intro)', href: 'linear-algebra/index.html' },
+    { id: 'prob',  label: 'Probability', href: 'probability/index.html' }
   ];
 
   var bar = document.createElement('nav');
