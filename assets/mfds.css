@@ -67,6 +67,7 @@ html:not([data-theme="dark"]) {
 body.mfds-algo { --accent:#9A6207; --accent-hover:#7C4E05; --accent-solid:#F0A93A; --accent-tint:#FFF1DC; --accent-deep:#8A5A0E; --glow:rgba(240,169,58,.10); }
 body.mfds-ana  { --accent:#14794E; --accent-hover:#0F6B41; --accent-solid:#2FAE72; --accent-tint:#E1F5EA; --accent-deep:#0F6B41; --glow:rgba(47,174,114,.10); }
 body.mfds-la   { --accent:#B22C6A; --accent-hover:#95245A; --accent-solid:#EF5DA0; --accent-tint:#FDE4EC; --accent-deep:#B22C6A; --glow:rgba(239,93,160,.10); }
+body.mfds-prob { --accent:#0A5C55; --accent-hover:#084A44; --accent-solid:#0D9488; --accent-tint:#DCF5F1; --accent-deep:#0A5C55; --glow:rgba(13,148,136,.10); }
 body.mfds-lads { --accent:#5B33B0; --accent-hover:#4A2894; --accent-solid:#8B5CF6; --accent-tint:#EFE6FE; --accent-deep:#5B33B0; --glow:rgba(139,92,246,.10); }
 
 /* ---------- base ---------- */

@@ -2,11 +2,14 @@
 
 First-year university maths — notes, proofs, mock exams, problem sets, and
 self-study plans for **Linear Algebra**, **Analysis**, **Linear Algebra
-for Data Science**, and **Algorithms & Data Structures** (Universität Wien).
+for Data Science**, and **Algorithms & Data Structures** (Universität Wien),
+plus the second-year **Introduction to Probability Theory** self-study
+programme.
 
 ## Live site
 
-**https://kulchankas.github.io/mfds_univie_first_year/** — hub linking to all four subjects.
+**https://kulchankas.github.io/mfds_univie_first_year/** — hub linking to all
+four first-year subjects and the second-year probability programme.
 
 ## Structure
 
@@ -33,6 +36,9 @@ for Data Science**, and **Algorithms & Data Structures** (Universität Wien).
 │   ├── recurrence-drills.html Master/Akra–Bazzi method + 21 drills
 │   ├── flashcards.html        spaced-repetition deck (47 cards)
 │   └── problem-sheets/        Prof. Schichl's weekly sheets (PDF)
+├── probability/
+│   └── index.html             Introduction to Probability Theory (2nd year) —
+│                              16-unit self-study programme with Python labs
 ├── study-plan.html            6-week plan: Algorithms + Analysis + Linear Algebra
 ├── exam_notes.html            redirect → linear-algebra/exam_notes.html
 └── mock_exams.html            redirect → linear-algebra/mock_exams.html
@@ -58,6 +64,7 @@ for Data Science**, and **Algorithms & Data Structures** (Universität Wien).
 | AlgoDat · Data-structure notes | [/algorithms/data-structures.html](https://kulchankas.github.io/mfds_univie_first_year/algorithms/data-structures.html) |
 | AlgoDat · Recurrence drills | [/algorithms/recurrence-drills.html](https://kulchankas.github.io/mfds_univie_first_year/algorithms/recurrence-drills.html) |
 | AlgoDat · Flashcards | [/algorithms/flashcards.html](https://kulchankas.github.io/mfds_univie_first_year/algorithms/flashcards.html) |
+| Introduction to Probability Theory (2nd year) | [/probability/](https://kulchankas.github.io/mfds_univie_first_year/probability/) |
 | 6-week study plan | [/study-plan.html](https://kulchankas.github.io/mfds_univie_first_year/study-plan.html) |
 
 The old top-level `exam_notes.html` / `mock_exams.html` URLs still work — they

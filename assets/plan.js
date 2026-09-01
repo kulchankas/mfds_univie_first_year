@@ -144,7 +144,8 @@ window.MFDS_PLAN = {
     'lads-progress-v1',
     'algo-progress-v1',
     'algo-sheet1-v1',
-    'analysis-daily-v1'
+    'analysis-daily-v1',
+    'prob-progress-v1'
   ],
 
   /* helper: which subject leads a given weekday index (Mon=0) */
