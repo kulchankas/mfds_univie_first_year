@@ -485,6 +485,20 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
     <br><br><em>Pattern to notice:</em> continuity at a single point plus the functional equation upgrades to continuity everywhere. That trick recurs.</div>
   </article>
 
+  <article data-tag="Theorem" data-ref="Rem 2.2.3 · p.48">
+    <div class="q">A series defines a function by $f(x):=\sum_{n=0}^{\infty}f_n(x)$. <b>Why does convergence make $f$ well-defined</b> — and what does it <em>not</em> give you?</div>
+    <div class="a">A series is not a formula you can simply write down; it is a <b>limit of partial sums</b>:
+    $$f(x):=\lim_{N\to\infty}S_N(x),\qquad S_N(x)=\sum_{n=0}^{N}f_n(x).$$
+    "Well-defined" means the recipe assigns <b>exactly one</b> value to each $x$. Three things have to hold, and convergence supplies the first two:
+    <br><br><b>(1) Existence.</b> If $S_N(x)$ does not converge, there is no value to assign and $f$ is simply <em>undefined</em> at $x$. So convergence determines the <b>domain</b>: $\sum x^{n}$ defines a function on $|x|&lt;1$ and nowhere else, while $\sum\frac{z^{n}}{n!}$ converges for every $z\in\mathbb{C}$ — which is exactly why $\exp:\mathbb{C}\to\mathbb{C}$ is legitimate.
+    <br><b>(2) Uniqueness.</b> Limits in $\mathbb{R}$ and $\mathbb{C}$ are unique when they exist, so the value is unambiguous — <em>for a fixed ordering of the terms</em>.
+    <br><b>(3) Independence of arbitrary choices.</b> Summing infinitely many terms presupposes an enumeration. If reordering changed the answer, $f$ would depend on the enumeration you happened to pick rather than on the collection $\{f_n\}$. <b>Absolute</b> convergence (Lem 2.1.8) is what rules that out.
+    <br><br><b>What convergence does NOT give you: properties.</b> Pointwise convergence makes $f$ well-defined and nothing more. Continuity needs <b>uniform</b> convergence (Ex 2.2.4) — the pointwise limit of the continuous $f_n(x)=x^{n}$ on $[0,1]$ is discontinuous.
+    <br><br><em>The slogan:</em> convergence buys you the <b>values</b>; absolute convergence buys you <b>order-independence</b>; uniform convergence buys you the <b>properties</b>.</div>
+  </article>
+
+
+
 
 
 
