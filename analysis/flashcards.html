@@ -125,7 +125,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
   <a class="back-link" href="index.html">← Analysis</a>
   <div class="eyebrow">Analysis · Spaced repetition</div>
   <h1>Flashcards</h1>
-  <p class="sub"><b style="color:var(--accent)">Chapter 1</b> — Convergence &amp; continuity (metric spaces → uniform convergence), plus the <b style="color:var(--accent)">§2.1 series toolkit</b> — telescoping, geometric, harmonic, and the three convergence criteria. Extracted from <a href="notes/Book_Project.pdf" style="color:var(--accent)">Book Project</a> pp. 11–46.</p>
+  <p class="sub"><b style="color:var(--accent)">Chapter 1</b> — Convergence &amp; continuity (metric spaces → uniform convergence), plus <b style="color:var(--accent)">§2.1 series</b> (telescoping, geometric, harmonic, the convergence criteria) and <b style="color:var(--accent)">§2.2 the exponential function</b> (Cauchy product, functional equation, remainder bound). Extracted from <a href="notes/Book_Project.pdf" style="color:var(--accent)">Book Project</a> pp. 11–50.</p>
 
   <div class="stats" id="stats"></div>
   <div class="bar"><i id="prog"></i></div>
@@ -417,6 +417,56 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
     <br><br><b>The hypothesis is sharp.</b> Convergence alone is not enough: $\sum\frac{(-1)^{n}}{n}$ converges by Leibniz but not absolutely (Ex 2.1.17), and for such <em>conditionally</em> convergent real series a reordering can be made to converge to any prescribed value — Riemann's rearrangement theorem. <em>(Standard result; stated here for contrast, not proved in these notes.)</em>
     <br><br>Note too that the comparison and ratio tests deliver <b>absolute</b> convergence, so it is the default mode you actually get.</div>
   </article>
+
+  <!-- ===== The exponential function (§2.2) ===== -->
+  <article data-tag="Definition" data-ref="Def 2.2.1 · p.46–47">
+    <div class="q">Define the <b>exponential function</b> and $e$. Why does the series converge for <em>every</em> $z\in\mathbb{C}$?</div>
+    <div class="a">$$\exp(z):=\sum_{n=0}^{\infty}\frac{z^{n}}{n!},\qquad e:=\exp(1)=\sum_{n=0}^{\infty}\frac{1}{n!}.$$
+    <b>Convergence — the ratio test, done properly.</b> The ratio of consecutive terms is
+    $$\frac{z^{n+1}/(n+1)!}{z^{n}/n!}=\frac{z}{n+1}.$$
+    Fix $z$ and choose $N_0\in\mathbb{N}$ with $|z|&lt;N_0$. Then for all $n\ge N_0$,
+    $$\frac{|z|}{n+1}\le\frac{|z|}{N_0+1}=:\theta&lt;1 .$$
+    That is a <b>uniform</b> $\theta&lt;1$, which is exactly what Thm 2.1.12(2) demands — so the series converges absolutely for every $z\in\mathbb{C}$.
+    <br><br><em>Note the shape of the argument:</em> the ratio $\to0$, so you can always manufacture the $\theta$ by starting late enough. Compare the harmonic series, where you cannot.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 2.2.2 · p.47">
+    <div class="q">State the <b>remainder estimate</b> for $\exp$, and what it is used for.</div>
+    <div class="a">For every $z\in\mathbb{C}$ and $N\in\mathbb{N}$,
+    $$\exp(z)=\sum_{n=0}^{N}\frac{z^{n}}{n!}+R_{N+1}(z),\qquad |R_{N+1}(z)|\le 2\,\frac{|z|^{N+1}}{(N+1)!}\quad\text{for }|z|\le\tfrac{N+2}{2}.$$
+    <b>Proof idea:</b> bound the tail $\sum_{n&gt;N}\frac{|z|^{n}}{n!}$ by factoring out $\frac{|z|^{N+1}}{(N+1)!}$ and dominating what is left by the geometric series $\sum(\tfrac12)^{n}=2$ — hence the constant $2$.
+    <br><br><b>What it buys:</b> a computable error bar on the truncated series. With $N=0$ it gives $|\exp(z)-1|\le2|z|$ for $|z|\le1$, which is how continuity of $\exp$ at $0$ is established (Cor 2.2.7).</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="Lem 2.2.5 · p.48–49">
+    <div class="q">State the <b>Cauchy product</b>. What hypothesis does it need, and why?</div>
+    <div class="a">If $\sum a_n$ and $\sum b_n$ are <b>absolutely</b> convergent, define
+    $$c_n:=\sum_{k=0}^{n}a_k\,b_{n-k}.$$
+    Then $\sum c_n$ is absolutely convergent and
+    $$\sum_{n=0}^{\infty}c_n=\Big(\sum_{n=0}^{\infty}a_n\Big)\Big(\sum_{n=0}^{\infty}b_n\Big).$$
+    <b>Why absolute convergence:</b> the proof compares the square index set $\{0\le k,l\le N\}$ with the triangle $\{k+l\le N\}$ and bounds the difference by $\sum|a_k||b_l|$ over the gap. Only absolute convergence makes that tail vanish — this is the <b>reordering-invariance</b> of §2.1 doing real work.</div>
+  </article>
+
+  <article data-tag="Theorem" data-ref="Thm 2.2.6 · p.49–50">
+    <div class="q">State and prove the <b>functional equation</b> of $\exp$.</div>
+    <div class="a">$$\exp(x+y)=\exp(x)\exp(y),\qquad x,y\in\mathbb{C}.$$
+    <b>Proof.</b> Both series are absolutely convergent, so the <b>Cauchy product</b> (Lem 2.2.5) applies with $a_n=\frac{x^{n}}{n!}$, $b_n=\frac{y^{n}}{n!}$:
+    $$c_n=\sum_{k=0}^{n}\frac{x^{k}}{k!}\cdot\frac{y^{\,n-k}}{(n-k)!}=\frac{1}{n!}\sum_{k=0}^{n}\binom{n}{k}x^{k}y^{\,n-k}=\frac{(x+y)^{n}}{n!},$$
+    the middle step being the <b>binomial theorem</b>. Summing, $\exp(x)\exp(y)=\sum_n c_n=\exp(x+y)$. ∎
+    <br><br>This one identity generates almost everything else: $\exp(-z)=1/\exp(z)$, $\exp(k)=e^{k}$, the logarithm's $\log(xy)=\log x+\log y$, and the trigonometric addition formulas.</div>
+  </article>
+
+  <article data-tag="Corollary" data-ref="Cor 2.2.7 · p.50">
+    <div class="q">List the four properties of $\exp$ that follow from the functional equation, and how continuity is obtained.</div>
+    <div class="a"><b>(0) $\exp:\mathbb{C}\to\mathbb{C}$ is continuous.</b> First at $0$: the $N=0$ remainder gives $|\exp(z)-1|\le2|z|$ for $|z|\le1$, so $\exp(z)\to1=\exp(0)$. Then <em>everywhere</em>, by the functional equation: if $z_n\to z$,
+    $$\exp(z_n)=\exp(z)\exp(z_n-z)\to\exp(z)\exp(0)=\exp(z).$$
+    <b>(i)</b> $\exp(-z)=\dfrac{1}{\exp(z)}$ &nbsp;— from $\exp(z)\exp(-z)=\exp(0)=1$. In particular $\exp$ never vanishes.
+    <br><b>(ii)</b> $\exp(x)&gt;0$ for all real $x$ — for $x\ge0$ read it off the series ($\ge1$); for $x&lt;0$ use (i).
+    <br><b>(iii)</b> $\exp(k)=e^{k}$ for all $k\in\mathbb{Z}$ — induction upward, then (i) for negatives.
+    <br><br><em>Pattern to notice:</em> continuity at a single point plus the functional equation upgrades to continuity everywhere. That trick recurs.</div>
+  </article>
+
+
 
 
 
