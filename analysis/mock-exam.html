@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F9">
+<meta name="description" content="A full timed practice paper for Analysis — the differentiation pipeline, Hessian classification, arc length, Lagrange multipliers, Newton and a Julia loop — with worked solutions, plus the six must-prove results named and stated.">
+<title>Analysis — practice paper &amp; the six must-prove results</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[['$','$']]},svg:{fontCache:'global'}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#F7F7F9;--card:#fff;--border:#EFEFF2;--ink:#1B1B1F;--muted:#55555C;--faint:#8A8A90;
+    --ana:#2FAE72;--ana-bg:#E1F5EA;--ana-dark:#0F6B41;
+    --algo:#F0A93A;--algo-bg:#FFF1DC;--algo-dark:#8A5A0E;
+    --blue:#2F6FB0;--blue-bg:#EAF2FB;
+    --purple:#6B3FA0;--purple-bg:#EFE6FE;
+    --rose:#B22C6A;--rose-bg:#FDE4EC;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Figtree',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.66;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:clamp(1.5rem,4vw,2.3rem) clamp(1rem,4vw,1.7rem) 5rem;
+        padding-left:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-left));
+        padding-right:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-right))}
+  .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--faint);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;margin-bottom:1.3rem}
+  .back-link:hover{color:var(--ana-dark)}
+  .eyebrow{font-weight:700;color:var(--faint);font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.6rem}
+  h1{font-weight:800;font-size:clamp(1.75rem,5.5vw,2.4rem);line-height:1.1;letter-spacing:-.025em;margin-bottom:.55rem}
+  .lede{color:var(--muted);font-size:clamp(.95rem,3vw,1.04rem);max-width:46em}
+  h2{font-weight:800;font-size:clamp(1.15rem,3.8vw,1.45rem);letter-spacing:-.02em;margin:2.5rem 0 .6rem;scroll-margin-top:70px}
+  h3{font-weight:700;font-size:1rem;margin:1.5rem 0 .4rem;color:var(--ana-dark)}
+  p{margin:.55rem 0;color:var(--muted);font-size:.96rem}
+  b,strong{color:var(--ink)}
+  ul,ol{margin:.4rem 0 .7rem;padding-left:1.35rem;color:var(--muted);font-size:.96rem}
+  li{margin:.32rem 0}
+  a{color:var(--purple)}
+  code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:#F0F0F3;color:var(--ana-dark);padding:.05rem .3rem;border-radius:5px}
+  .pts{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--ana-dark);background:var(--ana-bg);border-radius:5px;padding:.1rem .45rem;white-space:nowrap;vertical-align:middle}
+  .q{background:#fff;border:1px solid var(--border);border-left:4px solid var(--faint);border-radius:0 12px 12px 0;padding:.85rem 1.1rem;margin:.7rem 0;font-size:.94rem;color:#3B3B42}
+  .q .lbl{display:block;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);margin-bottom:.25rem}
+  .def{background:var(--ana-bg);border:1px solid rgba(47,174,114,.25);border-left:4px solid var(--ana);border-radius:0 14px 14px 0;padding:.85rem 1.1rem;margin:.9rem 0;color:var(--ink);font-size:.95rem}
+  .def .tag{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--ana-dark);margin-bottom:.3rem}
+  .idea{background:var(--blue-bg);border:1px solid rgba(47,111,176,.25);border-left:4px solid var(--blue);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.93rem;color:#33333A}
+  .idea .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-right:.4rem}
+  .warn{background:var(--rose-bg);border:1px solid rgba(178,44,106,.25);border-left:4px solid var(--rose);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.92rem;color:#4A2233}
+  .warn .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--rose);margin-right:.4rem}
+  .tip{background:var(--algo-bg);border:1px solid rgba(240,169,58,.3);border-left:4px solid var(--algo);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.92rem;color:#4A3A22}
+  .tip .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--algo-dark);margin-right:.4rem}
+  details.sol{background:#fff;border:1px solid rgba(47,174,114,.4);border-radius:12px;margin:.7rem 0 1.6rem;overflow:hidden}
+  details.sol>summary{cursor:pointer;list-style:none;padding:.8rem 1.15rem;font-weight:700;font-size:.93rem;color:var(--ana-dark)}
+  details.sol>summary::-webkit-details-marker{display:none}
+  details.sol>summary::before{content:'▸ ';font-size:.85em}
+  details.sol[open]>summary::before{content:'▾ '}
+  details.sol[open]>summary{border-bottom:1px solid var(--border)}
+  .solbody{padding:.9rem 1.2rem 1.2rem;color:var(--muted);font-size:.95rem}
+  .solbody p{margin:.55rem 0} .solbody b{color:var(--ink)}
+  .step{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ana-dark)}
+  .ans{display:inline-block;font-weight:800;color:var(--ana-dark);background:var(--ana-bg);border-radius:6px;padding:.05rem .45rem}
+  pre.code{font-family:'JetBrains Mono',monospace;font-size:.83rem;line-height:1.5;background:#F5F5F7;border:1px solid var(--border);border-radius:12px;padding:.85rem 1.05rem;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.7rem 0;color:#26262B}
+  pre.code .kw{color:var(--blue)} pre.code .cm{color:#7A7A82;font-style:italic}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.8rem 0;border:1px solid var(--border);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:.89rem;background:#fff}
+  th,td{border-bottom:1px solid var(--border);padding:.5rem .65rem;text-align:left;vertical-align:top}
+  th{background:#F5F5F7;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.03em;color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  .toc{background:#fff;border:1px solid var(--border);border-radius:14px;padding:.9rem 1.2rem;margin:1.3rem 0;font-size:.9rem;line-height:1.9}
+  .toc a{text-decoration:none;font-weight:600;white-space:nowrap}
+  .bchip{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:#0F4A2E;background:#BFE8D2;border-radius:5px;padding:.1rem .45rem;vertical-align:middle;letter-spacing:.03em;white-space:nowrap}
+  footer{margin-top:3rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--faint);font-size:.82rem}
+</style>
+<link rel="stylesheet" href="../assets/mfds.css?v=4">
+</head>
+<body class="mfds mfds-ana" data-page="ana" data-up="index.html" data-up-label="Analysis">
+<div class="wrap">
+  <a class="back-link" href="index.html">← Analysis</a>
+  <div class="eyebrow">Universität Wien · Analysis · practice paper</div>
+  <h1>Practice paper &amp; the six must-prove results</h1>
+  <p class="lede">The <a href="study-guide/index.html#exam">study guide</a> tells you to sit a full timed mock on day 15 and again on day 17, and to "re-prove the six must-prove results aloud" on day 16. Neither of those existed. This page is both.</p>
+
+  <div class="warn"><span class="lbl">Read this before you trust the format</span>
+  Unlike <a href="../algorithms/mock-exam-1.html">Algorithms</a> and <a href="../linear-algebra-ds/mock-exam-1.html">Linear Algebra</a>, <b>I do not have a real Analysis exam paper.</b> The structure below is <em>inferred</em> from the study guide's own exam-day strategy and your professor's problem-set priority coding — which together say a great deal (triage the compute-heavy items first; gradients / Hessian classification / Lagrange / Newton are the fastest points; there is a Julia component; proofs are convexity, submanifold and norm flavoured).
+  <br><br>So treat the <b>topic weighting as well-founded</b> and the <b>40 points / 90 minutes as a placeholder</b>. If you have the real format, the weighting is what matters — adjust the clock.</div>
+
+  <div class="toc"><b>Jump to:</b>
+    <a href="#weight">how it is weighted</a> ·
+    <a href="#paper">the paper</a> ·
+    <a href="#q1">Q1 pipeline</a> ·
+    <a href="#q2">Q2 Hessian</a> ·
+    <a href="#q3">Q3 arc length</a> ·
+    <a href="#q4">Q4 Lagrange</a> ·
+    <a href="#q5">Q5 Newton</a> ·
+    <a href="#q6">Q6 Julia</a> ·
+    <a href="#six">the six must-prove results</a> ·
+    <a href="#protocol">protocol</a>
+  </div>
+
+  <!-- ================= WEIGHTING ================= -->
+  <h2 id="weight">How this paper is weighted, and why</h2>
+  <p>The study guide is explicit: <em>"protect days 5–6 and 9–13 — differentiation pipeline, optimization, Newton, constraints — that's where the exam points are"</em>, and <em>"topology proofs (blocks 1–2) are lower yield"</em>. Your professor's coding points the same way: <b>PS5, PS8 and PS12 are all-✅</b>, while <b>PS4 has no exam-marked exercise at all</b>.</p>
+
+  <div class="tw"><table>
+    <tr><th>Q</th><th>Block</th><th>Topic</th><th>Pts</th><th>Why this weight</th></tr>
+    <tr><td>1</td><td>4</td><td>Gradient &amp; affine approximation</td><td>8</td><td>"Highest-frequency computation on the paper"</td></tr>
+    <tr><td>2</td><td>5</td><td>Hessian &amp; classifying extrema</td><td>8</td><td>PS6, PS8 P1–2 — all ✅</td></tr>
+    <tr><td>3</td><td>3</td><td>Arc length</td><td>6</td><td>PS3 ✅1,3 — cheap, mechanical points</td></tr>
+    <tr><td>4</td><td>9</td><td>Lagrange multipliers</td><td>8</td><td>PS12 all-✅; PS13, PS14 P1</td></tr>
+    <tr><td>5</td><td>8</td><td>Newton + interpret it</td><td>6</td><td>PS8 P3–4, PS10 — plus a "justify" prompt</td></tr>
+    <tr><td>6</td><td>7</td><td>Julia: gradient descent</td><td>4</td><td>"Heavy Julia component"</td></tr>
+  </table></div>
+  <p>Blocks 1, 2, 6 and 10 are not on this paper — they are on the <a href="#six">must-prove list</a> instead, which is where they actually get tested.</p>
+
+  <!-- ================= PAPER ================= -->
+  <h2 id="paper">The paper <span class="pts">40 pts · 90 min</span></h2>
+  <div class="tip"><span class="lbl">Sit it properly</span> Closed book, on paper, 90 minutes, before opening a single solution. Triage first — scan all six, bank Q3 and Q6, then work down by points-per-minute.</div>
+
+  <!-- Q1 -->
+  <h2 id="q1">1 · The differentiation pipeline <span class="pts">8 pts</span> <span class="bchip">BLOCK 4</span></h2>
+  <div class="q"><span class="lbl">Question</span>
+  Let $f:\mathbb{R}^{2}\to\mathbb{R}$, $f(x,y)=x^{2}y+e^{xy}$.
+  <ol>
+    <li>Compute $\nabla f(x,y)$ and state $Df(x,y)$ — say clearly which is a row and which is a column. <span class="pts">3</span></li>
+    <li>Give the affine approximation of $f$ at $a=(1,0)$. <span class="pts">3</span></li>
+    <li>Compute the directional derivative of $f$ at $a$ in the direction $v=\tfrac{1}{\sqrt2}(1,1)$. <span class="pts">2</span></li>
+  </ol></div>
+
+  <details class="sol"><summary>Solution — Q1</summary><div class="solbody">
+    <p><span class="step">1 · Partials</span>
+    $$\frac{\partial f}{\partial x}=2xy+y\,e^{xy},\qquad \frac{\partial f}{\partial y}=x^{2}+x\,e^{xy}.$$
+    The <b>gradient is the column</b> and the <b>derivative is the row</b>:
+    $$\nabla f(x,y)=\begin{pmatrix}2xy+ye^{xy}\\ x^{2}+xe^{xy}\end{pmatrix},\qquad Df(x,y)=\big(2xy+ye^{xy}\ \ \ x^{2}+xe^{xy}\big)=\nabla f(x,y)^{\mathsf T}.$$</p>
+
+    <p><span class="step">2 · At $a=(1,0)$</span> Since $e^{xy}=e^{0}=1$ there,
+    $$f(a)=1^{2}\cdot0+1=1,\qquad \nabla f(a)=\begin{pmatrix}2\cdot1\cdot0+0\cdot1\\ 1+1\cdot1\end{pmatrix}=\begin{pmatrix}0\\2\end{pmatrix}.$$
+    The affine approximation is $T(x)=f(a)+Df(a)(x-a)$, i.e. writing $x=(1+h,\;0+k)$,
+    $$\boxed{\,T(1+h,\,k)=1+\big(0\ \ 2\big)\begin{pmatrix}h\\k\end{pmatrix}=1+2k\,}$$
+    with $f(x)=T(x)+o(\lVert x-a\rVert)$ as $x\to a$ — that little-o clause <em>is</em> the definition of differentiability, so write it.</p>
+
+    <p><span class="step">3 · Directional derivative</span> For a differentiable $f$ and a <b>unit</b> vector $v$,
+    $$\partial_v f(a)=\nabla f(a)\cdot v=\begin{pmatrix}0\\2\end{pmatrix}\cdot\frac{1}{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix}=\frac{2}{\sqrt2}=\sqrt2 .$$
+    <span class="ans">$\partial_vf(a)=\sqrt2$</span></p>
+
+    <div class="warn"><span class="lbl">Two marks people drop here</span>
+    <b>(1)</b> Not checking $\lVert v\rVert=1$. If the direction is given un-normalised you must divide by its norm first, or the "derivative" is scaled by a factor. <b>(2)</b> Writing the gradient as a row. The guide flags this as <em>the most common silent error</em> — it only bites later, when you multiply matrices and the dimensions no longer line up.</div>
+  </div></details>
+
+  <!-- Q2 -->
+  <h2 id="q2">2 · Hessian &amp; classification <span class="pts">8 pts</span> <span class="bchip">BLOCK 5</span></h2>
+  <div class="q"><span class="lbl">Question</span>
+  Let $f(x,y)=x^{3}-3xy+y^{3}$. Find all critical points and classify each one. State the criterion you use.</div>
+
+  <details class="sol"><summary>Solution — Q2</summary><div class="solbody">
+    <p><span class="step">Step 1 — critical points: $\nabla f=0$</span>
+    $$\nabla f=\begin{pmatrix}3x^{2}-3y\\ -3x+3y^{2}\end{pmatrix}=0\iff y=x^{2}\ \text{ and }\ x=y^{2}.$$
+    Substituting, $x=(x^{2})^{2}=x^{4}$, so $x^{4}-x=0$, i.e. $x(x^{3}-1)=0$, giving $x=0$ or $x=1$ (over $\mathbb{R}$). Hence
+    $$\text{critical points: }(0,0)\ \text{ and }\ (1,1).$$</p>
+
+    <p><span class="step">Step 2 — the Hessian</span>
+    $$H_f(x,y)=\begin{pmatrix}6x&-3\\-3&6y\end{pmatrix}.$$</p>
+
+    <p><span class="step">Step 3 — the criterion</span> For a $2\times2$ Hessian at a critical point, with $D=\det H_f$:</p>
+    <ul>
+      <li>$D&gt;0$ and $(H_f)_{11}&gt;0$ ⇒ <b>local minimum</b> (positive definite);</li>
+      <li>$D&gt;0$ and $(H_f)_{11}&lt;0$ ⇒ <b>local maximum</b> (negative definite);</li>
+      <li>$D&lt;0$ ⇒ <b>saddle</b> (indefinite);</li>
+      <li>$D=0$ ⇒ the test is <b>inconclusive</b>.</li>
+    </ul>
+
+    <p><span class="step">Step 4 — evaluate</span></p>
+    <p><b>At $(0,0)$:</b> $H_f=\begin{pmatrix}0&-3\\-3&0\end{pmatrix}$, $D=0\cdot0-(-3)^{2}=-9&lt;0$ ⇒ <span class="ans">saddle point</span>.</p>
+    <p><b>At $(1,1)$:</b> $H_f=\begin{pmatrix}6&-3\\-3&6\end{pmatrix}$, $D=36-9=27&gt;0$ and $(H_f)_{11}=6&gt;0$ ⇒ <span class="ans">local minimum</span>. (Eigenvalues $6\mp3$, i.e. $3$ and $9$ — both positive, confirming definiteness.)</p>
+
+    <div class="idea"><span class="lbl">Where this comes from</span> The test is just <b>Taylor to second order</b>:
+  $$f(a+h)=f(a)+\underbrace{\nabla f(a)\cdot h}_{=0}+\tfrac12h^{\mathsf T}H_f(a)h+o(\lVert h\rVert^{2}).$$
+  With the linear term gone, the sign of the quadratic form decides the local behaviour — which is why definiteness of $H_f$ is exactly the right question. Being able to say that sentence is <a href="#six">must-prove result 4</a>.</div>
+
+    <div class="tip"><span class="lbl">Show the recipe</span> The guide is explicit that partial credit lives in the visible steps: write $\nabla f=0$ and its solutions, write $H_f$, <em>then</em> conclude. A bare answer of "saddle and minimum" scores far less than the same answer with three lines of working.</div>
+  </div></details>
+
+  <!-- Q3 -->
+  <h2 id="q3">3 · Arc length <span class="pts">6 pts</span> <span class="bchip">BLOCK 3</span></h2>
+  <div class="q"><span class="lbl">Question</span>
+  Compute the length of the curve $\gamma:[0,1]\to\mathbb{R}^{2}$, $\gamma(t)=\big(t,\ \tfrac23 t^{3/2}\big)$.</div>
+
+  <details class="sol"><summary>Solution — Q3</summary><div class="solbody">
+    <p><span class="step">1 · Differentiate componentwise</span> $\gamma'(t)=\big(1,\ t^{1/2}\big)$.</p>
+    <p><span class="step">2 · Norm — and simplify under the root first</span>
+    $$\lVert\gamma'(t)\rVert_2=\sqrt{1^{2}+\big(t^{1/2}\big)^{2}}=\sqrt{1+t}.$$</p>
+    <p><span class="step">3 · Integrate</span>
+    $$L(\gamma)=\int_0^1\sqrt{1+t}\;dt=\left[\tfrac23(1+t)^{3/2}\right]_0^1=\tfrac23\big(2^{3/2}-1\big)=\frac{2}{3}\big(2\sqrt2-1\big).$$
+    <span class="ans">$L=\tfrac23(2\sqrt2-1)\approx1.219$</span></p>
+    <div class="tip"><span class="lbl">The diagnostic</span> The guide's rule: <em>if the radicand isn't collapsing, recheck your derivative.</em> Exam curves are rigged so that $\lVert\gamma'\rVert$ simplifies — here $t^{1/2}$ squares away to a clean $1+t$. A messy root almost always means an algebra slip upstream, not a hard integral.</div>
+  </div></details>
+
+  <!-- Q4 -->
+  <h2 id="q4">4 · Lagrange multipliers <span class="pts">8 pts</span> <span class="bchip">BLOCK 9</span></h2>
+  <div class="q"><span class="lbl">Question</span>
+  Find the maximum and minimum of $f(x,y,z)=x+2y+3z$ on the sphere $g(x,y,z)=x^{2}+y^{2}+z^{2}=14$. Justify that the extrema exist.</div>
+
+  <details class="sol"><summary>Solution — Q4</summary><div class="solbody">
+    <p><span class="step">0 · Existence first</span> The constraint set is closed and bounded in $\mathbb{R}^{3}$, hence <b>compact</b>, and $f$ is continuous — so by the extreme value theorem $f$ attains a maximum and a minimum on it. (Saying this is worth a mark, and it is also what licenses you to just compare candidate values at the end.)</p>
+
+    <p><span class="step">1 · Regularity</span> $\nabla g=(2x,2y,2z)$ vanishes only at the origin, which is not on the sphere. So every constraint point is regular and the Lagrange condition applies.</p>
+
+    <p><span class="step">2 · Set up $\nabla f=\lambda\nabla g$</span>
+    $$\begin{pmatrix}1\\2\\3\end{pmatrix}=\lambda\begin{pmatrix}2x\\2y\\2z\end{pmatrix}\;\Longrightarrow\;x=\frac{1}{2\lambda},\quad y=\frac{2}{2\lambda}=\frac1\lambda,\quad z=\frac{3}{2\lambda},$$
+    with $\lambda\ne0$ (if $\lambda=0$ the left side would be zero, which it is not).</p>
+
+    <p><span class="step">3 · Impose the constraint</span>
+    $$x^{2}+y^{2}+z^{2}=\frac{1+4+9}{4\lambda^{2}}=\frac{14}{4\lambda^{2}}=14\;\Longrightarrow\;\lambda^{2}=\frac14\;\Longrightarrow\;\lambda=\pm\tfrac12 .$$</p>
+
+    <p><span class="step">4 · Candidates, and evaluate $f$ at each</span></p>
+    <ul>
+      <li>$\lambda=\tfrac12$: $(x,y,z)=(1,2,3)$, and $f=1+4+9=14$.</li>
+      <li>$\lambda=-\tfrac12$: $(x,y,z)=(-1,-2,-3)$, and $f=-14$.</li>
+    </ul>
+    <p>Comparing: <span class="ans">maximum $14$ at $(1,2,3)$, minimum $-14$ at $(-1,-2,-3)$</span>.</p>
+
+    <div class="warn"><span class="lbl">The classic way to lose this question</span> Finding both candidates and then <b>not evaluating $f$ at them</b> — or evaluating and mislabelling which is which. The guide says it directly: <em>leave 5 minutes to re-evaluate $f$ at each Lagrange candidate; forgetting to compare values is how max and min get swapped.</em></div>
+
+    <div class="idea"><span class="lbl">Sanity check</span> By Cauchy–Schwarz,
+  $$|f|=|(1,2,3)\cdot(x,y,z)|\le\lVert(1,2,3)\rVert\,\lVert(x,y,z)\rVert=\sqrt{14}\cdot\sqrt{14}=14,$$
+  with equality exactly when $(x,y,z)\parallel(1,2,3)$. That reproduces both the value and the maximiser in one line — a good way to check a Lagrange answer.</div>
+  </div></details>
+
+  <!-- Q5 -->
+  <h2 id="q5">5 · Newton's method <span class="pts">6 pts</span> <span class="bchip">BLOCK 8</span></h2>
+  <div class="q"><span class="lbl">Question</span>
+  Let $f(x)=x^{2}-2$.
+  <ol>
+    <li>Write the Newton iteration for $f$ and perform two steps from $x_0=1$, as exact fractions. <span class="pts">4</span></li>
+    <li>Justify in one or two sentences why Newton's method is "the root of the linearization". <span class="pts">2</span></li>
+  </ol></div>
+
+  <details class="sol"><summary>Solution — Q5</summary><div class="solbody">
+    <p><span class="step">1 · The iteration</span> $f'(x)=2x$, so
+    $$x_{k+1}=x_k-\frac{f(x_k)}{f'(x_k)}=x_k-\frac{x_k^{2}-2}{2x_k}=\frac{x_k}{2}+\frac{1}{x_k}.$$</p>
+    <p>From $x_0=1$:
+    $$x_1=\frac12+1=\frac32,\qquad x_2=\frac{3}{4}+\frac{2}{3}=\frac{9+8}{12}=\frac{17}{12}.$$
+    <span class="ans">$x_1=\tfrac32$, $x_2=\tfrac{17}{12}\approx1.41667$</span> — against $\sqrt2\approx1.41421$, so two steps already give three correct digits.</p>
+
+    <p><span class="step">2 · Newton as linearization</span> Replace $f$ near $x_k$ by its affine approximation
+    $$T(x)=f(x_k)+f'(x_k)(x-x_k),$$
+    and take $x_{k+1}$ to be the root of <em>that</em>: solving $T(x)=0$ gives $x=x_k-f(x_k)/f'(x_k)$, which is precisely the Newton step. So each iteration replaces the curve by its tangent line and jumps to where the tangent crosses the axis.</p>
+
+    <div class="idea"><span class="lbl">Worth one extra sentence if you have time</span> Because the affine model has error $O(\lVert x-x_k\rVert^{2})$, the iteration converges <b>quadratically</b> near a simple root — the digit count roughly doubles each step, which the numbers above already show. Quadratic convergence needs $f'(x^{*})\ne0$; at a double root Newton degrades to linear.</div>
+  </div></details>
+
+  <!-- Q6 -->
+  <h2 id="q6">6 · Julia: gradient descent <span class="pts">4 pts</span> <span class="bchip">BLOCK 7</span></h2>
+  <div class="q"><span class="lbl">Question</span>
+  Write a Julia function implementing gradient descent with a fixed step size for a function $f$ with gradient <code>∇f</code>, starting from <code>x0</code>. Comment the update line with the mathematics it implements.</div>
+
+  <details class="sol"><summary>Solution — Q6</summary><div class="solbody">
+<pre class="code"><span class="kw">function</span> gradient_descent(∇f, x0; α=0.1, iters=1000, tol=1e-8)
+    x = copy(x0)
+    <span class="kw">for</span> k <span class="kw">in</span> 1:iters
+        g = ∇f(x)
+        <span class="kw">if</span> norm(g) &lt; tol       <span class="cm"># stationary point reached</span>
+            <span class="kw">break</span>
+        <span class="kw">end</span>
+        x = x - α * g          <span class="cm"># x_{k+1} = x_k − α ∇f(x_k)</span>
+    <span class="kw">end</span>
+    <span class="kw">return</span> x
+<span class="kw">end</span></pre>
+    <div class="tip"><span class="lbl">How this is marked</span> The guide is explicit: <em>a correct loop skeleton with the right update line scores even if syntax is imperfect — write the math of the update as a comment.</em> So the four things to get down, in order of value:
+    <ol>
+      <li>the update $x_{k+1}=x_k-\alpha\nabla f(x_k)$ — <b>minus</b> the gradient, because $-\nabla f$ is the steepest-descent direction;</li>
+      <li>a loop with an iteration cap;</li>
+      <li>a stopping test on $\lVert\nabla f(x_k)\rVert$;</li>
+      <li><code>copy(x0)</code> so you do not mutate the caller's vector.</li>
+    </ol></div>
+    <div class="idea"><span class="lbl">If asked for SGD or mini-batch instead</span> Only the gradient changes: SGD replaces $\nabla f$ by $\nabla f_i$ for a single randomly drawn $i$, and mini-batch by $\tfrac{1}{|B|}\sum_{i\in B}\nabla f_i$ over a random batch $B$. The loop and the update line are identical — say so, and you have answered all three variants.</div>
+  </div></details>
+
+  <!-- ================= SIX ================= -->
+  <h2 id="six">The six must-prove results</h2>
+  <div class="warn"><span class="lbl">Where this list comes from</span>
+  The study guide's day-16 task says "re-prove the 6 must-prove results aloud" but <b>never says which six</b>. This list is assembled from the guide's own emphasis — the results it marks <em>Prove</em> in the state/prove/compute framing, cross-checked against your professor's ✅ coding. It is a <b>reasoned reconstruction, not a quotation</b>. If your lecturer named a different six, theirs wins.</div>
+
+  <div class="def"><span class="tag">1 · Continuous on compact ⇒ uniformly continuous <span class="bchip">BLOCK 2</span></span>
+  <b>Statement.</b> If $f:X\to Y$ is continuous and $X$ is compact, then $f$ is uniformly continuous.
+  <br><b>Key idea.</b> Contradiction plus sequential compactness: if uniform continuity fails, there is an $\varepsilon&gt;0$ and points $x_n,x_n'$ with $d(x_n,x_n')\le1/n$ but $d(f(x_n),f(x_n'))&gt;\varepsilon$. Extract a convergent subsequence $x_{n_k}\to x$; then $x_{n_k}'\to x$ too, and continuity at $x$ forces both images to $f(x)$ — contradicting the gap $\varepsilon$.
+  <br><b>The one thing to remember:</b> compactness is used <em>only</em> to extract the subsequence.</div>
+
+  <div class="def"><span class="tag">2 · The three convexity closure rules <span class="bchip">BLOCK 6 · PS7 P3</span></span>
+  <b>Statement.</b> Convexity is preserved by (i) non-negative combinations $\alpha f+\beta g$ with $\alpha,\beta\ge0$; (ii) pointwise suprema $\sup_{i\in I}f_i$; (iii) pre-composition with an affine map, $x\mapsto f(Ax+b)$.
+  <br><b>Key idea.</b> All three are one line from the definition — no calculus, no Hessians. For (ii) the trick is that the sup of functions each satisfying the convexity inequality still satisfies it, because the inequality survives taking suprema on both sides.
+  <br><b>Why it earns its place:</b> it is how you prove a function convex in practice, since most objectives are built from simple pieces by exactly these operations.</div>
+
+  <div class="def"><span class="tag">3 · Neumann series <span class="bchip">BLOCK 10 · §7.5</span></span>
+  <b>Statement.</b> If $\lVert A\rVert&lt;1$ in a submultiplicative operator norm on a complete space, then $I-A$ is invertible,
+  $$(I-A)^{-1}=\sum_{k=0}^{\infty}A^{k},\qquad\text{and}\qquad \big\lVert(I-A)^{-1}\big\rVert\le\frac{1}{1-\lVert A\rVert}.$$
+  <b>Key idea.</b> Submultiplicativity gives $\lVert A^{k}\rVert\le\lVert A\rVert^{k}$, so the series is dominated by a convergent geometric series and therefore converges absolutely (completeness turns that into convergence). Then the telescoping identity $(I-A)\sum_{k=0}^{n}A^{k}=I-A^{n+1}\to I$ identifies the limit.
+  <br><b>Where it is used:</b> perturbation bounds and the invertibility half of the inverse function theorem.</div>
+
+  <div class="def"><span class="tag">4 · The second-derivative test, from Taylor <span class="bchip">BLOCK 5</span></span>
+  <b>Statement.</b> At a critical point $a$ ($\nabla f(a)=0$) of a $C^{2}$ function: $H_f(a)$ positive definite ⇒ strict local minimum; negative definite ⇒ strict local maximum; indefinite ⇒ saddle.
+  <br><b>Key idea.</b> Second-order Taylor kills the linear term:
+  $$f(a+h)=f(a)+\tfrac12h^{\mathsf T}H_f(a)h+o(\lVert h\rVert^{2}),$$
+  so for small $h$ the sign of $f(a+h)-f(a)$ is the sign of the quadratic form. Definiteness gives a uniform bound $h^{\mathsf T}H h\ge\mu\lVert h\rVert^{2}$ with $\mu&gt;0$ (the smallest eigenvalue), which dominates the $o(\lVert h\rVert^{2})$ remainder.
+  <br><b>The subtlety:</b> semi-definite is <em>not</em> enough — that is exactly the inconclusive case.</div>
+
+  <div class="def"><span class="tag">5 · Lagrange's necessary condition <span class="bchip">BLOCK 9</span></span>
+  <b>Statement.</b> If $a$ is a local extremum of $f$ on $M=\{g=0\}$ and $a$ is a <b>regular point</b> ($Dg(a)$ has full rank), then $\nabla f(a)\in\operatorname{span}\{\nabla g_1(a),\dots,\nabla g_m(a)\}$ — i.e. $\nabla f(a)=\sum_i\lambda_i\nabla g_i(a)$.
+  <br><b>Key idea.</b> Regularity makes $M$ a submanifold, so every tangent vector $v\in T_aM$ is $\gamma'(0)$ for a curve $\gamma$ inside $M$. Then $t\mapsto f(\gamma(t))$ has an interior extremum at $0$, so its derivative $\nabla f(a)\cdot v$ vanishes for <em>every</em> tangent $v$. Hence $\nabla f(a)\perp T_aM=\ker Dg(a)$, and that orthogonal complement is spanned by the $\nabla g_i(a)$.
+  <br><b>Do not forget:</b> the condition is <b>necessary, not sufficient</b>, and it requires regularity — which is why Q4 above checks $\nabla g\ne0$ before using it.</div>
+
+  <div class="def"><span class="tag">6 · Newton's method converges quadratically <span class="bchip">BLOCK 8</span></span>
+  <b>Statement.</b> If $f$ is $C^{2}$, $f(x^{*})=0$ and $f'(x^{*})\ne0$, then for $x_0$ close enough to $x^{*}$ Newton's iteration converges and $|x_{k+1}-x^{*}|\le C|x_k-x^{*}|^{2}$.
+  <br><b>Key idea.</b> Taylor-expand $f$ about $x_k$ and evaluate at $x^{*}$:
+  $$0=f(x^{*})=f(x_k)+f'(x_k)(x^{*}-x_k)+\tfrac12f''(\xi)(x^{*}-x_k)^{2}.$$
+  Divide by $f'(x_k)$ and rearrange into the Newton step; the linear terms cancel and what is left is the squared error times $f''(\xi)/2f'(x_k)$.
+  <br><b>Where each hypothesis is used:</b> $f'(x^{*})\ne0$ keeps the denominator away from zero near the root (this is what fails at a double root); $C^{2}$ supplies the remainder term.</div>
+
+  <div class="idea"><span class="lbl">How to drill these</span> One per day, out loud, from a blank page — statement first, then the key idea in one sentence, then the details. If you can say the <em>key idea</em> line for all six, you can rebuild every proof under exam pressure; if you can only recite details you will lose the thread the moment you are interrupted.</div>
+
+  <!-- ================= PROTOCOL ================= -->
+  <h2 id="protocol">After the paper</h2>
+  <div class="def"><span class="tag">Turn the score into a plan</span>
+  <ul>
+    <li><b>Under 24/40:</b> the computational pipeline is not automatic yet. Go back to <a href="study-guide/index.html#b4">block 4</a> and <a href="study-guide/index.html#b5">block 5</a> and redo PS5 and PS8 — both are all-✅ — before sitting anything else.</li>
+    <li><b>24–32:</b> the standard profile — computations land, the justify/prove parts leak. Drill <a href="#six">the six</a>, one per day.</li>
+    <li><b>Above 32:</b> taper. Keep the <a href="flashcards.html">deck</a> daily and re-do only the sub-questions you dropped.</li>
+    <li>Whatever the score, the <a href="daily-practice.html">daily-practice sheets</a> are the maintenance dose — they interleave cumulative review with fresh tasks.</li>
+  </ul></div>
+
+  <div class="tip"><span class="lbl">Second mock</span> The guide asks for a second timed paper on day 17. Build it from the guide's own practice problems: take one ✅ exercise from each of PS5, PS8, PS12 and PS13, add one arc-length item from PS3 and one Julia item from PS7 P4, and give yourself the same 90 minutes. Different numbers, same shape as above.</div>
+
+  <footer>
+    Questions written for this site from the study guide's exam-day strategy and your professor's problem-set coding — they are <b>not</b> a past paper, and no official Analysis exam is available to me. Course text: Ehler, <em>Mathematical Structures of Computation</em>. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+<script src="../assets/mfds.js?v=4" data-root="../"></script>
+</body>
+</html>
