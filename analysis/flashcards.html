@@ -407,6 +407,19 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
     <br><br>This is the standard witness that convergence is <b>strictly weaker</b> than absolute convergence — and it is why Lemma 2.1.8's reordering guarantee needs the absolute hypothesis.</div>
   </article>
 
+  <article data-tag="Theorem" data-ref="Essentials §2.1 · Lem 2.1.8 / Rem 2.1.9 · p.42–46">
+    <div class="q">Why does <b>absolute convergence</b> play a central role?</div>
+    <div class="a"><b>Because of its invariance under reordering.</b>
+    <br><br><b>The theorem</b> (Lem 2.1.8): if $\sum a_n$ converges absolutely, then for <em>every</em> bijection $\tau:\mathbb{N}\to\mathbb{N}$,
+    $$\sum_{n=0}^{\infty}a_{\tau(n)}=\sum_{n=0}^{\infty}a_n .$$
+    The value is a property of the <b>collection</b> of terms, not of the order you happen to add them in.
+    <br><br><b>Why that matters</b> (Rem 2.1.9, "robust aggregation"): in computation the summation order changes for reasons you do not control — parallel reduction, chunking, compiler and BLAS optimisation. Absolute convergence is precisely the hypothesis guaranteeing the answer does not change with it.
+    <br><br><b>The hypothesis is sharp.</b> Convergence alone is not enough: $\sum\frac{(-1)^{n}}{n}$ converges by Leibniz but not absolutely (Ex 2.1.17), and for such <em>conditionally</em> convergent real series a reordering can be made to converge to any prescribed value — Riemann's rearrangement theorem. <em>(Standard result; stated here for contrast, not proved in these notes.)</em>
+    <br><br>Note too that the comparison and ratio tests deliver <b>absolute</b> convergence, so it is the default mode you actually get.</div>
+  </article>
+
+
+
 
 
 
