@@ -431,11 +431,30 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
   </article>
 
   <article data-tag="Theorem" data-ref="Thm 2.2.2 · p.47">
-    <div class="q">State the <b>remainder estimate</b> for $\exp$, and what it is used for.</div>
-    <div class="a">For every $z\in\mathbb{C}$ and $N\in\mathbb{N}$,
-    $$\exp(z)=\sum_{n=0}^{N}\frac{z^{n}}{n!}+R_{N+1}(z),\qquad |R_{N+1}(z)|\le 2\,\frac{|z|^{N+1}}{(N+1)!}\quad\text{for }|z|\le\tfrac{N+2}{2}.$$
-    <b>Proof idea:</b> bound the tail $\sum_{n&gt;N}\frac{|z|^{n}}{n!}$ by factoring out $\frac{|z|^{N+1}}{(N+1)!}$ and dominating what is left by the geometric series $\sum(\tfrac12)^{n}=2$ — hence the constant $2$.
-    <br><br><b>What it buys:</b> a computable error bar on the truncated series. With $N=0$ it gives $|\exp(z)-1|\le2|z|$ for $|z|\le1$, which is how continuity of $\exp$ at $0$ is established (Cor 2.2.7).</div>
+    <div class="q"><b>Prove</b> the remainder estimate for $\exp$. Where is the hypothesis $|z|\le\frac{N+2}{2}$ used?</div>
+    <div class="a"><b>Statement.</b> For every $z\in\mathbb{C}$ and $N\in\mathbb{N}$,
+    $$\exp(z)=\sum_{n=0}^{N}\frac{z^{n}}{n!}+R_{N+1}(z),\qquad |R_{N+1}(z)|\le 2\,\frac{|z|^{N+1}}{(N+1)!}\quad\text{whenever }|z|\le\tfrac{N+2}{2}.$$
+    <b>Proof — four estimates.</b> Start from the tail and factor out the first term:
+    $$|R_{N+1}(z)|\le\sum_{n=N+1}^{\infty}\frac{|z|^{n}}{n!}
+    =\frac{|z|^{N+1}}{(N+1)!}\left(1+\frac{|z|}{N+2}+\frac{|z|^{2}}{(N+2)(N+3)}+\cdots\right).$$
+    <b>(1)</b> Weaken each denominator: $(N+2)(N+3)\cdots\ge(N+2)^{k}$, so the bracket is at most
+    $$1+\frac{|z|}{N+2}+\frac{|z|^{2}}{(N+2)^{2}}+\cdots=\sum_{k=0}^{\infty}\left(\frac{|z|}{N+2}\right)^{k}.$$
+    <b>(2) Here is where the hypothesis enters:</b> $|z|\le\frac{N+2}{2}$ is exactly $\dfrac{|z|}{N+2}\le\dfrac12$.
+    <b>(3)</b> So the bracket is dominated by the <b>geometric series</b> $\sum_{k\ge0}\left(\tfrac12\right)^{k}=\dfrac{1}{1-\frac12}=2$.
+    <b>(4)</b> Hence $|R_{N+1}(z)|\le 2\dfrac{|z|^{N+1}}{(N+1)!}$. ∎
+    <br><br><em>The constant $2$ is not decoration</em> — it is the sum of that geometric series, and the radius $\frac{N+2}{2}$ is chosen precisely to force the ratio below $\tfrac12$.
+    <br><br><b>What it buys:</b> a computable error bar on the truncation. At $N=0$: $|\exp(z)-1|\le2|z|$ for $|z|\le1$, which is how continuity of $\exp$ at $0$ is established (Cor 2.2.7).</div>
+  </article>
+
+  <article data-tag="Example" data-ref="Ex 2.2.4 · p.48">
+    <div class="q">Use the remainder bound to show the truncations $f_N(x)=\sum_{n=0}^{N}\frac{x^{n}}{n!}$ converge <b>uniformly</b> to $\exp$ on $[-1,1]$. What does that give you?</div>
+    <div class="a">On $[-1,1]$ we have $|x|\le1\le\frac{N+2}{2}$ for every $N\ge0$, so Thm 2.2.2 applies with a bound independent of $x$:
+    $$\sup_{x\in[-1,1]}\big|f_N(x)-\exp(x)\big|\;\le\;\sup_{x\in[-1,1]}\frac{2|x|^{N+1}}{(N+1)!}\;\le\;\frac{2}{(N+1)!}\;\longrightarrow\;0 .$$
+    The bound does not depend on $x$ — that is exactly what makes the convergence <b>uniform</b> rather than merely pointwise.
+    <br><br><b>Payoff:</b> each $f_N$ is a polynomial, hence continuous; a <b>uniform</b> limit of continuous functions is continuous (Thm 1.4.7), so $\exp|_{[-1,1]}$ is continuous. Pointwise convergence would <em>not</em> have sufficed — compare $f_n(x)=x^{n}$ on $[0,1]$.
+    <br><br><b>In code</b> (the notes' version), the error bar is plotted alongside the truncation:
+    <br><code>myExp(x,N) = sum(x^n/factorial(big(n)) for n=0:N)</code>
+    <br><code>R(x,N) = 2*abs(x)^(N+1)/factorial(big(N+1))</code></div>
   </article>
 
   <article data-tag="Lemma" data-ref="Lem 2.2.5 · p.48–49">
