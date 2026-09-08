@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F9">
+<meta name="description" content="Introduction to Probability Theory (250167 VO, Petersen, 2026W) — full syllabus, assessment, the six listed textbooks with free-access notes, and a six-week self-study plan to start before the semester.">
+<title>Introduction to Probability Theory — 250167 VO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>MathJax={tex:{inlineMath:[['$','$']]},svg:{fontCache:'global'}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#F7F7F9;--card:#fff;--border:#EFEFF2;--ink:#1B1B1F;--muted:#55555C;--faint:#8A8A90;
+    --teal:#0D9488;--teal-bg:#DCF5F1;--teal-dark:#0A5C55;
+    --algo:#F0A93A;--algo-bg:#FFF1DC;--algo-dark:#8A5A0E;
+    --blue:#2F6FB0;--blue-bg:#EAF2FB;
+    --purple:#6B3FA0;--purple-bg:#EFE6FE;
+    --rose:#B22C6A;--rose-bg:#FDE4EC;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Figtree',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.66;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:clamp(1.5rem,4vw,2.3rem) clamp(1rem,4vw,1.7rem) 5rem;
+        padding-left:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-left));
+        padding-right:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-right))}
+  .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--faint);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;margin-bottom:1.3rem}
+  .back-link:hover{color:var(--teal-dark)}
+  .eyebrow{font-weight:700;color:var(--faint);font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.6rem}
+  h1{font-weight:800;font-size:clamp(1.75rem,5.5vw,2.4rem);line-height:1.1;letter-spacing:-.025em;margin-bottom:.55rem}
+  .lede{color:var(--muted);font-size:clamp(.95rem,3vw,1.04rem);max-width:46em}
+  h2{font-weight:800;font-size:clamp(1.15rem,3.8vw,1.45rem);letter-spacing:-.02em;margin:2.5rem 0 .6rem;scroll-margin-top:70px}
+  h3{font-weight:700;font-size:1rem;margin:1.4rem 0 .4rem;color:var(--teal-dark)}
+  p{margin:.55rem 0;color:var(--muted);font-size:.96rem}
+  b,strong{color:var(--ink)}
+  ul,ol{margin:.4rem 0 .7rem;padding-left:1.35rem;color:var(--muted);font-size:.95rem}
+  li{margin:.32rem 0}
+  a{color:var(--purple)}
+  code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:#F0F0F3;color:var(--teal-dark);padding:.05rem .3rem;border-radius:5px}
+  .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:.7rem;margin:1.2rem 0}
+  .fact{background:#fff;border:1px solid var(--border);border-radius:14px;padding:.75rem .9rem}
+  .fact .k{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--faint)}
+  .fact .v{font-weight:800;font-size:.95rem;margin-top:.15rem}
+  .def{background:var(--teal-bg);border:1px solid rgba(13,148,136,.25);border-left:4px solid var(--teal);border-radius:0 14px 14px 0;padding:.85rem 1.1rem;margin:.9rem 0;color:var(--ink);font-size:.95rem}
+  .def .tag{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--teal-dark);margin-bottom:.3rem}
+  .idea{background:var(--blue-bg);border:1px solid rgba(47,111,176,.25);border-left:4px solid var(--blue);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.93rem;color:#33333A}
+  .idea .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-right:.4rem}
+  .warn{background:var(--rose-bg);border:1px solid rgba(178,44,106,.25);border-left:4px solid var(--rose);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.92rem;color:#4A2233}
+  .warn .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--rose);margin-right:.4rem}
+  .tip{background:var(--algo-bg);border:1px solid rgba(240,169,58,.3);border-left:4px solid var(--algo);border-radius:0 14px 14px 0;padding:.75rem 1.1rem;margin:.85rem 0;font-size:.92rem;color:#4A3A22}
+  .tip .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--algo-dark);margin-right:.4rem}
+  .bk{display:flex;gap:.8rem;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:14px;padding:.85rem 1rem;margin:.6rem 0}
+  .bk .n{flex:none;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--teal-dark);background:var(--teal-bg);border-radius:6px;padding:.15rem .45rem}
+  .bk .t{font-weight:700;font-size:.93rem;color:var(--ink)}
+  .bk .s{display:block;font-size:.87rem;color:var(--muted);margin-top:.2rem}
+  .bk .free{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#0F4A2E;background:#BFE8D2;border-radius:5px;padding:.1rem .4rem;margin-left:.3rem}
+  .bk .paid{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:var(--faint);background:#F0F0F3;border-radius:5px;padding:.1rem .4rem;margin-left:.3rem}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.9rem 0;border:1px solid var(--border);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:.89rem;background:#fff}
+  th,td{border-bottom:1px solid var(--border);padding:.55rem .7rem;text-align:left;vertical-align:top}
+  th{background:#F5F5F7;font-weight:700;font-size:.76rem;text-transform:uppercase;letter-spacing:.03em;color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  .toc{background:#fff;border:1px solid var(--border);border-radius:14px;padding:.9rem 1.2rem;margin:1.3rem 0;font-size:.9rem;line-height:1.95}
+  .toc a{text-decoration:none;font-weight:600;white-space:nowrap}
+  footer{margin-top:3rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--faint);font-size:.82rem}
+</style>
+<link rel="stylesheet" href="../assets/mfds.css?v=5">
+</head>
+<body class="mfds" data-page="y2" data-up="index.html" data-up-label="Second year">
+<div class="wrap">
+  <a class="back-link" href="index.html">← Second year</a>
+  <div class="eyebrow">Universität Wien · 250167 VO · 2026W</div>
+  <h1>Introduction to Probability Theory</h1>
+  <p class="lede">Six ECTS, two lectures a week, <b>one written exam at the end</b> — and by far the most self-startable course in your second year, because it assumes almost nothing from first year. The principal textbook is free online. This page has the full syllabus, the six listed references, and a six-week plan to arrive in October already ahead.</p>
+
+  <div class="facts">
+    <div class="fact"><div class="k">Lecturer</div><div class="v">Philipp C. Petersen</div></div>
+    <div class="fact"><div class="k">Credit</div><div class="v">6 ECTS · 4 SWS</div></div>
+    <div class="fact"><div class="k">Language</div><div class="v">English</div></div>
+    <div class="fact"><div class="k">When</div><div class="v">Wed &amp; Thu 15:00–16:30</div></div>
+    <div class="fact"><div class="k">Where</div><div class="v">HS 13, OMP 1, 2nd floor</div></div>
+    <div class="fact"><div class="k">Module</div><div class="v">DSPS · Probability &amp; Statistics (20 ECTS)</div></div>
+  </div>
+
+  <div class="toc"><b>Jump to:</b>
+    <a href="#syllabus">the syllabus</a> ·
+    <a href="#assessment">assessment</a> ·
+    <a href="#books">the six books</a> ·
+    <a href="#plan">six-week head start</a> ·
+    <a href="#python">the Python side</a> ·
+    <a href="#firstyear">what carries over</a>
+  </div>
+
+  <!-- ================= SYLLABUS ================= -->
+  <h2 id="syllabus">The syllabus, as stated</h2>
+  <p>The course description splits cleanly in two. That split matters for planning, because the halves want different things from you — the first is mathematical, the second is methodological.</p>
+
+  <div class="def"><span class="tag">First half — foundations of probability</span>
+  Events · conditional probability · independence · random variables · standard distributions · expectation and variance · joint distributions · <b>concentration inequalities</b> · laws of large numbers · the <b>central limit theorem</b> · finite-state <b>Markov chains</b>.</div>
+
+  <div class="def"><span class="tag">Second half — statistical inference</span>
+  Sampling and statistical models · estimation and <b>likelihood</b> · sampling distributions · <b>bootstrap</b> methods · confidence intervals · hypothesis and <b>permutation tests</b> · categorical data analysis · <b>linear regression</b> · model diagnostics · overfitting · <b>cross-validation</b> · basic binary classification.</div>
+
+  <div class="idea"><span class="lbl">Stated learning outcomes</span> By the end you should be able to <b>formulate and analyse</b> probabilistic and statistical models, <b>calculate and simulate</b> probabilities, <b>quantify uncertainty</b>, and <b>interpret</b> statistical results — then <b>select</b> appropriate methods for estimation, confidence intervals, hypothesis testing, regression and basic classification, <b>evaluate their assumptions and limitations</b>, and implement reproducible analyses in Python.
+  <br><br>Note how much of that is <em>judgement</em> rather than calculation: select, evaluate assumptions, interpret. That is a hint about what the exam will ask beyond computation.</div>
+
+  <p>Delivery is explicitly mixed: motivating questions or data examples, then formal definitions and derivations, then worked calculations or proofs, then <b>live Python demonstrations</b>. Simulations and real datasets are used to build intuition and to assess the methods themselves.</p>
+
+  <!-- ================= ASSESSMENT ================= -->
+  <h2 id="assessment">Assessment</h2>
+  <div class="warn"><span class="lbl">One exam, everything on it</span>
+  There is a <b>single written exam at the end</b> of the lecture, covering everything presented. Your performance in that exam <b>determines the grade</b> — there is no continuous assessment component, no homework percentage, no project.
+  <br><br>Two consequences worth planning around:
+  <ul>
+    <li><b>Nothing forces you to keep up.</b> This is exactly the failure mode of your first-year courses. The fix that already works for you — a deck reviewed from week 1 — applies here unchanged.</li>
+    <li><b>"Everything covered in the lecture is relevant."</b> Including, presumably, the live Python demonstrations and the simulation-based arguments. Do not treat the computational half as decoration.</li>
+  </ul></div>
+
+  <!-- ================= BOOKS ================= -->
+  <h2 id="books">The six listed books — and which to actually use</h2>
+  <p>Lecture notes will be provided on Moodle. Until then, these six are what the lectures were prepared from. Three are free online; I have checked each link.</p>
+
+  <div class="bk"><span class="n">★ 2</span><span><span class="t">Chan — <em>Introduction to Probability for Data Science</em>, 2nd ed. (2026)<span class="free">FREE ONLINE</span></span>
+  <span class="s"><b>Named the principal reference.</b> Covers probability, statistics, random processes and computational examples in Python — i.e. it spans both halves of the course in the same style the lectures use. Start here.
+  <br><a href="https://probability4datascience.com/">probability4datascience.com</a> — full PDF, slides and Python notebooks.</span></span></div>
+
+  <div class="bk"><span class="n">5</span><span><span class="t">Adhikari, DeNero &amp; Wagner — <em>Computational and Inferential Thinking</em>, 2nd ed. (2022)<span class="free">FREE ONLINE</span></span>
+  <span class="s">Simulation, sampling, <b>bootstrap</b>, randomization tests, data analysis — precisely the second-half topics, taught computationally and very gently. The best on-ramp if the inference half feels abstract.
+  <br><a href="https://inferentialthinking.com/">inferentialthinking.com</a></span></span></div>
+
+  <div class="bk"><span class="n">4</span><span><span class="t">James, Witten, Hastie, Tibshirani &amp; Taylor — <em>An Introduction to Statistical Learning, with Applications in Python</em> (2023)<span class="free">FREE PDF</span></span>
+  <span class="s">Regression, classification, resampling, model evaluation — the last third of the syllabus, with Python labs. This is the book for cross-validation and overfitting.
+  <br><a href="https://www.statlearning.com/">statlearning.com</a> · <a href="https://www.statlearning.com/resources-python">Python labs</a></span></span></div>
+
+  <div class="bk"><span class="n">6</span><span><span class="t">Blitzstein &amp; Hwang — <em>Introduction to Probability</em>, 2nd ed. (2019)<span class="paid">BOOK</span></span>
+  <span class="s">Listed as supplementary, for conceptual explanations and exercises. The book itself is not free, but the author's Harvard course is: <a href="https://www.youtube.com/playlist?list=PL2SOU6wwxB0uwwH80KTQ6ht66KWxbzTIo">Stat 110 lectures on YouTube</a> — 34 sessions, and the single best source for <em>intuition</em> on conditional probability and expectation.</span></span></div>
+
+  <div class="bk"><span class="n">3</span><span><span class="t">Devore, Berk &amp; Carlton — <em>Modern Mathematical Statistics with Applications</em>, 3rd ed. (2021)<span class="paid">SPRINGER</span></span>
+  <span class="s">The reference for estimation, confidence intervals, hypothesis testing and regression. Often available through the university library's Springer access — worth checking before buying.</span></span></div>
+
+  <div class="bk"><span class="n">1</span><span><span class="t">Georgii — <em>Stochastik</em> (2015)<span class="paid">GERMAN</span></span>
+  <span class="s">German-language foundational reference for the mathematical treatment. Listed first, but the course is taught in English and Chan is named the principal reference — so treat this as optional unless you want the rigorous German-tradition version.</span></span></div>
+
+  <div class="tip"><span class="lbl">If you read one thing</span> <b>Chan.</b> It is free, it is named the principal reference, and it is the only listed book that covers both halves in one place with the Python integration the lectures use. Add <em>Computational and Inferential Thinking</em> when you reach the inference half, and Stat 110 videos whenever a concept refuses to click.</div>
+
+  <!-- ================= PLAN ================= -->
+  <h2 id="plan">A six-week head start</h2>
+  <p>Six weeks × roughly 4–5 hours takes you through the whole first half before the first lecture. That is the half that is hardest to catch up on later, because everything after it depends on it.</p>
+
+  <div class="tw"><table>
+    <tr><th>Week</th><th>Topic</th><th>Do</th></tr>
+    <tr><td><b>1</b></td><td>Sample spaces, events, conditional probability, independence</td><td>Chan ch. 1–2. Get Bayes and the law of total probability automatic — everything downstream leans on them. Stat 110 lectures 1–5 if the intuition lags.</td></tr>
+    <tr><td><b>2</b></td><td>Random variables, PMF/PDF/CDF, expectation and variance</td><td>Chan ch. 3–4. Derive $\mathbb{E}$ and $\operatorname{Var}$ for Bernoulli, binomial, geometric, Poisson, uniform, exponential, normal <em>from the definition</em>, not from a table.</td></tr>
+    <tr><td><b>3</b></td><td>Joint distributions, covariance, conditional expectation</td><td>Chan ch. 5. The key skill is marginalising and conditioning without losing track of which variable is which.</td></tr>
+    <tr><td><b>4</b></td><td>Concentration inequalities</td><td>Markov → Chebyshev → Chernoff/Hoeffding. <b>You already know the first two</b> from AlgoDat — see the <a href="../algorithms/probability.html">probability toolkit</a>. This week is mostly consolidation plus the exponential bounds.</td></tr>
+    <tr><td><b>5</b></td><td>Laws of large numbers &amp; the CLT</td><td>Chan ch. 6. Simulate both: average $n$ draws for growing $n$ and watch the histogram of the standardised mean become normal. This is where simulation earns its place.</td></tr>
+    <tr><td><b>6</b></td><td>Finite-state Markov chains</td><td>Transition matrices, $n$-step transitions as $P^{n}$, stationary distributions as a left eigenvector. <b>This is linear algebra</b> — see <a href="../linear-algebra-ds/theorems.html#spectral">the spectral theorem</a>.</td></tr>
+  </table></div>
+
+  <div class="idea"><span class="lbl">Then stop</span> Do <b>not</b> pre-read the inference half. It is taught with the lecturer's own datasets and Python demos, and reading it cold without those is much less efficient than the first half. Arrive strong on probability, and let inference be taught.</div>
+
+  <!-- ================= PYTHON ================= -->
+  <h2 id="python">The Python side</h2>
+  <p>Python is not incidental here — the outcomes include implementing <b>reproducible analyses</b>, and the lectures use live demonstrations. If your Python is rusty, fixing it now is the cheapest possible preparation, and it pays into <b>Tools in Data Science</b> at the same time.</p>
+  <div class="def"><span class="tag">The minimum useful stack</span>
+  <ul>
+    <li><code>numpy</code> — arrays, vectorised arithmetic, <code>numpy.random</code> for simulation. <a href="https://numpy.org/doc/stable/">docs</a></li>
+    <li><code>pandas</code> — data frames, grouping, joins, reading CSVs. <a href="https://pandas.pydata.org/docs/">docs</a></li>
+    <li><code>matplotlib</code> — histograms and scatter plots; enough to see a distribution.</li>
+    <li><code>scipy.stats</code> — distributions, and the standard tests when you reach the inference half.</li>
+  </ul>
+  A good self-test: simulate 10 000 draws from a distribution, plot the histogram against the true density, then plot the sample mean's distribution for $n=1,5,30$ and watch the CLT happen. If you can write that unaided, your Python is sufficient.</div>
+
+  <!-- ================= FIRST YEAR ================= -->
+  <h2 id="firstyear">What carries over from first year</h2>
+  <div class="tw"><table>
+    <tr><th>From</th><th>Carries into</th></tr>
+    <tr><td><a href="../algorithms/probability.html">AlgoDat probability toolkit</a> — indicators, linearity of expectation, Markov, Chebyshev, geometric distribution</td><td>Weeks 1–4 almost verbatim. You have already proved Markov and derived Chebyshev from it; this course simply goes further into Chernoff-type bounds.</td></tr>
+    <tr><td><a href="../linear-algebra-ds/theorems.html#spectral">Spectral theorem &amp; eigenvectors</a></td><td>Markov chains: stationary distributions are eigenvectors of the transition matrix for eigenvalue 1.</td></tr>
+    <tr><td><a href="../linear-algebra-ds/theorems.html#proj">Orthogonal projection &amp; least squares</a></td><td><b>Linear regression is a projection.</b> You have already proved the normal equations — the statistics half adds the probabilistic model on top of geometry you know.</td></tr>
+    <tr><td><a href="../analysis/index.html">Analysis</a> — series, convergence, limits</td><td>Laws of large numbers and the CLT are convergence statements. Knowing what "converges in probability" versus "in distribution" means is an analysis skill.</td></tr>
+  </table></div>
+
+  <div class="tip"><span class="lbl">The reassuring version</span> Roughly a third of the first half is material you have already met from a different angle. That is why this course is the one worth starting early: your marginal hour buys more here than anywhere else in the second year.</div>
+
+  <footer>
+    Course details transcribed from the <a href="https://ufind.univie.ac.at/en/course.html?lv=250167&amp;semester=2026W">u:find entry</a> (250167 VO, 2026W) on 8 September 2026; the directory is still being amended, so confirm times, room and assessment against the official page. Study plan, book commentary and the carry-over table are written for this site and are not official. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+<script src="../assets/mfds.js?v=5" data-root="../"></script>
+</body>
+</html>

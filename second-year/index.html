@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F9">
+<meta name="description" content="Second year of the BSc Mathematical Foundations of Data Science at Universität Wien — the winter-semester courses, what each one covers, how it is assessed, and self-study material to start early.">
+<title>Second year — course plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F7F9;--card:#fff;--border:#EFEFF2;--ink:#1B1B1F;--muted:#55555C;--faint:#8A8A90;
+    --teal:#0D9488;--teal-bg:#DCF5F1;--teal-dark:#0A5C55;
+    --slate:#5B7FA6;--slate-bg:#E7EEF6;--slate-dark:#2F4A66;
+    --algo:#F0A93A;--algo-bg:#FFF1DC;--algo-dark:#8A5A0E;
+    --purple:#6B3FA0;--purple-bg:#EFE6FE;
+    --blue:#2F6FB0;--blue-bg:#EAF2FB;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:'Figtree',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:900px;margin:0 auto;padding:clamp(1.5rem,4vw,2.4rem) clamp(1rem,4vw,1.7rem) 5rem;
+        padding-left:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-left));
+        padding-right:max(clamp(1rem,4vw,1.7rem),env(safe-area-inset-right))}
+  .back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--faint);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;margin-bottom:1.3rem}
+  .back-link:hover{color:var(--ink)}
+  .eyebrow{font-weight:700;color:var(--faint);font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.6rem}
+  h1{font-weight:800;font-size:clamp(1.8rem,5.5vw,2.5rem);line-height:1.1;letter-spacing:-.025em;margin-bottom:.55rem}
+  .lede{color:var(--muted);font-size:clamp(.96rem,3vw,1.06rem);max-width:46em}
+  h2{font-weight:800;font-size:clamp(1.2rem,4vw,1.5rem);letter-spacing:-.02em;margin:2.4rem 0 .7rem}
+  p{margin:.55rem 0;color:var(--muted);font-size:.96rem}
+  b,strong{color:var(--ink)}
+  ul,ol{margin:.4rem 0 .7rem;padding-left:1.35rem;color:var(--muted);font-size:.95rem}
+  li{margin:.3rem 0}
+  a{color:var(--purple)}
+  code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:#F0F0F3;color:var(--teal-dark);padding:.05rem .3rem;border-radius:5px}
+
+  .course{display:block;background:#fff;border:1px solid var(--border);border-radius:18px;padding:clamp(1.1rem,3.5vw,1.5rem);margin:1rem 0;text-decoration:none;color:inherit;transition:border-color .15s,transform .15s,box-shadow .15s}
+  .course:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.06)}
+  .course.teal:hover{border-color:var(--teal)} .course.slate:hover{border-color:var(--slate)} .course.amber:hover{border-color:var(--algo)}
+  .c-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem;flex-wrap:wrap}
+  .c-code{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;letter-spacing:.03em;padding:.14rem .5rem;border-radius:6px}
+  .teal .c-code{background:var(--teal-bg);color:var(--teal-dark)}
+  .slate .c-code{background:var(--slate-bg);color:var(--slate-dark)}
+  .amber .c-code{background:var(--algo-bg);color:var(--algo-dark)}
+  .c-ects{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--faint)}
+  .c-title{font-weight:800;font-size:clamp(1.05rem,3.2vw,1.25rem);letter-spacing:-.02em;margin:.5rem 0 .3rem}
+  .c-meta{font-size:.85rem;color:var(--faint);font-weight:600;margin-bottom:.5rem}
+  .c-desc{font-size:.93rem;color:var(--muted);margin-bottom:.7rem}
+  .c-cta{font-weight:700;font-size:.88rem}
+  .teal .c-cta{color:var(--teal-dark)} .slate .c-cta{color:var(--slate-dark)} .amber .c-cta{color:var(--algo-dark)}
+  .soon{opacity:.72;cursor:default}
+  .soon:hover{transform:none;box-shadow:none;border-color:var(--border)}
+  .badge{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;background:#F0F0F3;color:var(--faint);border-radius:5px;padding:.12rem .45rem}
+
+  .box{background:#fff;border:1px solid var(--border);border-left:4px solid var(--teal);border-radius:0 14px 14px 0;padding:.95rem 1.2rem;margin:1.1rem 0;color:var(--muted);font-size:.94rem}
+  .box .lbl{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--teal-dark);margin-bottom:.4rem}
+  .box.amber{border-left-color:var(--algo)} .box.amber .lbl{color:var(--algo-dark)}
+  .box.blue{border-left-color:var(--blue)} .box.blue .lbl{color:var(--blue)}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.9rem 0;border:1px solid var(--border);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:.89rem;background:#fff}
+  th,td{border-bottom:1px solid var(--border);padding:.55rem .7rem;text-align:left;vertical-align:top}
+  th{background:#F5F5F7;font-weight:700;font-size:.76rem;text-transform:uppercase;letter-spacing:.03em;color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  footer{margin-top:3rem;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--faint);font-size:.82rem}
+</style>
+<link rel="stylesheet" href="../assets/mfds.css?v=5">
+</head>
+<body class="mfds" data-page="y2" data-up="../index.html" data-up-label="Dashboard">
+<div class="wrap">
+  <a class="back-link" href="../index.html">← Dashboard</a>
+  <div class="eyebrow">Universität Wien · BSc Mathematical Foundations of Data Science</div>
+  <h1>Second year</h1>
+  <p class="lede">The winter-semester courses you are planning to take, with what each actually covers, how it is graded, and material to start on now. Details are transcribed from <a href="https://ufind.univie.ac.at/">u:find</a> — <b>2026W, and the directory is still being amended</b>, so re-check before you register.</p>
+
+  <div class="box amber"><span class="lbl">Registration — the one hard deadline</span>
+  <b>Tools in Data Science</b> is the only one of these with a registration window: <b>Tue 1 Sep 2026 00:00 → Mon 21 Sep 2026 23:59</b>, de-registration until Sat 31 Oct. u:find notes that <em>when</em> you register inside the window has no effect on place allocation — it is not first-come-first-served — so register carefully rather than fast.</div>
+
+  <h2>The courses</h2>
+
+  <a class="course teal" href="probability.html">
+    <div class="c-top">
+      <span class="c-code">250167 VO</span>
+      <span class="c-ects">6 ECTS · 4 SWS · DSPS</span>
+    </div>
+    <div class="c-title">Introduction to Probability Theory</div>
+    <div class="c-meta">Philipp Christian Petersen · English · Wed &amp; Thu 15:00–16:30 · HS 13, OMP 1 · from 1 Oct</div>
+    <p class="c-desc">Two halves. <b>Probability</b> — events, conditional probability, independence, random variables, standard distributions, expectation and variance, joint distributions, concentration inequalities, laws of large numbers, the CLT, finite-state Markov chains. Then <b>statistical inference</b> — estimation and likelihood, sampling distributions, bootstrap, confidence intervals, hypothesis and permutation tests, linear regression, model diagnostics, overfitting, cross-validation, binary classification. Theory throughout paired with live Python.</p>
+    <span class="c-cta">Course page &amp; self-study plan →</span>
+  </a>
+
+  <div class="course slate soon">
+    <div class="c-top">
+      <span class="c-code">250166 VO</span>
+      <span class="c-ects">6 ECTS · 4 SWS · DSMC</span>
+    </div>
+    <div class="c-title">Optimisation and Numerical Algorithms <span class="badge">PAGE TO COME</span></div>
+    <div class="c-meta">Martin Ehler · English · Mon &amp; Tue 15:00–16:30 · HS 13, OMP 1 · from 5 Oct</div>
+    <p class="c-desc">Taught by the author of your first-year Analysis text (<em>Mathematical Structures of Computation</em>), so it continues directly from Analysis blocks 7–9: gradient descent, Newton's method, constrained optimisation. The u:find description sections were collapsed in the listing I was given, so I have not transcribed contents, assessment or literature — <a href="https://ufind.univie.ac.at/en/course.html?lv=250166&amp;semester=2026W">open the entry</a> and I will build the page from it.</p>
+  </div>
+
+  <div class="course amber soon">
+    <div class="c-top">
+      <span class="c-code">250169 VU</span>
+      <span class="c-ects">10 ECTS · 6 SWS · DSTD</span>
+    </div>
+    <div class="c-title">Tools in Data Science <span class="badge">PAGE TO COME</span></div>
+    <div class="c-meta">Bellotto &amp; Loskutov · English · Tue/Thu/Fri 18:30–20:00 · HS 11 &amp; 13, OMP 1 · from 1 Oct</div>
+    <p class="c-desc">Thirteen practical topics: development environment, Python, GNU/Linux terminal, data cleaning and scraping, debugging and profiling, git, working with LLMs and agents, a little HPC, LaTeX and Markdown, relational databases and SQL, the server–client model, security and cryptography, reproducibility. <b>Continuous assessment</b>, and the biggest single course of the three at 10 ECTS.</p>
+  </div>
+
+  <h2>How the semester actually looks</h2>
+  <div class="tw"><table>
+    <tr><th></th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th></tr>
+    <tr><td><b>15:00–16:30</b></td><td>Optimisation</td><td>Optimisation</td><td>Probability</td><td>Probability</td><td>—</td></tr>
+    <tr><td><b>18:30–20:00</b></td><td>—</td><td>Tools</td><td>—</td><td>Tools</td><td>Tools</td></tr>
+  </table></div>
+
+  <div class="box blue"><span class="lbl">What this timetable implies</span>
+  <ul>
+    <li><b>22 ECTS across three courses</b>, and the two lecture courses run back-to-back in the same room on four afternoons. There is no clash — but there is also no slack.</li>
+    <li><b>Tools meets three evenings a week</b> and is assessed continuously, so it will take steady weekly effort rather than an exam-week sprint. Its midterm coding exam is fixed for <b>24 Nov</b>.</li>
+    <li>Probability and Optimisation are both <b>single written exams at the end</b>. That means the pattern you already know from first year: nothing forces you to keep up, so the risk is arriving at January having attended everything and retained little. The countermeasure is the same one that works now — flashcards from week 1, not week 12.</li>
+  </ul></div>
+
+  <h2>What to do before October</h2>
+  <div class="box"><span class="lbl">Highest-value preparation, in order</span>
+  <ol>
+    <li><b>Probability.</b> Genuinely worth starting early — it assumes almost nothing from first year, so you can get ahead without gaps. The <a href="probability.html">course page</a> has a free-textbook route and a six-week head-start plan.</li>
+    <li><b>Python fluency.</b> All three courses use it; Probability has live Python demos and Tools spends weeks on it. If your Python is rusty this is the cheapest thing to fix over the summer.</li>
+    <li><b>Optimisation</b> needs no new preparation — it continues your Analysis material. Keeping the <a href="../analysis/flashcards.html">Analysis deck</a> alive through the break <em>is</em> the preparation.</li>
+  </ol></div>
+
+  <footer>
+    Course details transcribed from u:find (2026W) on 8 September 2026; the directory is still being amended, so treat times, rooms and assessment as provisional and confirm against the official entry. Source on <a href="https://github.com/kulchankas/mfds_univie_first_year">GitHub</a>.
+  </footer>
+</div>
+<script src="../assets/mfds.js?v=5" data-root="../"></script>
+</body>
+</html>
