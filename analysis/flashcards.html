@@ -553,6 +553,33 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
     <br><b>The pattern:</b> the logarithm's <em>additive</em> law is the exponential's <em>multiplicative</em> law read backwards through the inverse. The same one move gives $\log\frac{x}{y}=\log x-\log y$, $\log(x^{n})=n\log x$, and — via Def 2.3.4, $a^{z}:=\exp(z\log a)$ — every rule for general exponents.</div>
   </article>
 
+  <article data-tag="Definition" data-ref="Def 2.3.4 · p.53">
+    <div class="q">Define <b>general exponents</b> $a^{z}$. Why is it defined this way rather than by a limit?</div>
+    <div class="a">For $a&gt;0$ and $z\in\mathbb{C}$,
+    $$\boxed{\,a^{z}:=\exp\!\big(z\log a\big)\,}$$
+    <b>Why this and not a limit.</b> Rational exponents can be built by hand and irrational ones reached by approximating with rationals — but that route does not extend to $z\in\mathbb{C}$. This definition covers <em>every</em> complex exponent in a <b>single expression</b>, and it is legitimate precisely because the two ingredients already exist: $\log a$ is defined for $a&gt;0$ (Thm 2.3.3) and $\exp$ is defined on all of $\mathbb{C}$ (Def 2.2.1).
+    <br><br><b>The consistency check</b> is rule 8 of Lem 2.3.5: taking $a=e$ gives $e^{x}=\exp(x\log e)=\exp(x)$, since $\log e=1$. So the new notation agrees with the old one, and writing $e^{x}$ for $\exp(x)$ is finally justified rather than assumed.</div>
+  </article>
+
+  <article data-tag="Lemma" data-ref="Lem 2.3.5 · p.53–54">
+    <div class="q">List the rules for $a^{z}=\exp(z\log a)$. <b>Which two need $x\in\mathbb{R}$, and why?</b></div>
+    <div class="a">For $a&gt;0$, the map $z\mapsto a^{z}$ is <b>continuous on $\mathbb{C}$</b>, and:
+    <br><b>1.</b> $a^{x+y}=a^{x}a^{y}$ &nbsp;$(x,y\in\mathbb{C})$
+    <br><b>2.</b> $\log(a^{x})=x\log a$ &nbsp;<b>$(x\in\mathbb{R})$</b>
+    <br><b>3.</b> $\big(a^{x}\big)^{y}=a^{xy}$ &nbsp;<b>$(x\in\mathbb{R},\,y\in\mathbb{C})$</b>
+    <br><b>4.</b> $(ab)^{x}=a^{x}b^{x}$ &nbsp;$(a,b&gt;0,\ x\in\mathbb{C})$
+    <br><b>5.</b> $a^{-x}=1/a^{x}$ &nbsp;$(x\in\mathbb{C})$
+    <br><b>6.</b> $a^{n}=\underbrace{a\cdots a}_{n\text{ times}}$ &nbsp;$(n\in\mathbb{N})$
+    <br><b>7.</b> $a^{1/n}=\sqrt[n]{a}$, the unique positive number whose $n$-th power is $a$
+    <br><b>8.</b> $e^{x}=\exp(x)$
+    <br><br><b>Every proof is one line of unwinding.</b> E.g. rule 1:
+    $$a^{x+y}=\exp\big((x+y)\log a\big)=\exp(x\log a)\exp(y\log a)=a^{x}a^{y},$$
+    which is just the <b>functional equation of $\exp$</b> (Thm 2.2.6) in disguise. Rule 4 is the same trick using $\log(ab)=\log a+\log b$ (Thm 2.3.3).
+    <br><br><b>Why rules 2 and 3 are restricted to $x\in\mathbb{R}$:</b> both apply $\log$ to $a^{x}$, and <b>$\log$ is only defined on $(0,\infty)$</b>. So you need $a^{x}$ to be a positive <em>real</em>, which for $a&gt;0$ forces $x$ real. The other rules never evaluate $\log$ at a complex point, so they hold on all of $\mathbb{C}$.</div>
+  </article>
+
+
+
 
 
 
