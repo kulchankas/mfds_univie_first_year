@@ -125,7 +125,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
   <a class="back-link" href="index.html">← Analysis</a>
   <div class="eyebrow">Analysis · Spaced repetition</div>
   <h1>Flashcards</h1>
-  <p class="sub"><b style="color:var(--accent)">Chapter 1</b> — Convergence &amp; continuity (metric spaces → uniform convergence), plus <b style="color:var(--accent)">§2.1 series</b> (telescoping, geometric, harmonic, the convergence criteria) and <b style="color:var(--accent)">§2.2 the exponential function</b> (Cauchy product, functional equation, remainder bound). Extracted from <a href="notes/Book_Project.pdf" style="color:var(--accent)">Book Project</a> pp. 11–50.</p>
+  <p class="sub"><b style="color:var(--accent)">Chapter 1</b> — Convergence &amp; continuity (metric spaces → uniform convergence), plus <b style="color:var(--accent)">§2.1 series</b>, <b style="color:var(--accent)">§2.2 the exponential function</b> and <b style="color:var(--accent)">§2.3 inverses</b> (continuous inverse, $k$-th roots, the logarithm). Extracted from <a href="notes/Book_Project.pdf" style="color:var(--accent)">Book Project</a> pp. 11–52.</p>
 
   <div class="stats" id="stats"></div>
   <div class="bar"><i id="prog"></i></div>
@@ -497,6 +497,38 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
     <br><br><em>The slogan:</em> convergence buys you the <b>values</b>; absolute convergence buys you <b>order-independence</b>; uniform convergence buys you the <b>properties</b>.</div>
   </article>
 
+  <!-- ===== Logarithm & general exponents (§2.3) ===== -->
+  <article data-tag="Proposition" data-ref="Prop 2.3.1 · p.51–52">
+    <div class="q">State the proposition on <b>continuity of the inverse</b> for functions between intervals, and give the key step of the proof.</div>
+    <div class="a">Let $I,J\subseteq\mathbb{R}$ be <b>intervals</b> and $f:I\to J$ continuous and <b>surjective</b>. Then:
+    <br><b>(i)</b> if $f$ is strictly monotone, it is bijective and $f^{-1}:J\to I$ is <b>continuous</b>;
+    <br><b>(ii)</b> if $f$ is bijective, it is strictly monotone and $f^{-1}$ is <b>continuous</b>.
+    <br><br>So on intervals <b>bijective $\iff$ strictly monotone</b>, and either one hands you a continuous inverse.
+    <br><br><b>Key step of (i) — build $\delta$ from the image of an interval.</b> Let $y\in J$ be interior, $x=f^{-1}(y)$, and take $\varepsilon$ small enough that $[x-\varepsilon,x+\varepsilon]\subseteq I$. For $f$ strictly increasing,
+    $$f\big([x-\varepsilon,x+\varepsilon]\big)=\big[f(x-\varepsilon),\,f(x+\varepsilon)\big].$$
+    Now set
+    $$\delta:=\min\big(y-f(x-\varepsilon),\;f(x+\varepsilon)-y\big)&gt;0 .$$
+    Then $[y-\delta,y+\delta]\subseteq[f(x-\varepsilon),f(x+\varepsilon)]$, so $f^{-1}\big((y-\delta,y+\delta)\big)\subseteq[x-\varepsilon,x+\varepsilon]$ — which is exactly continuity of $f^{-1}$ at $y$. Boundary points and the strictly decreasing case are analogous.
+    <br><br><b>(ii) is by contradiction:</b> if $f$ were bijective but not monotone, pick $x_1&lt;x_2&lt;x_3$ with $f(x_1)\le f(x_2)\ge f(x_3)$; injectivity sharpens this to $f(x_1)&lt;f(x_2)&gt;f(x_3)$, and then whichever of $f(x_1),f(x_3)$ is larger already lies in the image of the interval on the <em>other</em> side (intermediate value theorem) — contradicting injectivity.
+    <br><br><b>Do not drop the hypotheses:</b> $I$ and $J$ must be <b>intervals</b> (that is what makes the IVT available) and $f$ must be <b>surjective onto $J$</b>.</div>
+  </article>
+
+  <article data-tag="Example" data-ref="Ex 2.3.2 · p.52">
+    <div class="q">Use Prop 2.3.1 to show the <b>$k$-th root</b> is well-defined and continuous.</div>
+    <div class="a">Fix $k\in\mathbb{N}$, $k\ge1$, and consider
+    $$f:[0,\infty)\to[0,\infty),\qquad f(x)=x^{k}.$$
+    Check the three hypotheses:
+    <br><b>• Continuous</b> — it is a polynomial.
+    <br><b>• Strictly increasing</b> on $[0,\infty)$ — if $0\le x&lt;y$ then $x^{k}&lt;y^{k}$.
+    <br><b>• Surjective</b> onto $[0,\infty)$ — $f(0)=0$, $x^{k}\to\infty$, and the intermediate value theorem fills in everything between.
+    <br><br>Proposition 2.3.1(i) therefore gives that $f$ is bijective with <b>continuous</b> inverse
+    $$f^{-1}:[0,\infty)\to[0,\infty),\qquad x\mapsto\sqrt[k]{x}.$$
+    <b>What was actually earned:</b> that $\sqrt[k]{x}$ <em>exists</em> (surjectivity), is <em>unique</em> (injectivity), and is <em>continuous</em> (the proposition). None of the three is automatic.
+    <br><br><b>Same machinery, next result:</b> $\exp:\mathbb{R}\to(0,\infty)$ is continuous, strictly increasing and surjective, so its inverse $\log$ is continuous with $\log(xy)=\log x+\log y$ (Thm 2.3.3) — and that is what lets general exponents be defined by $a^{z}:=\exp(z\log a)$.</div>
+  </article>
+
+
+
 
 
 
@@ -514,7 +546,7 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
   const KEY = 'fc_analysis_day1_v1';
   const DAY = 86400000;
   const intervalsDays = [0, 1, 3, 8, 21, 60]; // box 0..5
-  const tagClass = { 'Definition':'def', 'Theorem':'thm', 'Lemma':'lemma', 'Example':'example', 'Corollary':'thm', 'Technique':'lemma' };
+  const tagClass = { 'Definition':'def', 'Theorem':'thm', 'Lemma':'lemma', 'Example':'example', 'Corollary':'thm', 'Technique':'lemma', 'Proposition':'thm' };
 
   const DECK = [...document.querySelectorAll('#src > article')].map((el,i)=>({
     id: 'c'+i,
