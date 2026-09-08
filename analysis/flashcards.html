@@ -527,6 +527,34 @@ MathJax = { tex: { inlineMath: [['$','$']] }, svg: { fontCache: 'global' }, star
     <br><br><b>Same machinery, next result:</b> $\exp:\mathbb{R}\to(0,\infty)$ is continuous, strictly increasing and surjective, so its inverse $\log$ is continuous with $\log(xy)=\log x+\log y$ (Thm 2.3.3) — and that is what lets general exponents be defined by $a^{z}:=\exp(z\log a)$.</div>
   </article>
 
+  <article data-tag="Theorem" data-ref="Thm 2.3.3 · p.52">
+    <div class="q">State <b>Theorem 2.3.3 (logarithm)</b> and prove the functional equation $\log(xy)=\log x+\log y$.</div>
+    <div class="a"><b>Statement.</b> $\exp:\mathbb{R}\to(0,\infty)$ is continuous and strictly monotonically increasing. Its inverse
+    $$\log:(0,\infty)\to\mathbb{R}$$
+    is <b>continuous</b> and satisfies
+    $$\log(xy)=\log(x)+\log(y),\qquad\forall x,y\in(0,\infty).$$
+
+    <br><b>(a) $\exp$ is strictly increasing.</b> For $\xi&gt;0$ the series gives
+    $$\exp(\xi)=1+\xi+\tfrac{\xi^{2}}{2}+\cdots&gt;1 .$$
+    So if $x&lt;y$, put $\xi=y-x&gt;0$ and use the <b>functional equation</b> (Thm 2.2.6) together with $\exp(x)&gt;0$ (Cor 2.2.7):
+    $$\exp(y)=\exp(x+\xi)=\exp(x)\exp(\xi)&gt;\exp(x).$$
+
+    <br><b>(b) The image is exactly $(0,\infty)$.</b> $\exp(x)&gt;0$ always, so the range lies inside $(0,\infty)$. For $n\in\mathbb{N}$,
+    $$\exp(n)\ge 1+n\to\infty,\qquad \exp(-n)=\frac{1}{\exp(n)}\le\frac{1}{1+n}\to0,$$
+    and continuity plus the intermediate value theorem fill in everything between — so $\exp$ is <b>surjective</b> onto $(0,\infty)$.
+
+    <br><br>By (a), (b) and <b>Prop 2.3.1(i)</b>, $\exp$ is bijective onto $(0,\infty)$ with a <b>continuous</b> inverse $\log$.
+
+    <br><br><b>(c) The functional equation — three lines.</b> Put $a=\log x$ and $b=\log y$, so $\exp(a)=x$ and $\exp(b)=y$. Then
+    $$\exp(a+b)=\exp(a)\exp(b)=xy,$$
+    and applying $\log$ to both sides,
+    $$\log(xy)=a+b=\log x+\log y. \qquad\blacksquare$$
+
+    <br><b>The pattern:</b> the logarithm's <em>additive</em> law is the exponential's <em>multiplicative</em> law read backwards through the inverse. The same one move gives $\log\frac{x}{y}=\log x-\log y$, $\log(x^{n})=n\log x$, and — via Def 2.3.4, $a^{z}:=\exp(z\log a)$ — every rule for general exponents.</div>
+  </article>
+
+
+
 
 
 
